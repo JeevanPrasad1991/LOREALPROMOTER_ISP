@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\menu_main_menu.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\menu_main_menu.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\activity_main_menu_drawer.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\activity_main_menu_drawer.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\main_menu_daily.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\main_menu_daily.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\main_menu.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\main_menu.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\main.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\main.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\menu.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\menu.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\empty_menu.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\empty_menu.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\activity_menu_drawer.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\activity_menu_drawer.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\global.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\global.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\release\\menu\\activity_main_menu_daily_drawer.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\menu\\activity_main_menu_daily_drawer.xml"
+    }
+]
