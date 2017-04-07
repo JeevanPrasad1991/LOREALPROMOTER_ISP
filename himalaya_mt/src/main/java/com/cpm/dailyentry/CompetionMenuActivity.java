@@ -20,8 +20,8 @@ import android.widget.Toast;
 
 import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
-import com.cpm.capitalfoods.R;
 import com.cpm.database.GSKDatabase;
+import com.cpm.himalaya.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

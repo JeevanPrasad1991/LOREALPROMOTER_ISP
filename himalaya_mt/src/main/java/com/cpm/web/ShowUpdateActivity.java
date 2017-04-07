@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.himalaya.MainMenuActivity;
 
 public class ShowUpdateActivity extends Activity {

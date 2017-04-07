@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v18\\values-v18.xml",
+        "outputFile": "E:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v18\\values-v18.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 99
                 },
                 "from": {
-                    "file": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\values-v18\\values-v18.xml",
+                    "file": "C:\\Users\\yadavendras\\.android\\build-cache\\a6083d397db50533e6b797ddd6c61916caf20c76\\output\\res\\values-v18\\values-v18.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,

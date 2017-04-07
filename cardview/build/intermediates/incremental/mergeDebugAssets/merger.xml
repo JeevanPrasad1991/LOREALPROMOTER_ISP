@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="G:\Gagan\svn_workspace\Himalaya_MT\cardview\src\main\assets"/><source path="G:\Gagan\svn_workspace\Himalaya_MT\cardview\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="G:\Gagan\svn_workspace\Himalaya_MT\cardview\src\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="E:\Himalaya_MT\Himalaya_MT\cardview\src\main\assets"/><source path="E:\Himalaya_MT\Himalaya_MT\cardview\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="E:\Himalaya_MT\Himalaya_MT\cardview\src\debug\assets"/></dataSet></merger>

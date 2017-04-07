@@ -49,7 +49,7 @@ import com.cpm.dailyentry.ClosingStock.ExpandableListAdapter;
 import com.cpm.dailyentry.ClosingStock.ViewHolder;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.ClosingStockInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;

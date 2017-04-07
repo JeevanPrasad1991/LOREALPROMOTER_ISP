@@ -29,8 +29,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
-import com.cpm.capitalfoods.R;
 import com.cpm.database.GSKDatabase;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
 import com.cpm.xmlGetterSetter.POIGetterSetter;

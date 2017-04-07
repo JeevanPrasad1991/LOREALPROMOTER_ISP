@@ -45,7 +45,7 @@
                 android:layout_height="200dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/baking_chocolates"
+                android:src="@drawable/himalaya_complete_logo"
                 />
 
             <WebView

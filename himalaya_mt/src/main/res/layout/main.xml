@@ -2,24 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical"
-    android:weightSum="100" 
-    android:background="#fff">
+    android:weightSum="100">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
         android:background="@color/primarycolor"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/geotag_title_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="LOGIN"
             android:paddingLeft="5dp"
+            android:text="LOGIN"
             android:textColor="#fff" />
     </LinearLayout>
 
@@ -27,87 +27,86 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:orientation="vertical" >
-    </LinearLayout>
-
+        android:orientation="vertical"
+        android:visibility="gone"></LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="13"
         android:layout_marginTop="5dp"
-        android:orientation="vertical" >
-        
-        <ImageView
-            
-        android:id="@+id/gsklogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_weight="13"
+        android:orientation="vertical">
 
-        android:background="@drawable/rt_logo_new"
-        android:layout_centerInParent="true">
-    </ImageView>
+        <ImageView
+
+            android:id="@+id/gsklogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true"
+            android:background="@drawable/rt_logo_new"
+            android:visibility="invisible"></ImageView>
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
+        android:gravity="center_horizontal"
         android:text="@string/version_name"
-        android:textSize="@dimen/text_size_normal"
         android:textColor="@color/primarycolor"
-        android:gravity="center_horizontal"/>
+        android:textSize="@dimen/text_size_normal" />
 
-  <!--  <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        >
+    <!--  <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="6"
+          android:orientation="horizontal"
+          android:weightSum="100"
+          >
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:src="@drawable/active_back_btn"
-            android:visibility="invisible" />
+          <ImageView
+              android:id="@+id/imageView1"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="10"
+              android:src="@drawable/active_back_btn"
+              android:visibility="invisible" />
 
-        <ImageView
-            android:visibility="invisible"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:background="@drawable/parinaam_logo_ico" />
+          <ImageView
+              android:visibility="invisible"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="10"
+              android:background="@drawable/parinaam_logo_ico" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="horizontal" >
-        </LinearLayout>
+          <LinearLayout
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="3"
+              android:orientation="horizontal" >
+          </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="66"
-            android:text="Version 1.0"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:textSize="@dimen/text_size_normal"
-            android:textColor="@color/primarycolor"/>
-&lt;!&ndash;
-        <ImageView
+          <TextView
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="66"
+              android:text="Version 1.0"
+              android:gravity="center"
+              android:paddingTop="5dp"
+              android:textSize="@dimen/text_size_normal"
+              android:textColor="@color/primarycolor"/>
+  &lt;!&ndash;
+          <ImageView
 
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="66"
-            android:background="@drawable/rtretail"
-            android:visibility="gone"
-            android:layout_gravity="center_vertical" />&ndash;&gt;
-    </LinearLayout>-->
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="66"
+              android:background="@drawable/rtretail"
+              android:visibility="gone"
+              android:layout_gravity="center_vertical" />&ndash;&gt;
+      </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,14 +114,13 @@
         android:layout_weight="47"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="100" >
+        android:weightSum="100">
 
         <ImageView
             android:id="@+id/imageView8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="10" >
-        </ImageView>
+            android:layout_weight="10"></ImageView>
 
         <LinearLayout
             android:id="@+id/imageViw"
@@ -131,14 +129,13 @@
             android:background="@drawable/login_bg"
             android:orientation="horizontal"
 
-            android:weightSum="100" >
+            android:weightSum="100">
 
             <ImageView
 
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5" >
-            </ImageView>
+                android:layout_weight="5"></ImageView>
 
             <LinearLayout
 
@@ -146,38 +143,36 @@
                 android:layout_height="match_parent"
                 android:layout_weight="76"
                 android:orientation="vertical"
-                android:weightSum="100" >
+                android:weightSum="100">
 
                 <ImageView
                     android:id="@+id/imiw"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="10" >
-                </ImageView>
+                    android:layout_weight="10"></ImageView>
 
                 <ImageView
 
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:background="@drawable/login_txt">
-                </ImageView>
+                    android:background="@drawable/login_txt"></ImageView>
+
                 <ImageView
 
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="7" >
-                </ImageView>
+                    android:layout_weight="7"></ImageView>
 
                 <TextView
-            android:id="@+id/username_title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="11"
-            android:text="Username"
-            android:textColor="#333"
-            android:textSize="14sp"
-            android:textStyle="italic" />
+                    android:id="@+id/username_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="11"
+                    android:text="Username"
+                    android:textColor="#333"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
 
                 <EditText
                     android:id="@+id/login_usertextbox"
@@ -185,28 +180,26 @@
                     android:layout_height="0dp"
                     android:layout_weight="9"
                     android:background="@drawable/txt_box_b_ico"
-                    android:textSize="14dp"
-                    android:textColorHint="#333"
+                    android:paddingLeft="5dp"
                     android:text=""
-                    android:paddingLeft="5dp" >
-                </EditText>
+                    android:textColorHint="#333"
+                    android:textSize="14dp"></EditText>
 
                 <ImageView
 
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="8" >
-                </ImageView>
+                    android:layout_weight="8"></ImageView>
 
                 <TextView
-            android:id="@+id/password_title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="11"
-            android:text="Password"
-            android:textColor="#333"
-            android:textSize="14dp"
-            android:textStyle="italic" />
+                    android:id="@+id/password_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="11"
+                    android:text="Password"
+                    android:textColor="#333"
+                    android:textSize="14dp"
+                    android:textStyle="italic" />
 
                 <EditText
                     android:id="@+id/login_locktextbox"
@@ -214,19 +207,17 @@
                     android:layout_height="0dp"
                     android:layout_weight="9"
                     android:background="@drawable/txt_box_bg_ico"
-                    android:textSize="14dp"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:text=""
                     android:textColorHint="#333"
-                  android:inputType="textPassword"
-                  android:text=""
-                    android:paddingLeft="5dp" >
-                </EditText>
+                    android:textSize="14dp"></EditText>
 
                 <ImageView
 
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="8" >
-                </ImageView>
+                    android:layout_weight="8"></ImageView>
 
                 <LinearLayout
                     android:id="@+id/imagddiw"
@@ -234,15 +225,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="13"
                     android:orientation="horizontal"
-                    android:weightSum="100" >
+                    android:weightSum="100">
 
                     <Button
                         android:id="@+id/login_loginbtn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="27"
-                        android:background="@drawable/signin_btn" >
-                    </Button>
+                        android:background="@drawable/signin_btn"></Button>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -253,17 +243,26 @@
         android:id="@+id/imageViaw"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="3dp"
         android:layout_weight="9"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/poweredbycandid" />
+        android:background="@drawable/poweredbycandid"
+        android:visibility="gone" />
 
-     <ImageView
-        android:id="@+id/loginfooter"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="15"
+        android:layout_weight="24">
 
-        android:background="@drawable/mond" />
+        <ImageView
+            android:id="@+id/loginfooter"
+            android:layout_width="294dp"
+            android:layout_height="170dp"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="15"
+            android:background="@drawable/himalaya_complete_logo" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>

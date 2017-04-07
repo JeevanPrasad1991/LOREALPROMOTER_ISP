@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <color name="primarycolor">#9575CD</color>
+    <color name="primarycolor">#009688</color>
     
     <color name="white">#FFFFFF</color>
     
@@ -32,9 +32,8 @@
      <color name="grey_background">#EEEEEE</color>
     <color name="grey_light">#FAFAFA</color>
 
-    <color name="colorPrimary">#9575CD</color>
-    <color name="colorPrimaryDark">#673AB7</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF4081</color>
-     
-    
+
 </resources>

@@ -34,7 +34,7 @@ import android.widget.TextView;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.message.AlertMessage;
 
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;

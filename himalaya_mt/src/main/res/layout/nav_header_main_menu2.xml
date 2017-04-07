@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
 android:layout_marginTop="5dp"
-        android:src="@drawable/rt_logo_new" />
+        android:src="@drawable/himalaya_logo" />
 
     <TextView
         android:id="@+id/nav_user_name"

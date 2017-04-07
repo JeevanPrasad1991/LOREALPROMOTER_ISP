@@ -7,7 +7,7 @@ import org.acra.annotation.ReportsCrashes;
 
 import android.app.Application;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 
 @ReportsCrashes(formKey = "", 
 		mailTo = "neha.tiwari@in.cpm-int.com",

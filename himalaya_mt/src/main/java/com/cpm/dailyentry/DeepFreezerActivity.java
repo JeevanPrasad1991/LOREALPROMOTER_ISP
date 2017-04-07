@@ -13,7 +13,8 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
+
 
 @SuppressWarnings("deprecation")
 public class DeepFreezerActivity extends TabActivity{

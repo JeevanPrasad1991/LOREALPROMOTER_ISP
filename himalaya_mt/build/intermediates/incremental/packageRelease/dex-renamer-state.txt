@@ -1,4 +1,0 @@
-#Thu Mar 16 13:46:05 IST 2017
-base.0=G\:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\release\\folders\\1000\\1f\\main
-renamed.0=classes.dex
-file.0=G\:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\release\\folders\\1000\\1f\\main\\classes.dex

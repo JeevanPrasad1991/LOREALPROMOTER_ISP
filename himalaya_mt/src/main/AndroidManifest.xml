@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cpm.capitalfoods"
+    package="com.cpm.himalaya"
     android:versionCode="1"
-    android:versionName="1.0">
-    <!--//package="com.cpm.capitalfoods"-->
-
+    android:versionName="1.0"> <!-- //package="com.cpm.capitalfoods" -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
@@ -22,7 +20,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/retailtrac_logo"
+        android:icon="@drawable/himalaya_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
@@ -184,7 +182,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name="com.cpm.dailyentry.PaySlip"
             android:configChanges="screenSize|orientation|keyboardHidden"
@@ -192,11 +189,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name="com.cpm.dailyentry.GeoFence_Activity"
             android:label="@string/title_activity_geo_fence_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.cpm.dailyentry.StoreImageActivity"
+            android:label="@string/title_activity_store_image"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

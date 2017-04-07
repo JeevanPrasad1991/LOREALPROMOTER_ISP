@@ -7,7 +7,7 @@ import java.util.Calendar;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.DeepFreezerTypeGetterSetter;
 
 import android.app.Activity;

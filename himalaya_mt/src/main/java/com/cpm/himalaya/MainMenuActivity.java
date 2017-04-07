@@ -26,7 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.dailyentry.DailyEntryScreen;
 import com.cpm.dailyentry.PaySlip;
 import com.cpm.database.GSKDatabase;

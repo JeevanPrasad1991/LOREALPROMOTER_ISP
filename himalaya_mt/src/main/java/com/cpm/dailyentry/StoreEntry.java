@@ -37,7 +37,7 @@ import android.widget.Toast;
 import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
 import com.cpm.database.GSKDatabase;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.MiddayStockInsertData;
 import com.cpm.xmlGetterSetter.OpeningStockInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.StockGetterSetter;
