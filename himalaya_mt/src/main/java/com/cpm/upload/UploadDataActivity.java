@@ -40,7 +40,7 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.delegates.StoreBean;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.himalaya.MainMenuActivity;
 import com.cpm.message.AlertMessage;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;

@@ -22,7 +22,7 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 
 import com.cpm.message.AlertMessage;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 
 public class UploadOptionActivity extends AppCompatActivity implements View.OnClickListener{

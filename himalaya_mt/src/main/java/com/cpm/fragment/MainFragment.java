@@ -13,7 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import com.cpm.Constants.CommonString;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.download.CompleteDownloadActivity;
 import com.cpm.himalaya.MainMenuActivity;
 

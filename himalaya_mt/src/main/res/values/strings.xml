@@ -79,6 +79,7 @@
     <string name="title_activity_additional_poi">AdditionalPOIActivity</string>
     <string name="title_activity_gate_meeting">GateMeetingActivity</string>
     <string name="title_activity_geo_fence_">GeoFence_Activity</string>
+    <string name="title_activity_store_image">StoreImageActivity</string>
 
 
 </resources>

@@ -26,8 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
+import com.cpm.himalaya.R;
 import com.cpm.message.AlertMessage;
-import com.cpm.capitalfoods.R;
 
 
 public class AutoupdateActivity extends Activity {

@@ -12,7 +12,7 @@ import com.cpm.dailyentry.PromotionActivity.ExpandableListAdapter;
 import com.cpm.dailyentry.PromotionActivity.ViewHolder;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
 import com.cpm.xmlGetterSetter.ChecklistInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;

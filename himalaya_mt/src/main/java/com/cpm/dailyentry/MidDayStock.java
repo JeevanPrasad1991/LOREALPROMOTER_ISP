@@ -50,7 +50,7 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.keyboard.BasicOnKeyboardActionListener;
 import com.cpm.keyboard.CustomKeyboardView;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.ClosingStockInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.MiddayStockInsertData;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;

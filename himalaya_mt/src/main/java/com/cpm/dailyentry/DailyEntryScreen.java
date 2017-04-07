@@ -40,7 +40,7 @@ import android.widget.TextView;
 import com.cpm.Constants.CommonString;
 
 import com.cpm.database.GSKDatabase;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 
 public class DailyEntryScreen extends AppCompatActivity implements OnItemClickListener,LocationListener{
@@ -735,7 +735,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
 					dialog.cancel();
 
-					Intent in  = new Intent(DailyEntryScreen.this, StoreEntry.class);
+					Intent in  = new Intent(DailyEntryScreen.this, StoreImageActivity.class);
 					startActivity(in);
 
 					overridePendingTransition(R.anim.activity_in, R.anim.activity_out);

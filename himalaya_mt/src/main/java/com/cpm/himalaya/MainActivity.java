@@ -28,7 +28,7 @@ import com.cpm.download.CompleteDownloadActivity;
 import com.cpm.upload.UploadDataActivity;
 
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.message.AlertMessage;
 
 public class MainActivity extends Activity implements OnClickListener {

@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w480dp-v13\\values-w480dp-v13.xml",
+        "outputFile": "E:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w480dp-v13\\values-w480dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 112
                 },
                 "from": {
-                    "file": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\values-w480dp\\values-w480dp.xml",
+                    "file": "C:\\Users\\yadavendras\\.android\\build-cache\\a6083d397db50533e6b797ddd6c61916caf20c76\\output\\res\\values-w480dp\\values-w480dp.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -30,7 +30,7 @@
                     "endOffset": 184
                 },
                 "from": {
-                    "file": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\values-w480dp\\values-w480dp.xml",
+                    "file": "C:\\Users\\yadavendras\\.android\\build-cache\\a6083d397db50533e6b797ddd6c61916caf20c76\\output\\res\\values-w480dp\\values-w480dp.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,

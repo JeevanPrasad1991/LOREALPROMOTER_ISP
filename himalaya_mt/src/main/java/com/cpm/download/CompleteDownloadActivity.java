@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.TableBean;
 import com.cpm.fragment.MainFragment;
@@ -377,7 +377,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
 
                 // Mapping Promotion data
-                /*request = new SoapObject(CommonString.NAMESPACE,CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE,CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "MAPPING_PROMOTION");
 
@@ -411,11 +411,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         promotion_flag = false;
                     }
                 }
-                publishProgress(data);*/
+                publishProgress(data);
 
 
                 // Mapping Asset data
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "MAPPING_ASSET_NEW");
 
@@ -449,11 +449,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         asset_flag = false;
                     }
                 }
-                publishProgress(data);*/
+                publishProgress(data);
 
 
                 // Asset Master data
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "ASSET_MASTER");
 
@@ -483,10 +483,10 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.value = 70;
                     data.name = "Asset Master Data Downloading";
                 }
-                publishProgress(data);*/
+                publishProgress(data);
 
                 // ASSET_CHECKLIST data
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "ASSET_CHECKLIST");
 
@@ -519,11 +519,10 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.value = 80;
                     data.name = "Checklist Data Downloading";
                 }
-                publishProgress(data);*/
-
+                publishProgress(data);
 
                 // MAPPING_ASSET_CHECKLIST
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "MAPPING_ASSET_CHECKLIST");
 
@@ -556,11 +555,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.value = 85;
                     data.name = "Checklist Mapping Downloading";
                 }
-                publishProgress(data);*/
+                publishProgress(data);
 
 
                 //Non Working Reason data
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "NON_WORKING_REASON_NEW");
 
@@ -591,11 +590,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Non Working Reason Downloading";
 
                 }
-                publishProgress(data);*/
+                publishProgress(data);
 
 
                 // Payment Slip Data
-                /*request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "EMP_SALARY");
 
@@ -624,8 +623,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
                     data.value = 100;
                     data.name = "EMP_SALARY Downloading";
-                }*/
-
+                }
 
                 //Database insert method calling
                 db.open();

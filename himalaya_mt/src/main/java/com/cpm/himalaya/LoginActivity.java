@@ -57,7 +57,6 @@ import com.cpm.xmlGetterSetter.FailureGetterSetter;
 import com.cpm.xmlGetterSetter.LoginGetterSetter;
 import com.cpm.xmlGetterSetter.QuestionGetterSetter;
 import com.cpm.xmlHandler.XMLHandlers;
-import com.cpm.capitalfoods.R;
 
 
 public class LoginActivity extends Activity implements OnClickListener,

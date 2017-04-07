@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 
 public class SplashScreenActivity extends Activity {
 

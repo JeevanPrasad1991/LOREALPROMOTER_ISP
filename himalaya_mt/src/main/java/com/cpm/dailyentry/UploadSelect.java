@@ -1,6 +1,6 @@
 package com.cpm.dailyentry;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.upload.UploadAllImageActivity;
 import com.cpm.upload.UploadDataActivity;
 

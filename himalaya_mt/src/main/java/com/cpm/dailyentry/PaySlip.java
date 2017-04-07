@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.cpm.capitalfoods.R;
+import com.cpm.himalaya.R;
 import com.cpm.database.GSKDatabase;
 
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;

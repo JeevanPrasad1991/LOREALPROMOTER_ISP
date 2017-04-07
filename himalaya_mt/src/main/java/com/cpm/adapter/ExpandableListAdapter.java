@@ -13,12 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
-import com.cpm.capitalfoods.R;
+
 import com.cpm.dailyentry.AssetActivity;
 import com.cpm.dailyentry.ClosingStock;
 import com.cpm.dailyentry.MidDayStock;
 import com.cpm.dailyentry.OpeningStock;
 import com.cpm.dailyentry.PromotionActivity;
+import com.cpm.himalaya.R;
 
 import java.util.HashMap;
 import java.util.List;

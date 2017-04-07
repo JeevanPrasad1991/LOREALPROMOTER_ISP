@@ -42,10 +42,12 @@ import android.widget.AbsListView.OnScrollListener;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
+import com.cpm.himalaya.R;
 import com.cpm.keyboard.BasicOnKeyboardActionListener;
 import com.cpm.keyboard.CustomKeyboardView;
-import com.cpm.capitalfoods.R;
+
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
+
 
 public class FacingCompetitor extends AppCompatActivity implements OnClickListener{
 
