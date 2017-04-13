@@ -139,7 +139,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         recyclerView = (RecyclerView) findViewById(R.id.drawer_layout_recycle);
@@ -149,7 +148,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
         //validate();
-
     }
 
     @Override
@@ -346,25 +344,18 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
     }
 
     public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.MyViewHolder> {
-
         private LayoutInflater inflator;
-
         List<NavMenuItemGetterSetter> data = Collections.emptyList();
 
         public ValueAdapter(Context context, List<NavMenuItemGetterSetter> data) {
-
             inflator = LayoutInflater.from(context);
             this.data = data;
-
         }
 
         @Override
         public ValueAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-
             View view = inflator.inflate(R.layout.custom_row, parent, false);
-
             MyViewHolder holder = new MyViewHolder(view);
-
             return holder;
         }
 
