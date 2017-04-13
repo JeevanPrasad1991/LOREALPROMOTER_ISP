@@ -1,13 +1,16 @@
 <component name="libraryTable">
   <library name="support-v4-23.1.1">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.android/build-cache/2a733742affe6b3bdf15cfabedb093efeed5d255/output/annotations.zip!/" />
+    </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/f285828d57bccd3f2a31bbcbffe1fcb2b20861d6/output/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/f285828d57bccd3f2a31bbcbffe1fcb2b20861d6/output/jars/libs/internal_impl-23.1.1.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/f285828d57bccd3f2a31bbcbffe1fcb2b20861d6/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2a733742affe6b3bdf15cfabedb093efeed5d255/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/2a733742affe6b3bdf15cfabedb093efeed5d255/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2a733742affe6b3bdf15cfabedb093efeed5d255/output/jars/libs/internal_impl-23.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://E:/adt-bundle-windows-x86_64-20140702/sdk/extras/android/m2repository/com/android/support/support-v4/23.1.1/support-v4-23.1.1-sources.jar!/" />
+      <root url="jar://G:/sdk/extras/android/m2repository/com/android/support/support-v4/23.1.1/support-v4-23.1.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

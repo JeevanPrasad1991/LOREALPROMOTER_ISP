@@ -2,40 +2,85 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\c463809351e3d18917d5c7bbd77231316b859d93\output\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_3767241b77113a021b1c3c05a8ddcd3ebb86512b\classes.dex" />
+        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_68b9a86c924564eb58d2b7256d43ee615e8b52c1.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\3a2205bcb0b402be653968780e762bfd7f963948\output\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\ksoap2-android-assembly-3.0.0-jar-with-dependencies_bdf5d77e5477bac1b291a3f64ce67b69e7a028d5\classes.dex" />
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_eeb56f25b54755ee7834048b0174a821d995faa9.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="91275f813bbeac01cc88b0eeaafb95bbe7ba05cb">
-        <dex dex="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_18f0c63458c1cb72642ab5e8780dde688030383d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="E:\Himalaya_MT\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\acra-4.4.0_b4939aeeca4c1f4fe63a3c4a96230595ef8e24b1\classes.dex" />
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\acra-4.4.0_c5165da046913ea2707d1ac30c21fa654d0af6cd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.0.0-jar-with-dependencies_5bf8c267f0ac864ca7db0f3e3694c4b46bfc7523.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\2a733742affe6b3bdf15cfabedb093efeed5d255\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_8e582ab1b5b111272af0d4d239662f8e1e79b7e5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\dfec88a1ba7eadc676c8b7cb3df942a2d0ed761f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_99cec67d01fb46a7cce502bfd334ff4c06bc619a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\ead397f089a02bcf248fc3eef4c177378ade427c\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_d64f3d929c9e901cf3f505c6bb9aefa8115f3e22.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\2a733742affe6b3bdf15cfabedb093efeed5d255\output\jars\libs\internal_impl-23.1.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\internal_impl-23.1.1_1b6a9f90dca9b833ff5e81ad84249bba876f5765.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gagang\.android\build-cache\641a15c006b7807bee4ccfb9b55017c85bcde381\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="G:\Gagan\svn_workspace\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\classes_86eb68746f9675c4d656c7ab47f1ff0092086fe8.jar" />
     </item>
 
 </items>

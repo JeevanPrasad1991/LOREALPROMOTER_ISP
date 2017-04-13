@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "E:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
+        "outputFile": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
         "map": [
             {
                 "to": {
@@ -12,7 +12,7 @@
                     "endOffset": 327
                 },
                 "from": {
-                    "file": "C:\\Users\\yadavendras\\.android\\build-cache\\a6083d397db50533e6b797ddd6c61916caf20c76\\output\\res\\values-hdpi\\values-hdpi.xml",
+                    "file": "C:\\Users\\gagang\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\values-hdpi\\values-hdpi.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,

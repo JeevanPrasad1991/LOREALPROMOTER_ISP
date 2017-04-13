@@ -1,22 +1,9 @@
 package com.cpm.dailyentry;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,45 +29,42 @@ import com.cpm.xmlGetterSetter.MiddayStockInsertData;
 import com.cpm.xmlGetterSetter.OpeningStockInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.StockGetterSetter;
 
-public class StoreEntry extends AppCompatActivity implements OnClickListener{
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-	Button btnDeepfreez,btnOpeningStock,btnClosingStock,btnMiddayStock,btnPromotion,btnAsset,btnfoodstr,btnfacingcomp,btncalls;
-   Button performance;
-	GSKDatabase db;
-	private SharedPreferences preferences;
-	String store_cd;
-	
-	boolean food_flag,user_flag=false;
-	
-	String user_type="";
-	
-	private ArrayList<StockGetterSetter> stockData = new ArrayList<StockGetterSetter>();
-	
-	HashMap<OpeningStockInsertDataGetterSetter, List<MiddayStockInsertData>> listDataChild;
-	
-	List<OpeningStockInsertDataGetterSetter> listDataHeader;
-	ArrayList<MiddayStockInsertData> skuData;
-	
-	LinearLayout layout_mid_close,gap_layout,gap_calls,food_layout;
+public class StoreEntry extends AppCompatActivity implements OnClickListener {
+    Button btnDeepfreez, btnOpeningStock, btnClosingStock, btnMiddayStock,
+            btnPromotion, btnAsset, btnfoodstr, btnfacingcomp, btncalls;
+    Button performance;
+    GSKDatabase db;
+    private SharedPreferences preferences;
+    String store_cd;
+    boolean food_flag, user_flag = false;
+    String user_type = "";
+    private ArrayList<StockGetterSetter> stockData = new ArrayList<StockGetterSetter>();
+    HashMap<OpeningStockInsertDataGetterSetter, List<MiddayStockInsertData>> listDataChild;
+    List<OpeningStockInsertDataGetterSetter> listDataHeader;
+    ArrayList<MiddayStockInsertData> skuData;
+    LinearLayout layout_mid_close, gap_layout, gap_calls, food_layout;
+    ValueAdapter adapter;
+    RecyclerView recyclerView;
 
-	ValueAdapter adapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
 
-	RecyclerView recyclerView;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		//setContentView(R.layout.store_entry_new_layout);
+        //setContentView(R.layout.store_entry_new_layout);
 
-		//setContentView(R.layout.store_entry_layout);
-		//setContentView(R.layout.store_entry_all_layout);
+        //setContentView(R.layout.store_entry_layout);
+        //setContentView(R.layout.store_entry_all_layout);
 
-		setContentView(R.layout.menu_item_recycle_layout);
+        setContentView(R.layout.menu_item_recycle_layout);
 
 		/*btnDeepfreez=(Button) findViewById(R.id.deepfreezer);
-		btnOpeningStock=(Button) findViewById(R.id.openingstock);
+        btnOpeningStock=(Button) findViewById(R.id.openingstock);
 		btnClosingStock=(Button) findViewById(R.id.closingstock);
 		btnMiddayStock=(Button) findViewById(R.id.midstock);
 		btnPromotion=(Button) findViewById(R.id.prommotion);
@@ -95,15 +79,15 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 		gap_calls=(LinearLayout) findViewById(R.id.gap_calls);
 		performance =(Button)findViewById(R.id.performance);*/
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-		getSupportActionBar().setHomeButtonEnabled(true);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 				
 	/*	performance.setOnClickListener(this);
-		
+
 		btnMiddayStock.setOnClickListener(this);
 		btnDeepfreez.setOnClickListener(this);
 		btnClosingStock.setOnClickListener(this);
@@ -113,20 +97,20 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 		btnfoodstr.setOnClickListener(this);
 		btnfacingcomp.setOnClickListener(this);
 		btncalls.setOnClickListener(this);*/
-		
-		
-		db=new GSKDatabase(getApplicationContext());
-		db.open();
-		
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
-		
-		food_flag=preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
-		
-		user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
-		
-		if(user_type!=null){/*
+
+
+        db = new GSKDatabase(getApplicationContext());
+        db.open();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
+
+        food_flag = preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
+
+        user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+
+        if (user_type != null) {/*
 			if(user_type.equals("Merchandiser")){
 				layout_mid_close.setVisibility(View.GONE);
 				gap_layout.setVisibility(View.GONE);
@@ -139,7 +123,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 				
 				user_flag=true;
 			}
-		*/}
+		*/
+        }
 		
 		/*if(food_flag){
 			food_layout.setVisibility(View.VISIBLE);
@@ -150,96 +135,41 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 		}*/
 
 
-	}
-	
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
+    }
 
-		recyclerView=(RecyclerView) findViewById(R.id.drawer_layout_recycle);
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
 
-		adapter=new ValueAdapter(getApplicationContext(),getdata());
-		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-		
-		//validate();
-		
-	}
-	
-	public void validate(){
-		
-		db.open();
-		
-		if(db.isClosingDataFilled(store_cd)){
-			btnClosingStock.setBackgroundResource(R.drawable.closing_stock_done);
-		}
-		else{
-			btnClosingStock.setBackgroundResource(R.drawable.closing_stock);
-		}
-		
-		if(db.isCompetitionDataFilled(store_cd)){
-			btnfacingcomp.setBackgroundResource(R.drawable.competition_done);
-		}
+        recyclerView = (RecyclerView) findViewById(R.id.drawer_layout_recycle);
 
-		//btnDeepfreez.setBackgroundResource(R.drawable.deep_freezer_done);
-		
-		/*if(db.isDeepfreezerDataFilled(store_cd, "McCain") && db.isDeepfreezerDataFilled(store_cd, "Store")){
-			btnDeepfreez.setBackgroundResource(R.drawable.deep_freezer_done);
-		}*/
-		if(db.isMiddayDataFilled(store_cd)){
-			btnMiddayStock.setBackgroundResource(R.drawable.mid_stock_done);
-		}
-		else{
-			btnMiddayStock.setBackgroundResource(R.drawable.mid_stock);
-		}
-		
-		if(db.isOpeningDataFilled(store_cd)){
-			btnOpeningStock.setBackgroundResource(R.drawable.opening_stock_done);
-		}
-		else{
-			btnOpeningStock.setBackgroundResource(R.drawable.opening_stock);
-		}
-		
-		if(db.isAssetDataFilled(store_cd)){
-			btnAsset.setBackgroundResource(R.drawable.asset_done);
-		}
-		if(db.isPromotionDataFilled(store_cd)){
-			btnPromotion.setBackgroundResource(R.drawable.promotion_done);
-		}
+        adapter = new ValueAdapter(getApplicationContext(), getdata());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
+        //validate();
 
-		
-		/*if(db.isFoodDataFilled(store_cd)){
-			btnfoodstr.setBackgroundResource(R.drawable.food_done);
-		}
-		
-		if(db.isCallsDataFilled(store_cd)){
-			btncalls.setBackgroundResource(R.drawable.calls_done);
-		}*/
-		
-	}
+    }
 
-
-	@Override
-	public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
 		/*Intent i = new Intent(this, DailyEntryScreen.class);
 		startActivity(i);*/
-		
-		finish();
-		
-		
-		overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-	}
+
+        finish();
 
 
-	@Override
-	public void onClick(View view) {
-		// TODO Auto-generated method stub
+        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+    }
 
-		int id=view.getId();
+    @Override
+    public void onClick(View view) {
+        // TODO Auto-generated method stub
 
-		switch (id) {
+        int id = view.getId();
+
+        switch (id) {
 		/*case R.id.deepfreezer:
 			
 			if(!db.isClosingDataFilled(store_cd)){
@@ -257,17 +187,17 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 
 			break;*/
 
-		case R.id.openingstock:
-			
-			if(!db.isClosingDataFilled(store_cd)){
-			
-				//if(db.getDFTypeUploadData(store_cd).size()>0){
-					
-					Intent in1=new Intent(getApplicationContext(),OpeningStock.class);
+            case R.id.openingstock:
 
-					startActivity(in1);
+                if (!db.isClosingDataFilled(store_cd)) {
 
-					overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    //if(db.getDFTypeUploadData(store_cd).size()>0){
+
+                    Intent in1 = new Intent(getApplicationContext(), OpeningStock.class);
+
+                    startActivity(in1);
+
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 					
 				/*}
 				else{
@@ -275,127 +205,411 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 							"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
 				}*/
 
-			}
-			else{
-				Toast.makeText(getApplicationContext(), "Data cannot be changed", Toast.LENGTH_SHORT).show();
-			}
-			
-			
-			break;
+                } else {
+                    Toast.makeText(getApplicationContext(), "Data cannot be changed", Toast.LENGTH_SHORT).show();
+                }
 
-		case R.id.closingstock:
-			
-			stockData=db.getOpeningStock(store_cd);
-			if((stockData.size()<=0) || (stockData.get(0).getOpen_stock_cold_room()==null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))){
-			
-				Toast.makeText(getApplicationContext(),
-						"First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
-			
+
+                break;
+
+            case R.id.closingstock:
+
+                stockData = db.getOpeningStock(store_cd);
+                if ((stockData.size() <= 0) || (stockData.get(0).getOpen_stock_cold_room() == null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))) {
+
+                    Toast.makeText(getApplicationContext(),
+                            "First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    stockData = db.getMiddayStock(store_cd);
+
+                    if ((stockData.size() <= 0) || (stockData.get(0).getMidday_stock() == null) || (stockData.get(0).getMidday_stock().equals(""))) {
+
+                        Toast.makeText(getApplicationContext(),
+                                "First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
+
+                        startActivity(in2);
+
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                    }
+                }
+
+
+                break;
+
+
+            case R.id.midstock:
+
+                if (!db.isClosingDataFilled(store_cd)) {
+
+                    Intent in3 = new Intent(getApplicationContext(), MidDayStock.class);
+
+                    startActivity(in3);
+
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Data cannot be changed", Toast.LENGTH_SHORT).show();
+                }
+
+
+                break;
+
+            case R.id.prommotion:
+
+                Intent in4 = new Intent(getApplicationContext(), PromotionActivity.class);
+
+                startActivity(in4);
+
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                break;
+
+            case R.id.assets:
+
+                Intent in5 = new Intent(getApplicationContext(), AssetActivity.class);
+
+                startActivity(in5);
+
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                break;
+
+            case R.id.foodstore:
+
+                Intent in6 = new Intent(getApplicationContext(), FoodStore.class);
+
+                startActivity(in6);
+
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                break;
+
+            case R.id.facingcompetitor:
+
+                Intent in7 = new Intent(getApplicationContext(), FacingCompetitor.class);
+
+                startActivity(in7);
+
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                break;
+
+            case R.id.calls:
+
+                Intent in8 = new Intent(getApplicationContext(), CallsActivity.class);
+
+                startActivity(in8);
+
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                break;
+
+
+            case R.id.performance:
+
+                Intent startPerformance = new Intent(StoreEntry.this, Performance.class);
+                startActivity(startPerformance);
+                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.empty_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+
+            // NavUtils.navigateUpFromSameTask(this);
+            finish();
+
+            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.MyViewHolder> {
+
+        private LayoutInflater inflator;
+
+        List<NavMenuItemGetterSetter> data = Collections.emptyList();
+
+        public ValueAdapter(Context context, List<NavMenuItemGetterSetter> data) {
+
+            inflator = LayoutInflater.from(context);
+            this.data = data;
+
+        }
+
+        @Override
+        public ValueAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+
+            View view = inflator.inflate(R.layout.custom_row, parent, false);
+
+            MyViewHolder holder = new MyViewHolder(view);
+
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final ValueAdapter.MyViewHolder viewHolder, final int position) {
+            final NavMenuItemGetterSetter current = data.get(position);
+            //viewHolder.txt.setText(current.txt);
+
+            viewHolder.icon.setImageResource(current.getIconImg());
+            viewHolder.icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (current.getIconImg() == R.drawable.opening_stock || current.getIconImg() == R.drawable.opening_stock_done) {
+                        if (!db.isClosingDataFilled(store_cd)) {
+                            //if(db.getDFTypeUploadData(store_cd).size()>0){
+                            Intent in1 = new Intent(getApplicationContext(), OpeningStock.class);
+                            startActivity(in1);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+							/*}
+							else{
+								Toast.makeText(getApplicationContext(),
+										"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
+							}*/
+                        } else {
+                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
+                        if (!db.isClosingDataFilled(store_cd)) {
+                            Intent in3 = new Intent(getApplicationContext(), MidDayStock.class);
+                            startActivity(in3);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                        } else {
+                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    if (current.getIconImg() == R.drawable.promotion || current.getIconImg() == R.drawable.promotion_done) {
+                        Intent in4 = new Intent(getApplicationContext(), PromotionActivity.class);
+                        startActivity(in4);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    }
+
+                    if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            if (db.isMiddayDataFilled(store_cd)) {
+                                Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
+                                startActivity(in2);
+                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            } else {
+                                Snackbar.make(recyclerView, "First fill Midday Stock Data", Snackbar.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Snackbar.make(recyclerView, "First fill Opening Stock data", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    if (current.getIconImg() == R.drawable.asset || current.getIconImg() == R.drawable.asset_done) {
+                        Intent in5 = new Intent(getApplicationContext(), AssetActivity.class);
+                        startActivity(in5);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    }
+
+                    if (current.getIconImg() == R.drawable.c_add_display || current.getIconImg() == R.drawable.c_add_display_done) {
+                        Intent in5 = new Intent(getApplicationContext(), AdditionalPOIActivity.class);
+                        startActivity(in5);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+						/*stockData=db.getOpeningStock(store_cd);
+						if((stockData.size()<=0) || (stockData.get(0).getOpen_stock_cold_room()==null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))){
+							Toast.makeText(getApplicationContext(),"First Fill Opening Stock and Midday Stock Data",
+							Toast.LENGTH_SHORT).show();
+						}
+						else{
+							stockData=db.getMiddayStock(store_cd);
+							if((stockData.size()<=0) || (stockData.get(0).getMidday_stock()==null) || (stockData.get(0).getMidday_stock().equals(""))){
+								Toast.makeText(getApplicationContext(),
+										"First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
+							}
+							else{
+								Intent in2=new Intent(getApplicationContext(),ClosingStock.class);
+								startActivity(in2);
+								overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+							}
+						}*/
+                    }
+
+                    if (current.getIconImg() == R.drawable.competition || current.getIconImg() == R.drawable.competition_done) {
+                        Intent in7 = new Intent(getApplicationContext(), CompetionMenuActivity.class);
+                        startActivity(in7);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+
+            //TextView txt;
+            ImageView icon;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                //txt=(TextView) itemView.findViewById(R.id.list_txt);
+                icon = (ImageView) itemView.findViewById(R.id.list_icon);
+            }
+        }
+    }
+
+    public List<NavMenuItemGetterSetter> getdata() {
+        List<NavMenuItemGetterSetter> data = new ArrayList<>();
+
+        int openingImg, middayImg, closingImg, promotionImg, assetImg, additionalImg, competitionImg;
+
+        if (db.isClosingDataFilled(store_cd)) {
+            closingImg = R.drawable.closing_stock_done;
+        } else {
+            closingImg = R.drawable.closing_stock;
+        }
+
+        if (db.isMiddayDataFilled(store_cd)) {
+            middayImg = R.drawable.midday_stock_done;
+        } else {
+            middayImg = R.drawable.midday_stock;
+        }
+
+        if (db.isOpeningDataFilled(store_cd)) {
+            openingImg = R.drawable.opening_stock_done;
+        } else {
+            openingImg = R.drawable.opening_stock;
+        }
+
+        if (db.isAssetDataFilled(store_cd)) {
+            assetImg = R.drawable.asset_done;
+        } else {
+            assetImg = R.drawable.asset;
+
+        }
+
+        if (db.isPromotionDataFilled(store_cd)) {
+            promotionImg = R.drawable.promotion_done;
+        } else {
+            promotionImg = R.drawable.promotion;
+
+        }
+
+        if (db.getFacingCompetitorData(store_cd).size() > 0 && db.getCompetitionPOIData(store_cd).size() > 0 && db.getCompetitionPromotionData(store_cd).size() > 0) {
+            competitionImg = R.drawable.competition_done;
+        } else {
+            competitionImg = R.drawable.competition;
+
+        }
+
+        if (db.getPOIData(store_cd).size() > 0) {
+            additionalImg = R.drawable.c_add_display_done;
+        } else {
+            additionalImg = R.drawable.c_add_display;
+        }
+
+
+        if (user_type.equals("Promoter")) {
+            int img[] = {openingImg, middayImg, promotionImg, assetImg, closingImg, additionalImg, competitionImg};
+            for (int i = 0; i < img.length; i++) {
+
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                //recData.setIconName(text[i]);
+
+                data.add(recData);
+            }
+        } else if (user_type.equals("Merchandiser")) {
+            int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg};
+            for (int i = 0; i < img.length; i++) {
+
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                //recData.setIconName(text[i]);
+
+                data.add(recData);
+            }
+        }
+
+        //String text[]={"My Cart", "Profile", "About","Logout"};
+
+
+        return data;
+    }
+
+    public void validate() {
+
+        db.open();
+
+        if (db.isClosingDataFilled(store_cd)) {
+            btnClosingStock.setBackgroundResource(R.drawable.closing_stock_done);
+        } else {
+            btnClosingStock.setBackgroundResource(R.drawable.closing_stock);
+        }
+
+        if (db.isCompetitionDataFilled(store_cd)) {
+            btnfacingcomp.setBackgroundResource(R.drawable.competition_done);
+        }
+
+        //btnDeepfreez.setBackgroundResource(R.drawable.deep_freezer_done);
+
+		/*if(db.isDeepfreezerDataFilled(store_cd, "McCain") && db.isDeepfreezerDataFilled(store_cd, "Store")){
+			btnDeepfreez.setBackgroundResource(R.drawable.deep_freezer_done);
+		}*/
+        if (db.isMiddayDataFilled(store_cd)) {
+            btnMiddayStock.setBackgroundResource(R.drawable.mid_stock_done);
+        } else {
+            btnMiddayStock.setBackgroundResource(R.drawable.mid_stock);
+        }
+
+        if (db.isOpeningDataFilled(store_cd)) {
+            btnOpeningStock.setBackgroundResource(R.drawable.opening_stock_done);
+        } else {
+            btnOpeningStock.setBackgroundResource(R.drawable.opening_stock);
+        }
+
+        if (db.isAssetDataFilled(store_cd)) {
+            btnAsset.setBackgroundResource(R.drawable.asset_done);
+        }
+        if (db.isPromotionDataFilled(store_cd)) {
+            btnPromotion.setBackgroundResource(R.drawable.promotion_done);
+        }
+
+
+
+		/*if(db.isFoodDataFilled(store_cd)){
+			btnfoodstr.setBackgroundResource(R.drawable.food_done);
 		}
-		else{
-			stockData=db.getMiddayStock(store_cd);
-			
-			if((stockData.size()<=0) || (stockData.get(0).getMidday_stock()==null) || (stockData.get(0).getMidday_stock().equals(""))){
-				
-				Toast.makeText(getApplicationContext(),
-						"First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
-				
-				}
-			else{
-	
-				Intent in2=new Intent(getApplicationContext(),ClosingStock.class);
 
-				startActivity(in2);
+		if(db.isCallsDataFilled(store_cd)){
+			btncalls.setBackgroundResource(R.drawable.calls_done);
+		}*/
 
-				overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+    }
 
-			}
-		}
-
-			
-			break;
-
-
-		case R.id.midstock:
-
-			if(!db.isClosingDataFilled(store_cd)){
-				
-				Intent in3=new Intent(getApplicationContext(),MidDayStock.class);
-
-				startActivity(in3);
-
-				overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-			}
-			else{
-				Toast.makeText(getApplicationContext(), "Data cannot be changed", Toast.LENGTH_SHORT).show();
-			}
-			
-			
-
-			break;
-			
-		case R.id.prommotion:
-
-			Intent in4=new Intent(getApplicationContext(),PromotionActivity.class);
-
-			startActivity(in4);
-
-			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-			break;
-			
-		case R.id.assets:
-
-			Intent in5=new Intent(getApplicationContext(),AssetActivity.class);
-
-			startActivity(in5);
-
-			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-			break;
-			
-		case R.id.foodstore:
-
-			Intent in6=new Intent(getApplicationContext(),FoodStore.class);
-
-			startActivity(in6);
-
-			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-			break;
-			
-		case R.id.facingcompetitor:
-
-			Intent in7=new Intent(getApplicationContext(),FacingCompetitor.class);
-
-			startActivity(in7);
-
-			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-			break;
-			
-		case R.id.calls:
-
-			Intent in8=new Intent(getApplicationContext(),CallsActivity.class);
-
-			startActivity(in8);
-
-			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-			break;
-			
-			
-		case R.id.performance:
-			
-			Intent startPerformance = 	new Intent(StoreEntry.this,Performance.class);
-			startActivity(startPerformance);
-			 overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-		}
-
-	}
-
-/*
-
+    /*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -438,11 +652,11 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 										.getDataDirectory();
 
 								if (sd.canWrite()) {
-									long date = System.currentTimeMillis(); 
+									long date = System.currentTimeMillis();
 
 									SimpleDateFormat sdf = new SimpleDateFormat("MMM/MM/dd");
-									String dateString = sdf.format(date);   
-									
+									String dateString = sdf.format(date);
+
 									String currentDBPath = "//data//com.cpm.capitalfoods//databases//Capital_DATABASE";
 									String backupDBPath = "capital_backup"
 											+ dateString.replace('/', '-');
@@ -498,314 +712,4 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener{
 		return super.onOptionsItemSelected(item);
 	}
 */
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.empty_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-
-		if(id==android.R.id.home){
-
-			// NavUtils.navigateUpFromSameTask(this);
-			finish();
-
-			overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.MyViewHolder>{
-
-		private LayoutInflater inflator;
-
-		List<NavMenuItemGetterSetter> data= Collections.emptyList();
-
-		public ValueAdapter(Context context, List<NavMenuItemGetterSetter> data){
-
-			inflator = LayoutInflater.from(context);
-			this.data=data;
-
-		}
-
-		@Override
-		public ValueAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-
-			View view=inflator.inflate(R.layout.custom_row,parent,false);
-
-			MyViewHolder holder=new MyViewHolder(view);
-
-			return holder;
-		}
-
-		@Override
-		public void onBindViewHolder(final ValueAdapter.MyViewHolder viewHolder, final int position) {
-
-			final NavMenuItemGetterSetter current=data.get(position);
-
-			//viewHolder.txt.setText(current.txt);
-
-			viewHolder.icon.setImageResource(current.getIconImg());
-			viewHolder.icon.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-
-					if(current.getIconImg()==R.drawable.opening_stock || current.getIconImg()==R.drawable.opening_stock_done){
-
-						if(!db.isClosingDataFilled(store_cd)){
-
-							//if(db.getDFTypeUploadData(store_cd).size()>0){
-
-							Intent in1=new Intent(getApplicationContext(),OpeningStock.class);
-
-							startActivity(in1);
-
-							overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-				/*}
-				else{
-					Toast.makeText(getApplicationContext(),
-							"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
-				}*/
-
-						}
-						else{
-
-							Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-
-						}
-
-
-					}
-					if(current.getIconImg()==R.drawable.midday_stock || current.getIconImg()==R.drawable.midday_stock_done){
-
-						if(!db.isClosingDataFilled(store_cd)){
-
-							Intent in3=new Intent(getApplicationContext(),MidDayStock.class);
-
-							startActivity(in3);
-
-							overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-						}
-						else{
-
-							Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-
-						}
-
-
-					}
-					if(current.getIconImg()==R.drawable.promotion || current.getIconImg()==R.drawable.promotion_done){
-						Intent in4=new Intent(getApplicationContext(),PromotionActivity.class);
-
-						startActivity(in4);
-
-						overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-					}
-					if(current.getIconImg()==R.drawable.asset || current.getIconImg()==R.drawable.asset_done){
-						Intent in5=new Intent(getApplicationContext(),AssetActivity.class);
-
-						startActivity(in5);
-
-						overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-					}
-
-					if(current.getIconImg()==R.drawable.closing_stock || current.getIconImg()==R.drawable.closing_stock_done){
-
-						if(db.isOpeningDataFilled(store_cd)){
-
-							if(db.isMiddayDataFilled(store_cd)){
-
-								Intent in2=new Intent(getApplicationContext(),ClosingStock.class);
-
-								startActivity(in2);
-
-								overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-							}
-							else{
-
-								Snackbar.make(recyclerView,"First fill Midday Stock Data",Snackbar.LENGTH_SHORT).show();
-							}
-
-						}else{
-
-							Snackbar.make(recyclerView,"First fill Opening Stock data",Snackbar.LENGTH_SHORT).show();
-
-						}
-
-					}
-					if(current.getIconImg()==R.drawable.c_add_display || current.getIconImg()==R.drawable.c_add_display_done){
-
-
-						Intent in5=new Intent(getApplicationContext(),AdditionalPOIActivity.class);
-
-						startActivity(in5);
-
-
-						overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-
-						/*stockData=db.getOpeningStock(store_cd);
-						if((stockData.size()<=0) || (stockData.get(0).getOpen_stock_cold_room()==null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))){
-
-							Toast.makeText(getApplicationContext(),
-									"First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
-
-						}
-						else{
-							stockData=db.getMiddayStock(store_cd);
-
-							if((stockData.size()<=0) || (stockData.get(0).getMidday_stock()==null) || (stockData.get(0).getMidday_stock().equals(""))){
-
-								Toast.makeText(getApplicationContext(),
-										"First Fill Opening Stock and Midday Stock Data", Toast.LENGTH_SHORT).show();
-
-							}
-							else{
-
-								Intent in2=new Intent(getApplicationContext(),ClosingStock.class);
-
-								startActivity(in2);
-
-								overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-							}
-						}*/
-
-					}
-
-					if(current.getIconImg()==R.drawable.competition || current.getIconImg()==R.drawable.competition_done){
-
-						Intent in7=new Intent(getApplicationContext(),CompetionMenuActivity.class);
-
-						startActivity(in7);
-
-						overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-					}
-
-				}
-			});
-
-		}
-
-		@Override
-		public int getItemCount() {
-			return data.size();
-		}
-
-
-		class MyViewHolder extends RecyclerView.ViewHolder{
-
-			//TextView txt;
-			ImageView icon;
-
-			public MyViewHolder(View itemView) {
-				super(itemView);
-				//txt=(TextView) itemView.findViewById(R.id.list_txt);
-				icon=(ImageView) itemView.findViewById(R.id.list_icon);
-			}
-		}
-
-	}
-
-	public List<NavMenuItemGetterSetter> getdata(){
-		List<NavMenuItemGetterSetter> data=new ArrayList<>();
-
-		int openingImg, middayImg, closingImg, promotionImg, assetImg, additionalImg, competitionImg;
-
-		if(db.isClosingDataFilled(store_cd)){
-			closingImg = R.drawable.closing_stock_done;
-		}
-		else{
-			closingImg = R.drawable.closing_stock;
-		}
-
-		if(db.isMiddayDataFilled(store_cd)){
-			middayImg = R.drawable.midday_stock_done;
-		}
-		else{
-			middayImg = R.drawable.midday_stock;
-		}
-
-		if(db.isOpeningDataFilled(store_cd)){
-			openingImg = R.drawable.opening_stock_done;
-		}
-		else{
-			openingImg = R.drawable.opening_stock;
-		}
-
-		if(db.isAssetDataFilled(store_cd)){
-			assetImg = R.drawable.asset_done;
-		}
-		else{
-			assetImg = R.drawable.asset;
-
-		}
-
-		if(db.isPromotionDataFilled(store_cd)){
-			promotionImg = R.drawable.promotion_done;
-		}
-		else{
-			promotionImg = R.drawable.promotion;
-
-		}
-
-		if(db.getFacingCompetitorData(store_cd).size()>0 && db.getCompetitionPOIData(store_cd).size()>0 && db.getCompetitionPromotionData(store_cd).size()>0){
-			competitionImg = R.drawable.competition_done;
-		}
-		else{
-			competitionImg = R.drawable.competition;
-
-		}
-
-		if(db.getPOIData(store_cd).size()>0){
-			additionalImg = R.drawable.c_add_display_done;
-		}
-		else{
-			additionalImg = R.drawable.c_add_display;
-		}
-
-
-		if(user_type.equals("Promoter")){
-			int img[]={openingImg, middayImg, promotionImg, assetImg, closingImg, additionalImg, competitionImg};
-			for(int i=0;i<img.length;i++){
-
-				NavMenuItemGetterSetter recData=new NavMenuItemGetterSetter();
-				recData.setIconImg(img[i]);
-				//recData.setIconName(text[i]);
-
-				data.add(recData);
-			}
-		}
-		else if(user_type.equals("Merchandiser")){
-			int img[]={openingImg, promotionImg, assetImg, additionalImg, competitionImg};
-			for(int i=0;i<img.length;i++){
-
-				NavMenuItemGetterSetter recData=new NavMenuItemGetterSetter();
-				recData.setIconImg(img[i]);
-				//recData.setIconName(text[i]);
-
-				data.add(recData);
-			}
-		}
-
-		//String text[]={"My Cart", "Profile", "About","Logout"};
-
-
-
-		return  data;
-	}
-
 }

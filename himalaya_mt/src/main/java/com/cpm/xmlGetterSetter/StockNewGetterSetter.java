@@ -5,7 +5,11 @@ package com.cpm.xmlGetterSetter;
  */
 public class StockNewGetterSetter {
 
-    String openning_total_stock,opening_facing,stock_under45days,total_mid_stock_received,closing_stock,brand_cd, brand,sku_cd, sku, img_cam, visit_date;
+    String openning_total_stock, opening_facing, stock_under45days, total_mid_stock_received, closing_stock;
+
+    String brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
+            ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing;
+
 
     public String getOpenning_total_stock() {
         return openning_total_stock;
@@ -55,7 +59,6 @@ public class StockNewGetterSetter {
         this.brand_cd = brand_cd;
     }
 
-
     public String getSku_cd() {
         return sku_cd;
     }
@@ -94,5 +97,53 @@ public class StockNewGetterSetter {
 
     public void setVisit_date(String visit_date) {
         this.visit_date = visit_date;
+    }
+
+    public String getCategory_cd() {
+        return category_cd;
+    }
+
+    public void setCategory_cd(String category_cd) {
+        this.category_cd = category_cd;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getEd_openingStock() {
+        return ed_openingStock;
+    }
+
+    public void setEd_openingStock(String ed_openingStock) {
+        this.ed_openingStock = ed_openingStock;
+    }
+
+    public String getEd_openingFacing() {
+        return ed_openingFacing;
+    }
+
+    public void setEd_openingFacing(String ed_openingFacing) {
+        this.ed_openingFacing = ed_openingFacing;
+    }
+
+    public String getEd_midFacing() {
+        return ed_midFacing;
+    }
+
+    public void setEd_midFacing(String ed_midFacing) {
+        this.ed_midFacing = ed_midFacing;
+    }
+
+    public String getEd_closingFacing() {
+        return ed_closingFacing;
+    }
+
+    public void setEd_closingFacing(String ed_closingFacing) {
+        this.ed_closingFacing = ed_closingFacing;
     }
 }

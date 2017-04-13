@@ -105,6 +105,9 @@ public class LoginActivity extends Activity implements OnClickListener,
         mUsername.setText("testmer");
         mPassword.setText("cpm123");
 
+        /*mUsername.setText("testpromo");
+        mPassword.setText("cpm123");*/
+
         mLogin = (Button) findViewById(R.id.login_loginbtn);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -291,6 +294,7 @@ public class LoginActivity extends Activity implements OnClickListener,
                                 + "[/DATA]";
 
                 SoapObject request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_LOGIN);
+
                 request.addProperty("onXML", userauth_xml);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
