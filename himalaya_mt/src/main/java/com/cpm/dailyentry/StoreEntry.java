@@ -53,11 +53,9 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
         //setContentView(R.layout.store_entry_new_layout);
-
         //setContentView(R.layout.store_entry_layout);
         //setContentView(R.layout.store_entry_all_layout);
 
@@ -81,7 +79,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -105,9 +102,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
-
         food_flag = preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
-
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
 
         if (user_type != null) {/*
@@ -368,6 +363,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             viewHolder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if (current.getIconImg() == R.drawable.opening_stock || current.getIconImg() == R.drawable.opening_stock_done) {
                         if (!db.isClosingDataFilled(store_cd)) {
                             //if(db.getDFTypeUploadData(store_cd).size()>0){
@@ -450,7 +446,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     }
                 }
             });
-
         }
 
         @Override
@@ -498,21 +493,19 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             assetImg = R.drawable.asset_done;
         } else {
             assetImg = R.drawable.asset;
-
         }
 
         if (db.isPromotionDataFilled(store_cd)) {
             promotionImg = R.drawable.promotion_done;
         } else {
             promotionImg = R.drawable.promotion;
-
         }
 
-        if (db.getFacingCompetitorData(store_cd).size() > 0 && db.getCompetitionPOIData(store_cd).size() > 0 && db.getCompetitionPromotionData(store_cd).size() > 0) {
+        if (db.getFacingCompetitorData(store_cd).size() > 0 && db.getCompetitionPOIData(store_cd).size() > 0
+                && db.getCompetitionPromotionData(store_cd).size() > 0) {
             competitionImg = R.drawable.competition_done;
         } else {
             competitionImg = R.drawable.competition;
-
         }
 
         if (db.getPOIData(store_cd).size() > 0) {
@@ -532,8 +525,18 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                 data.add(recData);
             }
-        } else if (user_type.equals("Merchandiser")) {
+        }/* else if (user_type.equals("Merchandiser")) {
             int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg};
+            for (int i = 0; i < img.length; i++) {
+
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                //recData.setIconName(text[i]);
+
+                data.add(recData);
+            }
+        }*/else if (user_type.equals("Merchandiser")) {
+            int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg,middayImg,closingImg};
             for (int i = 0; i < img.length; i++) {
 
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
@@ -545,8 +548,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         }
 
         //String text[]={"My Cart", "Profile", "About","Logout"};
-
-
         return data;
     }
 
