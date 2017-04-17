@@ -135,6 +135,13 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
                 expListView.clearFocus();
                 expListView.invalidateViews();
+
+                InputMethodManager inputManager = (InputMethodManager) getApplicationContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    getCurrentFocus().clearFocus();
+                }
             }
         });
 
@@ -156,7 +163,12 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-
+                InputMethodManager inputManager = (InputMethodManager) getApplicationContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    getCurrentFocus().clearFocus();
+                }
 				/*for(int i=0;i<listDataHeader.size();i++){
                     if(i==groupPosition){
 	                    //do nothing
@@ -177,6 +189,12 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
+                InputMethodManager inputManager = (InputMethodManager) getApplicationContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    getCurrentFocus().clearFocus();
+                }
                 /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition).getBrand() + " Collapsed",
 						Toast.LENGTH_SHORT).show();*/
@@ -405,7 +423,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         hide();*/
 
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().toString().replaceFirst("^0+(?!$)", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
 
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition))
