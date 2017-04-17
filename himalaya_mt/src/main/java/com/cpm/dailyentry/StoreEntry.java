@@ -381,19 +381,13 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     }
 
                     if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
-                        if (!db.isClosingDataFilled(store_cd)) {
+                        if (db.isOpeningDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), MidDayStock.class);
                             startActivity(in3);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                         } else {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(recyclerView, "First fill Opening Stock Data", Snackbar.LENGTH_SHORT).show();
                         }
-                    }
-
-                    if (current.getIconImg() == R.drawable.promotion || current.getIconImg() == R.drawable.promotion_done) {
-                        Intent in4 = new Intent(getApplicationContext(), PromotionActivity.class);
-                        startActivity(in4);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     }
 
                     if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
@@ -408,6 +402,12 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                         } else {
                             Snackbar.make(recyclerView, "First fill Opening Stock data", Snackbar.LENGTH_SHORT).show();
                         }
+                    }
+
+                    if (current.getIconImg() == R.drawable.promotion || current.getIconImg() == R.drawable.promotion_done) {
+                        Intent in4 = new Intent(getApplicationContext(), PromotionActivity.class);
+                        startActivity(in4);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     }
 
                     if (current.getIconImg() == R.drawable.asset || current.getIconImg() == R.drawable.asset_done) {
@@ -525,6 +525,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                 data.add(recData);
             }
+            //Previous correct
         }/* else if (user_type.equals("Merchandiser")) {
             int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
@@ -535,7 +536,9 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                 data.add(recData);
             }
-        }*/else if (user_type.equals("Merchandiser")) {
+        }*/
+        //for testing changes
+        else if (user_type.equals("Merchandiser")) {
             int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg,middayImg,closingImg};
             for (int i = 0; i < img.length; i++) {
 

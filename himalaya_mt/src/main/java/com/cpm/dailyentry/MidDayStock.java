@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +39,6 @@ import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.himalaya.R;
-import com.cpm.keyboard.BasicOnKeyboardActionListener;
 import com.cpm.keyboard.CustomKeyboardView;
 import com.cpm.xmlGetterSetter.MiddayStockInsertData;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
@@ -103,10 +101,10 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mKeyboard = new Keyboard(this, R.xml.keyboard);
+        /*mKeyboard = new Keyboard(this, R.xml.keyboard);
         mKeyboardView = (CustomKeyboardView) findViewById(R.id.keyboard_view);
         mKeyboardView.setKeyboard(mKeyboard);
-        mKeyboardView.setOnKeyboardActionListener(new BasicOnKeyboardActionListener(this));
+        mKeyboardView.setOnKeyboardActionListener(new BasicOnKeyboardActionListener(this));*/
 
         db = new GSKDatabase(getApplicationContext());
         db.open();
@@ -130,10 +128,12 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
         expListView.setOnScrollListener(new OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
 
             @Override
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
+                expListView.clearFocus();
                 expListView.invalidateViews();
             }
         });
@@ -181,10 +181,10 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         listDataHeader.get(groupPosition).getBrand() + " Collapsed",
 						Toast.LENGTH_SHORT).show();*/
 
-                if (mKeyboardView.getVisibility() == View.VISIBLE) {
+                /*if (mKeyboardView.getVisibility() == View.VISIBLE) {
                     mKeyboardView.setVisibility(View.INVISIBLE);
-                    /*mKeyboardView.requestFocusFromTouch();*/
-                }
+                   // mKeyboardView.requestFocusFromTouch();
+                }*/
 
             }
         });
@@ -195,7 +195,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition)
+                /*Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition)
                         .getBrand() + " : " + listDataChild.get(listDataHeader.get(groupPosition))
                         .get(childPosition).getSku(), Toast.LENGTH_SHORT).show();
 
@@ -203,7 +203,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                 findViewById(R.id.entry_data).setVisibility(View.VISIBLE);
                 tvheader.setText(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getSku());
                 sku_cd = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getSku_cd();
-                saveBtnFlag = 1;
+                saveBtnFlag = 1;*/
 
                 return false;
             }
@@ -224,8 +224,8 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                 listDataHeader.add(brandData.get(i));
 
                 skuData = db.getMiddayStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
-                if (!(skuData.size() > 0) || (skuData.get(0).getTotal_mid_stock_received() == null)
-                        || (skuData.get(0).getTotal_mid_stock_received().equals(""))) {
+                if (!(skuData.size() > 0) || (skuData.get(0).getEd_midFacing() == null)
+                        || (skuData.get(0).getEd_midFacing().equals(""))) {
 
                     skuData = db.getStockSkuMiddayData(brandData.get(i).getCategory_cd(), store_cd);
                 } else {
@@ -270,18 +270,18 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
                                 db.open();
                                 //getMid();
                                 dataExists = db.checkStock(store_cd);
 
-                                if (dataExists) {
+                                db.UpdateMiddayStocklistData(store_cd, listDataChild, listDataHeader);
+                                /*if (dataExists) {
                                     db.UpdateMiddayStocklistData(store_cd, listDataChild, listDataHeader);
                                 } else {
                                     db.InsertMiddayStocklistData(store_cd, listDataChild, listDataHeader);
-                                }
-                                //db.deleteMiddayStockData(store_cd);
+                                }*/
 
+                                //db.deleteMiddayStockData(store_cd);
                                 /*Intent DailyEntryMenu = new Intent(MidDayStock.this,StoreEntry.class);
                                 startActivity(DailyEntryMenu);*/
 
@@ -306,33 +306,34 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
     boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2,
                          List<StockNewGetterSetter> listDataHeader2) {
-        //	boolean flag = true;
+        boolean flag = true;
 
         checkHeaderArray.clear();
         for (int i = 0; i < listDataHeader2.size(); i++) {
 
             for (int j = 0; j < listDataChild2.get(listDataHeader.get(i)).size(); j++) {
-                String miday_stock = listDataChild.get(listDataHeader.get(i)).get(j).getTotal_mid_stock_received();
+                String miday_stock = listDataChild.get(listDataHeader.get(i)).get(j).getEd_midFacing();
 
                 if (miday_stock.equalsIgnoreCase("")) {
                     if (!checkHeaderArray.contains(i)) {
                         checkHeaderArray.add(i);
                     }
-                    checkflag = false;
-                    //flag = false;
+                    //checkflag = false;
+                    flag = false;
                     break;
                 } else {
-                    //flag = true;
-                    checkflag = true;
+                    flag = true;
+                    //checkflag = true;
                 }
-            }
-
-            if (checkflag == false) {
-                break;
             }
         }
         //expListView.invalidate();
-        return checkflag;
+
+        if (!flag) {
+            return checkflag = false;
+        } else {
+            return checkflag = true;
+        }
     }
 
     public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -376,51 +377,52 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
                 holder.cardView = (CardView) convertView.findViewById(R.id.card_view);
                 holder.etmidstock = (EditText) convertView.findViewById(R.id.ed_midStock);
+                holder.txt_midOpeningStock = (TextView) convertView.findViewById(R.id.txt_midStock_openingStock);
                 convertView.setTag(holder);
             }
             holder = (ViewHolder) convertView.getTag();
 
-            if (currentapiVersion >= 11) {
+            /*if (currentapiVersion >= 11) {
                 holder.etmidstock.setTextIsSelectable(true);
                 holder.etmidstock.setRawInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 holder.etmidstock.setInputType(0);
-            }
+            }*/
 
             TextView txtListChild = (TextView) convertView.findViewById(R.id.txt_midStock_skuHeader);
             txtListChild.setText(childText.getBrand() + " - " + childText.getSku());
+
+            holder.txt_midOpeningStock.setText("OS : " + childText.getEd_openingStock());
 
             holder.etmidstock.setOnFocusChangeListener(new OnFocusChangeListener() {
 
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
+                    /*if (hasFocus) {
                         showKeyboardWithAnimation();
                     }
-
                     if (!hasFocus) {
-                        hide();
+                        hide();*/
 
-                        final EditText Caption = (EditText) v;
-                        String value1 = Caption.getText().toString();
-                        if (value1.equals("")) {
-                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition)
-                                    .setTotal_mid_stock_received("");
-                        } else {
-                            ischangedflag = true;
+                    final EditText Caption = (EditText) v;
+                    String value1 = Caption.getText().toString().toString().replaceFirst("^0+(?!$)", "");
 
-                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition)
-                                    .setTotal_mid_stock_received(value1);
-                        }
+                    if (value1.equals("")) {
+                        _listDataChild.get(listDataHeader.get(groupPosition))
+                                .get(childPosition).setEd_midFacing("");
+                    } else {
+                        ischangedflag = true;
+
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition)
+                                .setEd_midFacing(value1);
                     }
+                    //}
                 }
             });
-            holder.etmidstock.setText(childText.getTotal_mid_stock_received());
-
+            holder.etmidstock.setText(childText.getEd_midFacing());
 
             if (!checkflag) {
                 if (holder.etmidstock.getText().toString().equals("")) {
-                    //holder.etmidstock.setBackgroundColor(getResources().getColor(R.color.red));
                     holder.etmidstock.setHintTextColor(getResources().getColor(R.color.red));
                     holder.etmidstock.setHint("Empty");
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
@@ -490,55 +492,34 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
     }
 
     public class ViewHolder {
-
+        TextView txt_midOpeningStock;
         EditText etmidstock;
         CardView cardView;
     }
 
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
-
-        if (mKeyboardView.getVisibility() == View.VISIBLE) {
+        /*if (mKeyboardView.getVisibility() == View.VISIBLE) {
             mKeyboardView.setVisibility(View.INVISIBLE);
-            /*mKeyboardView.requestFocusFromTouch();*/
-        } else {
-
-            if (ischangedflag) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(
-                        MidDayStock.this);
-                builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(
-                                            DialogInterface dialog, int id) {
-
-                                        finish();
-
-                                        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(
-                                            DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-            } else {
-                finish();
-
-                overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-            }
-
-
-        }
-
+            *//*mKeyboardView.requestFocusFromTouch();*//*
+        } else {*/
+        AlertDialog.Builder builder = new AlertDialog.Builder(MidDayStock.this);
+        builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+        //}
     }
 
     @Override
@@ -550,36 +531,43 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-
             // NavUtils.navigateUpFromSameTask(this);
-            finish();
 
-            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(MidDayStock.this);
+            builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
-        mKeyboardView.setVisibility(View.GONE);
+//        mKeyboardView.setVisibility(View.GONE);
     }
 
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        mKeyboardView.setKeyboard(mKeyboard);
-        mKeyboardView.setVisibility(View.INVISIBLE);
+        /*mKeyboardView.setKeyboard(mKeyboard);
+        mKeyboardView.setVisibility(View.INVISIBLE);*/
     }
 
     public long checkMid() {
@@ -626,7 +614,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
     }
 
     public void hide() {
-        mKeyboardView.setVisibility(View.INVISIBLE);
+        //mKeyboardView.setVisibility(View.INVISIBLE);
     /*	// mKeyboardView.clearFocus();
         mKeyboardView.requestFocusFromTouch();*/
 
@@ -653,7 +641,6 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
 	/*@Override
     public void onFocusChange(View v, boolean hasFocus) {
-		// TODO Auto-generated method stub
 		if(hasFocus==true){
 			et=(EditText) v;
 		}
