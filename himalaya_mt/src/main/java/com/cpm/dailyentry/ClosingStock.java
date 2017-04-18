@@ -447,14 +447,14 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                         _listDataChild.get(listDataHeader.get(groupPosition))
                                 .get(childPosition).setEd_closingFacing("");
                     } else {
-                        if (Integer.parseInt(value1) < total) {
+                        if (Integer.parseInt(value1) <= total) {
                             ischangedflag = true;
                             _listDataChild.get(listDataHeader.get(groupPosition))
                                     .get(childPosition).setEd_closingFacing(value1);
 
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ClosingStock.this);
-                            builder.setMessage("Closing can not be greater than the total of opening and mid day stock")
+                            builder.setMessage("Closing stock cannot be greater than sum of opening and mid day stock")
                                     .setCancelable(false)
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(
