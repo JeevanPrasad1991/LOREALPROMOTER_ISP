@@ -514,7 +514,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             additionalImg = R.drawable.c_add_display;
         }
 
-        //Previous code
+        //<editor-fold desc="Previous code">
         /*if (user_type.equals("Promoter")) {
             int img[] = {openingImg, middayImg, promotionImg, assetImg, closingImg, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
@@ -537,6 +537,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                 data.add(recData);
             }
         }*/
+        //</editor-fold>
 
         if (user_type.equals("Promoter")) {
             int img[] = {openingImg, middayImg, closingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
@@ -548,7 +549,6 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                 data.add(recData);
             }
-            //Previous correct
         } else if (user_type.equals("Merchandiser")) {
             int img[] = {openingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {

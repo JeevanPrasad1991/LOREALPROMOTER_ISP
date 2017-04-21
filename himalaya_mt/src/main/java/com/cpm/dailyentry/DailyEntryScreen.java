@@ -79,17 +79,14 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         database.open();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         date = preferences.getString(CommonString.KEY_DATE, null);
-        store_intime = preferences
-                .getString(CommonString.KEY_STORE_IN_TIME, "");
-
-        editor = preferences.edit();
-
+        store_intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+        editor = preferences.edit();
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
@@ -112,21 +109,19 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     }
 
     public void setCheckOutData() {
-
         for (int i = 0; i < jcplist.size(); i++) {
             String storeCd = jcplist.get(i).getStore_cd().get(0);
 
             if (!jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_C)
                     && !jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_VALID)) {
 
-                if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0
-                        && database.getPOIData(storeCd).size() > 0 && database.getCompetitionPOIData(storeCd).size() > 0
-                        && database.getCompetitionPromotionData(storeCd).size() > 0) {
+                if (database.isOpeningDataFilled(storeCd) && database.isPromotionDataFilled(storeCd)
+                        && database.isAssetDataFilled(storeCd)) {
 
                     boolean flag = true;
 
-                    if (database.getPromotionBrandData(storeCd).size() > 0) {
-                        if (database.isPromotionDataFilled(storeCd)) {
+                    if (database.getStockAvailabilityData(storeCd).size() > 0) {
+                        if (database.isOpeningDataFilled(storeCd)) {
                             flag = true;
                         } else {
                             flag = false;
@@ -134,8 +129,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                     }
 
                     if (flag) {
-                        if (user_type.equals("Promoter")) {
-                            if (database.isClosingDataFilled(storeCd) && database.isMiddayDataFilled(storeCd)) {
+                        if (database.getPromotionBrandData(storeCd).size() > 0) {
+                            if (database.isPromotionDataFilled(storeCd)) {
                                 flag = true;
                             } else {
                                 flag = false;
@@ -154,11 +149,23 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                     }
 
                     if (flag) {
+                        if (user_type.equals("Promoter")) {
+                            if (database.isMiddayDataFilled(storeCd) && database.isClosingDataFilled(storeCd)) {
+                                flag = true;
+                            } else {
+                                flag = false;
+                            }
+                        }
+                    }
+
+
+                    if (flag) {
                         database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
                         jcplist = database.getJCPData(date);
                     }
                 }
 
+                //<editor-fold desc="Previous Code">
                 /*if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0
                         && database.getPOIData(storeCd).size() > 0 && database.getCompetitionPOIData(storeCd).size() > 0
                         && database.getCompetitionPromotionData(storeCd).size() > 0) {
@@ -198,8 +205,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         jcplist = database.getJCPData(date);
                     }
                 }*/
-
-
+                //</editor-fold>
             }
         }
     }
@@ -246,17 +252,15 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             holder.checkout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(DailyEntryScreen.this);
                     builder.setMessage("Are you sure you want to Checkout")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(
                                         DialogInterface dialog, int id) {
+
                                     if (CheckNetAvailability()) {
-
                                         editor = preferences.edit();
-
                                         editor.putString(CommonString.KEY_STORE_CD, jcplist.get(position).getStore_cd().get(0));
                                         editor.putString(CommonString.KEY_STORE_NAME, jcplist.get(position).getStore_name().get(0));
                                         editor.commit();

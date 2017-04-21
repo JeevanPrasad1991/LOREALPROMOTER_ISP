@@ -4438,15 +4438,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
 
     public void updateCoverageStoreOutTime(String StoreId, String VisitDate, String outtime, String status) {
-
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_OUT_TIME, outtime);
             values.put(CommonString.KEY_COVERAGE_STATUS, status);
 
             db.update(CommonString.TABLE_COVERAGE_DATA, values, CommonString.KEY_STORE_ID + "='" + StoreId + "' AND "
-                    + CommonString.KEY_VISIT_DATE + "='" + VisitDate
-                    + "'", null);
+                    + CommonString.KEY_VISIT_DATE + "='" + VisitDate + "'", null);
         } catch (Exception e) {
 
         }
@@ -4470,17 +4468,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-    public void updateStoreStatusOnCheckout(String storeid, String visitdate,
-                                            String status) {
-
+    public void updateStoreStatusOnCheckout(String storeid, String visitdate, String status) {
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_CHECKOUT_STATUS, status);
 
-            db.update("JOURNEY_PLAN", values,
-                    CommonString.KEY_STORE_CD + "='" + storeid + "' AND "
-                            + CommonString.KEY_VISIT_DATE + "='" + visitdate
-                            + "'", null);
+            db.update("JOURNEY_PLAN", values, CommonString.KEY_STORE_CD + "='" + storeid + "' AND "
+                    + CommonString.KEY_VISIT_DATE + "='" + visitdate + "'", null);
         } catch (Exception e) {
 
         }
@@ -5324,7 +5318,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<StockNewGetterSetter> getAfterPaidVisibilitySkuData(String asset_cd, String store_cd, String visitdate,String category_cd) {
+    public ArrayList<StockNewGetterSetter> getAfterPaidVisibilitySkuData(String asset_cd, String store_cd, String visitdate, String category_cd) {
         Log.d("Fetching ", "checklist data--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<>();
         Cursor dbcursor = null;
