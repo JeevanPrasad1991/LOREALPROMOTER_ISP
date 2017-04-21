@@ -148,12 +148,12 @@
         "source": "C:\\Users\\gagang\\.android\\build-cache\\3a2205bcb0b402be653968780e762bfd7f963948\\output\\res\\layout\\design_layout_snackbar_include.xml"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\gateitem.xml",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\gateitem.xml"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_material.xml",
         "source": "C:\\Users\\gagang\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\layout\\abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\gateitem.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\gateitem.xml"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\pjpdeviation.xml",
@@ -388,6 +388,10 @@
         "source": "C:\\Users\\gagang\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\layout\\abc_activity_chooser_view_list_item.xml"
     },
     {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\sku_checklist_dialogue_layout.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\sku_checklist_dialogue_layout.xml"
+    },
+    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",
         "source": "C:\\Users\\gagang\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\layout\\select_dialog_multichoice_material.xml"
     },
@@ -462,6 +466,10 @@
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\mainpage.xml",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\mainpage.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\sku_check_list_child.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\sku_check_list_child.xml"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_icon.xml",

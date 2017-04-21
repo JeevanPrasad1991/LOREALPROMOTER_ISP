@@ -106,7 +106,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
 
         if (user_type != null) {/*
-			if(user_type.equals("Merchandiser")){
+            if(user_type.equals("Merchandiser")){
 				layout_mid_close.setVisibility(View.GONE);
 				gap_layout.setVisibility(View.GONE);
 				
@@ -120,7 +120,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 			}
 		*/
         }
-		
+
 		/*if(food_flag){
 			food_layout.setVisibility(View.VISIBLE);
 			gap_calls.setVisibility(View.VISIBLE);
@@ -471,10 +471,10 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
         int openingImg, middayImg, closingImg, promotionImg, assetImg, additionalImg, competitionImg;
 
-        if (db.isClosingDataFilled(store_cd)) {
-            closingImg = R.drawable.closing_stock_done;
+        if (db.isOpeningDataFilled(store_cd)) {
+            openingImg = R.drawable.opening_stock_done;
         } else {
-            closingImg = R.drawable.closing_stock;
+            openingImg = R.drawable.opening_stock;
         }
 
         if (db.isMiddayDataFilled(store_cd)) {
@@ -483,10 +483,10 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             middayImg = R.drawable.midday_stock;
         }
 
-        if (db.isOpeningDataFilled(store_cd)) {
-            openingImg = R.drawable.opening_stock_done;
+        if (db.isClosingDataFilled(store_cd)) {
+            closingImg = R.drawable.closing_stock_done;
         } else {
-            openingImg = R.drawable.opening_stock;
+            closingImg = R.drawable.closing_stock;
         }
 
         if (db.isAssetDataFilled(store_cd)) {
@@ -514,8 +514,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             additionalImg = R.drawable.c_add_display;
         }
 
-
-        if (user_type.equals("Promoter")) {
+        //Previous code
+        /*if (user_type.equals("Promoter")) {
             int img[] = {openingImg, middayImg, promotionImg, assetImg, closingImg, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
 
@@ -526,7 +526,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                 data.add(recData);
             }
             //Previous correct
-        }/* else if (user_type.equals("Merchandiser")) {
+        } else if (user_type.equals("Merchandiser")) {
             int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
 
@@ -537,9 +537,20 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                 data.add(recData);
             }
         }*/
-        //for testing changes
-        else if (user_type.equals("Merchandiser")) {
-            int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg,middayImg,closingImg};
+
+        if (user_type.equals("Promoter")) {
+            int img[] = {openingImg, middayImg, closingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
+            for (int i = 0; i < img.length; i++) {
+
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                //recData.setIconName(text[i]);
+
+                data.add(recData);
+            }
+            //Previous correct
+        } else if (user_type.equals("Merchandiser")) {
+            int img[] = {openingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
 
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
@@ -549,6 +560,19 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                 data.add(recData);
             }
         }
+
+        //for testing changes
+        /*else if (user_type.equals("Merchandiser")) {
+            int img[] = {openingImg, promotionImg, assetImg, additionalImg, competitionImg,middayImg,closingImg};
+            for (int i = 0; i < img.length; i++) {
+
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                //recData.setIconName(text[i]);
+
+                data.add(recData);
+            }
+        }*/
 
         //String text[]={"My Cart", "Profile", "About","Logout"};
         return data;
@@ -604,6 +628,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
     }
 
+    //region Previous code
     /*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -707,4 +732,5 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 */
+    //endregion
 }

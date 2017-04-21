@@ -134,23 +134,6 @@ public class CommonString {
                     + " VARCHAR" +
                     ")";
 
-    public static final String TABLE_INSERT_PROMOTION_HEADER_DATA = "openingHeader_Promotion_data";
-
-    public static final String CREATE_TABLE_insert_HEADER_PROMOTION_DATA = "CREATE TABLE IF NOT EXISTS "
-            + TABLE_INSERT_PROMOTION_HEADER_DATA
-            + "("
-            + "KEY_ID"
-            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-
-            + "STORE_CD"
-            + " VARCHAR,"
-
-            + "BRAND_CD"
-            + " VARCHAR,"
-
-            + "BRAND"
-            + " VARCHAR" +
-            ")";
 
     public static final String TABLE_INSERT_ASSET_HEADER_DATA = "openingHeader_Asset_data";
 
@@ -268,8 +251,6 @@ public class CommonString {
     public static final String TABLE_FOOD_STORE_DATA = "FOOD_STORE_DATA";
     public static final String CREATE_TABLE_FOOD_STORE_DATA = "CREATE TABLE IF NOT EXISTS FOOD_STORE_DATA(Common_Id INTEGER,STORE_CD VARCHAR, SKU_CD VARCHAR, SKU VARCHAR,AS_PER_MCCAIN VARCHAR,ACTUAL_LISTED VARCHAR, MCCAIN_DF VARCHAR, STORE_DF VARCHAR, MTD_SALES VARCHAR, PACKING_SIZE VARCHAR)";
 
-    public static final String TABLE_PROMOTION_DATA = "PROMOTION_DATA";
-    public static final String CREATE_TABLE_PROMOTION_DATA = "CREATE TABLE IF NOT EXISTS PROMOTION_DATA(Common_Id INTEGER,PID INTEGER,STORE_CD VARCHAR, PROMOTION VARCHAR, CATEGORY_TYPE VARCHAR, PRESENT VARCHAR, REMARK VARCHAR, IMAGE VARCHAR)";
 
     public static final String TABLE_ASSET_DATA = "ASSET_DATA";
     public static final String CREATE_TABLE_ASSET_DATA = "CREATE TABLE IF NOT EXISTS ASSET_DATA(Common_Id INTEGER,ASSET_CD INTEGER,STORE_CD VARCHAR, ASSET VARCHAR, PRESENT VARCHAR, REMARK VARCHAR,IMAGE VARCHAR)";
@@ -1130,4 +1111,99 @@ public class CommonString {
                     "VISIT_DATE" +
                     " VARCHAR" +
                     ")";
+
+
+    public static final String TABLE_INSERT_PROMOTION_HEADER_DATA = "openingHeader_Promotion_data";
+    public static final String CREATE_TABLE_insert_HEADER_PROMOTION_DATA = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_INSERT_PROMOTION_HEADER_DATA
+            + "("
+            + " KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+
+            + "STORE_CD"
+            + " VARCHAR,"
+
+            + "BRAND_CD"
+            + " VARCHAR,"
+
+            + "BRAND"
+            + " VARCHAR" +
+            ")";
+
+    public static final String TABLE_PROMOTION_DATA = "PROMOTION_DATA";
+    public static final String CREATE_TABLE_PROMOTION_DATA = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_PROMOTION_DATA
+            + "("
+            + "Common_Id "
+            + "INTEGER,"
+
+            + "PID"
+            + " INTEGER,"
+
+            + "STORE_CD"
+            + " VARCHAR,"
+
+            + "PROMOTION"
+            + " VARCHAR, "
+
+            + "CATEGORY_TYPE"
+            + " VARCHAR, "
+
+            + "PRESENT"
+            + " VARCHAR, "
+
+            + "REMARK"
+            + " VARCHAR, "
+
+            + "CAMERA"
+            + " VARCHAR, "
+
+            + "PROMO_STOCK"
+            + " VARCHAR, "
+
+            + "PROMO_TALKER"
+            + " VARCHAR, "
+
+            + "RUNNING_POS"
+            + " VARCHAR, "
+
+            + "IMAGE"
+            + " VARCHAR" +
+            ")";
+
+
+    public static final String TABLE_ASSET_SKU_CHECKLIST_INSERT = "Paid_Visibility_SkuDailog";
+    public static final String CREATE_TABLE_ASSET_SKU_CHECKLIST_INSERT = "CREATE TABLE "
+            + TABLE_ASSET_SKU_CHECKLIST_INSERT
+            + " ("
+            + "KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+
+            + "VISIT_DATE"
+            + " VARCHAR,"
+
+            + "STORE_CD"
+            + " VARCHAR,"
+
+            + "ASSET_CD"
+            + " VARCHAR,"
+
+            + "CATEGORY_CD"
+            + " VARCHAR,"
+
+            + "SKU_CD"
+            + " VARCHAR,"
+
+            + "SKU"
+            + " VARCHAR,"
+
+            + "BRAND_CD"
+            + " VARCHAR,"
+
+            + "BRAND"
+            + " VARCHAR,"
+
+            + "SKU_CHECK_BOX"
+            + " VARCHAR"
+            + ")";
 }

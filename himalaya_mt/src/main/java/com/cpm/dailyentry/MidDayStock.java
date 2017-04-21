@@ -423,7 +423,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         hide();*/
 
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
 
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition))

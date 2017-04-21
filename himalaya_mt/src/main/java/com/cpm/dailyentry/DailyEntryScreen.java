@@ -65,9 +65,9 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.storelistlayout);
+
         lv = (ListView) findViewById(R.id.list);
         nodata_linear = (LinearLayout) findViewById(R.id.no_data_lay);
         parent_linear = (LinearLayout) findViewById(R.id.parent_linear);
@@ -115,226 +115,93 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
         for (int i = 0; i < jcplist.size(); i++) {
             String storeCd = jcplist.get(i).getStore_cd().get(0);
-            if (!jcplist.get(i).getCheckOutStatus().get(0)
-                    .equals(CommonString.KEY_C) && !jcplist.get(i).getCheckOutStatus().get(0)
-                    .equals(CommonString.KEY_VALID)) {
 
-                if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0 && database.getPOIData(storeCd).size() > 0 && database.getCompetitionPOIData(storeCd).size() > 0 && database.getCompetitionPromotionData(storeCd).size() > 0) {
+            if (!jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_C)
+                    && !jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_VALID)) {
+
+                if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0
+                        && database.getPOIData(storeCd).size() > 0 && database.getCompetitionPOIData(storeCd).size() > 0
+                        && database.getCompetitionPromotionData(storeCd).size() > 0) {
 
                     boolean flag = true;
 
                     if (database.getPromotionBrandData(storeCd).size() > 0) {
-
                         if (database.isPromotionDataFilled(storeCd)) {
                             flag = true;
                         } else {
                             flag = false;
                         }
-
                     }
 
                     if (flag) {
-
                         if (user_type.equals("Promoter")) {
-
                             if (database.isClosingDataFilled(storeCd) && database.isMiddayDataFilled(storeCd)) {
-
                                 flag = true;
-
                             } else {
                                 flag = false;
                             }
-
                         }
-
                     }
 
-
                     if (flag) {
-
                         if (database.getAssetCategoryData(storeCd).size() > 0) {
-
                             if (database.isAssetDataFilled(storeCd)) {
-
                                 flag = true;
                             } else {
-
                                 flag = false;
                             }
                         }
-
                     }
 
                     if (flag) {
                         database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
                         jcplist = database.getJCPData(date);
                     }
-
                 }
 
-				/*{
-                    *//*boolean flag=false;
-                    boolean notAll=false;
-					
-					boolean closingnmidday_flag=false;
-					boolean promotion_flag=false;
-					boolean assest_flag=false;
-					boolean food_flag=false;
-					
-					
-					if(!user_type.equals("Merchandiser")){
-						
-						closingnmidday_flag=true;
-						
-						if(database.isClosingDataFilled(storeCd)  && database.isMiddayDataFilled(storeCd) ){
-							flag=true;
-						}
-						else{
-							flag=false;
-						}
-							
-					}
-					
-					if(database.getCallsData(storeCd).size()>0){
-						flag=true;
-					}
-					else{
-						flag=false;
-					}
-					
+                /*if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0
+                        && database.getPOIData(storeCd).size() > 0 && database.getCompetitionPOIData(storeCd).size() > 0
+                        && database.getCompetitionPromotionData(storeCd).size() > 0) {
 
-					if(database.getPromotionBrandData(storeCd).size()>0 ){
+                    boolean flag = true;
 
-						notAll=false;
-						
-						promotion_flag=true;
-						
-						if(database.isPromotionDataFilled(storeCd)){
-							
-							if(!closingnmidday_flag){
-								flag=true;
-							}
-							
-						}
-						else{
-							flag=false;
-						}
+                    if (database.getPromotionBrandData(storeCd).size() > 0) {
+                        if (database.isPromotionDataFilled(storeCd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
 
-					}
-					else{
-						notAll=true;
-					}
+                    if (flag) {
+                        if (user_type.equals("Promoter")) {
+                            if (database.isClosingDataFilled(storeCd) && database.isMiddayDataFilled(storeCd)) {
+                                flag = true;
+                            } else {
+                                flag = false;
+                            }
+                        }
+                    }
 
-					if(database.getAssetBrandData(storeCd).size()>0 ){
-						notAll=false;
-						
-						if(database.isAssetDataFilled(storeCd)){
-							if(!promotion_flag){
-								flag=true;
-							}
-						}
-						else{
-							flag=false;
-						}
-					}
-					else{
-						notAll=true;
-					}
+                    if (flag) {
+                        if (database.getAssetCategoryData(storeCd).size() > 0) {
+                            if (database.isAssetDataFilled(storeCd)) {
+                                flag = true;
+                            } else {
+                                flag = false;
+                            }
+                        }
+                    }
 
-					if(jcplist.get(i).getCategory_type().get(0).equals("Food")){
-
-						notAll=false;
-						
-						if(database.isFoodDataFilled(storeCd)){
-							flag=true;
-						}
-						else{
-							flag=false;
-						}
-					}
-					else{
-						notAll=true;
-					}
-					
-					if(notAll || flag){
-						 database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID); 
-						 jcplist=database.getJCPData(date);
-					}
-*//*
-
-					boolean flag=true;
-					
-					if(!user_type.equals("Merchandiser")){
-						if(database.isClosingDataFilled(storeCd)  && database.isMiddayDataFilled(storeCd) ){
-							flag=true;
-						}
-						else{
-							flag=false;
-						}
-					}
-					
-					if(flag)
-					if(database.getPromotionBrandData(storeCd).size()>0){
-						if(database.isPromotionDataFilled(storeCd)){
-							flag=true;
-						}
-						else{
-							flag=false;
-						}
-					}
-					
-					if(flag)
-						if(database.getAssetBrandData(storeCd).size()>0 ){
-							if(database.isAssetDataFilled(storeCd)){
-								flag=true;
-							}
-							else{
-								flag=false;
-							}
-						}
-					
-					if(flag)
-						if(jcplist.get(i).getCategory_type().get(0).equals("Food")){
-							if(database.isFoodDataFilled(storeCd)){
-								flag=true;
-							}
-							else{
-								flag=false;
-							}
-						}
-					
-					if(flag)
-						if(!user_type.equals("Merchandiser")){
-							if(database.isCallsDataFilled(storeCd)){
-								flag=true;
-							}
-							else{
-								flag=false;
-							}
-						}
-					
-					
-					if(flag){
-						*//*if(ismncavl && isasstavl && ispromotavl && isfoodavl){
-
-						}*//*
-
-						 database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID); 
-						 jcplist=database.getJCPData(date);
-						
-						//Toast.makeText(getApplicationContext(), "Checked",  Toast.LENGTH_SHORT).show();
-					}
-					else{
-						//Toast.makeText(getApplicationContext(), "Not Checked",  Toast.LENGTH_SHORT).show();
-					}
-
-				}*/
+                    if (flag) {
+                        database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
+                        jcplist = database.getJCPData(date);
+                    }
+                }*/
 
 
             }
-
         }
-
     }
 
     private class MyAdapter extends BaseAdapter {

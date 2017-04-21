@@ -8,7 +8,8 @@ public class StockNewGetterSetter {
     String openning_total_stock, opening_facing, stock_under45days, total_mid_stock_received, closing_stock;
 
     String brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
-            ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing;
+            ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing,
+            chk_skuBox;
 
 
     public String getOpenning_total_stock() {
@@ -145,5 +146,13 @@ public class StockNewGetterSetter {
 
     public void setEd_closingFacing(String ed_closingFacing) {
         this.ed_closingFacing = ed_closingFacing;
+    }
+
+    public String getChk_skuBox() {
+        return chk_skuBox;
+    }
+
+    public void setChk_skuBox(String chk_skuBox) {
+        this.chk_skuBox = chk_skuBox;
     }
 }

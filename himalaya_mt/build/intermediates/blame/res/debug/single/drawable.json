@@ -4,12 +4,12 @@
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\deactivebtn_bg.png"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_posmtheme.xml",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\btn_posmtheme.xml"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
         "source": "C:\\Users\\gagang\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_posmtheme.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\btn_posmtheme.xml"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\titletext_bg.xml",

@@ -399,7 +399,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
                     final int position = v.getId();
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
 
                     //final String stk_under = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getStock_under45days();
                     final String facing = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getEd_openingFacing();
@@ -465,7 +465,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         hide();*/
                     final int position = v.getId();
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
 
                     final String stock = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getEd_openingStock();
 

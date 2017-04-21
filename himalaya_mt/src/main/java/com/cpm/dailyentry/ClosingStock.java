@@ -440,7 +440,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                     int total = Integer.parseInt(childText.getEd_openingStock()) + Integer.parseInt(childText.getEd_midFacing());
 
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
 
 
                     if (value1.equals("")) {
