@@ -115,30 +115,31 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             if (!jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_C)
                     && !jcplist.get(i).getCheckOutStatus().get(0).equals(CommonString.KEY_VALID)) {
 
-                if (database.isOpeningDataFilled(storeCd) && database.isPromotionDataFilled(storeCd)
-                        && database.isAssetDataFilled(storeCd)) {
+                /*if (database.isOpeningDataFilled(storeCd) && database.isPromotionDataFilled(storeCd)
+                        && database.isAssetDataFilled(storeCd)) {*/
 
-                    boolean flag = true;
+                boolean flag = true;
 
-                    if (database.getStockAvailabilityData(storeCd).size() > 0) {
-                        if (database.isOpeningDataFilled(storeCd)) {
+                if (database.getStockAvailabilityData(storeCd).size() > 0) {
+                    if (database.isOpeningDataFilled(storeCd)) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
+                }
+
+                if (flag) {
+                    if (database.getPromotionBrandData(storeCd).size() > 0) {
+                        if (database.isPromotionDataFilled(storeCd)) {
                             flag = true;
                         } else {
                             flag = false;
                         }
                     }
+                }
 
-                    if (flag) {
-                        if (database.getPromotionBrandData(storeCd).size() > 0) {
-                            if (database.isPromotionDataFilled(storeCd)) {
-                                flag = true;
-                            } else {
-                                flag = false;
-                            }
-                        }
-                    }
-
-                    if (flag) {
+                if (flag) {
+                    if (database.isStoreAssetDataFilled(storeCd)) {
                         if (database.getAssetCategoryData(storeCd).size() > 0) {
                             if (database.isAssetDataFilled(storeCd)) {
                                 flag = true;
@@ -147,23 +148,24 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             }
                         }
                     }
+                }
 
-                    if (flag) {
-                        if (user_type.equals("Promoter")) {
-                            if (database.isMiddayDataFilled(storeCd) && database.isClosingDataFilled(storeCd)) {
-                                flag = true;
-                            } else {
-                                flag = false;
-                            }
+                if (flag) {
+                    if (user_type.equals("Promoter")) {
+                        if (database.isMiddayDataFilled(storeCd) && database.isClosingDataFilled(storeCd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
                         }
                     }
-
-
-                    if (flag) {
-                        database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
-                        jcplist = database.getJCPData(date);
-                    }
                 }
+
+
+                if (flag) {
+                    database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
+                    jcplist = database.getJCPData(date);
+                }
+                //}
 
                 //<editor-fold desc="Previous Code">
                 /*if (database.isOpeningDataFilled(storeCd) && database.getFacingCompetitorData(storeCd).size() > 0

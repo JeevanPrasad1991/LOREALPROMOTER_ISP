@@ -4,12 +4,11 @@ package com.cpm.xmlGetterSetter;
  * Created by yadavendras on 24-12-2015.
  */
 public class StockNewGetterSetter {
+    String openning_total_stock, opening_facing, total_mid_stock_received, closing_stock;
 
-    String openning_total_stock, opening_facing, stock_under45days, total_mid_stock_received, closing_stock;
-
-    String brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
+    String store_cd, brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
             ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing,
-            chk_skuBox;
+            chk_skuBox, stock_under45days;
 
 
     public String getOpenning_total_stock() {
@@ -50,6 +49,14 @@ public class StockNewGetterSetter {
 
     public void setClosing_stock(String closing_stock) {
         this.closing_stock = closing_stock;
+    }
+
+    public String getStore_cd() {
+        return store_cd;
+    }
+
+    public void setStore_cd(String store_cd) {
+        this.store_cd = store_cd;
     }
 
     public String getBrand_cd() {

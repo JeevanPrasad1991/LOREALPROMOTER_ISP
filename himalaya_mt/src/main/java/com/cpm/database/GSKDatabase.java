@@ -2410,50 +2410,38 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //Insert Asset Data with Brand
-    public void InsertAssetData(String storeid,
-                                HashMap<AssetInsertdataGetterSetter, List<AssetInsertdataGetterSetter>> data,
+    public void InsertAssetData(String storeid, HashMap<AssetInsertdataGetterSetter, List<AssetInsertdataGetterSetter>> data,
                                 List<AssetInsertdataGetterSetter> save_listDataHeader) {
-
         ContentValues values = new ContentValues();
         ContentValues values1 = new ContentValues();
 
         try {
-
             db.beginTransaction();
+
             for (int i = 0; i < save_listDataHeader.size(); i++) {
-
                 values.put("STORE_CD", storeid);
+                values.put("CATEGORY_CD", save_listDataHeader.get(i).getCategory_cd());
+                values.put("CATEGORY", save_listDataHeader.get(i).getCategory());
 
-                values.put("CATEGORY_CD", save_listDataHeader.get(i)
-                        .getCategory_cd());
-                values.put("CATEGORY", save_listDataHeader
-                        .get(i).getCategory());
-
-                long l = db.insert(CommonString.TABLE_INSERT_ASSET_HEADER_DATA,
-                        null, values);
+                long l = db.insert(CommonString.TABLE_INSERT_ASSET_HEADER_DATA, null, values);
 
                 for (int j = 0; j < data.get(save_listDataHeader.get(i)).size(); j++) {
-
                     values1.put("Common_Id", (int) l);
                     values1.put("STORE_CD", storeid);
-                    values1.put("ASSET_CD", Integer.parseInt(data.get(save_listDataHeader.get(i)).get(j)
-                            .getAsset_cd()));
+                    values1.put("ASSET_CD", Integer.parseInt(data.get(save_listDataHeader.get(i)).get(j).getAsset_cd()));
                     values1.put("ASSET", data.get(save_listDataHeader.get(i)).get(j).getAsset());
                     values1.put("REMARK", data.get(save_listDataHeader.get(i)).get(j).getRemark());
                     values1.put("PRESENT", data.get(save_listDataHeader.get(i)).get(j).getPresent());
                     values1.put("IMAGE", data.get(save_listDataHeader.get(i)).get(j).getImg());
 
                     db.insert(CommonString.TABLE_ASSET_DATA, null, values1);
-
                 }
             }
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Log.d("Database Exception while Insert Posm Master Data ",
-                    ex.toString());
+            Log.d("Database Exception ", "while Insert Posm Master Data " + ex.toString());
         }
-
     }
 
     //Get Asset Upload Data
@@ -5385,6 +5373,211 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public boolean isStoreAssetDataFilled(String storeId) {
+        boolean filled = false;
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY " +
+                    "FROM CATEGORY_MASTER BD " +
+                    "WHERE CATEGORY_CD IN( SELECT DISTINCT CATEGORY_CD FROM MAPPING_ASSET " +
+                    "WHERE STORE_CD ='" + storeId + "' ) ", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                int icount = dbcursor.getInt(0);
+                dbcursor.close();
+
+                if (icount > 0) {
+                    filled = true;
+                } else {
+                    filled = false;
+                }
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return filled;
+        }
+        return filled;
+    }
+
+    //Data Upload
+    public ArrayList<StockNewGetterSetter> getOpeningStockUpload(String storeId) {
+        Log.d("Fetching", "Stock upload data--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_STOCK_DATA +
+                    " WHERE STORE_CD= '" + storeId + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+
+                    sb.setStore_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORE_CD")));
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+                    sb.setSku_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CD")));
+                    sb.setEd_openingStock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("OPENING_STOCK")));
+                    sb.setEd_openingFacing(dbcursor.getString(dbcursor.getColumnIndexOrThrow("OPENING_FACING")));
+
+                    String midday_stock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("MIDDAY_STOCK"));
+                    if (midday_stock == null || midday_stock.equals("")) {
+                        sb.setEd_midFacing("");
+                    } else {
+                        sb.setEd_midFacing(midday_stock);
+                    }
+
+                    String closing_stock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK"));
+                    if (closing_stock == null || closing_stock.equals("")) {
+                        sb.setEd_closingFacing("");
+                    } else {
+                        sb.setEd_closingFacing(closing_stock);
+                    }
+
+                    String Stock_under45days = dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_UNDER_DAYS"));
+                    if (Stock_under45days == null || Stock_under45days.equals("")) {
+                        sb.setStock_under45days("");
+                    } else {
+                        sb.setStock_under45days(Stock_under45days);
+                    }
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", "Stock Data Fetching------->Stop<-------");
+        return list;
+    }
+
+    public ArrayList<PromotionInsertDataGetterSetter> getPromotionUploadData(String storeId) {
+        Log.d("Fetching", "Promotion Upload Data--------------->Start<------------");
+        ArrayList<PromotionInsertDataGetterSetter> list = new ArrayList<PromotionInsertDataGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT SD.PID, SD.IMAGE, SD.PROMOTION,SD.PRESENT,SD.REMARK, CD.BRAND_CD,CD.BRAND," +
+                    "SD.CAMERA,SD.PROMO_STOCK,SD.PROMO_TALKER,SD.RUNNING_POS " +
+                    "FROM openingHeader_Promotion_data CD " +
+                    "INNER JOIN PROMOTION_DATA SD " +
+                    "ON CD.KEY_ID=SD.Common_Id " +
+                    "WHERE CD.STORE_CD= '" + storeId + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    PromotionInsertDataGetterSetter sb = new PromotionInsertDataGetterSetter();
+
+                    sb.setPid(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PID")));
+                    sb.setPromotion_txt(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMOTION")));
+                    sb.setImg(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE")));
+                    sb.setPresent(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT")));
+                    sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow("REMARK")));
+                    sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
+
+                    sb.setCamera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAMERA")));
+                    sb.setPromoStock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMO_STOCK")));
+                    sb.setPromoTalker(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMO_TALKER")));
+                    sb.setRunningPOS(dbcursor.getString(dbcursor.getColumnIndexOrThrow("RUNNING_POS")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", "Storedat---------------------->Stop<-----------");
+        return list;
+    }
+
+    public ArrayList<AssetInsertdataGetterSetter> getAssetUploadData(String storeId) {
+        Log.d("Fetching", "Assetuploaddata--------------->Start<------------");
+        ArrayList<AssetInsertdataGetterSetter> list = new ArrayList<AssetInsertdataGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT SD.ASSET_CD, SD.ASSET, SD.PRESENT, SD.REMARK, SD.IMAGE, CD.CATEGORY_CD, CD.CATEGORY " +
+                    "FROM openingHeader_Asset_data CD " +
+                    "INNER JOIN ASSET_DATA SD " +
+                    "ON CD.KEY_ID=SD.Common_Id " +
+                    "WHERE CD.STORE_CD= '" + storeId + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    AssetInsertdataGetterSetter sb = new AssetInsertdataGetterSetter();
+
+                    sb.setAsset_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ASSET_CD")));
+                    sb.setAsset(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ASSET")));
+                    sb.setPresent(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT")));
+                    sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow("REMARK")));
+                    sb.setImg(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE")));
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", "Storedat---------------------->Stop<-----------");
+        return list;
+    }
+
+    public ArrayList<ChecklistInsertDataGetterSetter> getAssetCheckUploadData(String store_cd) {
+        Log.d("Fetching ", "checklist data--------------->Start<------------");
+        ArrayList<ChecklistInsertDataGetterSetter> list = new ArrayList<ChecklistInsertDataGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM ASSET_CHECKLIST_INSERT " +
+                    "WHERE STORE_CD = '" + store_cd + "'", null);
+
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    ChecklistInsertDataGetterSetter sb = new ChecklistInsertDataGetterSetter();
+
+                    sb.setAsset_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.ASSET_CD)));
+                    sb.setChecklist(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST)));
+                    sb.setChecklist_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_ID)));
+                    sb.setChecklist_type(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_TYPE)));
+                    sb.setChecklist_text(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_TEXT)));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching checklist data!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", " checklist data---------------------->Stop<-----------");
+        return list;
+    }
     //----------------------------------------------------
     //<editor-fold desc="Previous Code">
     /*// downloaded data

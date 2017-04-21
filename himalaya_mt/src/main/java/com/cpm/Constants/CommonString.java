@@ -253,7 +253,16 @@ public class CommonString {
 
 
     public static final String TABLE_ASSET_DATA = "ASSET_DATA";
-    public static final String CREATE_TABLE_ASSET_DATA = "CREATE TABLE IF NOT EXISTS ASSET_DATA(Common_Id INTEGER,ASSET_CD INTEGER,STORE_CD VARCHAR, ASSET VARCHAR, PRESENT VARCHAR, REMARK VARCHAR,IMAGE VARCHAR)";
+    public static final String CREATE_TABLE_ASSET_DATA = "CREATE TABLE IF NOT EXISTS ASSET_DATA" +
+            "(" +
+            "Common_Id INTEGER," +
+            "ASSET_CD INTEGER," +
+            "STORE_CD VARCHAR, " +
+            "ASSET VARCHAR, " +
+            "PRESENT VARCHAR, " +
+            "REMARK VARCHAR," +
+            "IMAGE VARCHAR" +
+            ")";
 
     public static final String TABLE_CALLS_DATA = "CALLS_DATA";
     public static final String CREATE_TABLE_CALLS_DATA = "CREATE TABLE IF NOT EXISTS CALLS_DATA(Key_Id INTEGER PRIMARY KEY AUTOINCREMENT, STORE_CD VARCHAR, TOTAL_CALLS VARCHAR, PRODUCTIVE_CALLS VARCHAR)";

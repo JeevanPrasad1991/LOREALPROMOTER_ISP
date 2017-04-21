@@ -445,7 +445,6 @@ public class UploadAllImageActivity extends Activity {
 			}
 		}
 
-		
 
 		public String UploadImage(String path) throws Exception {
 

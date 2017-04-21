@@ -184,6 +184,43 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.save_btn) {
+            expListView.clearFocus();
+
+            if (validateData(listDataChild, listDataHeader)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Are you sure you want to save")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                db.open();
+                                //getMid();
+
+                                db.deleteAssetData(store_cd);
+                                db.InsertAssetData(store_cd, listDataChild, listDataHeader);
+
+                                Toast.makeText(getApplicationContext(), "Data has been saved", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                listAdapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public class ExpandableListAdapter extends BaseExpandableListAdapter {
         private Context _context;
         private List<AssetInsertdataGetterSetter> _listDataHeader; // header titles
@@ -462,64 +499,6 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
         LinearLayout cam_layout, remark_layout;
         Button btn_cam, btn_checkList, btn_skuList;
         //TextView tvpromo;
-    }
-
-    @Override
-    public void onClick(View v) {
-        // TODO Auto-generated method stub
-        int id = v.getId();
-
-        if (id == R.id.save_btn) {
-
-            expListView.clearFocus();
-
-            if (validateData(listDataChild, listDataHeader)) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to save")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int id) {
-
-                                        db.open();
-
-                                        getMid();
-
-                                        db.deleteAssetData(store_cd);
-                                        db.InsertAssetData(
-                                                store_cd, listDataChild,
-                                                listDataHeader);
-
-                                        Toast.makeText(getApplicationContext(),
-                                                "Data has been saved", Toast.LENGTH_SHORT).show();
-
-						/*Intent DailyEntryMenu = new Intent(
-                                AssetActivity.this,
-								StoreEntry.class);
-						startActivity(DailyEntryMenu);*/
-
-                                        finish();
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-
-                alert.show();
-
-            } else {
-                listAdapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
-            }
-
-        }
     }
 
     public long checkMid() {
@@ -1199,7 +1178,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     dialog.cancel();
                 }
             });
-            
+
             dialog.show();
         }
 
