@@ -4,23 +4,42 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primarycolor"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="Sku List"
-        android:textColor="@color/white"
-        android:textSize="@dimen/store_entry_text_size"
-        android:textStyle="bold" />
-    <!--android:text="Check list"-->
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lv_checklist"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primarycolor"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="Sku List"
+            android:textColor="@color/white"
+            android:textSize="@dimen/store_entry_text_size" />
+        <!--android:text="Check list"
+                android:textStyle="bold"-->
+
+        <ListView
+            android:id="@+id/lv_checklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_no_data"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/no_data" />
+    </LinearLayout>
 
     <!--Save and Cancel-->
     <LinearLayout
@@ -60,5 +79,4 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 </LinearLayout>

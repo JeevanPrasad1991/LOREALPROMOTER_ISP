@@ -1139,17 +1139,20 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             update_flag = true;
         }
 
+        final Dialog dialog = new Dialog(AssetActivity.this);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.sku_checklist_dialogue_layout);
+
+        Button btnsave = (Button) dialog.findViewById(R.id.btn_save_checklist);
+        Button btncancel = (Button) dialog.findViewById(R.id.btn_cancel_checklist);
+        LinearLayout lin_no_data = (LinearLayout) dialog.findViewById(R.id.lin_no_data);
+
         if (listSkuData.size() > 0) {
-            final Dialog dialog = new Dialog(AssetActivity.this);
-            dialog.setCancelable(false);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.sku_checklist_dialogue_layout);
+            lin_no_data.setVisibility(View.GONE);
 
             listView = (ListView) dialog.findViewById(R.id.lv_checklist);
             listView.setAdapter(new SkuListAdaptor(listSkuData));
-
-            Button btnsave = (Button) dialog.findViewById(R.id.btn_save_checklist);
-            Button btncancel = (Button) dialog.findViewById(R.id.btn_cancel_checklist);
 
             if (update_flag) {
                 btnsave.setText("UPDATE");
@@ -1185,7 +1188,21 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 }
             });
             dialog.show();
+        } else {
+            btnsave.setVisibility(View.GONE);
+            lin_no_data.setVisibility(View.VISIBLE);
+
+            btncancel.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+            
+            dialog.show();
         }
+
     }
 
     private class SkuListAdaptor extends BaseAdapter {
