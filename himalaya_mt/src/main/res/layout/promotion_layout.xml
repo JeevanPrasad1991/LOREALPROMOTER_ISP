@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <android.support.design.widget.AppBarLayout
@@ -26,36 +26,36 @@
     </android.support.design.widget.AppBarLayout>
 
 
-  <!--  <LinearLayout
-        android:id="@+id/belowme"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/primarycolor"
-        android:orientation="horizontal"
-        android:weightSum="100" >
+    <!--  <LinearLayout
+          android:id="@+id/belowme"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:background="@color/primarycolor"
+          android:orientation="horizontal"
+          android:weightSum="100" >
 
-        <TextView
-            android:id="@+id/txt_idealFor"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="100"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:text="Promotion"
-            android:textSize="20sp"
-            android:textStyle="italic" />
-    </LinearLayout>-->
+          <TextView
+              android:id="@+id/txt_idealFor"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_weight="100"
+              android:gravity="center"
+              android:paddingLeft="5dp"
+              android:text="Promotion"
+              android:textSize="20sp"
+              android:textStyle="italic" />
+      </LinearLayout>-->
 
-   <!--  <include
-        android:id="@+id/entry_data"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_below="@+id/belowme"
-        layout="@layout/midday_stock_entry" 
-        android:visibility="invisible"
-        /> 
-     -->
+    <!--  <include
+         android:id="@+id/entry_data"
+         android:layout_width="match_parent"
+         android:layout_height="400dp"
+         android:layout_above="@+id/linearLayout1"
+         android:layout_below="@+id/belowme"
+         layout="@layout/midday_stock_entry"
+         android:visibility="invisible"
+         />
+      -->
 
     <ExpandableListView
         android:id="@+id/lvExp"
@@ -64,13 +64,9 @@
         android:layout_above="@+id/linearLayout1"
         android:layout_below="@+id/appbar"
         android:cacheColorHint="#00000000"
-         android:divider="@null"
+        android:divider="@null"
         android:dividerHeight="0dp"
-        android:scrollingCache="false"
-         />
-    
-    
-  
+        android:scrollingCache="false" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -80,7 +76,7 @@
         android:layout_weight="7"
         android:background="@color/primarycolor"
         android:orientation="horizontal"
-        android:weightSum="100" >
+        android:weightSum="100">
 
         <Button
             android:id="@+id/butt"
@@ -90,21 +86,20 @@
             android:visibility="invisible" />
 
         <Button
-            android:id="@+id/save_btn"
+            android:id="@+id/btn_save_promotion"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
             android:text="  SAVE " />
     </LinearLayout>
-    
-     <ImageView 
+
+    <ImageView
         android:id="@+id/imgnodata"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         android:layout_above="@+id/linearLayout1"
         android:layout_below="@+id/belowme"
         android:background="@drawable/no_data"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>

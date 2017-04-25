@@ -1,7 +1,4 @@
-#Thu Apr 06 17:51:00 IST 2017
-base.0=E\:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_3767241b77113a021b1c3c05a8ddcd3ebb86512b
-renamed.1=classes2.dex
+#Tue Apr 25 09:25:47 IST 2017
+base.0=G\:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
-file.1=E\:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_18f0c63458c1cb72642ab5e8780dde688030383d\\classes.dex
-base.1=E\:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_18f0c63458c1cb72642ab5e8780dde688030383d
-file.0=E\:\\Himalaya_MT\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_3767241b77113a021b1c3c05a8ddcd3ebb86512b\\classes.dex
+file.0=G\:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

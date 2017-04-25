@@ -102,9 +102,18 @@
         <activity
             android:name="com.cpm.dailyentry.AssetActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
+            android:label="Paid Visibility"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--
+            <activity
+            android:name="com.cpm.dailyentry.AssetActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
             android:label="Asset"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        -->
         <activity
             android:name="com.cpm.dailyentry.NonWorkingReason"
             android:label="Non Working"

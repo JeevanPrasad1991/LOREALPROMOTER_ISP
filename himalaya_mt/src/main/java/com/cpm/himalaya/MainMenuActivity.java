@@ -55,18 +55,12 @@ public class MainMenuActivity extends AppCompatActivity
     ArrayList<JourneyPlanGetterSetter> jcplist;
     private SharedPreferences preferences = null;
     private String date, user_name, user_type;
-
     TextView tv_username, tv_usertype;
-
     FrameLayout frameLayout;
     NavigationView navigationView;
-
     ArrayList<CoverageBean> cdata = new ArrayList<CoverageBean>();
-
     JourneyPlanGetterSetter storestatus = new JourneyPlanGetterSetter();
-
     ArrayList<PayslipGetterSetter> payslip = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -383,7 +377,6 @@ public class MainMenuActivity extends AppCompatActivity
                 .commit();
     }
 
-
     public boolean validate_data() {
         boolean result = false;
 
@@ -410,7 +403,6 @@ public class MainMenuActivity extends AppCompatActivity
         return result;
     }
 
-
     public boolean validate() {
         boolean result = false;
 
@@ -428,5 +420,4 @@ public class MainMenuActivity extends AppCompatActivity
 
         return result;
     }
-
 }
