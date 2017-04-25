@@ -1,23 +1,7 @@
 package com.cpm.himalaya;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -33,30 +17,38 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpm.Constants.CommonString;
 import com.cpm.autoupdate.AutoupdateActivity;
-
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
-import com.cpm.delegates.TableBean;
 import com.cpm.message.AlertMessage;
 import com.cpm.xmlGetterSetter.FailureGetterSetter;
 import com.cpm.xmlGetterSetter.LoginGetterSetter;
 import com.cpm.xmlGetterSetter.QuestionGetterSetter;
 import com.cpm.xmlHandler.XMLHandlers;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class LoginActivity extends Activity implements OnClickListener,
@@ -184,8 +176,7 @@ public class LoginActivity extends Activity implements OnClickListener,
         }
 
         // Create a Folder for Images
-        File file = new File(Environment.getExternalStorageDirectory(),
-                "Mondelez_Images");
+        File file = new File(Environment.getExternalStorageDirectory(), "Himalaya_MT_Images");
         if (!file.isDirectory()) {
             file.mkdir();
         }

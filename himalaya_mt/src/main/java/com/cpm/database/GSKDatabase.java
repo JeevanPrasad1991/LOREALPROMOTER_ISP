@@ -70,32 +70,21 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
-
-        // CREATING TABLE FOR GTGSK
-
 
         db.execSQL(TableBean.getjcptable());
         db.execSQL(TableBean.getSkumastertable());
         db.execSQL(TableBean.getMappingavailtable());
         db.execSQL(TableBean.getMappingpromotable());
         db.execSQL(TableBean.getMappingassettable());
-        //db.execSQL(TableBean.getDeepfreezertable());
         db.execSQL(TableBean.getAssetmastertable());
         db.execSQL(TableBean.getCompanytable());
-        //db.execSQL(TableBean.getPerformancetable());
-        //db.execSQL(TableBean.getClosingcoldtable());
         db.execSQL(TableBean.getNonworkingtable());
-
-        //db.execSQL(TableBean.getQuestiontable());
         db.execSQL(TableBean.getBrandtable());
-
         db.execSQL(TableBean.getAsset_checklist_table());
         db.execSQL(TableBean.getMapping_asset_checklist_table());
-
         db.execSQL(TableBean.getEmp_payslip_table());
-
         db.execSQL(TableBean.getCategorymastertable());
+
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
         db.execSQL(CommonString.CREATE_TABLE_CLOSING_STOCK_DATA);
@@ -131,10 +120,22 @@ public class GSKDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
     public void deleteSpecificStoreData(String storeid) {
-
         db.delete(CommonString.TABLE_COVERAGE_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
+
+        db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+        db.delete(CommonString.TABLE_STOCK_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
+        db.delete(CommonString.TABLE_INSERT_PROMOTION_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+        db.delete(CommonString.TABLE_PROMOTION_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
+        db.delete(CommonString.TABLE_INSERT_ASSET_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+        db.delete(CommonString.TABLE_ASSET_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
+        db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+        db.delete(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
+        /*db.delete(CommonString.TABLE_COVERAGE_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
         db.delete("DEEPFREEZER_DATA", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("FACING_COMPETITOR_DATA", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("openingHeader_Asset_data", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
@@ -144,9 +145,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete("openingHeader_FOOD_STORE_data", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("FOOD_STORE_DATA", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("openingHeader_data", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
-    /*	db.delete("OPENING_STOCK_DATA", null, null);
-        db.delete("MIDDAY_STOCK_DATA", null, null);
-		db.delete("CLOSING_STOCK_DATA", null, null);*/
         db.delete("openingHeader_Closing_data", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("openingHeader_Midday_data", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("STOCK_DATA", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
@@ -157,17 +155,25 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete("POI", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("COMPETITION_PROMOTION", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete("STOCK_IMAGE", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
-        db.delete("ASSET_CHECKLIST_INSERT", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
-
+        db.delete("ASSET_CHECKLIST_INSERT", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);*/
     }
 
-
     public void deleteAllTables() {
-
-        // DELETING TABLES GTGSK
-
-
         db.delete(CommonString.TABLE_COVERAGE_DATA, null, null);
+
+        db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, null, null);
+        db.delete(CommonString.TABLE_STOCK_DATA, null, null);
+
+        db.delete(CommonString.TABLE_INSERT_PROMOTION_HEADER_DATA, null, null);
+        db.delete(CommonString.TABLE_PROMOTION_DATA, null, null);
+
+        db.delete(CommonString.TABLE_INSERT_ASSET_HEADER_DATA, null, null);
+        db.delete(CommonString.TABLE_ASSET_DATA, null, null);
+
+        db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, null, null);
+        db.delete(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, null, null);
+
+        /*db.delete(CommonString.TABLE_COVERAGE_DATA, null, null);
         db.delete("DEEPFREEZER_DATA", null, null);
         db.delete("FACING_COMPETITOR_DATA", null, null);
         db.delete("openingHeader_Asset_data", null, null);
@@ -177,9 +183,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete("openingHeader_FOOD_STORE_data", null, null);
         db.delete("FOOD_STORE_DATA", null, null);
         db.delete("openingHeader_data", null, null);
-    /*	db.delete("OPENING_STOCK_DATA", null, null);
-        db.delete("MIDDAY_STOCK_DATA", null, null);
-		db.delete("CLOSING_STOCK_DATA", null, null);*/
         db.delete("openingHeader_Closing_data", null, null);
         db.delete("openingHeader_Midday_data", null, null);
         db.delete("STOCK_DATA", null, null);
@@ -188,8 +191,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_COMPETITION_POI, null, null);
         db.delete(CommonString.TABLE_COMPETITION_PROMOTION, null, null);
         db.delete(CommonString.TABLE_POI, null, null);
-        db.delete(CommonString.TABLE_STOCK_IMAGE, null, null);
-
+        db.delete(CommonString.TABLE_STOCK_IMAGE, null, null);*/
     }
 
 
@@ -1292,7 +1294,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "INNER JOIN SKU_MASTER SD " +
                     "ON CD.SKU_CD = SD.SKU_CD " +
                     "WHERE CD.STORE_CD ='" + store_cd + "' " +
-                    "ORDER BY SD.BRAND_SEQUENCE", null);
+                    "ORDER BY SD.BRAND_SEQUENCE limit 1", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -3767,19 +3769,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
 //deletecross Asset Data
 
     public void deleteAssetData(String storeid) {
-
         try {
-
-            db.delete(CommonString.TABLE_ASSET_DATA,
-                    CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
-
-            db.delete(CommonString.TABLE_INSERT_ASSET_HEADER_DATA,
-                    CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+            db.delete(CommonString.TABLE_ASSET_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+            db.delete(CommonString.TABLE_INSERT_ASSET_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
 
         } catch (Exception e) {
-            Log.d("Exception when fetching Records!!!!!!!!!!!!!!!!!!!!!",
-                    e.toString());
-
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
         }
     }
 
@@ -4379,15 +4374,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
     //check if table is empty
     public boolean isCoverageDataFilled(String visit_date) {
         boolean filled = false;
-
         Cursor dbcursor = null;
 
         try {
-
-            dbcursor = db
-                    .rawQuery(
-                            "SELECT * FROM COVERAGE_DATA " + "where "
-                                    + CommonString.KEY_VISIT_DATE + "<>'" + visit_date + "'", null);
+            dbcursor = db.rawQuery("SELECT * FROM COVERAGE_DATA " +
+                    "where " + CommonString.KEY_VISIT_DATE + "<>'" + visit_date + "'", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -4398,15 +4389,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 } else {
                     filled = false;
                 }
-
             }
-
         } catch (Exception e) {
-            Log.d("Exception when fetching Records!!!!!!!!!!!!!!!!!!!!!",
-                    e.toString());
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
             return filled;
         }
-
         return filled;
     }
 
@@ -5306,7 +5293,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<StockNewGetterSetter> getAfterPaidVisibilitySkuData(String asset_cd, String store_cd, String visitdate, String category_cd) {
+    public ArrayList<StockNewGetterSetter> getAfterPaidVisibilitySkuData(String asset_cd, String store_cd,
+                                                                         String visitdate, String category_cd) {
         Log.d("Fetching ", "checklist data--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<>();
         Cursor dbcursor = null;
@@ -5424,24 +5412,24 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     String midday_stock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("MIDDAY_STOCK"));
                     if (midday_stock == null || midday_stock.equals("")) {
-                        sb.setEd_midFacing("");
+                        sb.setEd_midFacing("0");
                     } else {
                         sb.setEd_midFacing(midday_stock);
                     }
 
                     String closing_stock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK"));
                     if (closing_stock == null || closing_stock.equals("")) {
-                        sb.setEd_closingFacing("");
+                        sb.setEd_closingFacing("0");
                     } else {
                         sb.setEd_closingFacing(closing_stock);
                     }
 
-                    String Stock_under45days = dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_UNDER_DAYS"));
+                    /*String Stock_under45days = dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_UNDER_DAYS"));
                     if (Stock_under45days == null || Stock_under45days.equals("")) {
                         sb.setStock_under45days("");
                     } else {
                         sb.setStock_under45days(Stock_under45days);
-                    }
+                    }*/
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5455,6 +5443,39 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
 
         Log.d("Fetching", "Stock Data Fetching------->Stop<-------");
+        return list;
+    }
+
+    public ArrayList<StockNewGetterSetter> getStockImageUploadData(String store_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY, IMAGE_STK " +
+                    "FROM STOCK_IMAGE " +
+                    "WHERE STORE_CD ='" + store_cd + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+                    sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
+                    sb.setImg_cam(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE_STK")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching Header!!!!!!!!!!! " + e.toString());
+            return list;
+        }
+        Log.d("Fetching ", "Header stock---------------------->Stop<-----------");
         return list;
     }
 
@@ -5523,10 +5544,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setAsset_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ASSET_CD")));
                     sb.setAsset(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ASSET")));
-                    sb.setPresent(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT")));
                     sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow("REMARK")));
                     sb.setImg(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE")));
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+
+                    String toggle = dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT"));
+                    if (toggle.equalsIgnoreCase("Yes")) {
+                        sb.setPresent("1");
+                    } else {
+                        sb.setPresent("0");
+                    }
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5562,7 +5589,14 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setChecklist(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST)));
                     sb.setChecklist_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_ID)));
                     sb.setChecklist_type(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_TYPE)));
-                    sb.setChecklist_text(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_TEXT)));
+
+                    String toggle = dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_TEXT));
+                    if (toggle.equalsIgnoreCase("yes")) {
+                        sb.setChecklist_text("1");
+                    } else {
+                        sb.setChecklist_text("0");
+                    }
+
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5578,6 +5612,42 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", " checklist data---------------------->Stop<-----------");
         return list;
     }
+
+    public ArrayList<StockNewGetterSetter> getAssetSkuListData(String store_cd) {
+        Log.d("Fetching ", "skulist data--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT +
+                    " WHERE STORE_CD = '" + store_cd + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+
+                    sb.setSku_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CD")));
+                    sb.setSku(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU")));
+                    sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
+                    sb.setChk_skuBox(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CHECK_BOX")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching checklist data!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", " checklist data---------------------->Stop<-----------");
+        return list;
+    }
+
     //----------------------------------------------------
     //<editor-fold desc="Previous Code">
     /*// downloaded data

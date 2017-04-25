@@ -4,7 +4,7 @@ import android.os.Environment;
 
 public class CommonString {
 
-    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/Mondelez_Images/";
+    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/Himalaya_MT_Images/";
     public static final String PLS_FILL_DATA = "Please fill the data";
     public static final String CALLS_INVALID_DATA = "Productive Call cannot be greater than Total Calls";
     public static final String ONBACK_ALERT_MESSAGE = "Unsaved data will be lost - Do you want to continue?";
