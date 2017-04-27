@@ -148,6 +148,13 @@ public class AuditQuestionActivity extends AppCompatActivity {
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             holder.sp_auditAnswer.setAdapter(spinnerAdapter);
 
+            for (int i = 0; i < answerList.size(); i++) {
+                if (data.getSp_answer().equals(answerList.get(i).getAnswer_id())) {
+                    holder.sp_auditAnswer.setSelection(i);
+                    break;
+                }
+            }
+
             holder.sp_auditAnswer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -157,8 +164,9 @@ public class AuditQuestionActivity extends AppCompatActivity {
                         data.setSp_answer("0");
                     } else {
                         for (int i = 0; i < answerList.size(); i++) {
-                            if (answerList.get(i).getAnswer().equalsIgnoreCase(str)) {
+                            if (str.equalsIgnoreCase(answerList.get(i).getAnswer())) {
                                 data.setSp_answer(answerList.get(i).getAnswer_id());
+                                break;
                             }
                         }
                     }
@@ -169,11 +177,6 @@ public class AuditQuestionActivity extends AppCompatActivity {
                 }
             });
 
-            for (int i = 0; i < answerList.size(); i++) {
-                if (answerList.get(i).getAnswer_id().equals(data.getSp_answer())) {
-                    holder.sp_auditAnswer.setSelection(i);
-                }
-            }
         }
 
         @Override
