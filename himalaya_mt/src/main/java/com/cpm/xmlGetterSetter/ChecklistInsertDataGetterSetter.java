@@ -5,7 +5,7 @@ package com.cpm.xmlGetterSetter;
  */
 public class ChecklistInsertDataGetterSetter {
 
-    String checklist_id, checklist, checklist_type, checklist_text, asset_cd;
+    String checklist_id, checklist, checklist_type, checklist_text, asset_cd, category_cd;
 
     public String getChecklist_id() {
         return checklist_id;
@@ -46,5 +46,13 @@ public class ChecklistInsertDataGetterSetter {
 
     public void setAsset_cd(String asset_cd) {
         this.asset_cd = asset_cd;
+    }
+
+    public String getCategory_cd() {
+        return category_cd;
+    }
+
+    public void setCategory_cd(String category_cd) {
+        this.category_cd = category_cd;
     }
 }

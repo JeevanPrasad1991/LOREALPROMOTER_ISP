@@ -641,8 +641,6 @@ public class CommonString {
     public static final String TABLE_PLANOGRAM_MAPPING_GTGSK = "PLANOGRAM_MAPPING";
 
 
-    public static final String TABLE_ASSET_CHECKLIST_INSERT = "ASSET_CHECKLIST_INSERT";
-
     // CREATING TABLE FOR ABOVE TABLE NAMES
     // Tables
 
@@ -1011,6 +1009,7 @@ public class CommonString {
 
 
     // planogram
+    public static final String TABLE_ASSET_CHECKLIST_INSERT = "ASSET_CHECKLIST_INSERT";
 
     public static final String CREATE_TABLE_ASSET_CHECKLIST_INSERT = "CREATE TABLE "
             + TABLE_ASSET_CHECKLIST_INSERT
@@ -1029,6 +1028,10 @@ public class CommonString {
             + " VARCHAR,"
             + ASSET_CD
             + " VARCHAR,"
+
+            + "CATEGORY_CD"
+            + " VARCHAR,"
+
             + KEY_VISIT_DATE
             + " VARCHAR)";
 

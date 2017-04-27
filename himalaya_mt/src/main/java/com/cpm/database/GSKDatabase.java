@@ -1,5 +1,6 @@
 package com.cpm.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +14,8 @@ import com.cpm.delegates.TableBean;
 import com.cpm.xmlGetterSetter.AssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
 import com.cpm.xmlGetterSetter.AssetMasterGetterSetter;
+import com.cpm.xmlGetterSetter.Audit_QuestionDataGetterSetter;
+import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.CallsGetterSetter;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
@@ -46,7 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+@SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "CANDID_PROMOTER_DATABASES";
@@ -84,6 +87,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getMapping_asset_checklist_table());
         db.execSQL(TableBean.getEmp_payslip_table());
         db.execSQL(TableBean.getCategorymastertable());
+        db.execSQL(TableBean.getAudit_question_table());
 
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
@@ -297,6 +301,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //JCP data
+    @SuppressLint("LongLogTag")
     public void insertJCPData(JourneyPlanGetterSetter data) {
 
         db.delete("JOURNEY_PLAN", null, null);
@@ -313,6 +318,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 //Temp 		values.put("VISIT_DATE", data.getVISIT_DATE().get(i));
 
                 values.put("VISIT_DATE", data.getVISIT_DATE().get(i));
+                //values.put("VISIT_DATE", "04/25/2017");
                 values.put("KEYACCOUNT", data.getKey_account().get(i));
 
                 values.put("STORENAME", data.getStore_name().get(i));
@@ -2489,50 +2495,40 @@ public class GSKDatabase extends SQLiteOpenHelper {
     //check if table is empty
     public boolean isAssetDataFilled(String storeId) {
         boolean filled = false;
-
         Cursor dbcursor = null;
 
         try {
-
-            dbcursor = db
-                    .rawQuery(
-                            "SELECT * FROM ASSET_DATA WHERE STORE_CD= '" + storeId + "'", null);
+            dbcursor = db.rawQuery("SELECT * FROM ASSET_DATA WHERE STORE_CD= '" + storeId + "'", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 int icount = dbcursor.getInt(0);
                 dbcursor.close();
+
                 if (icount > 0) {
                     filled = true;
                 } else {
                     filled = false;
                 }
-
             }
-
         } catch (Exception e) {
-            Log.d("Exception when fetching Records!!!!!!!!!!!!!!!!!!!!!",
-                    e.toString());
+            Log.d("Exception", " when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
             return filled;
         }
-
         return filled;
     }
 
     //Get Asset Upload Data
     public ArrayList<AssetInsertdataGetterSetter> getAssetUpload(String storeId) {
-        Log.d("FetchingAssetuploaddata--------------->Start<------------",
-                "------------------");
+        Log.d("Fetching", "Assetuploaddata--------------->Start<------------");
         ArrayList<AssetInsertdataGetterSetter> list = new ArrayList<AssetInsertdataGetterSetter>();
         Cursor dbcursor = null;
 
         try {
 
-            dbcursor = db
-                    .rawQuery(
-                            "SELECT SD.ASSET_CD,SD.ASSET,SD.PRESENT,SD.REMARK, SD.IMAGE,CD.CATEGORY_CD, CD.CATEGORY " +
-                                    "FROM openingHeader_Asset_data CD INNER JOIN ASSET_DATA SD ON CD.KEY_ID=SD.Common_Id WHERE CD.STORE_CD= '"
-                                    + storeId + "'", null);
+            dbcursor = db.rawQuery("SELECT SD.ASSET_CD,SD.ASSET,SD.PRESENT,SD.REMARK, SD.IMAGE,CD.CATEGORY_CD, CD.CATEGORY " +
+                    "FROM openingHeader_Asset_data CD INNER JOIN ASSET_DATA SD ON CD.KEY_ID=SD.Common_Id WHERE CD.STORE_CD= '"
+                    + storeId + "'", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -4910,19 +4906,18 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-//Checklist data
-
+    //Checklist data
     public ArrayList<ChecklistInsertDataGetterSetter> getCheckListData(String asset_cd) {
-        Log.d("Fetching checklist data--------------->Start<------------",
-                "------------------");
-        ArrayList<ChecklistInsertDataGetterSetter> list = new ArrayList<ChecklistInsertDataGetterSetter>();
+        Log.d("Fetching checklist data--------------->Start<------------", "------------------");
+        ArrayList<ChecklistInsertDataGetterSetter> list = new ArrayList<>();
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db
-                    .rawQuery(
-                            "SELECT DISTINCT AC.CHECKLIST, AC.CHECKLIST_ID,  AC.CHECKLIST_TYPE FROM MAPPING_ASSET_CHECKLIST MA INNER JOIN ASSET_CHECKLIST AC ON MA.CHECKLIST_ID = AC.CHECKLIST_ID WHERE MA.ASSET_CD= '" + asset_cd + "'"
-                            , null);
+            dbcursor = db.rawQuery("SELECT DISTINCT AC.CHECKLIST, AC.CHECKLIST_ID,AC.CHECKLIST_TYPE " +
+                    "FROM MAPPING_ASSET_CHECKLIST MA " +
+                    "INNER JOIN ASSET_CHECKLIST AC " +
+                    "ON MA.CHECKLIST_ID = AC.CHECKLIST_ID " +
+                    "WHERE MA.ASSET_CD= '" + asset_cd + "'", null);
 
 
             if (dbcursor != null) {
@@ -4930,18 +4925,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 while (!dbcursor.isAfterLast()) {
                     ChecklistInsertDataGetterSetter sb = new ChecklistInsertDataGetterSetter();
 
-
-                    sb.setChecklist(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("CHECKLIST")));
-
-                    sb.setChecklist_id(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("CHECKLIST_ID")));
-
-                    sb.setChecklist_type(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("CHECKLIST_TYPE")));
-
+                    sb.setChecklist(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHECKLIST")));
+                    sb.setChecklist_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHECKLIST_ID")));
+                    sb.setChecklist_type(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHECKLIST_TYPE")));
                     sb.setChecklist_text("");
-
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -4949,21 +4936,15 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.close();
                 return list;
             }
-
         } catch (Exception e) {
-            Log.d("Exception when fetching checklist data!!!!!!!!!!!",
-                    e.toString());
+            Log.d("Exception when fetching checklist data!!!!!!!!!!!", e.toString());
             return list;
         }
-
-        Log.d("Fetching checklist data---------------------->Stop<-----------",
-                "-------------------");
+        Log.d("Fetching checklist data---------------------->Stop<-----------", "-------------------");
         return list;
     }
 
-
     //Get Checklist Insert data
-
     public ArrayList<ChecklistInsertDataGetterSetter> getCheckListInsertData(String asset_cd, String store_cd, String visitdate) {
         Log.d("Fetching ", "checklist data--------------->Start<------------");
         ArrayList<ChecklistInsertDataGetterSetter> list = new ArrayList<ChecklistInsertDataGetterSetter>();
@@ -5000,9 +4981,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
-    //dlete specific Checklist Insert data
-
+    //delete specific Checklist Insert data
     public void deleteCheckListInsertData(String asset_cd, String store_cd, String visitdate) {
         Log.d("Fetching checklist data--------------->Start<------------",
                 "------------------");
@@ -5011,9 +4990,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //Get All Checklist Insert data
-
     public ArrayList<ChecklistInsertDataGetterSetter> getCheckListAllInsertData(String store_cd, String visitdate) {
         Log.d("Fetching checklist data--------------->Start<------------",
                 "------------------");
@@ -5078,9 +5055,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
-//Get mapping Checklist data
-
+    //Get mapping Checklist data
     public ArrayList<MappingAssetChecklistGetterSetter> getMapingCheckListData() {
         Log.d("Fetching mapping checklist data--------------->Start<------------",
                 "------------------");
@@ -5123,18 +5098,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     //Insert Asset Checklist Data
+    public void insertAssetCheckListData(ArrayList<ChecklistInsertDataGetterSetter> data,
+                                         String asset_cd, String visit_date, String store_cd, String category_cd) {
 
-    public void insertAssetCheckListData(ArrayList<ChecklistInsertDataGetterSetter> data, String asset_cd, String visit_date, String store_cd) {
-
-        db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, "ASSET_CD" + "='" + asset_cd + "' AND STORE_CD" + "='" + store_cd + "'", null);
+        db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, "ASSET_CD" + "='" + asset_cd
+                + "' AND STORE_CD" + "='" + store_cd + "' AND CATEGORY_CD='" + category_cd + "'", null);
         ContentValues values = new ContentValues();
 
         try {
-
             for (int i = 0; i < data.size(); i++) {
-
                 values.put(CommonString.CHECK_LIST_ID, data.get(i).getChecklist_id());
                 values.put(CommonString.KEY_STORE_CD, store_cd);
                 values.put(CommonString.ASSET_CD, asset_cd);
@@ -5142,27 +5115,21 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put(CommonString.CHECK_LIST_TEXT, data.get(i).getChecklist_text());
                 values.put(CommonString.CHECK_LIST_TYPE, data.get(i).getChecklist_type());
                 values.put(CommonString.CHECK_LIST, data.get(i).getChecklist());
+                values.put("CATEGORY_CD", category_cd);
 
                 db.insert(CommonString.TABLE_ASSET_CHECKLIST_INSERT, null, values);
-
             }
-
         } catch (Exception ex) {
-            Log.d("Database Exception while Insert Asset checklist insert Data ",
-                    ex.toString());
+            Log.d("Database Exception while Insert Asset checklist insert Data ", ex.toString());
         }
-
     }
 
-//Salary Pay Slip data
-
+    //Salary Pay Slip data
     public void insertPaySlipdata(PayslipGetterSetter data) {
-
         db.delete("EMP_SALARY", null, null);
         ContentValues values = new ContentValues();
 
         try {
-
             values.put("SALARY_MONTH", data.getMONTH().get(0));
             values.put("SALARY_YEAR", data.getSALARY_YEAR().get(0));
             values.put("ECODE", data.getECODE().get(0));
@@ -5182,17 +5149,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
             db.insert("EMP_SALARY", null, values);
 
-
         } catch (Exception ex) {
-            Log.d("Database Exception while Insert Non Working Data ",
-                    ex.toString());
+            Log.d("Database Exception while Insert Non Working Data ", ex.toString());
         }
-
     }
 
-
     //get Payslip Data
-
     public ArrayList<PayslipGetterSetter> getPaySlipData() {
         Log.d("Fetching", "Storedata--------------->Start<------------");
 
@@ -5304,7 +5266,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     " WHERE ASSET_CD = '" + asset_cd + "' AND STORE_CD = '" + store_cd +
                     "' AND VISIT_DATE = '" + visitdate + "'  AND CATEGORY_CD='" + category_cd + "'", null);
 
-
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
@@ -5315,7 +5276,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
                     sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
                     sb.setChk_skuBox(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CHECK_BOX")));
-
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5585,6 +5545,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 while (!dbcursor.isAfterLast()) {
                     ChecklistInsertDataGetterSetter sb = new ChecklistInsertDataGetterSetter();
 
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setAsset_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.ASSET_CD)));
                     sb.setChecklist(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST)));
                     sb.setChecklist_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.CHECK_LIST_ID)));
@@ -5632,6 +5593,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
                     sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
                     sb.setChk_skuBox(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CHECK_BOX")));
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+                    sb.setAsset_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ASSET_CD")));
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5645,6 +5608,92 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
 
         Log.d("Fetching", " checklist data---------------------->Stop<-----------");
+        return list;
+    }
+
+
+    //Audit Question Data
+    public void insertAuditQuestionData(Audit_QuestionGetterSetter data) {
+        db.delete("AUDIT_QUESTION", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+            for (int i = 0; i < data.getQUESTION_ID().size(); i++) {
+                values.put("QUESTION_ID", data.getQUESTION_ID().get(i));
+                values.put("QUESTION", data.getQUESTION().get(i));
+                values.put("ANSWER_ID", data.getANSWER_ID().get(i));
+                values.put("ANSWER", data.getANSWER().get(i));
+                values.put("QUESTION_TYPE", data.getQUESTION_TYPE().get(i));
+
+                db.insert("AUDIT_QUESTION", null, values);
+            }
+        } catch (Exception ex) {
+            Log.d("Database Exception", " while Insert Audit Question Data " + ex.toString());
+        }
+    }
+
+    public ArrayList<Audit_QuestionDataGetterSetter> getAuditQuestionData(String store_cd) {
+        Log.d("Fetching", "AuditQuestion Data--------------->Start<------------");
+        ArrayList<Audit_QuestionDataGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("Select DISTINCT QUESTION_ID,QUESTION " +
+                    "From AUDIT_QUESTION", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    Audit_QuestionDataGetterSetter sb = new Audit_QuestionDataGetterSetter();
+
+                    sb.setQuestion_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION_ID")));
+                    sb.setQuestion(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION")));
+                    sb.setSp_answer("0");
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching opening stock!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching ", "opening stock---------------------->Stop<-----------");
+        return list;
+    }
+
+    public ArrayList<Audit_QuestionDataGetterSetter> getAuditAnswerData(String store_cd, String question_id) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+
+        ArrayList<Audit_QuestionDataGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("Select * from AUDIT_QUESTION " +
+                    "where QUESTION_ID='" + question_id + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    Audit_QuestionDataGetterSetter sb = new Audit_QuestionDataGetterSetter();
+
+                    sb.setAnswer_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ANSWER_ID")));
+                    sb.setAnswer(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ANSWER")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching opening stock!!!!!!!!!!! " + e.toString());
+            return list;
+        }
+        Log.d("Fetching", " opening stock---------------------->Stop<-----------");
         return list;
     }
 

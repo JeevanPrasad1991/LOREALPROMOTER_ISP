@@ -395,6 +395,7 @@ public class UploadDataActivity extends Activity {
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[ASSET_CD]" + paidVisibilityCheckList.get(j).getAsset_cd() + "[/ASSET_CD]"
+                                            + "[CATEGORY_CD]" + paidVisibilityCheckList.get(j).getCategory_cd() + "[/CATEGORY_CD]"
                                             + "[CHECK_LIST_ID]" + paidVisibilityCheckList.get(j).getChecklist_id() + "[/CHECK_LIST_ID]"
                                             + "[CHECK_LIST_TOGGLE]" + paidVisibilityCheckList.get(j).getChecklist_text() + "[/CHECK_LIST_TOGGLE]"
                                             + "[/CHECK_LIST_DATA]";
@@ -413,6 +414,8 @@ public class UploadDataActivity extends Activity {
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + paidVisibilitySkuList.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[BRAND_CD]" + paidVisibilitySkuList.get(j).getBrand_cd() + "[/BRAND_CD]"
+                                            + "[ASSET_CD]" + paidVisibilitySkuList.get(j).getAsset_cd() + "[/ASSET_CD]"
+                                            + "[CATEGORY_CD]" + paidVisibilitySkuList.get(j).getCategory_cd() + "[/CATEGORY_CD]"
                                             + "[SKU_CHECK_BOX]" + paidVisibilitySkuList.get(j).getChk_skuBox() + "[/SKU_CHECK_BOX]"
                                             + "[/SKU_LIST_DATA]";
 

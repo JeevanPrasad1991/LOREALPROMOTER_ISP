@@ -297,8 +297,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             holder.btn_checkList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showChecklistDialogue(_listDataChild.get(listDataHeader.get(groupPosition))
-                            .get(childPosition).getAsset_cd());
+                    showChecklistDialogue(childText.getAsset_cd(), childText.getCategory_cd());
                 }
             });
 
@@ -741,7 +740,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     }
 
     //CheckList
-    public void showChecklistDialogue(final String asset_cd) {
+    public void showChecklistDialogue(final String asset_cd, final String category_cd) {
         boolean update_flag = false;
 
         checklistInsertDataGetterSetters = db.getCheckListInsertData(asset_cd, store_cd, visit_date);
@@ -793,7 +792,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     }
 
                     if (isvalid) {
-                        db.insertAssetCheckListData(checklistInsertDataGetterSetters, asset_cd, visit_date, store_cd);
+                        db.insertAssetCheckListData(checklistInsertDataGetterSetters, asset_cd, visit_date, store_cd, category_cd);
                         dialog.cancel();
                     } else {
                         Toast.makeText(AssetActivity.this, "Please fill text in text field", Toast.LENGTH_SHORT).show();

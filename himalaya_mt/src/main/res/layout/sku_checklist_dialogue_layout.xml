@@ -1,32 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primarycolor"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="Sku List"
-            android:textColor="@color/white"
-            android:textSize="@dimen/store_entry_text_size" />
-        <!--android:text="Check list"
-                android:textStyle="bold"-->
-
-        <ListView
-            android:id="@+id/lv_checklist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lin_no_data"
@@ -41,42 +17,85 @@
             android:src="@drawable/no_data" />
     </LinearLayout>
 
-    <!--Save and Cancel-->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primarycolor"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:weightSum="2">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/lin_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_save_checklist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/save"
-                android:textColor="@color/primarycolor" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primarycolor"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="Sku List"
+                android:textColor="@color/white"
+                android:textSize="@dimen/store_entry_text_size" />
+            <!--android:text="Check list"
+                    android:textStyle="bold"-->
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_above="@+id/lin_saveCancel"
+            android:layout_below="@+id/lin_header"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_cancel_checklist"
-                android:layout_width="wrap_content"
+            <ListView
+                android:id="@+id/lv_checklist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!--Save and Cancel-->
+        <LinearLayout
+            android:id="@+id/lin_saveCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primarycolor"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/cancel"
-                android:textColor="@color/primarycolor" />
-        </RelativeLayout>
+                android:layout_weight="1">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btn_save_checklist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/save"
+                    android:textColor="@color/primarycolor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_cancel_checklist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/cancel"
+                    android:textColor="@color/primarycolor" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 </LinearLayout>
