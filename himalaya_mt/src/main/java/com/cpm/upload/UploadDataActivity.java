@@ -199,10 +199,10 @@ public class UploadDataActivity extends Activity {
                         validity = (words[0]);
 
                         if (validity.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                            /*database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_P);
+                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_P);
 
                             database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(),
-                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_P);*/
+                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_P);
                         } else {
                             isError = true;
                             continue;
@@ -643,11 +643,11 @@ public class UploadDataActivity extends Activity {
                         if (result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                             database.open();
 
-                            /*database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
+                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
                             database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(),
                                     coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_D);
 
-                            database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());*/
+                            database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());
                         }
 
                         if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
@@ -838,7 +838,7 @@ public class UploadDataActivity extends Activity {
                 return CommonString.KEY_FAILURE;
             }
         } else {
-            //new File(Path + path).delete();
+            new File(Path + path).delete();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
             editor.commit();
