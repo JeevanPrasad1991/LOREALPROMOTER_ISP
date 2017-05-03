@@ -100,12 +100,12 @@
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\exit_selector.xml"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\icn_promotion.png",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\icn_promotion.png"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\footer.png",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\footer.png"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\icn_promotion.png",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\icn_promotion.png"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\rtretail.png",
@@ -128,16 +128,16 @@
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\tab_text_indicator.xml"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
-        "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable\\abc_tab_indicator_material.xml"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\icn_promotion_done.png",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\icn_promotion_done.png"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\rtlogo.png",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\rtlogo.png"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
+        "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable\\abc_tab_indicator_material.xml"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\rt_logo_new.jpg",
@@ -388,12 +388,12 @@
         "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable\\abc_item_background_holo_dark.xml"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\secondary_window_selector.xml",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\secondary_window_selector.xml"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\capital_logo.png",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\capital_logo.png"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\secondary_window_selector.xml",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\secondary_window_selector.xml"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\edit_text_border.xml",
@@ -420,12 +420,12 @@
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\daily_entry.png"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\mccainvf.jpg",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\mccainvf.jpg"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_autoupdate.xml",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\btn_autoupdate.xml"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\mccainvf.jpg",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\mccainvf.jpg"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_downloaddata.xml",

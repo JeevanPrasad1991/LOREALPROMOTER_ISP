@@ -3,7 +3,7 @@ package com.cpm.xmlGetterSetter;
 import java.util.ArrayList;
 
 public class Audit_QuestionDataGetterSetter {
-    String question_id ,question ,answer_id,answer,question_type,sp_answer;
+    String question_id ,question ,answer_id,answer,question_type,sp_answer_id="";
 
     public String getQuestion_id() {
         return question_id;
@@ -45,11 +45,11 @@ public class Audit_QuestionDataGetterSetter {
         this.question_type = question_type;
     }
 
-    public String getSp_answer() {
-        return sp_answer;
+    public String getSp_answer_id() {
+        return sp_answer_id;
     }
 
-    public void setSp_answer(String sp_answer) {
-        this.sp_answer = sp_answer;
+    public void setSp_answer_id(String sp_answer_id) {
+        this.sp_answer_id = sp_answer_id;
     }
 }

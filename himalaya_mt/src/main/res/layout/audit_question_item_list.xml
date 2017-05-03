@@ -34,7 +34,7 @@
                     android:paddingRight="20dp"
                     android:paddingTop="5dp"
                     android:text="Question"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/black"
                     android:textSize="16dip" />
             </LinearLayout>
 
@@ -56,7 +56,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:text="Answer"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <Spinner

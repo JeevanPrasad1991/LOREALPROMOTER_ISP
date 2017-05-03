@@ -371,7 +371,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                             startActivity(in1);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             /*}
-							else{
+                            else{
 								Toast.makeText(getApplicationContext(),
 										"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
 							}*/
@@ -420,7 +420,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                         Intent in5 = new Intent(getApplicationContext(), AdditionalPOIActivity.class);
                         startActivity(in5);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-						/*stockData=db.getOpeningStock(store_cd);
+                        /*stockData=db.getOpeningStock(store_cd);
 						if((stockData.size()<=0) || (stockData.get(0).getOpen_stock_cold_room()==null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))){
 							Toast.makeText(getApplicationContext(),"First Fill Opening Stock and Midday Stock Data",
 							Toast.LENGTH_SHORT).show();
@@ -446,7 +446,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     }
 
                     //Audit
-                    if (current.getIconImg() == R.drawable.audit) {
+                    if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.deep_freezer_done) {
                         Intent in7 = new Intent(getApplicationContext(), AuditQuestionActivity.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -523,11 +523,11 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
 
         //Audit Option
-        /*if (db.getPOIData(store_cd).size() > 0) {
-            audit = R.drawable.c_add_display_done;
-        } else {*/
-        audit = R.drawable.audit;
-        //}
+        if (db.isAuditDataFilled(store_cd)) {
+            audit = R.drawable.deep_freezer_done;
+        } else {
+            audit = R.drawable.audit;
+        }
 
         //<editor-fold desc="Previous code">
         /*if (user_type.equals("Promoter")) {

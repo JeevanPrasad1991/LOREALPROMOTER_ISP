@@ -476,12 +476,12 @@
         "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable-hdpi\\abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\focussku_tick.png",
-        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-hdpi\\focussku_tick.png"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\shareofdisplay_tick.png",
         "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-hdpi\\shareofdisplay_tick.png"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\focussku_tick.png",
+        "source": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-hdpi\\focussku_tick.png"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\reports.png",
@@ -652,12 +652,12 @@
         "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable-hdpi\\abc_scrubber_track_mtrl_alpha.9.png"
     },
     {
-        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png",
-        "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\641a15c006b7807bee4ccfb9b55017c85bcde381\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png"
-    },
-    {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\abc_cab_background_top_mtrl_alpha.9.png",
         "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\ead397f089a02bcf248fc3eef4c177378ade427c\\output\\res\\drawable-hdpi\\abc_cab_background_top_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png",
+        "source": "C:\\Users\\gagang.CPMIN\\.android\\build-cache\\641a15c006b7807bee4ccfb9b55017c85bcde381\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png"
     },
     {
         "merged": "G:\\Gagan\\svn_workspace\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\food_done.png",

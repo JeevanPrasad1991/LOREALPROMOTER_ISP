@@ -1218,4 +1218,25 @@ public class CommonString {
             + "SKU_CHECK_BOX"
             + " VARCHAR"
             + ")";
+
+    public static final String TABLE_AUDIT_DATA_SAVE = "Audit_Data_Save";
+    public static final String CREATE_TABLE_AUDIT_DATA_SAVE = "CREATE TABLE "
+            + TABLE_AUDIT_DATA_SAVE
+            + " ("
+            + "KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+
+            + "STORE_CD"
+            + " VARCHAR,"
+
+            + "QUESTION_ID"
+            + " VARCHAR,"
+
+            + "QUESTION"
+            + " VARCHAR,"
+
+            + "ANSWER_ID"
+            + " VARCHAR"
+
+            + ")";
 }

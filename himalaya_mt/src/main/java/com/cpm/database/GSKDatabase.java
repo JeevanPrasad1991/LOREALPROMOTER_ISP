@@ -114,6 +114,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(CommonString.CREATE_TABLE_ASSET_CHECKLIST_INSERT);
 
         db.execSQL(CommonString.CREATE_TABLE_ASSET_SKU_CHECKLIST_INSERT);
+
+        db.execSQL(CommonString.CREATE_TABLE_AUDIT_DATA_SAVE);
     }
 
     @Override
@@ -138,6 +140,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
+        db.delete(CommonString.TABLE_AUDIT_DATA_SAVE, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
 
         /*db.delete(CommonString.TABLE_COVERAGE_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
         db.delete("DEEPFREEZER_DATA", CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
@@ -176,6 +180,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         db.delete(CommonString.TABLE_ASSET_CHECKLIST_INSERT, null, null);
         db.delete(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, null, null);
+
+        db.delete(CommonString.TABLE_AUDIT_DATA_SAVE, null, null);
 
         /*db.delete(CommonString.TABLE_COVERAGE_DATA, null, null);
         db.delete("DEEPFREEZER_DATA", null, null);
@@ -314,11 +320,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("STORE_CD", Integer.parseInt(data.getStore_cd().get(i)));
                 values.put("EMP_CD", Integer.parseInt(data.getEmp_cd().get(i)));
 
-//-------------------------------
-//Temp 		values.put("VISIT_DATE", data.getVISIT_DATE().get(i));
-
                 values.put("VISIT_DATE", data.getVISIT_DATE().get(i));
-                //values.put("VISIT_DATE", "04/25/2017");
+                //values.put("VISIT_DATE", "04/05/2017");
                 values.put("KEYACCOUNT", data.getKey_account().get(i));
 
                 values.put("STORENAME", data.getStore_name().get(i));
@@ -5648,7 +5651,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setQuestion_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION_ID")));
                     sb.setQuestion(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION")));
-                    sb.setSp_answer("0");
+                    sb.setSp_answer_id("0");
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -5669,6 +5672,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", "Storedata--------------->Start<------------");
 
         ArrayList<Audit_QuestionDataGetterSetter> list = new ArrayList<>();
+        Audit_QuestionDataGetterSetter sb1 = new Audit_QuestionDataGetterSetter();
+        sb1.setAnswer_id("0");
+        sb1.setAnswer("Select");
+        list.add(0, sb1);
+
         Cursor dbcursor = null;
 
         try {
@@ -5697,6 +5705,84 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
+    public void saveAuditQuestionAnswerData(ArrayList<Audit_QuestionDataGetterSetter> questionAnswerList, String store_cd) {
+        db.delete(CommonString.TABLE_AUDIT_DATA_SAVE, "STORE_CD" + "='" + store_cd + "'", null);
+
+        ContentValues values = new ContentValues();
+        try {
+            for (int i = 0; i < questionAnswerList.size(); i++) {
+                Audit_QuestionDataGetterSetter data = questionAnswerList.get(i);
+
+                values.put("STORE_CD", store_cd);
+                values.put("QUESTION_ID", data.getQuestion_id());
+                values.put("QUESTION", data.getQuestion());
+                values.put("ANSWER_ID", data.getSp_answer_id());
+
+                db.insert(CommonString.TABLE_AUDIT_DATA_SAVE, null, values);
+            }
+        } catch (Exception ex) {
+            Log.d("Database ", "Exception while Insert Audit Data " + ex.toString());
+        }
+    }
+
+    public ArrayList<Audit_QuestionDataGetterSetter> getAfterSaveAuditQuestionAnswerData(String store_cd) {
+        Log.d("Fetching", "AuditQuestion Data--------------->Start<------------");
+        ArrayList<Audit_QuestionDataGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("Select * " + "From " + CommonString.TABLE_AUDIT_DATA_SAVE
+                    + " where STORE_CD='" + store_cd + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    Audit_QuestionDataGetterSetter sb = new Audit_QuestionDataGetterSetter();
+
+                    sb.setQuestion_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION_ID")));
+                    sb.setQuestion(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION")));
+                    sb.setSp_answer_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ANSWER_ID")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Audit after save!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching ", "Audit after save---------------------->Stop<-----------");
+        return list;
+    }
+
+    //check if table is empty
+    public boolean isAuditDataFilled(String storeId) {
+        boolean filled = false;
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_AUDIT_DATA_SAVE + " WHERE STORE_CD= '" + storeId + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                int icount = dbcursor.getInt(0);
+                dbcursor.close();
+
+                if (icount > 0) {
+                    filled = true;
+                } else {
+                    filled = false;
+                }
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return filled;
+        }
+        return filled;
+    }
     //----------------------------------------------------
     //<editor-fold desc="Previous Code">
     /*// downloaded data

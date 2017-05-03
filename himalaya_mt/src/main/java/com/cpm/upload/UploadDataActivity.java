@@ -24,6 +24,7 @@ import com.cpm.himalaya.MainMenuActivity;
 import com.cpm.himalaya.R;
 import com.cpm.message.AlertMessage;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
+import com.cpm.xmlGetterSetter.Audit_QuestionDataGetterSetter;
 import com.cpm.xmlGetterSetter.ChecklistInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.CompetitionPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
@@ -93,6 +94,7 @@ public class UploadDataActivity extends Activity {
     private ArrayList<AssetInsertdataGetterSetter> paidVisibility = new ArrayList<>();
     private ArrayList<ChecklistInsertDataGetterSetter> paidVisibilityCheckList = new ArrayList<>();
     private ArrayList<StockNewGetterSetter> paidVisibilitySkuList = new ArrayList<>();
+    ArrayList<Audit_QuestionDataGetterSetter> auditListData=new ArrayList<>();
 
 
     @Override
@@ -197,10 +199,10 @@ public class UploadDataActivity extends Activity {
                         validity = (words[0]);
 
                         if (validity.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_P);
+                            /*database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_P);
 
                             database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(),
-                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_P);
+                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_P);*/
                         } else {
                             isError = true;
                             continue;
@@ -453,6 +455,51 @@ public class UploadDataActivity extends Activity {
                         publishProgress(data);
 
 
+                        //Audit Data
+                        final_xml = "";
+                        onXML = "";
+                        auditListData = database.getAfterSaveAuditQuestionAnswerData(coverageBeanlist.get(i).getStoreId());
+
+                        if (auditListData.size() > 0) {
+                            for (int j = 0; j < auditListData.size(); j++) {
+                                onXML = "[MT_AUDIT_DATA]"
+                                        + "[MID]" + mid + "[/MID]"
+                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                        + "[QUESTION_ID]" + auditListData.get(j).getQuestion_id() + "[/QUESTION_ID]"
+                                        + "[ANSWER_ID]" + auditListData.get(j).getSp_answer_id() + "[/ANSWER_ID]"
+                                        + "[/MT_AUDIT_DATA]";
+
+                                final_xml = final_xml + onXML;
+                            }
+
+                            final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+
+                            request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                            request.addProperty("XMLDATA", sos_xml);
+                            request.addProperty("KEYS", "MT_AUDIT_DATA");
+                            request.addProperty("USERNAME", username);
+                            request.addProperty("MID", mid);
+
+                            envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                            envelope.dotNet = true;
+                            envelope.setOutputSoapObject(request);
+
+                            androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                            androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+
+                            result = (Object) envelope.getResponse();
+
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                //    return CommonString.METHOD_UPLOAD_XML;
+                                isError = true;
+                            }
+                        }
+
+                        data.value = 45;
+                        data.name = "Audit Data";
+                        publishProgress(data);
+
+
                         //Images Upload
 
                         //Store Image
@@ -596,11 +643,11 @@ public class UploadDataActivity extends Activity {
                         if (result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                             database.open();
 
-                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
+                            /*database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
                             database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(),
                                     coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_D);
 
-                            database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());
+                            database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());*/
                         }
 
                         if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
@@ -791,7 +838,7 @@ public class UploadDataActivity extends Activity {
                 return CommonString.KEY_FAILURE;
             }
         } else {
-            new File(Path + path).delete();
+            //new File(Path + path).delete();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
             editor.commit();
