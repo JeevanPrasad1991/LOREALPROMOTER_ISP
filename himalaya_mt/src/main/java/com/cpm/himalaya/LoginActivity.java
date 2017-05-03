@@ -372,6 +372,7 @@ public class LoginActivity extends Activity implements OnClickListener,
                         editor.putString(CommonString.KEY_PASSWORD, password);
                         editor.putString(CommonString.KEY_VERSION, lgs.getVERSION());
                         editor.putString(CommonString.KEY_PATH, lgs.getPATH());
+                        //editor.putString(CommonString.KEY_DATE, "04/05/2017");
                         editor.putString(CommonString.KEY_DATE, lgs.getDATE());
                         editor.putString(CommonString.KEY_USER_TYPE, lgs.getRIGHTNAME());
 

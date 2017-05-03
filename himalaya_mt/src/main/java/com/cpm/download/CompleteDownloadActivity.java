@@ -21,6 +21,7 @@ import com.cpm.fragment.MainFragment;
 import com.cpm.message.AlertMessage;
 import com.cpm.xmlGetterSetter.AssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.AssetMasterGetterSetter;
+import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
 import com.cpm.xmlGetterSetter.CompanyGetterSetter;
@@ -71,7 +72,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     AssetChecklistGetterSetter assetChecklistGetterSetter;
     MappingAssetChecklistGetterSetter mappingAssetChecklistGetterSetter;
     PayslipGetterSetter payslipGetterSetter;
-    
+    Audit_QuestionGetterSetter audit_questionGetterSetter;
+
     SupervisorGetterSetter ditributorlist;
     JourneyPlanGetterSetter journeyplanMerchan;
     Deviation_Reason deviation_Reason;
@@ -377,7 +379,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
 
                 // Mapping Promotion data
-                request = new SoapObject(CommonString.NAMESPACE,CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "MAPPING_PROMOTION");
 
@@ -398,8 +400,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     mappingprormotgettersetter = XMLHandlers.mappingpromotXML(xpp, eventType);
 
                     //if (mappingprormotgettersetter.getMapping_promotion_table() != null) {
-                        String mappingtable = mappingprormotgettersetter.getMapping_promotion_table();
-                        TableBean.setMappingpromotable(mappingtable);
+                    String mappingtable = mappingprormotgettersetter.getMapping_promotion_table();
+                    TableBean.setMappingpromotable(mappingtable);
                     //}
 
                     if (mappingprormotgettersetter.getPid().size() > 0) {
@@ -621,9 +623,46 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         return "EMP_SALARY";
                     }
 
-                    data.value = 100;
+                    data.value = 95;
                     data.name = "EMP_SALARY Downloading";
                 }
+
+
+                //AUDIT_QUESTION
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "AUDIT_QUESTION");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object auditQuestionResult = (Object) envelope.getResponse();
+
+                if (auditQuestionResult.toString() != null) {
+                    xpp.setInput(new StringReader(auditQuestionResult.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    audit_questionGetterSetter = XMLHandlers.audit_QuestionXML(xpp, eventType);
+
+                    String auditQuestionTable = audit_questionGetterSetter.getAudit_question_table();
+                    TableBean.setAudit_question_table(auditQuestionTable);
+
+                    /*if (audit_questionGetterSetter.getAudit_question_table() != null) {
+                        String auditQuestionTable = payslipGetterSetter.getEmp_salary_table();
+                        TableBean.setAudit_question_table(auditQuestionTable);
+                    } else {
+                        return "AUDIT_QUESTION";
+                    }*/
+
+                    data.value = 100;
+                    data.name = "AUDIT_QUESTION Downloading";
+                }
+
 
                 //Database insert method calling
                 db.open();
@@ -672,6 +711,12 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 if (payslipGetterSetter != null) {
                     db.insertPaySlipdata(payslipGetterSetter);
                 }
+
+                //Audit
+                if (audit_questionGetterSetter != null) {
+                    db.insertAuditQuestionData(audit_questionGetterSetter);
+                }
+
 
                 data.value = 100;
                 data.name = "Finishing";

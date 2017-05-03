@@ -122,7 +122,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         }
 
 		/*if(food_flag){
-			food_layout.setVisibility(View.VISIBLE);
+            food_layout.setVisibility(View.VISIBLE);
 			gap_calls.setVisibility(View.VISIBLE);
 		}
 		else{
@@ -147,8 +147,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onBackPressed() {
-		/*Intent i = new Intent(this, DailyEntryScreen.class);
-		startActivity(i);*/
+        /*Intent i = new Intent(this, DailyEntryScreen.class);
+        startActivity(i);*/
 
         finish();
 
@@ -163,8 +163,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         int id = view.getId();
 
         switch (id) {
-		/*case R.id.deepfreezer:
-			
+        /*case R.id.deepfreezer:
+
 			if(!db.isClosingDataFilled(store_cd)){
 				Intent in=new Intent(getApplicationContext(),DeepFreezerActivity.class);
 
@@ -191,9 +191,9 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     startActivity(in1);
 
                     overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-					
+
 				/*}
-				else{
+                else{
 					Toast.makeText(getApplicationContext(),
 							"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
 				}*/
@@ -370,8 +370,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                             Intent in1 = new Intent(getApplicationContext(), OpeningStock.class);
                             startActivity(in1);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-							/*}
-							else{
+                            /*}
+                            else{
 								Toast.makeText(getApplicationContext(),
 										"First Fill Deep Freezer Data", Toast.LENGTH_SHORT).show();
 							}*/
@@ -420,7 +420,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                         Intent in5 = new Intent(getApplicationContext(), AdditionalPOIActivity.class);
                         startActivity(in5);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-						/*stockData=db.getOpeningStock(store_cd);
+                        /*stockData=db.getOpeningStock(store_cd);
 						if((stockData.size()<=0) || (stockData.get(0).getOpen_stock_cold_room()==null) || (stockData.get(0).getOpen_stock_cold_room().equals(""))){
 							Toast.makeText(getApplicationContext(),"First Fill Opening Stock and Midday Stock Data",
 							Toast.LENGTH_SHORT).show();
@@ -441,6 +441,13 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                     if (current.getIconImg() == R.drawable.competition || current.getIconImg() == R.drawable.competition_done) {
                         Intent in7 = new Intent(getApplicationContext(), CompetionMenuActivity.class);
+                        startActivity(in7);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    }
+
+                    //Audit
+                    if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.deep_freezer_done) {
+                        Intent in7 = new Intent(getApplicationContext(), AuditQuestionActivity.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     }
@@ -469,7 +476,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
     public List<NavMenuItemGetterSetter> getdata() {
         List<NavMenuItemGetterSetter> data = new ArrayList<>();
 
-        int openingImg, middayImg, closingImg, promotionImg, assetImg, additionalImg, competitionImg;
+        int openingImg, middayImg, closingImg, promotionImg, assetImg, audit, additionalImg, competitionImg;
 
         if (db.isOpeningDataFilled(store_cd)) {
             openingImg = R.drawable.opening_stock_done;
@@ -514,6 +521,14 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
             additionalImg = R.drawable.c_add_display;
         }
 
+
+        //Audit Option
+        if (db.isAuditDataFilled(store_cd)) {
+            audit = R.drawable.deep_freezer_done;
+        } else {
+            audit = R.drawable.audit;
+        }
+
         //<editor-fold desc="Previous code">
         /*if (user_type.equals("Promoter")) {
             int img[] = {openingImg, middayImg, promotionImg, assetImg, closingImg, additionalImg, competitionImg};
@@ -540,7 +555,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
         //</editor-fold>
 
         if (user_type.equals("Promoter")) {
-            int img[] = {openingImg, middayImg, closingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
+            int img[] = {openingImg, middayImg, closingImg, promotionImg, assetImg, audit};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
 
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
@@ -550,7 +565,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                 data.add(recData);
             }
         } else if (user_type.equals("Merchandiser")) {
-            int img[] = {openingImg, promotionImg, assetImg};//, additionalImg, competitionImg};
+            int img[] = {openingImg, promotionImg, assetImg, audit};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
 
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();

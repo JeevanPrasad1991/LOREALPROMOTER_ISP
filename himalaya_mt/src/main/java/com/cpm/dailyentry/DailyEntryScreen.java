@@ -151,6 +151,16 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 }
 
                 if (flag) {
+                    if (database.getAuditQuestionData(storeCd).size() > 0) {
+                        if (database.isAuditDataFilled(storeCd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                }
+
+                if (flag) {
                     if (user_type.equals("Promoter")) {
                         if (database.isMiddayDataFilled(storeCd) && database.isClosingDataFilled(storeCd)) {
                             flag = true;
