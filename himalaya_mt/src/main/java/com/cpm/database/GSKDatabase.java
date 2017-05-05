@@ -52,7 +52,7 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "CANDID_PROMOTER_DATABASES";
+    public static final String DATABASE_NAME = "HIMALAYA_MT_DATABASES";
     public static final int DATABASE_VERSION = 2;
     private SQLiteDatabase db;
 
@@ -204,7 +204,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_STOCK_IMAGE, null, null);*/
     }
 
-
     public void deleteStockData() {
         db.delete("STOCK_DATA", null, null);
     }
@@ -212,7 +211,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     public void deleteStockHeaderData() {
         db.delete("openingHeader_data", null, null);
     }
-
 
     public void updateGeoTagStatus(String id, String status, double lat, double longtitude) {
 
@@ -232,7 +230,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     ex.toString());
         }
     }
-
 
     public void InsertGeoTagData(JCPGetterSetter data) {
 
@@ -346,7 +343,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //mapping available data
     public void insertMappingAvailData(MappingAvailabilityGetterSetter data) {
 
@@ -375,7 +371,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     // Performance Data
     public void insertPerformanceData(PerformanceGetterSetter data) {
 
@@ -401,7 +396,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
 
     }
-
 
     // closing cold Data
     public void insertClosingColdData(ColdroomClosingGetterSetter data) {
@@ -520,9 +514,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//Asset master data
-
+    //Asset master data
     public void insertAssetMasterData(AssetMasterGetterSetter data) {
 
         db.delete("ASSET_MASTER", null, null);
@@ -547,7 +539,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //Asset master data
-
     public void insertCompanyMasterData(CompanyGetterSetter data) {
 
         db.delete("COMPANY_MASTER", null, null);
@@ -624,7 +615,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //delete Asset Checklist data
-
     public void deleteAssetChecklist() {
         db.delete("ASSET_CHECKLIST", null, null);
     }
@@ -654,14 +644,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //delete Mapping asset Checklist
-
     public void deleteMappingAssetChecklist() {
         db.delete("MAPPING_ASSET_CHECKLIST", null, null);
     }
 
-
-//Non Working data
-
+    //Non Working data
     public void insertNonWorkingReasonData(NonWorkingReasonGetterSetter data) {
 
         db.delete("NON_WORKING_REASON", null, null);
@@ -686,9 +673,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//Category Master data
-
+    //Category Master data
     public void insertCategoryMasterData(CategoryMasterGetterSetter data) {
 
         db.delete("CATEGORY_MASTER", null, null);
@@ -711,7 +696,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
 
     }
-
 
     //get JCP Data
     public ArrayList<JourneyPlanGetterSetter> getJCPData(String date) {
@@ -754,7 +738,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //get JCP Data
-
     public ArrayList<JourneyPlanGetterSetter> getAllJCPData() {
 
         Log.d("FetchingStoredata--------------->Start<------------",
@@ -811,8 +794,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-//get DeepFreezerType Data from Master
-
+    //get DeepFreezerType Data from Master
     public ArrayList<DeepFreezerTypeGetterSetter> getDFMasterData(String dftype) {
 
         Log.d("FetchingStoredata--------------->Start<------------",
@@ -857,9 +839,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //Insert Deepfreezer Type Data
-
     public void insertDeepFreezerTypeData(ArrayList<DeepFreezerTypeGetterSetter> data, String dfType, String store_cd) {
 
         db.delete(CommonString.TABLE_DEEPFREEZER_DATA, "FREEZER_TYPE" + "='" + dfType + "'", null);
@@ -887,9 +867,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //Insert Facing Competitor Data
-
     public void insertFscingCompetitorData(String store_cd,
                                            HashMap<FacingCompetitorGetterSetter, List<FacingCompetitorGetterSetter>> data, List<FacingCompetitorGetterSetter> save_listDataHeader) {
 
@@ -939,8 +917,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-//get DeepFreezerType Data
-
+    //get DeepFreezerType Data
     public ArrayList<DeepFreezerTypeGetterSetter> getDFTypeData(String dftype, String storecd) {
 
         Log.d("FetchingDeepFreezerType--------------->Start<------------",
@@ -987,7 +964,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //check if table is empty
     public boolean isDeepfreezerDataFilled(String storeId, String dftype) {
         boolean filled = false;
@@ -1021,9 +997,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return filled;
     }
 
-
-//get DeepFreezerType Data
-
+    //get DeepFreezerType Data
     public ArrayList<DeepFreezerTypeGetterSetter> getDFTypeUploadData(String store_cd) {
 
         Log.d("FetchingDeepFreezerType--------------->Start<------------",
@@ -1071,9 +1045,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//get Facing Competitor Data
-
+    //get Facing Competitor Data
     public ArrayList<FacingCompetitorGetterSetter> getFacingCompetitorData(String store_cd) {
 
         Log.d("Fetching facing competitor--------------->Start<------------",
@@ -1124,9 +1096,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //get Facing Competitor Data Categoty wise
-
     public ArrayList<FacingCompetitorGetterSetter> getFacingCompetitorCategotywiseData(String store_cd, String category_cd) {
 
         Log.d("Fetching brand>Start<--",
@@ -1177,9 +1147,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//get Facing Competitor Data
-
+    //get Facing Competitor Data
     public ArrayList<PerformanceGetterSetter> getPerformrmance(String store_cd) {
 
         Log.d("Fetching facing competitor--------------->Start<------------",
@@ -1223,7 +1191,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //check if table is empty
     public boolean isCompetitionDataFilled(String storeId) {
         boolean filled = false;
@@ -1256,7 +1223,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         return filled;
     }
-
 
     //Stock data
     /*public ArrayList<StockNewGetterSetter> getStockAvailabilityData(String store_cd) {
@@ -1292,6 +1258,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching ", "opening stock---------------------->Stop<-----------");
         return list;
     }*/
+
     public ArrayList<StockNewGetterSetter> getStockAvailabilityData(String store_cd) {
         Log.d("Fetching", "Storedata--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
@@ -1362,7 +1329,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     //Stock data
     public ArrayList<StockNewGetterSetter> getFoodStoreAvailabilityData(String store_cd) {
         Log.d("FetchingStoredata--------------->Start<------------",
@@ -1431,7 +1397,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 "-------------------");
         return list;
     }
-
 
     //Stock Sku data
     /*public ArrayList<StockNewGetterSetter> getStockSkuData(String brand_cd, String store_cd) {
@@ -1511,7 +1476,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", " opening stock---------------------->Stop<-----------");
         return list;
     }
-
 
     //Food Stock data
     public ArrayList<FoodStoreInsertDataGetterSetter> getFoodSkuData(String brand_cd, String store_cd) {
@@ -1626,8 +1590,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-//Stock Midday Sku data
-
+    //Stock Midday Sku data
     public ArrayList<StockNewGetterSetter> getStockSkuMiddayData(String categord_cd, String store_cd) {
         Log.d("Fetching", "Storedata--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
@@ -1686,7 +1649,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     public ArrayList<MiddayStockInsertData> getStockSkuMiddayZeroData(String brand_cd) {
         Log.d("FetchingStoredata--------------->Start<------------",
                 "------------------");
@@ -1733,9 +1695,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-//Promotion brand data
-
-
+    //Promotion brand data
     public ArrayList<StockNewGetterSetter> getPromotionBrandData(String store_cd) {
         Log.d("Fetching", "Storedata--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
@@ -1805,7 +1765,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching ", "Asset brand---------------------->Stop<-----------");
         return list;
     }
-
 
     // get promotion Sku data
     public ArrayList<PromotionInsertDataGetterSetter> getPromotionSkuData(String brand_cd, String store_cd) {
@@ -1990,7 +1949,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     // get Non Working data
     public ArrayList<NonWorkingReasonGetterSetter> getNonWorkingData() {
         Log.d("FetchingAssetdata--------------->Start<------------",
@@ -2039,9 +1997,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     //Insert Opening Stock Data
-
 		/*	public void insertOpeningStockData(StockNewGetterSetter data,String sku_cd) {
 
 				db.delete(CommonString.TABLE_OPENING_STOCK_DATA, "SKU_CD" + "='" + sku_cd + "'", null);
@@ -3777,9 +3733,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
-
-//Insert Closing Stock Data
-
+    //Insert Closing Stock Data
     public void insertClosingStockData(ClosingStockInsertDataGetterSetter data, String sku_cd) {
 
         db.delete(CommonString.TABLE_CLOSING_STOCK_DATA, "SKU_CD" + "='" + sku_cd + "'", null);
@@ -3803,9 +3757,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//Insert Closing Stock Data
-
+    //Insert Closing Stock Data
     public void insertMiddayStockData(String midday_stock, String sku_cd) {
 
         db.delete(CommonString.TABLE_MIDDAY_STOCK_DATA, "SKU_CD" + "='" + sku_cd + "'", null);
@@ -3828,9 +3780,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//get if category type is food
-
+    //get if category type is food
     public boolean isCategoryTypeFood(String brand_cd) {
         Log.d("FetchingStoredata--------------->Start<------------",
                 "------------------");
@@ -3881,9 +3831,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
-
-//get DeepFreezerType Data
-
+    //get DeepFreezerType Data
     public ArrayList<FacingCompetitorGetterSetter> getCategoryData() {
 
         Log.d("FetchingCategoryType--------------->Start<------------",
@@ -3929,8 +3877,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-//category for competition
-
+    //category for competition
     public ArrayList<FacingCompetitorGetterSetter> getCategoryCompetionData() {
 
         Log.d("FetchingCategoryType--------------->Start<------------",
@@ -3978,7 +3925,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //category for competition faceup
-
     public ArrayList<FacingCompetitorGetterSetter> getCategoryCompetionFaceupData(String store_cd) {
 
         Log.d("FetchingCategoryType--------------->Start<------------",
@@ -4028,8 +3974,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-//get Brand Data
-
+    //get Brand Data
     public ArrayList<StockNewGetterSetter> getBrandData(String category_id) {
 
         Log.d("FetchingBrand--------------->Start<------------",
@@ -4073,7 +4018,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //get Brand Data for competion faceup
-
     public ArrayList<FacingCompetitorGetterSetter> getBrandCompetitionData(String category_id) {
 
         Log.d("FetchingBrand-->Start<-",
@@ -4117,9 +4061,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//get Company Data
-
+    //get Company Data
     public ArrayList<CompanyGetterSetter> getCompanyData() {
 
         Log.d("FetchingCategoryType--------------->Start<------------",
@@ -4217,7 +4159,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         return visite_date;
     }
-
 
     public long InsertCoverageData(CoverageBean data) {
         ContentValues values = new ContentValues();
@@ -4396,7 +4337,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return filled;
     }
 
-
     public void updateCoverageStatus(int mid, String status) {
 
         try {
@@ -4409,7 +4349,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         }
     }
-
 
     public void updateCoverageStoreOutTime(String StoreId, String VisitDate, String outtime, String status) {
         try {
@@ -4424,23 +4363,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
-
-    public void updateStoreStatusOnLeave(String storeid, String visitdate,
-                                         String status) {
-
+    public void updateStoreStatusOnLeave(String storeid, String visitdate, String status) {
         try {
             ContentValues values = new ContentValues();
             values.put("UPLOAD_STATUS", status);
 
-            db.update("JOURNEY_PLAN", values,
-                    CommonString.KEY_STORE_CD + "='" + storeid + "' AND "
-                            + CommonString.KEY_VISIT_DATE + "='" + visitdate
-                            + "'", null);
+            db.update("JOURNEY_PLAN", values, CommonString.KEY_STORE_CD + "='" + storeid + "' AND "
+                    + CommonString.KEY_VISIT_DATE + "='" + visitdate + "'", null);
         } catch (Exception e) {
-
         }
     }
-
 
     public void updateStoreStatusOnCheckout(String storeid, String visitdate, String status) {
         try {
@@ -4454,9 +4386,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
-
-//Insert Calls Data
-
+    //Insert Calls Data
     public void insertCallsData(String store_cd, String total_calls, String productive_calls) {
 
         db.delete("CALLS_DATA", "STORE_CD" + "='" + store_cd + "'", null);
@@ -4478,8 +4408,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-//get Calls Data
-
+    //get Calls Data
     public ArrayList<CallsGetterSetter> getCallsData(String store_cd) {
 
         Log.d("Fetching calls--------------->Start<------------",
@@ -4525,7 +4454,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //check if table is empty
     public boolean isCallsDataFilled(String storeId) {
         boolean filled = false;
@@ -4559,7 +4487,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return filled;
     }
 
-
     public void deleteStockRow(int id, String store_cd) {
 
         try {
@@ -4572,9 +4499,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //Insert Calls Data
-
     public void insertCompetitionPOIData(String store_cd, POIGetterSetter poiGetterSetter) {
 
         //db.delete("CALLS_DATA", "STORE_CD" + "='" + store_cd + "'", null);
@@ -4601,9 +4526,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //get Calls Data
-
     public ArrayList<POIGetterSetter> getCompetitionPOIData(String store_cd) {
 
         Log.d("Fetching calls--------------->Start<------------",
@@ -4657,7 +4580,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     public void deleteCompetitionPOIRow(int id) {
 
         try {
@@ -4669,9 +4591,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //Insert Calls Data
-
     public void insertCompetitionPromotionData(CompetitionPromotionGetterSetter poiGetterSetter, String store_cd) {
 
         //db.delete("CALLS_DATA", "STORE_CD" + "='" + store_cd + "'", null);
@@ -4698,7 +4618,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //get Competition Promotion Data
-
     public ArrayList<CompetitionPromotionGetterSetter> getCompetitionPromotionData(String store_cd) {
 
         Log.d("Fetching calls--------------->Start<------------",
@@ -4749,7 +4668,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     public void deleteCompetitionPromotionRow(int id) {
 
         try {
@@ -4761,9 +4679,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//Insert Calls Data
-
+    //Insert Calls Data
     public void insertPOIData(POIGetterSetter poiGetterSetter, String store_cd) {
 
         //db.delete("CALLS_DATA", "STORE_CD" + "='" + store_cd + "'", null);
@@ -4790,9 +4706,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     //get Calls Data
-
     public ArrayList<POIGetterSetter> getPOIData(String store_cd) {
 
         Log.d("Fetching calls--------------->Start<------------",
@@ -4846,7 +4760,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
     public void deletePOIRow(int id, String store_cd) {
 
         try {
@@ -4858,7 +4771,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
 
     }
-
 
     /// get store Status
     public JourneyPlanGetterSetter getStoreStatus(String id) {
@@ -5613,7 +5525,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", " checklist data---------------------->Stop<-----------");
         return list;
     }
-
 
     //Audit Question Data
     public void insertAuditQuestionData(Audit_QuestionGetterSetter data) {
