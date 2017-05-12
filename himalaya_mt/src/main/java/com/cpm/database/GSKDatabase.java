@@ -1270,7 +1270,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "INNER JOIN SKU_MASTER SD " +
                     "ON CD.SKU_CD = SD.SKU_CD " +
                     "WHERE CD.STORE_CD ='" + store_cd + "' " +
-                    "ORDER BY SD.BRAND_SEQUENCE limit 1", null);
+                    "ORDER BY SD.BRAND_SEQUENCE ", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
