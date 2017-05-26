@@ -102,6 +102,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
+        setTitle("Promotion - " + visit_date);
+
         str = CommonString.FILE_PATH;
 
 
@@ -469,7 +471,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
-                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.teal_dark));
+                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
 

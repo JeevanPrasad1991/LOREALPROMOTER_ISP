@@ -37,7 +37,7 @@
             android:layout_height="170dp"
             android:id="@+id/logo"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/himalaya_complete_logo" />
+            android:background="@drawable/himalaya_logo" />
 
     </RelativeLayout>
 

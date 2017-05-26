@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 'Google Inc.:Google APIs (x86 System Image):19'
+    compileSdkVersion 23
     buildToolsVersion '25.0.0'
 
     defaultConfig {

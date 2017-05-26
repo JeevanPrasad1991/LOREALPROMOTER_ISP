@@ -12,7 +12,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:layout_marginTop="2dp"
-        card_view:cardBackgroundColor="@color/teal_dark"
+        card_view:cardBackgroundColor="@color/light_teal"
         card_view:cardCornerRadius="2dp">
 
         <LinearLayout

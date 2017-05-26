@@ -330,7 +330,7 @@ public class MainMenuActivity extends AppCompatActivity
             AlertDialog alert1 = builder1.create();
             alert1.show();
 
-        } else if (id == R.id.nav_payslip) {
+        } /*else if (id == R.id.nav_payslip) {
             jcplist = database.getJCPData(date);
 
             if (jcplist.size() == 0) {
@@ -346,7 +346,7 @@ public class MainMenuActivity extends AppCompatActivity
                     overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                 }
             }
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -387,7 +387,7 @@ public class MainMenuActivity extends AppCompatActivity
 
             storestatus = database.getStoreStatus(cdata.get(i).getStoreId());
 
-            if (!storestatus.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_D)) {
+            if (!storestatus.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)) {
                 if ((storestatus.getCheckOutStatus().get(0).equalsIgnoreCase(
                         CommonString.KEY_C)
                         || storestatus.getUploadStatus().get(0).equalsIgnoreCase(

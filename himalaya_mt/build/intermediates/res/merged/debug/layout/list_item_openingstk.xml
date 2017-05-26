@@ -32,7 +32,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="Brand Name - Sku Name"
-                    android:textColor="@color/teal_dark"
+                    android:textColor="@color/black"
                     android:textSize="16dip" />
             </LinearLayout>
 
@@ -184,7 +184,7 @@
                             android:maxLength="7"
                             android:paddingBottom="10dp"
                             android:paddingTop="10dp"
-                            android:textColor="@color/teal_dark"
+                            android:textColor="@color/black"
                             android:textSize="15dp" />
                     </LinearLayout>
 
@@ -208,7 +208,7 @@
                             android:maxLength="7"
                             android:paddingBottom="10dp"
                             android:paddingTop="10dp"
-                            android:textColor="@color/teal_dark"
+                            android:textColor="@color/black"
                             android:textSize="15dp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -237,7 +237,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/stock_under_days"
-                        android:textColor="@color/teal_dark"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <EditText
@@ -245,7 +245,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textColor="@color/teal_dark" />
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
             </LinearLayout>

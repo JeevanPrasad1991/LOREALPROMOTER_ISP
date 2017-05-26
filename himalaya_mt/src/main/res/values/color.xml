@@ -36,4 +36,6 @@
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="light_teal">#42bcb1</color>
+
 </resources>

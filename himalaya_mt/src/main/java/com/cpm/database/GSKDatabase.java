@@ -2378,14 +2378,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     //Insert Asset Data with Brand
     public void InsertAssetData(String storeid, HashMap<AssetInsertdataGetterSetter, List<AssetInsertdataGetterSetter>> data,
-                                List<AssetInsertdataGetterSetter> save_listDataHeader) {
+                                List<AssetInsertdataGetterSetter> save_listDataHeader,String visit_date) {
         ContentValues values = new ContentValues();
         ContentValues values1 = new ContentValues();
+        ContentValues values3 = new ContentValues();
 
         try {
             db.beginTransaction();
 
             for (int i = 0; i < save_listDataHeader.size(); i++) {
+
                 values.put("STORE_CD", storeid);
                 values.put("CATEGORY_CD", save_listDataHeader.get(i).getCategory_cd());
                 values.put("CATEGORY", save_listDataHeader.get(i).getCategory());
@@ -2402,6 +2404,27 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values1.put("IMAGE", data.get(save_listDataHeader.get(i)).get(j).getImg());
 
                     db.insert(CommonString.TABLE_ASSET_DATA, null, values1);
+
+                    db.delete(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, "ASSET_CD" + "='" + data.get(save_listDataHeader.get(i)).get(j).getAsset_cd() +
+                            "' AND STORE_CD" + "='" + storeid + "' AND CATEGORY_CD='" + save_listDataHeader.get(i).getCategory_cd() + "'", null);
+
+                    for (int k = 0; k < (data.get(save_listDataHeader.get(i)).get(j).getListSkuData()).size(); k++) {
+                        StockNewGetterSetter data1 = (data.get(save_listDataHeader.get(i)).get(j).getListSkuData()).get(k);
+
+
+                        values3.put("VISIT_DATE", visit_date);
+                        values3.put("STORE_CD", storeid);
+                        values3.put("ASSET_CD", Integer.parseInt(data.get(save_listDataHeader.get(i)).get(j).getAsset_cd()));
+                        values3.put("CATEGORY_CD", save_listDataHeader.get(i).getCategory_cd());
+                        values3.put("SKU_CD", data1.getSku_cd());
+                        values3.put("SKU", data1.getSku());
+                        values3.put("BRAND_CD", data1.getBrand_cd());
+                        values3.put("BRAND", data1.getBrand());
+                        values3.put("SKU_CHECK_BOX", data1.getChk_skuBox());
+
+                        db.insert(CommonString.TABLE_ASSET_SKU_CHECKLIST_INSERT, null, values3);
+
+                    }
                 }
             }
             db.setTransactionSuccessful();
@@ -3727,6 +3750,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         try {
             db.delete(CommonString.TABLE_ASSET_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
             db.delete(CommonString.TABLE_INSERT_ASSET_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
+
 
         } catch (Exception e) {
             Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());

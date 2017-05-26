@@ -144,6 +144,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
+        setTitle("Opening Stock - " + visit_date);
+
         // preparing list data
         prepareListData();
 
@@ -399,7 +401,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
                     final int position = v.getId();
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
+                    //String value1 = Caption.getText().toString().replace("^0+(?!$)&", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
 
                     //final String stk_under = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getStock_under45days();
                     final String facing = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getEd_openingFacing();
@@ -465,7 +468,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         hide();*/
                     final int position = v.getId();
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
 
                     final String stock = _listDataChild.get(listDataHeader.get(groupPosition)).get(position).getEd_openingStock();
 
@@ -576,19 +579,19 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                             holder.ed_openingStock.setTextColor(getResources().getColor(R.color.red));
                             tempflag = true;
                         } else {
-                            holder.ed_openingStock.setTextColor(getResources().getColor(R.color.teal_dark));
+                            holder.ed_openingStock.setTextColor(getResources().getColor(R.color.black));
                         }
 
                         if (flagmccain) {
                             holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.red));
                             tempflag = true;
                         } else {
-                            holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.teal_dark));
+                            holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.black));
                         }
 
                         if (!flagcoldroom && !flagmccain && !flagstoredf) {
-                            holder.ed_openingStock.setTextColor(getResources().getColor(R.color.teal_dark));
-                            holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.teal_dark));
+                            holder.ed_openingStock.setTextColor(getResources().getColor(R.color.black));
+                            holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.black));
                             holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
                             tempflag = false;
                         } else {
@@ -596,14 +599,14 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                             tempflag = true;
                         }
                     } else {
-                        holder.ed_openingStock.setTextColor(getResources().getColor(R.color.teal_dark));
-                        holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.teal_dark));
+                        holder.ed_openingStock.setTextColor(getResources().getColor(R.color.black));
+                        holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.black));
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                     }
 
                 } else {
-                    holder.ed_openingStock.setTextColor(getResources().getColor(R.color.teal_dark));
-                    holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.teal_dark));
+                    holder.ed_openingStock.setTextColor(getResources().getColor(R.color.black));
+                    holder.ed_openingFacing.setTextColor(getResources().getColor(R.color.black));
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 }
             }
@@ -691,7 +694,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
-                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.teal_dark));
+                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
 
@@ -699,7 +702,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (checkValidHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
-                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.teal_dark));
+                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
             //convertView.setId(groupPosition);

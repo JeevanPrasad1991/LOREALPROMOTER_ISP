@@ -256,11 +256,11 @@
 
         <ImageView
             android:id="@+id/loginfooter"
-            android:layout_width="294dp"
+            android:layout_width="262dp"
             android:layout_height="170dp"
             android:layout_centerHorizontal="true"
-            android:layout_weight="15"
-            android:background="@drawable/himalaya_complete_logo" />
+            android:layout_weight="97"
+            android:background="@drawable/himalaya_logo" />
 
     </RelativeLayout>
 
