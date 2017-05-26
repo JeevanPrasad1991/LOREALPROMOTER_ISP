@@ -111,6 +111,8 @@ public class UploadDataActivity extends Activity {
         database = new GSKDatabase(this);
         database.open();
 
+        //setTitle("Upload - " + visit_date);
+
         Intent i = getIntent();
         upload_status = i.getBooleanExtra("UploadAll", false);
 
@@ -161,7 +163,7 @@ public class UploadDataActivity extends Activity {
                 }
 
                 for (int i = 0; i < coverageBeanlist.size(); i++) {
-                    if (!coverageBeanlist.get(i).getStatus().equalsIgnoreCase(CommonString.KEY_D)) {
+                    if (!coverageBeanlist.get(i).getStatus().equalsIgnoreCase(CommonString.KEY_U)) {
                         String onXML =
                                 "[DATA]"
                                         + "[USER_DATA]"
@@ -530,24 +532,28 @@ public class UploadDataActivity extends Activity {
 
                         //Stock Images
                         if (stockImages.size() > 0) {
-                            if (stockImages.get(i).getImg_cam() != null && !stockImages.get(i).getImg_cam().equals("")) {
+                            for(int j=0;j<stockImages.size();j++){
 
-                                if (new File(CommonString.FILE_PATH + stockImages.get(i).getImg_cam()).exists()) {
+                                if (stockImages.get(j).getImg_cam() != null && !stockImages.get(j).getImg_cam().equals("")) {
 
-                                    result = UploadImage(stockImages.get(i).getImg_cam(), "MTStockImages");
+                                    if (new File(CommonString.FILE_PATH + stockImages.get(j).getImg_cam()).exists()) {
 
-                                    if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                        //    return "StoreImages";
-                                        isError = true;
-                                    }
+                                        result = UploadImage(stockImages.get(j).getImg_cam(), "MTStockImages");
 
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            message.setText("MTStockImages Uploaded");
+                                        if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                            //    return "StoreImages";
+                                            isError = true;
                                         }
-                                    });
+
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                message.setText("MTStockImages Uploaded");
+                                            }
+                                        });
+                                    }
                                 }
                             }
+
                         }
                         data.value = 55;
                         data.name = "MTStockImages";
@@ -556,24 +562,29 @@ public class UploadDataActivity extends Activity {
 
                         //Promotion Images
                         if (promotionData.size() > 0) {
-                            if (promotionData.get(i).getCamera() != null && !promotionData.get(i).getCamera().equals("")) {
 
-                                if (new File(CommonString.FILE_PATH + promotionData.get(i).getCamera()).exists()) {
+                            for(int j=0;j<promotionData.size();j++){
 
-                                    result = UploadImage(promotionData.get(i).getCamera(), "MTPromotionImages");
+                                if (promotionData.get(j).getCamera() != null && !promotionData.get(j).getCamera().equals("")) {
 
-                                    if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                        //    return "StoreImages";
-                                        isError = true;
-                                    }
+                                    if (new File(CommonString.FILE_PATH + promotionData.get(j).getCamera()).exists()) {
 
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            message.setText("MTPromotionImages Uploaded");
+                                        result = UploadImage(promotionData.get(j).getCamera(), "MTPromotionImages");
+
+                                        if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                            //    return "StoreImages";
+                                            isError = true;
                                         }
-                                    });
+
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                message.setText("MTPromotionImages Uploaded");
+                                            }
+                                        });
+                                    }
                                 }
                             }
+
                         }
                         data.value = 60;
                         data.name = "PromotionImages";
@@ -582,24 +593,29 @@ public class UploadDataActivity extends Activity {
 
                         //Paid Visibility Images
                         if (paidVisibility.size() > 0) {
-                            if (paidVisibility.get(i).getImg() != null && !paidVisibility.get(i).getImg().equals("")) {
 
-                                if (new File(CommonString.FILE_PATH + paidVisibility.get(i).getImg()).exists()) {
+                            for(int j=0;j < paidVisibility.size();j++){
 
-                                    result = UploadImage(paidVisibility.get(i).getImg(), "MTPaidVisibilityImages");
+                                if (paidVisibility.get(j).getImg() != null && !paidVisibility.get(j).getImg().equals("")) {
 
-                                    if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                        //    return "StoreImages";
-                                        isError = true;
-                                    }
+                                    if (new File(CommonString.FILE_PATH + paidVisibility.get(j).getImg()).exists()) {
 
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            message.setText("MTPaidVisibility Images Uploaded");
+                                        result = UploadImage(paidVisibility.get(j).getImg(), "MTPaidVisibilityImages");
+
+                                        if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                            //    return "StoreImages";
+                                            isError = true;
                                         }
-                                    });
+
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                message.setText("MTPaidVisibility Images Uploaded");
+                                            }
+                                        });
+                                    }
                                 }
                             }
+
                         }
                         data.value = 70;
                         data.name = "PaidVisibilityImage";
@@ -618,7 +634,7 @@ public class UploadDataActivity extends Activity {
                                 + "[STORE_ID]" + coverageBeanlist.get(i).getStoreId() + "[/STORE_ID]"
                                 + "[VISIT_DATE]" + coverageBeanlist.get(i).getVisitDate() + "[/VISIT_DATE]"
                                 + "[USER_ID]" + coverageBeanlist.get(i).getUserId() + "[/USER_ID]"
-                                + "[STATUS]" + CommonString.KEY_D + "[/STATUS]"
+                                + "[STATUS]" + CommonString.KEY_U+ "[/STATUS]"
                                 + "[/COVERAGE_STATUS]";
 
                         final_xml1 = final_xml1 + onXML1;
@@ -643,9 +659,9 @@ public class UploadDataActivity extends Activity {
                         if (result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                             database.open();
 
-                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
+                            database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_U);
                             database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(),
-                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_D);
+                                    coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_U);
 
                             database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());
                         }

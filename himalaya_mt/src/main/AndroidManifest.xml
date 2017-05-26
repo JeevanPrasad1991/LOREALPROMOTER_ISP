@@ -206,7 +206,9 @@
             android:name="com.cpm.dailyentry.StoreImageActivity"
             android:label="@string/title_activity_store_image"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.cpm.dailyentry.AuditQuestionActivity"></activity>
+        <activity android:name="com.cpm.dailyentry.AuditQuestionActivity"
+            android:label="@string/title_activity_audi"
+            ></activity>
     </application>
 
 </manifest>

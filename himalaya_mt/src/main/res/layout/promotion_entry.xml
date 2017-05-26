@@ -40,7 +40,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:text="Brand Name"
-                    android:textColor="@color/teal_dark"
+                    android:textColor="@color/black"
                     android:textSize="15dip" />
                 <!--android:textAppearance="?android:attr/textAppearanceListItem"-->
 
@@ -194,7 +194,7 @@
                         android:layout_weight="0.7"
                         android:padding="10dp"
                         android:text="Promo Stock"
-                        android:textColor="@color/teal_dark"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <ToggleButton
@@ -222,7 +222,7 @@
                         android:layout_weight="0.7"
                         android:padding="10dp"
                         android:text="Promo Talker"
-                        android:textColor="@color/teal_dark"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <ToggleButton
@@ -250,7 +250,7 @@
                         android:layout_weight="0.7"
                         android:padding="10dp"
                         android:text="Running on POS"
-                        android:textColor="@color/teal_dark"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <ToggleButton

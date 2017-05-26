@@ -1,8 +1,12 @@
 package com.cpm.xmlGetterSetter;
 
+import java.util.ArrayList;
+
 public class AssetInsertdataGetterSetter {
 	
 	String brand, brand_cd, store_cd, asset, asset_cd, present,remark,img, category, category_cd;
+
+	ArrayList<StockNewGetterSetter> listSkuData = new ArrayList<>();
 
 	public String getBrand() {
 		return brand;
@@ -82,5 +86,13 @@ public class AssetInsertdataGetterSetter {
 
 	public void setCategory_cd(String category_cd) {
 		this.category_cd = category_cd;
+	}
+
+	public ArrayList<StockNewGetterSetter> getListSkuData() {
+		return listSkuData;
+	}
+
+	public void setListSkuData(ArrayList<StockNewGetterSetter> listSkuData) {
+		this.listSkuData = listSkuData;
 	}
 }

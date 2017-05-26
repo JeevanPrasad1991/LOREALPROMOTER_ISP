@@ -80,6 +80,7 @@
     <string name="title_activity_gate_meeting">GateMeetingActivity</string>
     <string name="title_activity_geo_fence_">GeoFence_Activity</string>
     <string name="title_activity_store_image">StoreImageActivity</string>
+    <string name="title_activity_audi">Category Audit</string>
 
 
 </resources>

@@ -73,6 +73,7 @@
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
     <color name="light_blue">#64B5F6</color>
+    <color name="light_teal">#42bcb1</color>
     <color name="light_yellow">#FFF176</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
@@ -459,6 +460,7 @@
     <string name="store_picture_message">"Allow Ad to store image in Picture gallery?"</string>
     <string name="store_picture_title">Save image</string>
     <string name="title_activity_additional_poi">AdditionalPOIActivity</string>
+    <string name="title_activity_audi">Category Audit</string>
     <string name="title_activity_competion_menu">Competition</string>
     <string name="title_activity_competition_aditional_poi">CompetitionAditionalPOIActivity</string>
     <string name="title_activity_competition_faceup">Faceup</string>

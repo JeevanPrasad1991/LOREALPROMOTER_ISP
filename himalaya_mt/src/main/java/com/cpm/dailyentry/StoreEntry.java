@@ -40,7 +40,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
     Button performance;
     GSKDatabase db;
     private SharedPreferences preferences;
-    String store_cd;
+    String store_cd,visit_date;
     boolean food_flag, user_flag = false;
     String user_type = "";
     private ArrayList<StockGetterSetter> stockData = new ArrayList<StockGetterSetter>();
@@ -101,9 +101,12 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        visit_date = preferences.getString(CommonString.KEY_DATE, null);
         store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
         food_flag = preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+
+        setTitle("Store Entry - " + visit_date);
 
         if (user_type != null) {/*
             if(user_type.equals("Merchandiser")){
@@ -381,7 +384,12 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     }
 
                     if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
-                        if (db.isOpeningDataFilled(store_cd)) {
+
+                        if (db.isClosingDataFilled(store_cd)) {
+
+                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+
+                        } else if (db.isOpeningDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), MidDayStock.class);
                             startActivity(in3);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -446,7 +454,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
                     }
 
                     //Audit
-                    if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.deep_freezer_done) {
+                    if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.audit_done) {
                         Intent in7 = new Intent(getApplicationContext(), AuditQuestionActivity.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -524,7 +532,7 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
         //Audit Option
         if (db.isAuditDataFilled(store_cd)) {
-            audit = R.drawable.deep_freezer_done;
+            audit = R.drawable.audit_done;
         } else {
             audit = R.drawable.audit;
         }

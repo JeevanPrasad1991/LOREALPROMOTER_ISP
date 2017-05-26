@@ -85,6 +85,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
         editor = preferences.edit();
 
+        setTitle("Store List - " + date);
+
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -299,10 +301,10 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
             String storecd = jcplist.get(position).getStore_cd().get(0);
 
-            if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_D)) {
+            if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_U)) {
 
                 holder.img.setVisibility(View.VISIBLE);
-                holder.img.setBackgroundResource(R.drawable.tick_d);
+                holder.img.setBackgroundResource(R.drawable.tick_u);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
             } else if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS + storecd, "").equals("No")) {
@@ -377,7 +379,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         final String upload_status = jcplist.get(position).getUploadStatus().get(0);
         final String checkoutstatus = jcplist.get(position).getCheckOutStatus().get(0);
 
-        if (upload_status.equals(CommonString.KEY_D)) {
+        if (upload_status.equals(CommonString.KEY_U)) {
             Snackbar.make(lv, "All Data Uploaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             //Toast.makeText(getApplicationContext(), "All Data Uploaded", Toast.LENGTH_SHORT).show();
 

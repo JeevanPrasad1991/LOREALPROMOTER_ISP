@@ -116,6 +116,8 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
+        setTitle("Midday Stock - " + visit_date);
+
         // preparing list data
         prepareListData();
 
@@ -344,6 +346,10 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                     //checkflag = true;
                 }
             }
+
+            if(!flag){
+                break;
+            }
         }
         //expListView.invalidate();
 
@@ -423,7 +429,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         hide();*/
 
                     final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)&", "");
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
 
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition))
@@ -490,7 +496,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
-                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.teal_dark));
+                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
 

@@ -87,6 +87,8 @@ public class AuditQuestionActivity extends AppCompatActivity {
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
+        setTitle("Category Audit - " + visit_date);
+
         // preparing list data
         prepareListData();
 
@@ -156,6 +158,9 @@ public class AuditQuestionActivity extends AppCompatActivity {
         headerListData = db.getAfterSaveAuditQuestionAnswerData(store_cd);
         if (!(headerListData.size() > 0)) {
             headerListData = db.getAuditQuestionData(store_cd);
+        }
+        else{
+            save_btn.setText("Update");
         }
 
         if (headerListData.size() > 0) {

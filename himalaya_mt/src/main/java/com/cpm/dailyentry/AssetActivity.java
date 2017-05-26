@@ -85,6 +85,8 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     ArrayList<StockNewGetterSetter> listSkuData;
     ListView listView;
 
+    String msg_error="Please fill all the fields";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -115,6 +117,8 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
+
+        setTitle("Paid Visibility - " + visit_date);
 
         str = CommonString.FILE_PATH;
 
@@ -170,8 +174,16 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     btnSave.setText("Update");
                 }
 
-                List<AssetInsertdataGetterSetter> skulist = new ArrayList<AssetInsertdataGetterSetter>();
+
+                List<AssetInsertdataGetterSetter> skulist = new ArrayList<>();
                 for (int j = 0; j < skuData.size(); j++) {
+
+                    ArrayList<StockNewGetterSetter> listSkuData = db.getAfterPaidVisibilitySkuData(skuData.get(j).getAsset_cd(),
+                            store_cd, visit_date, categoryData.get(i).getCategory_cd());
+                    if(listSkuData.size()>0){
+                        skuData.get(j).setListSkuData(listSkuData);
+                    }
+
                     skulist.add(skuData.get(j));
                 }
 
@@ -201,7 +213,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                                 //getMid();
 
                                 db.deleteAssetData(store_cd);
-                                db.InsertAssetData(store_cd, listDataChild, listDataHeader);
+                                db.InsertAssetData(store_cd, listDataChild, listDataHeader,visit_date);
 
                                 Toast.makeText(getApplicationContext(), "Data has been saved", Toast.LENGTH_SHORT).show();
                                 finish();
@@ -216,7 +228,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 alert.show();
             } else {
                 listAdapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), msg_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -399,7 +411,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             holder.btn_skuList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSkuListDialogue(childText.getCategory_cd(), childText.getAsset_cd());
+                    showSkuListDialogue(childText);
                 }
             });
 
@@ -472,7 +484,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
-                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.teal_dark));
+                    lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
 
@@ -561,6 +573,8 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
                 String asset_cd = listDataChild2.get(listDataHeader2.get(i)).get(j).getAsset_cd();
 
+                ArrayList<StockNewGetterSetter> listSkuData = listDataChild2.get(listDataHeader2.get(i)).get(j).getListSkuData();
+
 
                 if (present.equalsIgnoreCase("NO")) {
                     if (remark.equalsIgnoreCase("")) {
@@ -568,7 +582,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         if (!checkHeaderArray.contains(i)) {
                             checkHeaderArray.add(i);
                         }
-
+                        msg_error="Please fill remark";
                         checkflag = false;
 
                         //flag = false;
@@ -584,6 +598,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                             checkHeaderArray.add(i);
                         }
 
+                        msg_error="Please click image";
                         checkflag = false;
 
                         //flag = false;
@@ -617,6 +632,18 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         }
                     }
 
+                }
+
+                if(checkflag && present.equalsIgnoreCase("YES")){
+
+                    if(listSkuData.size()>0){
+                        checkflag = true;
+                    }
+                    else{
+                        msg_error="Please fill SKU data";
+                        checkflag = false;
+                        break;
+                    }
                 }
 
             }
@@ -1106,11 +1133,15 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     }
 
     //Sku List
-    public void showSkuListDialogue(final String category_cd, final String asset_cd) {
-        boolean update_flag = false;
-        listSkuData = new ArrayList<>();
+    public void showSkuListDialogue(final AssetInsertdataGetterSetter asset) {
 
-        listSkuData = db.getAfterPaidVisibilitySkuData(asset_cd, store_cd, visit_date, category_cd);
+        final AssetInsertdataGetterSetter assets = asset;
+        final String category_cd = assets.getCategory_cd();
+        final String asset_cd = assets.getAsset_cd();
+
+        boolean update_flag = false;
+        //ArrayList<StockNewGetterSetter> listSkuData = db.getAfterPaidVisibilitySkuData(asset_cd, store_cd, visit_date, category_cd);
+        ArrayList<StockNewGetterSetter> listSkuData = assets.getListSkuData();
         if (!(listSkuData.size() > 0)) {
             listSkuData = db.getPaidVisibilitySkuData(store_cd, category_cd);
         } else {
@@ -1144,21 +1175,23 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 }
             });
 
+            final ArrayList<StockNewGetterSetter> finalListSkuData = listSkuData;
             btnsave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listView.clearFocus();
                     boolean isvalid = false;
 
-                    for (int i = 0; i < listSkuData.size(); i++) {
-                        if (listSkuData.get(i).getChk_skuBox().equals("1")) {
+                    for (int i = 0; i < finalListSkuData.size(); i++) {
+                        if (finalListSkuData.get(i).getChk_skuBox().equals("1")) {
                             isvalid = true;
                             break;
                         }
                     }
 
                     if (isvalid) {
-                        db.insertAssetSkuListData(listSkuData, asset_cd, visit_date, store_cd, category_cd);
+                        //db.insertAssetSkuListData(finalListSkuData, asset_cd, visit_date, store_cd, category_cd);
+                        assets.setListSkuData(finalListSkuData);
                         dialog.cancel();
                     } else {
                         Toast.makeText(AssetActivity.this, "Please fill atleast one sku", Toast.LENGTH_SHORT).show();
