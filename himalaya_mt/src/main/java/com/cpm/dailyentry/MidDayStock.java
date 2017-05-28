@@ -499,6 +499,9 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
+            else{
+                lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
+            }
 
             return convertView;
         }
