@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpm.Constants.CommonString;
@@ -71,13 +72,14 @@ public class LoginActivity extends Activity implements OnClickListener,
     GSKDatabase database;
     static int counter = 1;
     // TextView login_version;
-    String app_ver;
+    String app_ver,version_name;
     int eventType;
     LoginGetterSetter lgs = null;
     private ArrayList<CoverageBean> coverageBeanlist = new ArrayList<CoverageBean>();
     private QuestionGetterSetter questionGetterSetter;
 
     String right_answer, rigth_answer_cd = "", qns_cd, ans_cd;
+    TextView tv_version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +91,14 @@ public class LoginActivity extends Activity implements OnClickListener,
 
         mUsername = (EditText) findViewById(R.id.login_usertextbox);
         mPassword = (EditText) findViewById(R.id.login_locktextbox);
+        tv_version = (TextView) findViewById(R.id.tv_version);
         // login_remember = (RelativeLayout)
         // findViewById(R.id.login_rememberme);
         // login_remembericon = (ImageView)
         // findViewById(R.id.login_remembermeicon);
 
-        mUsername.setText("testmer");
-        mPassword.setText("cpm123");
+        //mUsername.setText("testmer");
+        //mPassword.setText("cpm123");
 
         /*mUsername.setText("testpromo");
         mPassword.setText("cpm123");*/
@@ -111,8 +114,9 @@ public class LoginActivity extends Activity implements OnClickListener,
 
         try {
             app_ver = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+            version_name = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
 
-            // login_version.setText("Parinaam Version " + app_ver);
+            tv_version.setText("Version " + version_name);
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

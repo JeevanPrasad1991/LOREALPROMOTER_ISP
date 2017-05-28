@@ -560,6 +560,10 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
+            else{
+                lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
+            }
+
 
             if (!validate) {
                 if (checkValidHeaderArray.contains(groupPosition)) {
@@ -611,6 +615,9 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                     flag = true;
                     //checkflag = true;
                 }
+            }
+            if(!flag){
+                break;
             }
         }
 

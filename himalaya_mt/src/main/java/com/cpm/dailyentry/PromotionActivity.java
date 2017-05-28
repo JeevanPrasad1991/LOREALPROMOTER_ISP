@@ -474,6 +474,10 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
+            else{
+                lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
+            }
+
 
             return convertView;
         }
