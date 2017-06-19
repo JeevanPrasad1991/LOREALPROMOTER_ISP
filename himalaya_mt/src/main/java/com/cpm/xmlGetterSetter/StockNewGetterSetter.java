@@ -8,7 +8,7 @@ public class StockNewGetterSetter {
 
     String store_cd, brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
             ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing, asset_cd,
-            chk_skuBox, stock_under45days;
+            chk_skuBox, stock_under45days,company_cd;
 
 
     public String getOpenning_total_stock() {
@@ -169,5 +169,13 @@ public class StockNewGetterSetter {
 
     public void setAsset_cd(String asset_cd) {
         this.asset_cd = asset_cd;
+    }
+
+    public String getCompany_cd() {
+        return company_cd;
+    }
+
+    public void setCompany_cd(String company_cd) {
+        this.company_cd = company_cd;
     }
 }

@@ -177,11 +177,28 @@
                         <ToggleButton
                             android:id="@+id/tbpresent"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight=".6"
                             android:gravity="center"
                             android:textOff="NO"
                             android:textOn="YES" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4">
+
+                            <ImageButton
+                                android:id="@+id/img_ref"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+android:layout_centerInParent="true"
+                                android:background="@drawable/ref_img"
+                                />
+
+                        </RelativeLayout>
+
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -309,7 +326,7 @@
                         android:layout_margin="5dp"
                         android:text="CheckList"
                         android:textSize="15dp"
-                        android:visibility="gone" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout

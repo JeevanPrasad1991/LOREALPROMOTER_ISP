@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cpm.himalaya"
-    android:versionCode="1"
-    android:versionName="1.0" > <!-- //package="com.cpm.capitalfoods" -->
+    android:versionCode="2"
+    android:versionName="1.1" > <!-- //package="com.cpm.capitalfoods" -->
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="22" />
@@ -209,6 +209,10 @@
         <activity
             android:name="com.cpm.dailyentry.AuditQuestionActivity"
             android:label="@string/title_activity_audi" />
+        <activity
+            android:name="com.cpm.dailyentry.QuizTabbedActivity"
+            android:label="@string/title_activity_audi"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"

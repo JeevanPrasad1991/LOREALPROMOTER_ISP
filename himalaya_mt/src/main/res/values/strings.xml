@@ -81,6 +81,16 @@
     <string name="title_activity_geo_fence_">GeoFence_Activity</string>
     <string name="title_activity_store_image">StoreImageActivity</string>
     <string name="title_activity_audi">Category Audit</string>
+    <string name="title_activity_quiz_tabbed">QuizTabbedActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
+    <string name="brand">Brand</string>
+    <string name="sku">Sku</string>
+    <string name="enter_the_values">Enter the values</string>
+    <string name="entry_already_exist">This entry already exist!</string>
+    <string name="select">Select</string>
+    <string name="quantity">Quantity</string>
+    <string name="add">Add</string>
+    <string name="closed">Close</string>
 
 </resources>

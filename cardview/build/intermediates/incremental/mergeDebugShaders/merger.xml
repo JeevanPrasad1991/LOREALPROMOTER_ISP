@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/yadu/Desktop/Himalaya_MT280517/cardview/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/yadu/Desktop/Himalaya_MT280517/cardview/src/debug/shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="E:\Himalya_MTLatest\Himalaya_MT\cardview\src\main\shaders"/></dataSet><dataSet config="debug"><source path="E:\Himalya_MTLatest\Himalaya_MT\cardview\src\debug\shaders"/></dataSet></merger>

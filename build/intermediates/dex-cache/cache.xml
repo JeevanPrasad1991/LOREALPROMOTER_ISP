@@ -3,75 +3,57 @@
 
     <item
         is-multidex="false"
-        jar="/home/yadu/.android/build-cache/a5e3ec626ad5dac965137d0e3c8e1eee44eaf3d5/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d125b199a427e5cc8d4234f7d8673c9a27ef6336">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_6faf4a50c33262e4a2f8b2c7c1cad0c3bd58e5c6.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/yadu/.android/build-cache/e4297b10acf5d00651bdaf8c3a5ce134cd6d1563/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_050b370d31cca0746c7c75e988aa27e7ee5e4c0a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/yadu/.android/build-cache/7aec7aeb8a4a98576e142503e40494d596d48ee6/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_5b92e750bb3c732a9ff70d43d880248389dfd994.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/yadu/.android/build-cache/bd2ea2b24c4d9947031d0f5c46c474978c022ea7/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_5a7b98c4ddda679009b8e9b4821462dc4680210e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/libs/acra-4.4.0.jar"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/acra-4.4.0_1eb010137464141c5f6b6826606bdb30c594f69a.jar" />
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\release\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a.jar" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/yadu/.android/build-cache/cb3c903b4b05807420b47a82ee1f6fdafd096f4d/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_3e7cdd6c3136aa6e853efad08dc1c4cf975d27cc.jar" />
+        sha1="8f5cc47094b15874f14d75a75f551dc48cdc6efb">
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_1c1389408bb77c724012a6d6b5fb1b09ba6ce83c\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/yadu/.android/build-cache/d5d06deb945c1081de8beb7fa99de01a7100da22/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/classes_3cd3cd94c22255093b3e6be64b756f285d44d43c.jar" />
+        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_a9a705a4ab4608628da226536a97ea01d3c9ac75\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a\classes.dex" />
     </item>
     <item
         is-multidex="false"
-        jar="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="/home/yadu/Desktop/Himalaya_MT280517/himalaya_mt/build/intermediates/pre-dexed/release/ksoap2-android-assembly-3.0.0-jar-with-dependencies_448aea25aefef8c9559de05be291fdbd58d58fb9.jar" />
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\release\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51.jar" />
     </item>
 
 </items>

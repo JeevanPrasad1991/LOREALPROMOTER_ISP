@@ -144,7 +144,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
-        setTitle("Opening Stock - " + visit_date);
+        setTitle("Availability - " + visit_date);
 
         // preparing list data
         prepareListData();
@@ -475,7 +475,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing("");
 
-                    } else if (stock.equals("")) {
+                    } else if (childText.getCompany_cd().equals("1")&&stock.equals("")) {
                         if (isDialogOpen) {
                             isDialogOpen = !isDialogOpen;
                             AlertDialog.Builder builder = new AlertDialog.Builder(OpeningStock.this);
@@ -496,7 +496,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         /*Snackbar.make(expListView, "First fill Stock data", Snackbar.LENGTH_LONG).show();
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing("");
                         finalHolder.ed_openingFacing.setText("");*/
-                    } else {
+                    } else if(childText.getCompany_cd().equals("1")){
                         int totalstk = 0;
                         totalstk = Integer.parseInt(stock);
                         int facing = Integer.parseInt(value1);
@@ -523,10 +523,19 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                             ischangedflag = true;
                             _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing(value1);
                         }
+                    } else {
+                        ischangedflag = true;
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing(value1);
                     }
                     //}
                 }
             });
+
+           if (childText.getCompany_cd().equals("1")) {
+                holder.ed_openingStock.setVisibility(View.VISIBLE);
+            } else {
+                holder.ed_openingStock.setVisibility(View.INVISIBLE);
+            }
 
             holder.ed_openingStock.setId(childPosition);
             holder.ed_openingFacing.setId(childPosition);
@@ -547,7 +556,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             if (!checkflag) {
                 boolean tempflag = false;
 
-                if (holder.ed_openingStock.getText().toString().equals("")) {
+                if (childText.getCompany_cd().equals("1") && holder.ed_openingStock.getText().toString().equals("")) {
                     holder.ed_openingStock.setHintTextColor(getResources().getColor(R.color.red));
                     holder.ed_openingStock.setHint("Empty");
                     tempflag = true;
@@ -696,8 +705,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 } else {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
-            }
-            else{
+            } else {
                 lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
             }
 
@@ -743,13 +751,18 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             for (int j = 0; j < listDataChild2.get(listDataHeader2.get(i)).size(); j++) {
 
                 String openstocktotal = listDataChild2.get(listDataHeader2.get(i)).get(j).getEd_openingStock();
+                String company_cd = listDataChild2.get(listDataHeader2.get(i)).get(j).getCompany_cd();
                 String openfacing = listDataChild2.get(listDataHeader2.get(i)).get(j).getEd_openingFacing();
 
-                if (openstocktotal.equalsIgnoreCase("") || (openfacing.equalsIgnoreCase(""))) {
+                if ((openfacing.equalsIgnoreCase(""))) {
 
-                    if (!checkHeaderArray.contains(i)) {
-                        checkHeaderArray.add(i);
-                    }
+                    checkflag = false;
+
+                    flag = false;
+                    Error_Message = "Please fill all the data";
+                    break;
+                } else if (company_cd.equals("1") && openstocktotal.equalsIgnoreCase("")) {
+                //} else if ( openstocktotal.equalsIgnoreCase("")) {
 
                     checkflag = false;
 
@@ -763,6 +776,9 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             }
 
             if (checkflag == false) {
+                if (!checkHeaderArray.contains(i)) {
+                    checkHeaderArray.add(i);
+                }
                 break;
             }
         }

@@ -36,6 +36,9 @@ public class TableBean {
 
     public static String audit_question_table;
 
+    public static String table_NON_COMPLIANCE_CHECKLIST;
+    public static String table_MAPPING_ASSET_CHECKLIST_REASON;
+
     public static String getClosingcoldtable() {
         return closingcoldtable;
     }
@@ -171,6 +174,22 @@ public class TableBean {
 
     public static void setAudit_question_table(String audit_question_table) {
         TableBean.audit_question_table = audit_question_table;
+    }
+
+    public static String getTable_NON_COMPLIANCE_CHECKLIST() {
+        return table_NON_COMPLIANCE_CHECKLIST;
+    }
+
+    public static void setTable_NON_COMPLIANCE_CHECKLIST(String table_NON_COMPLIANCE_CHECKLIST) {
+        TableBean.table_NON_COMPLIANCE_CHECKLIST = table_NON_COMPLIANCE_CHECKLIST;
+    }
+
+    public static String getTable_MAPPING_ASSET_CHECKLIST_REASON() {
+        return table_MAPPING_ASSET_CHECKLIST_REASON;
+    }
+
+    public static void setTable_MAPPING_ASSET_CHECKLIST_REASON(String table_MAPPING_ASSET_CHECKLIST_REASON) {
+        TableBean.table_MAPPING_ASSET_CHECKLIST_REASON = table_MAPPING_ASSET_CHECKLIST_REASON;
     }
 
     /*public static String merchandisetable;

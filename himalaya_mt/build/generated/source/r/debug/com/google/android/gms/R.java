@@ -76,38 +76,38 @@ public final class R {
         public static final int wallet_secondary_text_holo_dark = 0x7f0c0082;
     }
     public static final class drawable {
-        public static final int common_full_open_on_phone = 0x7f020097;
-        public static final int common_ic_googleplayservices = 0x7f020098;
-        public static final int common_signin_btn_icon_dark = 0x7f020099;
-        public static final int common_signin_btn_icon_disabled_dark = 0x7f02009a;
-        public static final int common_signin_btn_icon_disabled_focus_dark = 0x7f02009b;
-        public static final int common_signin_btn_icon_disabled_focus_light = 0x7f02009c;
-        public static final int common_signin_btn_icon_disabled_light = 0x7f02009d;
-        public static final int common_signin_btn_icon_focus_dark = 0x7f02009e;
-        public static final int common_signin_btn_icon_focus_light = 0x7f02009f;
-        public static final int common_signin_btn_icon_light = 0x7f0200a0;
-        public static final int common_signin_btn_icon_normal_dark = 0x7f0200a1;
-        public static final int common_signin_btn_icon_normal_light = 0x7f0200a2;
-        public static final int common_signin_btn_icon_pressed_dark = 0x7f0200a3;
-        public static final int common_signin_btn_icon_pressed_light = 0x7f0200a4;
-        public static final int common_signin_btn_text_dark = 0x7f0200a5;
-        public static final int common_signin_btn_text_disabled_dark = 0x7f0200a6;
-        public static final int common_signin_btn_text_disabled_focus_dark = 0x7f0200a7;
-        public static final int common_signin_btn_text_disabled_focus_light = 0x7f0200a8;
-        public static final int common_signin_btn_text_disabled_light = 0x7f0200a9;
-        public static final int common_signin_btn_text_focus_dark = 0x7f0200aa;
-        public static final int common_signin_btn_text_focus_light = 0x7f0200ab;
-        public static final int common_signin_btn_text_light = 0x7f0200ac;
-        public static final int common_signin_btn_text_normal_dark = 0x7f0200ad;
-        public static final int common_signin_btn_text_normal_light = 0x7f0200ae;
-        public static final int common_signin_btn_text_pressed_dark = 0x7f0200af;
-        public static final int common_signin_btn_text_pressed_light = 0x7f0200b0;
-        public static final int ic_plusone_medium_off_client = 0x7f020113;
-        public static final int ic_plusone_small_off_client = 0x7f020114;
-        public static final int ic_plusone_standard_off_client = 0x7f020115;
-        public static final int ic_plusone_tall_off_client = 0x7f020116;
-        public static final int powered_by_google_dark = 0x7f020163;
-        public static final int powered_by_google_light = 0x7f020164;
+        public static final int common_full_open_on_phone = 0x7f020098;
+        public static final int common_ic_googleplayservices = 0x7f020099;
+        public static final int common_signin_btn_icon_dark = 0x7f02009a;
+        public static final int common_signin_btn_icon_disabled_dark = 0x7f02009b;
+        public static final int common_signin_btn_icon_disabled_focus_dark = 0x7f02009c;
+        public static final int common_signin_btn_icon_disabled_focus_light = 0x7f02009d;
+        public static final int common_signin_btn_icon_disabled_light = 0x7f02009e;
+        public static final int common_signin_btn_icon_focus_dark = 0x7f02009f;
+        public static final int common_signin_btn_icon_focus_light = 0x7f0200a0;
+        public static final int common_signin_btn_icon_light = 0x7f0200a1;
+        public static final int common_signin_btn_icon_normal_dark = 0x7f0200a2;
+        public static final int common_signin_btn_icon_normal_light = 0x7f0200a3;
+        public static final int common_signin_btn_icon_pressed_dark = 0x7f0200a4;
+        public static final int common_signin_btn_icon_pressed_light = 0x7f0200a5;
+        public static final int common_signin_btn_text_dark = 0x7f0200a6;
+        public static final int common_signin_btn_text_disabled_dark = 0x7f0200a7;
+        public static final int common_signin_btn_text_disabled_focus_dark = 0x7f0200a8;
+        public static final int common_signin_btn_text_disabled_focus_light = 0x7f0200a9;
+        public static final int common_signin_btn_text_disabled_light = 0x7f0200aa;
+        public static final int common_signin_btn_text_focus_dark = 0x7f0200ab;
+        public static final int common_signin_btn_text_focus_light = 0x7f0200ac;
+        public static final int common_signin_btn_text_light = 0x7f0200ad;
+        public static final int common_signin_btn_text_normal_dark = 0x7f0200ae;
+        public static final int common_signin_btn_text_normal_light = 0x7f0200af;
+        public static final int common_signin_btn_text_pressed_dark = 0x7f0200b0;
+        public static final int common_signin_btn_text_pressed_light = 0x7f0200b1;
+        public static final int ic_plusone_medium_off_client = 0x7f020115;
+        public static final int ic_plusone_small_off_client = 0x7f020116;
+        public static final int ic_plusone_standard_off_client = 0x7f020117;
+        public static final int ic_plusone_tall_off_client = 0x7f020118;
+        public static final int powered_by_google_dark = 0x7f020165;
+        public static final int powered_by_google_light = 0x7f020166;
     }
     public static final class id {
         public static final int adjust_height = 0x7f0d0032;
@@ -170,11 +170,11 @@ public final class R {
         public static final int common_open_on_phone = 0x7f07002c;
         public static final int common_signin_button_text = 0x7f07002d;
         public static final int common_signin_button_text_long = 0x7f07002e;
-        public static final int create_calendar_message = 0x7f070045;
-        public static final int create_calendar_title = 0x7f070046;
-        public static final int decline = 0x7f070048;
-        public static final int store_picture_message = 0x7f070060;
-        public static final int store_picture_title = 0x7f070061;
+        public static final int create_calendar_message = 0x7f070048;
+        public static final int create_calendar_title = 0x7f070049;
+        public static final int decline = 0x7f07004b;
+        public static final int store_picture_message = 0x7f070069;
+        public static final int store_picture_title = 0x7f07006a;
         public static final int wallet_buy_button_place_holder = 0x7f070030;
     }
     public static final class style {
