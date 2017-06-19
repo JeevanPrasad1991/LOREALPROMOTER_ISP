@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Himalaya_MT280517.iml" filepath="$PROJECT_DIR$/Himalaya_MT280517.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Himalaya_MT.iml" filepath="$PROJECT_DIR$/Himalaya_MT.iml" />
       <module fileurl="file://$PROJECT_DIR$/cardview/cardview.iml" filepath="$PROJECT_DIR$/cardview/cardview.iml" />
       <module fileurl="file://$PROJECT_DIR$/himalaya_mt/himalaya_mt.iml" filepath="$PROJECT_DIR$/himalaya_mt/himalaya_mt.iml" />
     </modules>

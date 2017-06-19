@@ -248,11 +248,11 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
 
         //if (reason_reamrk.equalsIgnoreCase("true")) {
 
-        if (text.getText().toString().trim().equals("")) {
+        /*if (text.getText().toString().trim().equals("")) {
 
             result = false;
 
-        }
+        }*/
         //}
 
         return result;

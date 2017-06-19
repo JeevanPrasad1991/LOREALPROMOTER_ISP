@@ -37,6 +37,7 @@ import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.himalaya.R;
+import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 
 import java.text.SimpleDateFormat;
@@ -153,13 +154,26 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 }
 
                 if (flag) {
-                    if (database.getAuditQuestionData(storeCd).size() > 0) {
-                        if (database.isAuditDataFilled(storeCd)) {
-                            flag = true;
-                        } else {
-                            flag = false;
+
+                    ArrayList<Audit_QuestionGetterSetter> cat_list = database.getCategoryQuestionData();
+
+                    boolean audit_flag = true;
+
+                    for (int j = 0; j < cat_list.size(); j++) {
+                        if (database.getAuditQuestionData(cat_list.get(j).getCATEGORY_ID().get(0)).size() > 0) {
+                            if (!database.isAuditDataFilled(storeCd, cat_list.get(j).getCATEGORY_ID().get(0))) {
+                                audit_flag = false;
+                                break;
+                            }
                         }
+
                     }
+                    if (audit_flag) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
+
                 }
 
                 if (flag) {
@@ -307,8 +321,10 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.img.setBackgroundResource(R.drawable.tick_u);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
-            } else if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS + storecd, "").equals("No")) {
-
+            }
+            // else if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS + storecd, "").equals("No"))
+            //else if (coverage.get(position).getStatus().equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE))
+            else if (isStoreCoverageLeave(storecd)) {
                 holder.img.setBackgroundResource(R.drawable.leave_tick);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
@@ -760,4 +776,22 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
         return result_flag;
     }
+
+    public boolean isStoreCoverageLeave(String store_cd) {
+         boolean result = false;
+        for (int i = 0; i < coverage.size(); i++) {
+
+            if (store_cd.equals(coverage.get(i).getStoreId())) {
+
+                if (coverage.get(i).getStatus().equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE)) {
+                    result = true;
+                    break;
+                }
+            } else {
+                result = false;
+            }
+        }
+        return result;
+    }
+
 }

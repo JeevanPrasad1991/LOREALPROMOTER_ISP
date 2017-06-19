@@ -58,7 +58,7 @@ public class AuditQuestionActivity extends AppCompatActivity {
     AnswerAdapter adapter;
     RecyclerView recyclerView;
     Button save_btn;
-    List<Integer> checkHeaderArray = new ArrayList<Integer>();
+    List<Integer> checkHeaderArray = new ArrayList<>();
     boolean checkflag = true;
 
     @Override
@@ -102,7 +102,8 @@ public class AuditQuestionActivity extends AppCompatActivity {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     db.open();
-                                    db.saveAuditQuestionAnswerData(listDataHeader, store_cd);
+                                    //temp category cd added
+                                    db.saveAuditQuestionAnswerData(listDataHeader, store_cd,"1");
 
                                     Toast.makeText(getApplicationContext(), "Data has been saved", Toast.LENGTH_SHORT).show();
                                     finish();
@@ -155,7 +156,7 @@ public class AuditQuestionActivity extends AppCompatActivity {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<Audit_QuestionDataGetterSetter, ArrayList<Audit_QuestionDataGetterSetter>>();
 
-        headerListData = db.getAfterSaveAuditQuestionAnswerData(store_cd);
+        headerListData = db.getAfterSaveAuditQuestionAnswerData(store_cd,"1");
         if (!(headerListData.size() > 0)) {
             headerListData = db.getAuditQuestionData(store_cd);
         }

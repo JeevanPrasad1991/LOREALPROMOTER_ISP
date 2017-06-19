@@ -261,6 +261,7 @@ public class CommonString {
             "ASSET VARCHAR, " +
             "PRESENT VARCHAR, " +
             "REMARK VARCHAR," +
+            "PLANOGRAM_IMG VARCHAR," +
             "IMAGE VARCHAR" +
             ")";
 
@@ -1096,6 +1097,9 @@ public class CommonString {
                     "MIDDAY_STOCK" +
                     " INTEGER, " +
 
+                    "COMPANY_CD" +
+                    " INTEGER, " +
+
                     "CLOSING_STOCK" +
                     " INTEGER" +
                     ")";
@@ -1185,7 +1189,7 @@ public class CommonString {
 
 
     public static final String TABLE_ASSET_SKU_CHECKLIST_INSERT = "Paid_Visibility_SkuDailog";
-    public static final String CREATE_TABLE_ASSET_SKU_CHECKLIST_INSERT = "CREATE TABLE "
+    public static final String CREATE_TABLE_ASSET_SKU_CHECKLIST_INSERT = "CREATE TABLE IF NOT EXISTS "
             + TABLE_ASSET_SKU_CHECKLIST_INSERT
             + " ("
             + "KEY_ID"
@@ -1215,28 +1219,60 @@ public class CommonString {
             + "BRAND"
             + " VARCHAR,"
 
-            + "SKU_CHECK_BOX"
+            + COMMONID
+            + " VARCHAR,"
+
+            + "SKU_QUANTITY"
             + " VARCHAR"
             + ")";
 
+    //Checklist Paid Visibility
+    public static final String TABLE_ASSET_CHECKLIST_DATA = "ASSET_CHECKLIST_DATA";
+
+    public static final String CREATE_ASSET_CHECKLIST_DATA = "CREATE TABLE "
+            + TABLE_ASSET_CHECKLIST_DATA
+            + " ("
+            + KEY_ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + CHECK_LIST_ID
+            + " VARCHAR,"
+            + CHECK_LIST
+            + " VARCHAR,"
+            + CHECK_LIST_TEXT
+            + " VARCHAR,"
+            + CHECK_LIST_TYPE
+            + " VARCHAR,"
+
+            + COMMONID
+            + " VARCHAR,"
+
+            + REASON_ID
+            + " INTEGER)";
+
+
     public static final String TABLE_AUDIT_DATA_SAVE = "Audit_Data_Save";
-    public static final String CREATE_TABLE_AUDIT_DATA_SAVE = "CREATE TABLE "
+    public static final String CREATE_TABLE_AUDIT_DATA_SAVE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_AUDIT_DATA_SAVE
             + " ("
             + "KEY_ID"
             + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
 
             + "STORE_CD"
-            + " VARCHAR,"
+            + " INTEGER,"
 
             + "QUESTION_ID"
-            + " VARCHAR,"
+            + " INTEGER,"
 
             + "QUESTION"
             + " VARCHAR,"
 
             + "ANSWER_ID"
-            + " VARCHAR"
+            + " INTEGER,"
+
+            + "CATEGORY_ID"
+            + " INTEGER"
 
             + ")";
+
+    public static final String KEY_POSITION = "POSITION";
 }

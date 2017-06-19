@@ -490,7 +490,7 @@ public class CheckoutNUpload extends Activity {
                         //Audit Data
                         final_xml = "";
                         onXML = "";
-                        auditListData = database.getAfterSaveAuditQuestionAnswerData(coverageBeanlist.get(i).getStoreId());
+                        auditListData = database.getAfterSaveAuditQuestionAnswerData(coverageBeanlist.get(i).getStoreId(),"1");
 
                         if (auditListData.size() > 0) {
                             for (int j = 0; j < auditListData.size(); j++) {

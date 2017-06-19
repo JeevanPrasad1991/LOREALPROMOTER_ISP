@@ -1,19 +1,28 @@
 package com.cpm.dailyentry;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +33,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -33,9 +47,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -45,8 +61,11 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.himalaya.R;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
+import com.cpm.xmlGetterSetter.Audit_QuestionDataGetterSetter;
+import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.ChecklistInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
+import com.cpm.xmlGetterSetter.SkuGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 
 import java.io.File;
@@ -85,7 +104,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     ArrayList<StockNewGetterSetter> listSkuData;
     ListView listView;
 
-    String msg_error="Please fill all the fields";
+    String msg_error = "Please fill all the fields";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +124,6 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         db = new GSKDatabase(getApplicationContext());
         db.open();
@@ -133,7 +151,6 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
         expListView.setAdapter(listAdapter);
 
         btnSave.setOnClickListener(this);
-
 
         expListView.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -165,26 +182,37 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
             // Adding child data
             for (int i = 0; i < categoryData.size(); i++) {
+                List<AssetInsertdataGetterSetter> skulist = new ArrayList<>();
                 listDataHeader.add(categoryData.get(i));
 
                 skuData = db.getAssetDataFromdatabase(store_cd, categoryData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0) || (skuData.get(0).getAsset() == null) || (skuData.get(0).getAsset().equals(""))) {
                     skuData = db.getAssetData(categoryData.get(i).getCategory_cd(), store_cd);
+                    for (int j = 0; j < skuData.size(); j++) {
+                        skulist.add(skuData.get(j));
+                    }
                 } else {
-                    btnSave.setText("Update");
-                }
 
+                    for (int j = 0; j < skuData.size(); j++) {
 
-                List<AssetInsertdataGetterSetter> skulist = new ArrayList<>();
-                for (int j = 0; j < skuData.size(); j++) {
+                       /* ArrayList<StockNewGetterSetter> listSkuData = db.getAfterPaidVisibilitySkuData(skuData.get(j).getAsset_cd(),
+                                store_cd, visit_date, categoryData.get(i).getCategory_cd());
+                     */
+                        ArrayList<SkuGetterSetter> listSkuData = db.getPaidVisibilitySkuListData(skuData.get(j).getKey_id());
+                        if (listSkuData.size() > 0) {
+                            skuData.get(j).setSkulist(listSkuData);
+                        }
 
-                    ArrayList<StockNewGetterSetter> listSkuData = db.getAfterPaidVisibilitySkuData(skuData.get(j).getAsset_cd(),
-                            store_cd, visit_date, categoryData.get(i).getCategory_cd());
-                    if(listSkuData.size()>0){
-                        skuData.get(j).setListSkuData(listSkuData);
+                        ArrayList<ChecklistInsertDataGetterSetter> check_list = db.getCheckListWithReasonData(skuData.get(j).getKey_id());
+
+                        if (check_list.size() > 0) {
+                            skuData.get(j).setChecklist(check_list);
+                        }
+
+                        skulist.add(skuData.get(j));
                     }
 
-                    skulist.add(skuData.get(j));
+                    btnSave.setText("Update");
                 }
 
                 listDataChild.put(listDataHeader.get(i), skulist); // Header, Child data
@@ -212,8 +240,8 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                                 db.open();
                                 //getMid();
 
-                                db.deleteAssetData(store_cd);
-                                db.InsertAssetData(store_cd, listDataChild, listDataHeader,visit_date);
+                                db.deleteAssetData(store_cd, db.getAssetHeaderData(store_cd));
+                                db.InsertAssetData(store_cd, listDataChild, listDataHeader, visit_date);
 
                                 Toast.makeText(getApplicationContext(), "Data has been saved", Toast.LENGTH_SHORT).show();
                                 finish();
@@ -279,10 +307,19 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 holder.remark_layout = (LinearLayout) convertView.findViewById(R.id.remark_layout);
                 holder.btn_checkList = (Button) convertView.findViewById(R.id.btn_checkList);
                 holder.btn_skuList = (Button) convertView.findViewById(R.id.btn_skuList);
+                holder.img_ref = (ImageButton) convertView.findViewById(R.id.img_ref);
 
                 convertView.setTag(holder);
             }
             holder = (ViewHolder) convertView.getTag();
+
+            holder.img_ref.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    showPlanogram(_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getPlanogram_img());
+                }
+            });
 
             holder.tbpresent.setOnClickListener(new View.OnClickListener() {
 
@@ -295,9 +332,11 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
                     if (val.equals("NO")) {
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setImg("");
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getChecklist().clear();
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getSkulist().clear();
 
-                        db.deleteCheckListInsertData(_listDataChild.get(listDataHeader.get(groupPosition))
-                                .get(childPosition).getAsset_cd(), store_cd, visit_date);
+                       /* db.deleteCheckListInsertData(_listDataChild.get(listDataHeader.get(groupPosition))
+                                .get(childPosition).getAsset_cd(), store_cd, visit_date);*/
                     } else {
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setRemark("");
                     }
@@ -309,7 +348,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             holder.btn_checkList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showChecklistDialogue(childText.getAsset_cd(), childText.getCategory_cd());
+                    showChecklistDialogue(childText.getAsset_cd(), childText.getCategory_cd(), _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
                 }
             });
 
@@ -365,6 +404,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 //holder.etremark.setVisibility(View.INVISIBLE);
                 holder.remark_layout.setVisibility(View.GONE);
                 holder.cam_layout.setVisibility(View.VISIBLE);
+                holder.btn_skuList.setVisibility(View.VISIBLE);
 
                 if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg() != null &&
                         !_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg().equals("")) {
@@ -377,6 +417,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 //holder.etremark.setVisibility(View.VISIBLE);
                 holder.remark_layout.setVisibility(View.VISIBLE);
                 holder.cam_layout.setVisibility(View.GONE);
+                holder.btn_skuList.setVisibility(View.GONE);
                 holder.etremark.setText(childText.getRemark());
             }
 
@@ -394,13 +435,6 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         holder.btn_checkList.setVisibility(View.GONE);
                     }
 
-                    if (!checkflag && !(db.getCheckListInsertData(_listDataChild.get(listDataHeader.get(groupPosition))
-                            .get(childPosition).getAsset_cd(), store_cd, visit_date).size() > 0)) {
-                        holder.btn_checkList.setTextColor(getResources().getColor(R.color.red));
-                    } else {
-                        holder.btn_checkList.setTextColor(getResources().getColor(R.color.black));
-                    }
-
                     break;
                 } else {
                     holder.btn_checkList.setVisibility(View.GONE);
@@ -411,7 +445,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             holder.btn_skuList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSkuListDialogue(childText);
+                    showSkuDialog(childText);
                 }
             });
 
@@ -430,6 +464,18 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     } else {
                         holder.btn_cam.setBackgroundResource(R.drawable.camera_done);
                     }
+
+                    if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getChecklist().size() == 0) {
+                        holder.btn_checkList.setTextColor(getResources().getColor(R.color.red));
+                    } else {
+                        holder.btn_checkList.setTextColor(getResources().getColor(R.color.black));
+                    }
+
+                    if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getSkulist().size() == 0) {
+                        holder.btn_skuList.setTextColor(getResources().getColor(R.color.red));
+                    } else {
+                        holder.btn_skuList.setTextColor(getResources().getColor(R.color.black));
+                    }
                 }
 
                 if (tempflag) {
@@ -439,6 +485,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 }
 
             }
+
 
             //holder.tvpromo.setText(childText.getAsset());
             return convertView;
@@ -509,6 +556,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
         CardView cardView;
         LinearLayout cam_layout, remark_layout;
         Button btn_cam, btn_checkList, btn_skuList;
+        ImageButton img_ref;
         //TextView tvpromo;
     }
 
@@ -565,11 +613,15 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     .size(); j++) {
 
                 ArrayList<ChecklistInsertDataGetterSetter> checklistInsertDataGetterSetter;
+                ArrayList<SkuGetterSetter> skuaddedlist;
 
 				/*String aspermccain = listDataChild2.get(listDataHeader2.get(i)).get(j).getAs_per_meccain();*/
                 String present = listDataChild2.get(listDataHeader2.get(i)).get(j).getPresent();
                 String remark = listDataChild2.get(listDataHeader2.get(i)).get(j).getRemark();
                 String img = listDataChild2.get(listDataHeader2.get(i)).get(j).getImg();
+
+                checklistInsertDataGetterSetter = listDataChild2.get(listDataHeader2.get(i)).get(j).getChecklist();
+                skuaddedlist = listDataChild2.get(listDataHeader2.get(i)).get(j).getSkulist();
 
                 String asset_cd = listDataChild2.get(listDataHeader2.get(i)).get(j).getAsset_cd();
 
@@ -582,7 +634,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         if (!checkHeaderArray.contains(i)) {
                             checkHeaderArray.add(i);
                         }
-                        msg_error="Please fill remark";
+                        msg_error = "Please fill remark";
                         checkflag = false;
 
                         //flag = false;
@@ -598,7 +650,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                             checkHeaderArray.add(i);
                         }
 
-                        msg_error="Please click image";
+                        msg_error = "Please click image";
                         checkflag = false;
 
                         //flag = false;
@@ -615,37 +667,44 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
                     for (int m = 0; m < mappingChecklistDataGetterSetters.size(); m++) {
 
-                        if (mappingChecklistDataGetterSetters.get(m).getAsset_cd().get(0).equals(asset_cd)) {
+                      /* if (mappingChecklistDataGetterSetters.get(m).getAsset_cd().get(0).equals(asset_cd)) {
                             checklistInsertDataGetterSetter = db.getCheckListInsertData(asset_cd, store_cd, visit_date);
                             if (!(checklistInsertDataGetterSetter.size() > 0)) {
                                 checkflag = false;
                             }
                             break;
-                        }
+                        }*/
+
 
                     }
 
-                    if (!checkflag) {
-                        if (!checkHeaderArray.contains(i)) {
-                            checkHeaderArray.add(i);
-                            break;
-                        }
+                    if (checklistInsertDataGetterSetter.size() > 0) {
+                        checkflag = true;
+                    } else {
+                        msg_error = "Please fill Checklist data";
+                        checkflag = false;
+                        break;
                     }
 
                 }
 
-                if(checkflag && present.equalsIgnoreCase("YES")){
+                if (checkflag && present.equalsIgnoreCase("YES")) {
 
-                    if(listSkuData.size()>0){
+                    if (skuaddedlist.size() > 0) {
                         checkflag = true;
-                    }
-                    else{
-                        msg_error="Please fill SKU data";
+                    } else {
+                        msg_error = "Please fill SKU data";
                         checkflag = false;
                         break;
                     }
                 }
 
+                if (!checkflag) {
+                    if (!checkHeaderArray.contains(i)) {
+                        checkHeaderArray.add(i);
+                        break;
+                    }
+                }
             }
 
             if (checkflag == false) {
@@ -767,10 +826,10 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     }
 
     //CheckList
-    public void showChecklistDialogue(final String asset_cd, final String category_cd) {
+    public void showChecklistDialogue(final String asset_cd, final String category_cd, final AssetInsertdataGetterSetter asset_child) {
         boolean update_flag = false;
-
-        checklistInsertDataGetterSetters = db.getCheckListInsertData(asset_cd, store_cd, visit_date);
+        checklistInsertDataGetterSetters = asset_child.getChecklist();
+        //checklistInsertDataGetterSetters = db.getCheckListInsertData(asset_cd, store_cd, visit_date);
         if (!(checklistInsertDataGetterSetters.size() > 0)) {
             checklistInsertDataGetterSetters = db.getCheckListData(asset_cd);
         } else {
@@ -808,21 +867,34 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 public void onClick(View v) {
                     listView.clearFocus();
                     boolean isvalid = true;
+                    String error_msg = "";
 
                     for (int i = 0; i < checklistInsertDataGetterSetters.size(); i++) {
 
                         if (checklistInsertDataGetterSetters.get(i).getChecklist_type().equals("FREETEXT")
                                 && checklistInsertDataGetterSetters.get(i).getChecklist_text().equals("")) {
                             isvalid = false;
+                            error_msg = "Please fill text in text field";
                             break;
+                        } else if (checklistInsertDataGetterSetters.get(i).getChecklist_type().equals("TOGGLE")
+                                && checklistInsertDataGetterSetters.get(i).getChecklist_text().equalsIgnoreCase("NO")) {
+                            if (checklistInsertDataGetterSetters.get(i).getReason_cd().equals("0")) {
+                                isvalid = false;
+                                error_msg = "Please select reason";
+                                break;
+                            }
                         }
                     }
 
                     if (isvalid) {
-                        db.insertAssetCheckListData(checklistInsertDataGetterSetters, asset_cd, visit_date, store_cd, category_cd);
+                        //db.insertAssetCheckListData(checklistInsertDataGetterSetters, asset_cd, visit_date, store_cd, category_cd);
+                        asset_child.setChecklist(checklistInsertDataGetterSetters);
                         dialog.cancel();
                     } else {
-                        Toast.makeText(AssetActivity.this, "Please fill text in text field", Toast.LENGTH_SHORT).show();
+                        //Snackbar.make(expListView,error_msg,Snackbar.LENGTH_SHORT).show();
+                        Snackbar sb = Snackbar.make(listView, error_msg, Snackbar.LENGTH_SHORT);
+                        sb.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                        sb.show();
                     }
                 }
             });
@@ -865,40 +937,9 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 holder.tbpresent = (ToggleButton) convertView.findViewById(R.id.toggle_checklist);
                 holder.etremark = (EditText) convertView.findViewById(R.id.et_checklist);
                 holder.stauslay = (LinearLayout) convertView.findViewById(R.id.status_layout);
-                //holder.spinstat=(Spinner) convertView.findViewById(R.id.spinstatus);
+                holder.reason_lay = (LinearLayout) convertView.findViewById(R.id.lay_reason);
+                holder.spin_reason = (Spinner) convertView.findViewById(R.id.spin_reason);
 
-				/*if(position==0 && deepFreezlist.get(position).getStatus().equals("") || position==0 && deepFreezlist.get(position).getStatus().equals("NO")){
-                    listsize=1;
-					notifyDataSetChanged();
-				}
-
-				if(listsize==1){
-
-					holder.etremark.addTextChangedListener(new TextWatcher(){
-
-						@Override
-						public void afterTextChanged(Editable arg0) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-													  int arg3) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void onTextChanged(CharSequence s, int a, int b, int c) {
-							// TODO Auto-generated method stub
-
-							deepFreezlist.get(position).setRemark(s.toString());
-						}});
-
-				}
-				else{
-*/
                 holder.etremark.setOnFocusChangeListener(new OnFocusChangeListener() {
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (!hasFocus) {
@@ -915,68 +956,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         }
                     }
                 });
-                //}
 
-				/*holder.spinstat.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> arg0, View v,
-							int pos, long arg3) {
-						// TODO Auto-generated method stub
-
-						if(pos!=0){
-							status=statuslist.get(pos);
-
-							final int position = arg0.getId();
-
-
-							if(position==0 && status.equals("No")){
-								listsize=1;
-								 //notifyDataSetChanged();
-								//lv.invalidateViews();
-
-
-								SharedPreferences.Editor editor = preferences.edit();
-								editor.putBoolean("opnestkmccaindf", false);
-
-								editor.commit();
-							}
-							else if(position==0 && status.equals("Yes")){
-								listsize=deepFreezlist.size();
-
-								SharedPreferences.Editor editor = preferences.edit();
-								editor.putBoolean("opnestkmccaindf", true);
-
-								editor.commit();
-							}
-
-
-							if(status.equals("No")){
-								//lv.setClickable(false);
-								spinflag=false;
-								deepFreezlist.get(position).setStatus("No");
-
-								//lv.getChildAt(position).findViewById(R.id.etremark).setVisibility(View.VISIBLE);
-
-							}
-							else{
-								deepFreezlist.get(position).setStatus("Yes");
-								spinflag=true;
-
-								//lv.getChildAt(position).findViewById(R.id.etremark).setVisibility(View.INVISIBLE);
-							}
-
-
-						}
-
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-
-					}
-				});*/
 
                 holder.tbpresent.setOnClickListener(new View.OnClickListener() {
 
@@ -984,59 +964,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                     public void onClick(View v) {
                         String val = ((ToggleButton) v).getText().toString();
 
-					/*	status=statuslist.get(pos);
-                        final int position = arg0.getId();*/
                         final int position = v.getId();
-
-                    /*	if(position==0 && val.equals("NO")){
-                            //listsize=1;
-							//notifyDataSetChanged();
-							//lv.invalidateViews();
-
-							SharedPreferences.Editor editor = preferences.edit();
-							editor.putBoolean("opnestkmccaindf", false);
-
-							editor.commit();
-						}
-						else if(position==0 && val.equals("YES")){
-							listsize=deepFreezlist.size();
-
-							*//*if(mccainflag){
-
-								String msg;
-								String user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
-								if(user_type.equals("Merchandiser")){
-									msg="Fill Mccain DF in Opening Stock";
-								}
-								else{
-									msg="Fill Mccain DF in Opening and Closing Stock";
-								}
-
-								AlertDialog.Builder builder = new AlertDialog.Builder(MccainType.this);
-								builder.setMessage(msg)
-								.setCancelable(false)
-								.setPositiveButton("OK",
-										new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-
-
-										dialog.cancel();
-									//finish();
-
-									}
-								});
-								AlertDialog alert = builder.create();
-
-								alert.show();
-							}*//*
-
-							SharedPreferences.Editor editor = preferences.edit();
-							editor.putBoolean("opnestkmccaindf", true);
-
-							editor.commit();
-						}*/
-
 
                         checklistInsertDataGetterSetters.get(position).setChecklist_text(val);
                         listView.invalidateViews();
@@ -1055,21 +983,6 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             holder.tbpresent.setId(position);
             //holder.spinstat.setId(position);
 
-/*
-            if(deepFreezlist.get(position).getDeep_freezer().contains("Deep Freezer cooling")){
-				holder.stauslay.setVisibility(View.INVISIBLE);
-			}
-			else{
-				holder.stauslay.setVisibility(View.VISIBLE);
-			}*/
-
-			/*if(deepFreezlist.get(position).getDeep_freezer().contains("Material Wellness")){
-                holder.etremark.setVisibility(View.INVISIBLE);
-			}
-			else{
-				holder.etremark.setVisibility(View.VISIBLE);
-			}*/
-
             holder.dfavail.setText(checklistInsertDataGetterSetters.get(position).getChecklist());
             holder.etremark.setText(checklistInsertDataGetterSetters.get(position).getChecklist_text());
             //status=deepFreezlist.get(position).getStatus();
@@ -1084,38 +997,44 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 holder.etremark.setVisibility(View.GONE);
                 holder.tbpresent.setVisibility(View.VISIBLE);
 
-                holder.tbpresent.setChecked(checklistInsertDataGetterSetters.get(position).getChecklist_text().equals("YES"));
-                //dfAdapter.notifyDataSetChanged();
-                // notifyDataSetChanged();
-                //lv.invalidateViews();
-                /*if(position!=0){
+                if (checklistInsertDataGetterSetters.get(position).getChecklist_text().equals("YES")) {
+                    holder.tbpresent.setChecked(true);
+                    holder.reason_lay.setVisibility(View.GONE);
+                } else {
 
-					//dfAdapter.notifyDataSetChanged();
-					lv.invalidateViews();
-				}*/
-                //listView.invalidateViews();
-                // notifyDataSetChanged();
-            }/*else{
-                holder.etremark.setVisibility(View.VISIBLE);
-				//dfAdapter.notifyDataSetChanged();
-				//lv.invalidateViews();
-				 notifyDataSetChanged();
-			}*/
+                    holder.tbpresent.setChecked(false);
+                    holder.reason_lay.setVisibility(View.VISIBLE);
+                    final ArrayList<AssetChecklistReasonGettersetter> reason_list = db.getAssetCheckListReasonData(checklistInsertDataGetterSetters.get(position).getChecklist_id());
+                    AssetChecklistReasonGettersetter select = new AssetChecklistReasonGettersetter();
+                    select.setReason("Select");
+                    select.setReason_id("0");
+                    reason_list.add(0, select);
 
-			/*if(spinflag){
-                if(position!=0){
-					holder.etremark.setVisibility(View.INVISIBLE);
-					dfAdapter.notifyDataSetChanged();
-				}
-			}
-			else{
-				holder.etremark.setVisibility(View.VISIBLE);
-				dfAdapter.notifyDataSetChanged();
-			}*/
-            //	int indexspin=statuslist.indexOf(status);
+                    holder.spin_reason.setAdapter(new ReasonSpinnerAdapter(AssetActivity.this, R.layout.spinner_text_view, reason_list));
 
+                    for (int i = 0; i < reason_list.size(); i++) {
+                        if (reason_list.get(i).getReason_id().equals(checklistInsertDataGetterSetters.get(position).getReason_cd())) {
+                            holder.spin_reason.setSelection(i);
+                            break;
+                        }
+                    }
 
-            //holder.spinstat.setSelection(indexspin);
+                    holder.spin_reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                            AssetChecklistReasonGettersetter ans = reason_list.get(pos);
+                            checklistInsertDataGetterSetters.get(position).setReason_cd(ans.getReason_id());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                }
+
+            }
 
             return convertView;
         }
@@ -1128,12 +1047,13 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
         ToggleButton tbpresent;
         EditText etremark;
-        LinearLayout stauslay;
+        LinearLayout stauslay, reason_lay;
+        Spinner spin_reason;
 
     }
 
     //Sku List
-    public void showSkuListDialogue(final AssetInsertdataGetterSetter asset) {
+   /* public void showSkuListDialogue(final AssetInsertdataGetterSetter asset) {
 
         final AssetInsertdataGetterSetter assets = asset;
         final String category_cd = assets.getCategory_cd();
@@ -1214,7 +1134,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
             dialog.show();
         }
 
-    }
+    }*/
 
     private class SkuListAdaptor extends BaseAdapter {
         List<StockNewGetterSetter> skuListData;
@@ -1280,5 +1200,468 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
     private class ViewSkuHolder {
         TextView txt_skuName;
         CheckBox chk_sku;
+    }
+
+    public class ReasonSpinnerAdapter extends ArrayAdapter<AssetChecklistReasonGettersetter> {
+        List<AssetChecklistReasonGettersetter> list;
+        Context context;
+        int resourceId;
+
+        public ReasonSpinnerAdapter(Context context, int resourceId, ArrayList<AssetChecklistReasonGettersetter> list) {
+            super(context, resourceId, list);
+            this.context = context;
+            this.list = list;
+            this.resourceId = resourceId;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View view = convertView;
+            LayoutInflater inflater = getLayoutInflater();
+            view = inflater.inflate(resourceId, parent, false);
+
+            AssetChecklistReasonGettersetter cm = list.get(position);
+
+            TextView txt_spinner = (TextView) view.findViewById(R.id.txt_sp_text);
+            txt_spinner.setText(list.get(position).getReason());
+
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            LayoutInflater inflater = getLayoutInflater();
+            view = inflater.inflate(resourceId, parent, false);
+
+            AssetChecklistReasonGettersetter cm = list.get(position);
+
+            TextView txt_spinner = (TextView) view.findViewById(R.id.txt_sp_text);
+            txt_spinner.setText(cm.getReason());
+
+            return view;
+        }
+
+    }
+
+    public void showSkuDialog(final AssetInsertdataGetterSetter asset_child) {
+
+        final ArrayList<SkuGetterSetter> skuAddedList = asset_child.getSkulist();
+
+        final SkuGetterSetter[] sku_selected = new SkuGetterSetter[1];
+        final BrandGetterSetter[] brand_selected = new BrandGetterSetter[1];
+
+        final ArrayList<BrandGetterSetter> brandList = db.getBrandDataForPaidvisibility(store_cd, asset_child.getCategory_cd());
+        BrandGetterSetter brand = new BrandGetterSetter();
+        brand.setBrand("select");
+        brand.setBrand_cd("0");
+        brandList.add(0, brand);
+        // ArrayList<SkuMasterGetterSetter> skuMasterGetterSetterArrayList = db.getSkuT2PData("1", "1", "1",)
+
+        final Dialog dialog = new Dialog(AssetActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.t2p_sku_dialog_layout);
+        //pb = (ProgressBar) dialog.findViewById(R.id.progressBar1);
+        //dialog.setCancelable(false);
+        final Spinner spinner_brand = (Spinner) dialog.findViewById(R.id.spinner_brand);
+        final Spinner spinner_sku = (Spinner) dialog.findViewById(R.id.spinner_sku);
+        Button btn_add = (Button) dialog.findViewById(R.id.btn_add);
+        Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        final EditText et_stock = (EditText) dialog.findViewById(R.id.et_stock);
+        final RecyclerView rec_sku = (RecyclerView) dialog.findViewById(R.id.rec_sku);
+
+
+        final ArrayList<SkuGetterSetter> sku_list = new ArrayList<>();
+
+        if (skuAddedList.size() > 0) {
+
+            rec_sku.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            SkuAddedAdapter skuAdapter = new SkuAddedAdapter(skuAddedList);
+            rec_sku.setAdapter(skuAdapter);
+
+        }
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isDuplicate = false;
+                if (brand_selected[0] == null || sku_selected[0] == null || et_stock.getText().toString().equals("")) {
+
+                    Snackbar.make(v, getResources().getString(R.string.enter_the_values), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    if (skuAddedList.size() > 0) {
+                        for (int i = 0; i < skuAddedList.size(); i++) {
+                            if (skuAddedList.get(i).getSKU_ID().equalsIgnoreCase(sku_selected[0].getSKU_ID()))
+                            {
+                                isDuplicate = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(isDuplicate)
+                    {
+                        Snackbar.make(v, getResources().getString(R.string.entry_already_exist), Snackbar.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        SkuGetterSetter sku = new SkuGetterSetter();
+                        sku.setBRAND_ID(brand_selected[0].getBrand_cd().get(0));
+                        sku.setBRAND(brand_selected[0].getBrand().get(0));
+                        sku.setSKU(sku_selected[0].getSKU());
+                        sku.setSKU_ID(sku_selected[0].getSKU_ID());
+                        sku.setQUANTITY(et_stock.getText().toString().replaceFirst("^0+(?!$)", ""));
+
+                        skuAddedList.add(sku);
+
+                        rec_sku.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        SkuAddedAdapter skuAdapter = new SkuAddedAdapter(skuAddedList);
+                        rec_sku.setAdapter(skuAdapter);
+
+                        et_stock.setText("");
+                        spinner_brand.setSelection(0);
+
+                        SkuGetterSetter select = new SkuGetterSetter();
+                        select.setSKU(getString(R.string.select));
+                        sku_list.clear();
+                        sku_list.add(select);
+                        CustomSkuAdapter skuadapter = new CustomSkuAdapter(AssetActivity.this, R.layout.custom_spinner_item, sku_list);
+                        spinner_sku.setAdapter(skuadapter);
+
+                        spinner_sku.setSelection(0);
+
+                        brand_selected[0] = null;
+                        sku_selected[0] = null;
+                    }
+
+                }
+
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.cancel();
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+
+        // Create custom adapter object ( see below CustomAdapter.java )
+        CustomAdapter adapter = new CustomAdapter(AssetActivity.this, R.layout.custom_spinner_item, brandList);
+        // Set adapter to spinner
+        spinner_brand.setAdapter(adapter);
+
+
+        SkuGetterSetter select = new SkuGetterSetter();
+        select.setSKU(getString(R.string.select));
+        sku_list.add(select);
+        CustomSkuAdapter skuadapter = new CustomSkuAdapter(AssetActivity.this, R.layout.custom_spinner_item, sku_list);
+        spinner_sku.setAdapter(skuadapter);
+
+
+        spinner_brand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position != 0) {
+
+                    sku_list.clear();
+
+                    brand_selected[0] = brandList.get(position);
+
+                    String brand_id = brandList.get(position).getBrand_cd().get(0);
+
+                    ArrayList<SkuGetterSetter> temp_list = db.getSkuDataForPaidvisibility(store_cd, brand_id);
+
+                    for (int k = 0; k < temp_list.size(); k++) {
+                        sku_list.add(temp_list.get(k));
+                    }
+
+                    SkuGetterSetter select = new SkuGetterSetter();
+                    select.setSKU(getString(R.string.select));
+                    select.setSKU_ID("0");
+                    sku_list.add(0, select);
+                    // Create custom adapter object ( see below CustomSkuAdapter.java )
+                    CustomSkuAdapter skuadapter = new CustomSkuAdapter(AssetActivity.this, R.layout.custom_spinner_item, sku_list);
+                    // Set adapter to spinner
+                    spinner_sku.setAdapter(skuadapter);
+
+                    spinner_sku.setSelection(0);
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner_sku.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position != 0) {
+
+                    sku_selected[0] = sku_list.get(position);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
+
+    }
+
+    public class SkuAddedAdapter extends RecyclerView.Adapter<SkuAddedAdapter.ViewHolder> {
+
+        private ArrayList<SkuGetterSetter> list;
+
+        public SkuAddedAdapter(ArrayList<SkuGetterSetter> skuList) {
+            list = skuList;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.sku_added_item_layout, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+            final SkuGetterSetter mItem = list.get(position);
+            holder.tv_brand.setText(mItem.getBRAND());
+            holder.tv_sku.setText(mItem.getSKU().trim());
+            holder.tv_stock.setText(mItem.getQUANTITY());
+            holder.btn_delete.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    list.remove(position);
+                    SkuAddedAdapter.this.notifyDataSetChanged();
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public final ImageButton btn_delete;
+            public final LinearLayout parentLayout;
+            public final TextView tv_brand, tv_sku, tv_stock;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                tv_brand = (TextView) mView.findViewById(R.id.tv_brand);
+                tv_sku = (TextView) mView.findViewById(R.id.tv_sku);
+                tv_stock = (TextView) mView.findViewById(R.id.tv_stock);
+                parentLayout = (LinearLayout) mView.findViewById(R.id.parent_layout);
+                btn_delete = (ImageButton) mView.findViewById(R.id.delete);
+            }
+
+        }
+    }
+
+    public class CustomSkuAdapter extends ArrayAdapter<String> {
+
+        SkuGetterSetter tempValues = null;
+        LayoutInflater inflater;
+        private Activity activity;
+        private ArrayList data;
+
+        /*************
+         * CustomAdapter Constructor
+         *****************/
+        public CustomSkuAdapter(
+                AssetActivity activitySpinner,
+                int textViewResourceId,
+                ArrayList objects
+        ) {
+            super(activitySpinner, textViewResourceId, objects);
+
+            /********** Take passed values **********/
+            activity = activitySpinner;
+            data = objects;
+            /***********  Layout inflator to call external xml layout () **********************/
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        // This funtion called for each row ( Called data.size() times )
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            /********** Inflate spinner_rows.xml file for each row ( Defined below ) ************/
+            View row = inflater.inflate(R.layout.custom_spinner_item, parent, false);
+
+            /***** Get each Model object from Arraylist ********/
+            tempValues = null;
+            tempValues = (SkuGetterSetter) data.get(position);
+
+            TextView label = (TextView) row.findViewById(R.id.tv_text);
+
+            if (position == 0) {
+
+                // Default selected Spinner item
+                label.setText(getString(R.string.select));
+                //sub.setText("");
+            } else {
+                // Set values for spinner each row
+                label.setText(tempValues.getSKU());
+            }
+
+            return row;
+        }
+    }
+
+    public class CustomAdapter extends ArrayAdapter<String> {
+
+        BrandGetterSetter tempValues = null;
+        LayoutInflater inflater;
+        private Activity activity;
+        private ArrayList data;
+
+        /*************
+         * CustomAdapter Constructor
+         *****************/
+        public CustomAdapter(
+                AssetActivity activitySpinner,
+                int textViewResourceId,
+                ArrayList objects
+
+        ) {
+            super(activitySpinner, textViewResourceId, objects);
+
+            /********** Take passed values **********/
+            activity = activitySpinner;
+            data = objects;
+            /***********  Layout inflator to call external xml layout () **********************/
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        // This funtion called for each row ( Called data.size() times )
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            /********** Inflate spinner_rows.xml file for each row ( Defined below ) ************/
+            View row = inflater.inflate(R.layout.custom_spinner_item, parent, false);
+
+            /***** Get each Model object from Arraylist ********/
+            tempValues = null;
+            tempValues = (BrandGetterSetter) data.get(position);
+
+            TextView label = (TextView) row.findViewById(R.id.tv_text);
+
+            if (position == 0) {
+
+                // Default selected Spinner item
+                label.setText(getString(R.string.select));
+                //sub.setText("");
+            } else {
+                // Set values for spinner each row
+                label.setText(tempValues.getBrand().get(0));
+            }
+
+            return row;
+        }
+    }
+
+    public void showPlanogram(String planogram_image) {
+
+        final Dialog dialog = new Dialog(AssetActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.planogram_dialog_layout);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+
+        //ArrayList<MAPPING_PLANOGRAM_DataGetterSetter> mp = db.getMappingPlanogramData("");
+
+        WebView webView = (WebView) dialog.findViewById(R.id.webview);
+        webView.setWebViewClient(new MyWebViewClient());
+
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+
+        //String planogram_image = mp.get(0).getPLANOGRAM_IMAGE();
+        //if (new File(str + planogram_image).exists()) {
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        //String imagePath = "file://" + CommonString.FILE_PATH + "/" + planogram_image;
+        //String imagePath = "file://" + CommonString.FILE_PATH + "/" + "image_ref.png";
+        String html = "<html><head></head><body><img src=\"" + planogram_image + "\"></body></html>";
+        webView.loadDataWithBaseURL("", html, "text/html", "utf-8", "");
+
+        dialog.show();
+        // }
+
+        ImageView cancel = (ImageView) dialog.findViewById(R.id.img_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private class MyWebViewClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            view.clearCache(true);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
     }
 }

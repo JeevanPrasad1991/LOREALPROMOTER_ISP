@@ -3,8 +3,12 @@ package com.cpm.xmlGetterSetter;
 import java.util.ArrayList;
 
 public class AssetInsertdataGetterSetter {
-	
-	String brand, brand_cd, store_cd, asset, asset_cd, present,remark,img, category, category_cd;
+
+	ArrayList<ChecklistInsertDataGetterSetter> checklist = new ArrayList<>();
+
+	ArrayList<SkuGetterSetter> skulist = new ArrayList<>();
+
+	String key_id, brand, brand_cd, store_cd, asset, asset_cd, present,remark,img, category, category_cd, planogram_img;
 
 	ArrayList<StockNewGetterSetter> listSkuData = new ArrayList<>();
 
@@ -94,5 +98,37 @@ public class AssetInsertdataGetterSetter {
 
 	public void setListSkuData(ArrayList<StockNewGetterSetter> listSkuData) {
 		this.listSkuData = listSkuData;
+	}
+
+	public ArrayList<ChecklistInsertDataGetterSetter> getChecklist() {
+		return checklist;
+	}
+
+	public void setChecklist(ArrayList<ChecklistInsertDataGetterSetter> checklist) {
+		this.checklist = checklist;
+	}
+
+	public ArrayList<SkuGetterSetter> getSkulist() {
+		return skulist;
+	}
+
+	public void setSkulist(ArrayList<SkuGetterSetter> skulist) {
+		this.skulist = skulist;
+	}
+
+	public String getKey_id() {
+		return key_id;
+	}
+
+	public void setKey_id(String key_id) {
+		this.key_id = key_id;
+	}
+
+	public String getPlanogram_img() {
+		return planogram_img;
+	}
+
+	public void setPlanogram_img(String planogram_img) {
+		this.planogram_img = planogram_img;
 	}
 }

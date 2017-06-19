@@ -29,9 +29,11 @@ import com.cpm.xmlGetterSetter.DesignationGetterSetter;
 import com.cpm.xmlGetterSetter.Deviation_Reason;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
+import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
+import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
@@ -74,6 +76,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     PayslipGetterSetter payslipGetterSetter;
     Audit_QuestionGetterSetter audit_questionGetterSetter;
 
+    NonComplianceChecklistGetterSetter nonComplianceChecklistGetterSetter;
+    MappingAssetChecklistreasonGetterSetter mappingAssetChecklistreasonGetterSetter;
+
     SupervisorGetterSetter ditributorlist;
     JourneyPlanGetterSetter journeyplanMerchan;
     Deviation_Reason deviation_Reason;
@@ -86,7 +91,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
     GSKDatabase db;
     TableBean tb;
-    String _UserId;
+    String _UserId, visit_date;
     private SharedPreferences preferences;
 
     boolean flag_cold_stock = true;
@@ -103,6 +108,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         _UserId = preferences.getString(CommonString.KEY_USERNAME, "");
+        visit_date = preferences.getString(CommonString.KEY_DATE, null);
+
+        //getSupportActionBar().setTitle("Main Menu - " + visit_date);
         tb = new TableBean();
         db = new GSKDatabase(this);
 
@@ -594,8 +602,76 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }
                 publishProgress(data);
 
+                //NON_COMPLIANCE_CHECKLIST
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "NON_COMPLIANCE_CHECKLIST");
 
-                // Payment Slip Data
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object result_noncompliance_cecklist = (Object) envelope.getResponse();
+
+                if (result_noncompliance_cecklist.toString() != null) {
+                   xpp.setInput(new StringReader(result_noncompliance_cecklist.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    nonComplianceChecklistGetterSetter = XMLHandlers.nonComplianceChecklistXML(xpp, eventType);
+
+                    if (nonComplianceChecklistGetterSetter.getCREASON_ID().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                        String noncomliancetable = nonComplianceChecklistGetterSetter.getTable_NON_COMPLIANCE_CHECKLIST();
+                        TableBean.setTable_NON_COMPLIANCE_CHECKLIST(noncomliancetable);
+                    } else {
+                        return "NON_COMPLIANCE_CHECKLIST";
+                    }
+                    data.value = 90;
+                    data.name = "Non Working Reason Downloading";
+
+                }
+                publishProgress(data);
+
+                //MAPPING_ASSET_CHECKLIST_REASON
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_ASSET_CHECKLIST_REASON");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object result_mapping_asset_cecklist = (Object) envelope.getResponse();
+
+                if (result_mapping_asset_cecklist.toString() != null) {
+                   xpp.setInput(new StringReader(result_mapping_asset_cecklist.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    mappingAssetChecklistreasonGetterSetter = XMLHandlers.mappingAssetChecklistReasonXML(xpp, eventType);
+
+                    if (mappingAssetChecklistreasonGetterSetter.getCHECKLIST_ID().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                        String checklist_reasontable = mappingAssetChecklistreasonGetterSetter.getTable_MAPPING_ASSET_CHECKLIST_REASON();
+                        TableBean.setTable_MAPPING_ASSET_CHECKLIST_REASON(checklist_reasontable);
+                        data.value = 90;
+                        data.name = "Non Working Reason Downloading";
+
+                    } else {
+                        //return "MAPPING_ASSET_CHECKLIST_REASON";
+                    }
+
+                }
+                publishProgress(data);
+
+                //Payment Slip Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "EMP_SALARY");
@@ -629,7 +705,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
 
                 //AUDIT_QUESTION
-                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+          /*      request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "AUDIT_QUESTION");
 
@@ -652,15 +728,43 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     String auditQuestionTable = audit_questionGetterSetter.getAudit_question_table();
                     TableBean.setAudit_question_table(auditQuestionTable);
 
-                    /*if (audit_questionGetterSetter.getAudit_question_table() != null) {
+                    *//*if (audit_questionGetterSetter.getAudit_question_table() != null) {
                         String auditQuestionTable = payslipGetterSetter.getEmp_salary_table();
                         TableBean.setAudit_question_table(auditQuestionTable);
                     } else {
                         return "AUDIT_QUESTION";
-                    }*/
+                    }*//*
 
                     data.value = 100;
                     data.name = "AUDIT_QUESTION Downloading";
+                }*/
+
+                //AUDIT_QUESTION_CATEGORYWISE
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "AUDIT_QUESTION_CATEGORYWISE");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object auditQuestionResult_category = (Object) envelope.getResponse();
+
+                if (auditQuestionResult_category.toString() != null) {
+                    xpp.setInput(new StringReader(auditQuestionResult_category.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    audit_questionGetterSetter = XMLHandlers.audit_QuestionXML(xpp, eventType);
+
+                    String auditQuestionTable = audit_questionGetterSetter.getAudit_question_table();
+                    TableBean.setAudit_question_table(auditQuestionTable);
+
+                    data.value = 100;
+                    data.name = "AUDIT_QUESTION_CATEGORYWISE Downloading";
                 }
 
 
@@ -717,6 +821,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     db.insertAuditQuestionData(audit_questionGetterSetter);
                 }
 
+                db.insertNonComplianceChecklistData(nonComplianceChecklistGetterSetter);
+                db.insertMappingAssetChecklistReasonData(mappingAssetChecklistreasonGetterSetter);
 
                 data.value = 100;
                 data.name = "Finishing";

@@ -11,6 +11,7 @@
     <dimen name="tab_transparent_overlay_height">14dp</dimen>
 
     <dimen name="text_size_normal">18sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
 
     <dimen name="store_entry_icon_size">65dp</dimen>
     <dimen name="store_entry_text_size">20sp</dimen>
@@ -23,5 +24,9 @@
     <dimen name="nav_header_height">180dp</dimen>
 
     <dimen name="fab_margin">5dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="custom_margin">5dp</dimen>
+    <dimen name="text_size_xsmall">12sp</dimen>
 </resources>

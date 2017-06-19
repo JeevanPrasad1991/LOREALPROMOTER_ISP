@@ -50,7 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:gravity="center"
                     android:paddingBottom="5dp"
                     android:paddingLeft="10dp"
@@ -63,7 +63,7 @@
                     android:id="@+id/sp_auditAnswer"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="8" />
+                    android:layout_weight="7" />
             </LinearLayout>
         </LinearLayout>
 

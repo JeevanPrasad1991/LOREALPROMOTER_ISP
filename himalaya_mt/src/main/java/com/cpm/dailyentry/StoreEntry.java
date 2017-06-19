@@ -25,6 +25,7 @@ import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
 import com.cpm.database.GSKDatabase;
 import com.cpm.himalaya.R;
+import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.MiddayStockInsertData;
 import com.cpm.xmlGetterSetter.OpeningStockInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.StockGetterSetter;
@@ -455,7 +456,8 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
                     //Audit
                     if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.audit_done) {
-                        Intent in7 = new Intent(getApplicationContext(), AuditQuestionActivity.class);
+                        //Intent in7 = new Intent(getApplicationContext(), AuditQuestionActivity.class);
+                        Intent in7 = new Intent(getApplicationContext(), QuizTabbedActivity.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     }
@@ -531,7 +533,17 @@ public class StoreEntry extends AppCompatActivity implements OnClickListener {
 
 
         //Audit Option
-        if (db.isAuditDataFilled(store_cd)) {
+        ArrayList<Audit_QuestionGetterSetter> cat_list = db.getCategoryQuestionData();
+
+        boolean audit_flag=true;
+
+        for(int i=0;i<cat_list.size();i++){
+            if (!db.isAuditDataFilled(store_cd,cat_list.get(i).getCATEGORY_ID().get(0))) {
+                audit_flag = false;
+                break;
+            }
+        }
+        if (audit_flag) {
             audit = R.drawable.audit_done;
         } else {
             audit = R.drawable.audit;

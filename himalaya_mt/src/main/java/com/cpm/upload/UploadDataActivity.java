@@ -31,6 +31,7 @@ import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
 import com.cpm.xmlGetterSetter.FailureGetterSetter;
 import com.cpm.xmlGetterSetter.POIGetterSetter;
 import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;
+import com.cpm.xmlGetterSetter.SkuGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.cpm.xmlHandler.FailureXMLHandler;
 
@@ -94,6 +95,7 @@ public class UploadDataActivity extends Activity {
     private ArrayList<AssetInsertdataGetterSetter> paidVisibility = new ArrayList<>();
     private ArrayList<ChecklistInsertDataGetterSetter> paidVisibilityCheckList = new ArrayList<>();
     private ArrayList<StockNewGetterSetter> paidVisibilitySkuList = new ArrayList<>();
+    private ArrayList<SkuGetterSetter> sku_list = new ArrayList<>();
     ArrayList<Audit_QuestionDataGetterSetter> auditListData=new ArrayList<>();
 
 
@@ -377,20 +379,61 @@ public class UploadDataActivity extends Activity {
 
                         if (paidVisibility.size() > 0) {
                             for (int j = 0; j < paidVisibility.size(); j++) {
+
+                                //CHECKLIST
+                                paidVisibilityCheckList = database.getAssetCheckListUploadData(paidVisibility.get(j).getKey_id());
+                                String checkList_list_xml="",checkList="";
+                                if (paidVisibilityCheckList.size() > 0) {
+                                    for (int c = 0; c < paidVisibilityCheckList.size(); c++) {
+                                        checkList = "[CHECK_LIST_DATA]"
+                                                + "[MID]" + mid + "[/MID]"
+                                                + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                                + "[COMMON_ID]" + paidVisibility.get(j).getKey_id() + "[/COMMON_ID]"
+                                                + "[CHECK_LIST_ID]" + paidVisibilityCheckList.get(c).getChecklist_id() + "[/CHECK_LIST_ID]"
+                                                + "[CHECK_LIST_TOGGLE]" + paidVisibilityCheckList.get(c).getChecklist_text() + "[/CHECK_LIST_TOGGLE]"
+                                                + "[REASON_CD]" + paidVisibilityCheckList.get(c).getReason_cd() + "[/REASON_CD]"
+                                                + "[/CHECK_LIST_DATA]";
+
+                                        checkList_list_xml = checkList_list_xml + checkList;
+                                    }
+                                }
+
+                                //skuList
+                                sku_list = database.getAssetSkuLisNewtData(paidVisibility.get(j).getKey_id());
+                                String sku_list_xml="",sku="";
+                                if (sku_list.size() > 0) {
+                                    for (int s = 0; s < sku_list.size(); s++) {
+                                        sku = "[SKU_LIST_DATA]"
+                                                + "[MID]" + mid + "[/MID]"
+                                                + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                                + "[COMMON_ID]" + paidVisibility.get(j).getKey_id() + "[/COMMON_ID]"
+                                                + "[SKU_CD]" + sku_list.get(s).getSKU_ID() + "[/SKU_CD]"
+                                                + "[BRAND_CD]" + sku_list.get(s).getBRAND_ID() + "[/BRAND_CD]"
+                                                + "[SKU_QUANTITY]" + sku_list.get(s).getQUANTITY() + "[/SKU_QUANTITY]"
+                                                + "[/SKU_LIST_DATA]";
+
+                                        sku_list_xml = sku_list_xml + sku;
+                                    }
+                                }
+
+
                                 onXML = "[PAID_VISIBILITY]"
                                         + "[MID]" + mid + "[/MID]"
                                         + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                         + "[CATEGORY_CD]" + paidVisibility.get(j).getCategory_cd() + "[/CATEGORY_CD]"
                                         + "[ASSET_CD]" + paidVisibility.get(j).getAsset_cd() + "[/ASSET_CD]"
+                                        + "[COMMON_ID]" + paidVisibility.get(j).getKey_id() + "[/COMMON_ID]"
                                         + "[PRESENT]" + paidVisibility.get(j).getPresent() + "[/PRESENT]"
                                         + "[REMARK]" + paidVisibility.get(j).getRemark() + "[/REMARK]"
                                         + "[IMAGE]" + paidVisibility.get(j).getImg() + "[/IMAGE]"
+                                        + "[CHECKLIST]" + checkList_list_xml + "[/CHECKLIST]"
+                                        + "[SKULIST]" + sku_list_xml + "[/SKULIST]"
                                         + "[/PAID_VISIBILITY]";
 
                                 paid_visibility = paid_visibility + onXML;
                             }
 
-                            //CheckList
+                    /*        //CheckList
                             paidVisibilityCheckList = database.getAssetCheckUploadData(coverageBeanlist.get(i).getStoreId());
 
                             if (paidVisibilityCheckList.size() > 0) {
@@ -428,13 +471,13 @@ public class UploadDataActivity extends Activity {
                             }
 
 
-                            final_xml = paid_visibility + checkList_xml + skuList_xml;
+                            final_xml = paid_visibility + checkList_xml + skuList_xml;*/
 
-                            final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                            final String sos_xml = "[DATA]" + paid_visibility + "[/DATA]";
 
                             request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                             request.addProperty("XMLDATA", sos_xml);
-                            request.addProperty("KEYS", "MT_PAID_VISIBILITY_DATA");
+                            request.addProperty("KEYS", "MT_PAID_VISIBILITY_DATA_NEW");
                             request.addProperty("USERNAME", username);
                             request.addProperty("MID", mid);
 
@@ -460,7 +503,8 @@ public class UploadDataActivity extends Activity {
                         //Audit Data
                         final_xml = "";
                         onXML = "";
-                        auditListData = database.getAfterSaveAuditQuestionAnswerData(coverageBeanlist.get(i).getStoreId());
+
+                        auditListData = database.getAfterSaveAuditQuestionAnswerData(coverageBeanlist.get(i).getStoreId(),"1");
 
                         if (auditListData.size() > 0) {
                             for (int j = 0; j < auditListData.size(); j++) {
@@ -469,6 +513,7 @@ public class UploadDataActivity extends Activity {
                                         + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                         + "[QUESTION_ID]" + auditListData.get(j).getQuestion_id() + "[/QUESTION_ID]"
                                         + "[ANSWER_ID]" + auditListData.get(j).getSp_answer_id() + "[/ANSWER_ID]"
+                                        + "[CATEGORY_ID]" + auditListData.get(j).getCategory_id() + "[/CATEGORY_ID]"
                                         + "[/MT_AUDIT_DATA]";
 
                                 final_xml = final_xml + onXML;
@@ -478,7 +523,7 @@ public class UploadDataActivity extends Activity {
 
                             request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                             request.addProperty("XMLDATA", sos_xml);
-                            request.addProperty("KEYS", "MT_AUDIT_DATA");
+                            request.addProperty("KEYS", "MT_AUDIT_DATA_NEW");
                             request.addProperty("USERNAME", username);
                             request.addProperty("MID", mid);
 

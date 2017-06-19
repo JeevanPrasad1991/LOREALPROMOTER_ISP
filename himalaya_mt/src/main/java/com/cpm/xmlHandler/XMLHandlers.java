@@ -20,9 +20,11 @@ import com.cpm.xmlGetterSetter.JCPGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.LoginGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
+import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
+import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWrkingMasterGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
@@ -917,6 +919,9 @@ public class XMLHandlers {
                     if (xpp.getName().equals("ASSET_CD")) {
                         mappingasset.setAsset_cd(xpp.nextText());
                     }
+                    if (xpp.getName().equals("IMAGE_URL")) {
+                        mappingasset.setIMAGE_URL(xpp.nextText());
+                    }
 
                 }
                 xpp.next();
@@ -1259,6 +1264,71 @@ public class XMLHandlers {
         return nonworking;
     }
 
+//NON_COMPLIANCE_CHECKLIST
+public static NonComplianceChecklistGetterSetter nonComplianceChecklistXML(XmlPullParser xpp,
+                                                                           int eventType) {
+    NonComplianceChecklistGetterSetter noncomliance = new NonComplianceChecklistGetterSetter();
+
+    try {
+        while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+            if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                if (xpp.getName().equals("META_DATA")) {
+                    noncomliance.setTable_NON_COMPLIANCE_CHECKLIST(xpp.nextText());
+                }
+                if (xpp.getName().equals("CREASON_ID")) {
+                    noncomliance.setCREASON_ID(xpp.nextText());
+                }
+                if (xpp.getName().equals("CREASON")) {
+                    noncomliance.setCREASON(xpp.nextText());
+                }
+
+            }
+            xpp.next();
+        }
+    } catch (XmlPullParserException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    return noncomliance;
+}
+
+    //MAPPING_ASSET_CHECKLIST_REASON
+    public static MappingAssetChecklistreasonGetterSetter mappingAssetChecklistReasonXML(XmlPullParser xpp,
+                                                                                         int eventType) {
+        MappingAssetChecklistreasonGetterSetter noncomliance = new MappingAssetChecklistreasonGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        noncomliance.setTable_MAPPING_ASSET_CHECKLIST_REASON(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CREASON_ID")) {
+                        noncomliance.setCREASON_ID(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CHECKLIST_ID")) {
+                        noncomliance.setCHECKLIST_ID(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return noncomliance;
+    }
+
+
 
     public static CategoryMasterGetterSetter categoryMasterXML(XmlPullParser xpp,
                                                                int eventType) {
@@ -1316,6 +1386,14 @@ public class XMLHandlers {
                     if (xpp.getName().equals("QUESTION_TYPE")) {
                         payslip.setQUESTION_TYPE(xpp.nextText());
                     }
+
+                    if (xpp.getName().equals("CATEGORY_ID")) {
+                        payslip.setCATEGORY_ID(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CATEGORY")) {
+                        payslip.setCATEGORY(xpp.nextText());
+                    }
+
                 }
                 xpp.next();
             }

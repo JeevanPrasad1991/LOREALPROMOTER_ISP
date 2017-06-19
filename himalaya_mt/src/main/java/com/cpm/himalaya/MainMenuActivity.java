@@ -54,7 +54,7 @@ public class MainMenuActivity extends AppCompatActivity
     GSKDatabase database;
     ArrayList<JourneyPlanGetterSetter> jcplist;
     private SharedPreferences preferences = null;
-    private String date, user_name, user_type;
+    private String date, user_name, user_type, visit_date;
     TextView tv_username, tv_usertype;
     FrameLayout frameLayout;
     NavigationView navigationView;
@@ -76,6 +76,11 @@ public class MainMenuActivity extends AppCompatActivity
 
         user_name = preferences.getString(CommonString.KEY_USERNAME, null);
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+        visit_date = preferences.getString(CommonString.KEY_DATE, null);
+
+        getSupportActionBar().setTitle("Main Menu - " + visit_date);
+
+       // setTitle("Main Menu - " + visit_date);
 
       /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

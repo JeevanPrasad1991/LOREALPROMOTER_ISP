@@ -54,14 +54,14 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Activity activity = getActivity();
+      /*  Activity activity = getActivity();
         if(activity instanceof CompleteDownloadActivity){
             CompleteDownloadActivity myactivity = (CompleteDownloadActivity) activity;
             myactivity.getSupportActionBar().setTitle("Main Menu");
         }
         else{
             ((MainMenuActivity) getActivity()).getSupportActionBar().setTitle("Main Menu");
-        }
+        }*/
 
     }
 
