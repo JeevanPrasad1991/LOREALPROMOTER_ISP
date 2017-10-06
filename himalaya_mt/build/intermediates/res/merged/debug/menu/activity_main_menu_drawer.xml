@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@mipmap/download_grey"
+            android:title="Download" />
+
         <item
             android:id="@+id/nav_daily"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/entry_grey"
             android:title="Daily Entry" />
 
        <!-- <item
@@ -12,28 +18,22 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Pay Slip" />
 -->
-        <item
-            android:id="@+id/nav_download"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Download" />
+
 
         <item
             android:id="@+id/nav_upload"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/upload_grey"
             android:title="Upload" />
 
         <item
             android:id="@+id/nav_export_database"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/export"
             android:title="Export Database" />
 
         <item
             android:id="@+id/nav_exit"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/exit_grey"
             android:title="Exit" />
-
-
-
 
     </group>
 
@@ -68,7 +68,7 @@
                 android:title="Share" />-->
             <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@mipmap/settings_grey"
                 android:title="Help" />
         </menu>
     </item>

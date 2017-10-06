@@ -292,12 +292,12 @@
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\daily_entry.png"
     },
     {
-        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\rtretail.png",
-        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\rtretail.png"
-    },
-    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_skuavailability.xml",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\btn_skuavailability.xml"
+    },
+    {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\rtretail.png",
+        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\rtretail.png"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\poweredbycandid.jpg",
@@ -472,24 +472,24 @@
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\download_btn.xml"
     },
     {
-        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\meccain_icon.png",
-        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\meccain_icon.png"
-    },
-    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_autoupdate.xml",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\btn_autoupdate.xml"
+    },
+    {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\meccain_icon.png",
+        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\meccain_icon.png"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\daily_activity.png",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\daily_activity.png"
     },
     {
-        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
-        "source": "C:\\Users\\yadavendras.CPMIN\\.android\\build-cache\\5456f83b7ff07360b7e97bfd3b520582efffc4ba\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
-    },
-    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\store_marker.png",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable\\store_marker.png"
+    },
+    {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "C:\\Users\\yadavendras.CPMIN\\.android\\build-cache\\5456f83b7ff07360b7e97bfd3b520582efffc4ba\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",

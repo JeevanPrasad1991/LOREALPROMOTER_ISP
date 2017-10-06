@@ -43,6 +43,9 @@ public class AutoupdateActivity extends Activity {
 
 	ProgressBar progressBar;
 	private boolean status;
+	TextView tv_version;
+
+	String app_ver,version_name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,19 @@ public class AutoupdateActivity extends Activity {
 		status = intent.getBooleanExtra(CommonString.KEY_STATUS, false);
 
 		setContentView(R.layout.main);
+
+		tv_version = (TextView) findViewById(R.id.tv_version);
+
+		try {
+			app_ver = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+			version_name = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+
+			tv_version.setText("Version " + version_name);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
 		/*if (status)
 			setContentView(R.layout.mainpage);

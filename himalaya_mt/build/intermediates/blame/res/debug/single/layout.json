@@ -140,6 +140,10 @@
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\activity_competition_aditional_poi.xml"
     },
     {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\activity_storelist_layout.xml",
+        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\activity_storelist_layout.xml"
+    },
+    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\layout\\facing_competitor.xml",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\layout\\facing_competitor.xml"
     },

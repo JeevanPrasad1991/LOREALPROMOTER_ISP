@@ -172,63 +172,84 @@ public class MainMenuActivity extends AppCompatActivity
             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
         } else if (id == R.id.nav_download) {
-            if (checkNetIsAvailable()) {
-                if (database.isCoverageDataFilled(date)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Parinaam");
-                    builder.setMessage("Please Upload Previous Data First")
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent startUpload = new Intent(MainMenuActivity.this, CheckoutNUpload.class);
-                                    startActivity(startUpload);
-                                    finish();
 
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Parinaam");
+            builder1.setMessage("Want to download data")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            if (checkNetIsAvailable()) {
+                                if (database.isCoverageDataFilled(date)) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainMenuActivity.this);
+                                    builder.setTitle("Parinaam");
+                                    builder.setMessage("Please Upload Previous Data First")
+                                            .setCancelable(false)
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    Intent startUpload = new Intent(MainMenuActivity.this, CheckoutNUpload.class);
+                                                    startActivity(startUpload);
+                                                    finish();
+
+                                                }
+                                            });
+
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                    // Toast.makeText(getBaseContext(), AlertMessage.MESSAGE_NO_DATA, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Intent startDownload = new Intent(getApplicationContext(), CompleteDownloadActivity.class);
+                                    startActivity(startDownload);
+                                    finish();
                                 }
-                            });
-                                /*.setNegativeButton("Cancel",
+                            } else {
+                                Snackbar.make(frameLayout, "No Network Available", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                //Toast.makeText(getApplicationContext(), "No Network Available", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
                                         new DialogInterface.OnClickListener() {
 	            							public void onClick(DialogInterface dialog, int id) {
-
-	            								Intent i = new Intent(AutoupdateActivity.this,
-	            										MainActivity.class);
-	            								startActivity(i);
-
-	            								AutoupdateActivity.this.finish();
-
+                                                dialog.cancel();
 	            							}
-	            						});*/
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    // Toast.makeText(getBaseContext(), AlertMessage.MESSAGE_NO_DATA, Toast.LENGTH_LONG).show();
-                } else {
-                    Intent startDownload = new Intent(getApplicationContext(), CompleteDownloadActivity.class);
-                    startActivity(startDownload);
-                    finish();
-                }
-            } else {
-                Snackbar.make(frameLayout, "No Network Available", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                //Toast.makeText(getApplicationContext(), "No Network Available", Toast.LENGTH_SHORT).show();
-            }
+	            						});
+            AlertDialog alert = builder1.create();
+            alert.show();
 
         } else if (id == R.id.nav_upload) {
-            if (checkNetIsAvailable()) {
-                jcplist = database.getJCPData(date);
-                if (jcplist.size() == 0) {
-                    Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                    //  Toast.makeText(getBaseContext(), "Please Download Data First", Toast.LENGTH_LONG).show();
-                } else {
-                    if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS, "").equals("Yes")) {
-                        Snackbar.make(frameLayout, "First checkout of store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                        //Toast.makeText(getApplicationContext(), "First checkout of store", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //ArrayList<GeotaggingBeans> gdata = new ArrayList<GeotaggingBeans>();
-                        cdata = database.getCoverageData(date);
-                        //gdata = database.getGeotaggingData("Y");
-                        if (cdata.size() == 0) {
-                            Snackbar.make(frameLayout, AlertMessage.MESSAGE_NO_DATA, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                            // Toast.makeText(getBaseContext(), AlertMessage.MESSAGE_NO_DATA, Toast.LENGTH_LONG).show();
-                        } else {
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Parinaam");
+            builder1.setMessage("Want to upload data")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            if (checkNetIsAvailable()) {
+                                jcplist = database.getJCPData(date);
+                               /* if (jcplist.size() == 0) {
+                                    Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                    //  Toast.makeText(getBaseContext(), "Please Download Data First", Toast.LENGTH_LONG).show();
+                                }*/
+                               //it works even there is no jcp
+                               if (database.isSkuMasterDownloaded()) {
+
+                                   cdata = database.getCoverageData(date);
+                                   if(isStoreInvalid(cdata)){
+                                       //if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS, "").equals("Yes")) {
+                                       Snackbar.make(frameLayout, "First checkout of store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                       //Toast.makeText(getApplicationContext(), "First checkout of store", Toast.LENGTH_SHORT).show();
+                                   } else {
+                                       //ArrayList<GeotaggingBeans> gdata = new ArrayList<GeotaggingBeans>();
+
+                                       //gdata = database.getGeotaggingData("Y");
+                                       if (cdata.size() == 0) {
+                                           Snackbar.make(frameLayout, AlertMessage.MESSAGE_NO_DATA, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                           // Toast.makeText(getBaseContext(), AlertMessage.MESSAGE_NO_DATA, Toast.LENGTH_LONG).show();
+                                       } else {
                           /*  Menu m = navigationView.getMenu();
                             MenuItem mitem = m.getItem(3);
 
@@ -244,35 +265,74 @@ public class MainMenuActivity extends AppCompatActivity
                             startActivity(i);
 
                             finish();*/
-                            if ((validate_data())) {
-                                Intent i = new Intent(getBaseContext(), UploadDataActivity.class);
-                                i.putExtra("UploadAll", false);
-                                startActivity(i);
-                                finish();
+                                           if ((validate_data())) {
+                                               Intent i = new Intent(getBaseContext(), UploadDataActivity.class);
+                                               i.putExtra("UploadAll", false);
+                                               startActivity(i);
+                                               finish();
 
-                            } else if (validate()) {
-                                Intent i = new Intent(getBaseContext(), UploadAllImageActivity.class);
-                                //i.putExtra("UploadAll", false);
-                                startActivity(i);
-                                finish();
-                            } else {
-                                Snackbar.make(frameLayout, AlertMessage.MESSAGE_NO_DATA, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                            }
-                        }
-                    }
+                                           } else if (validate()) {
+                                               Intent i = new Intent(getBaseContext(), UploadAllImageActivity.class);
+                                               //i.putExtra("UploadAll", false);
+                                               startActivity(i);
+                                               finish();
+                                           } else {
+                                               Snackbar.make(frameLayout, AlertMessage.MESSAGE_NO_DATA, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                           }
+                                       }
+                                   }
                     /*intent = new Intent(getBaseContext(),UploadOptionActivity.class);
                     startActivity(intent);
 					MainMenuActivity.this.finish();*/
-                }
-            } else {
-                Snackbar.make(frameLayout, "No Network Available", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                //  Toast.makeText(getApplicationContext(), "No Network Available", Toast.LENGTH_SHORT).show();
-            }
+
+                                }else {
+
+                                   Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                   //  Toast.makeText(getBaseContext(), "Please Download Data First", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Snackbar.make(frameLayout, "No Network Available", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                //  Toast.makeText(getApplicationContext(), "No Network Available", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+
+                                }
+                            });
+            AlertDialog alert = builder1.create();
+            alert.show();
 
         } else if (id == R.id.nav_exit) {
-            Intent startDownload = new Intent(this, LoginActivity.class);
-            startActivity(startDownload);
-            finish();
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Parinaam");
+            builder1.setMessage("Want to exit app")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            Intent startDownload = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(startDownload);
+                            finish();
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+
+                                }
+                            });
+            AlertDialog alert = builder1.create();
+            alert.show();
 
         } else if (id == R.id.nav_help) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -374,7 +434,6 @@ public class MainMenuActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-
         MainFragment cartfrag = new MainFragment();
 
         fragmentManager.beginTransaction()
@@ -390,13 +449,18 @@ public class MainMenuActivity extends AppCompatActivity
 
         for (int i = 0; i < cdata.size(); i++) {
 
-            storestatus = database.getStoreStatus(cdata.get(i).getStoreId());
+            if(cdata.get(i).isPJPDeviation()){
+                storestatus = database.getDeviationStoreStatus(cdata.get(i).getStoreId());
+            }
+            else{
+                storestatus = database.getStoreStatus(cdata.get(i).getStoreId());
+            }
 
             if (!storestatus.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)) {
                 if ((storestatus.getCheckOutStatus().get(0).equalsIgnoreCase(
                         CommonString.KEY_C)
                         || storestatus.getUploadStatus().get(0).equalsIgnoreCase(
-                        CommonString.KEY_P) || storestatus.getUploadStatus().get(0)
+                        CommonString.KEY_P) || cdata.get(i).getStatus()
                         .equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE))) {
                     result = true;
                     break;
@@ -424,5 +488,19 @@ public class MainMenuActivity extends AppCompatActivity
         }
 
         return result;
+    }
+
+    public boolean isStoreInvalid( ArrayList<CoverageBean> coverage){
+        boolean flag_is_invalid = false;
+
+        for(int i=0; i<coverage.size();i++){
+
+            if(coverage.get(i).getStatus().equals(CommonString.KEY_INVALID)){
+                flag_is_invalid = true;
+                break;
+            }
+        }
+
+        return flag_is_invalid;
     }
 }

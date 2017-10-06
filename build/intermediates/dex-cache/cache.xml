@@ -8,43 +8,7 @@
         optimize="true"
         revision="25.0.0"
         sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\release\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a.jar" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="8f5cc47094b15874f14d75a75f551dc48cdc6efb">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_1c1389408bb77c724012a6d6b5fb1b09ba6ce83c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_a9a705a4ab4608628da226536a97ea01d3c9ac75\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\transforms\dex\debug\folders\1000\2\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a\classes.dex" />
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a.jar" />
     </item>
     <item
         is-multidex="false"
@@ -53,7 +17,7 @@
         optimize="true"
         revision="25.0.0"
         sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\release\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51.jar" />
+        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51.jar" />
     </item>
 
 </items>

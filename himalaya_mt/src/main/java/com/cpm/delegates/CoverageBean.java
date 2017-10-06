@@ -10,6 +10,7 @@ public class CoverageBean
 	protected String davId;
 	
 	protected String coverageReamark;
+	boolean isPJPDeviation = false;
 	
 	
 	public String getCoverageReamark() {
@@ -255,7 +256,13 @@ public class CoverageBean
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-	
-	
-	
+
+
+	public boolean isPJPDeviation() {
+		return isPJPDeviation;
+	}
+
+	public void setPJPDeviation(boolean PJPDeviation) {
+		isPJPDeviation = PJPDeviation;
+	}
 }

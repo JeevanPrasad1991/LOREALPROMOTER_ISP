@@ -51,6 +51,8 @@ public class CheckOutStoreActivity extends Activity implements LocationListener 
     public static String currLatitude = "0.0";
     public static String currLongitude = "0.0";
 
+    boolean flag_deviation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,8 @@ public class CheckOutStoreActivity extends Activity implements LocationListener 
 
         db = new GSKDatabase(this);
         db.open();
+
+        flag_deviation = getIntent().getBooleanExtra(CommonString.KEY_PJP_DEVIATION,false);
 
         visit_date = db.getVisiteDateFromCoverage(store_id);
         new BackgroundTask(this).execute();
@@ -171,13 +175,19 @@ public class CheckOutStoreActivity extends Activity implements LocationListener 
                     editor.putString(CommonString.KEY_LONGITUDE, "");
                     editor.commit();
 
-                    db.updateStoreStatusOnCheckout(store_id, visit_date, CommonString.KEY_C);
-
-                } else {
-                    if (result.toString().equalsIgnoreCase(CommonString.KEY_FALSE)) {
-                        return CommonString.METHOD_Checkout_StatusNew;
+                    if(flag_deviation){
+                        db.updateDeviationStoreStatusOnCheckout(store_id, visit_date, CommonString.KEY_C);
+                    }
+                    else{
+                        db.updateStoreStatusOnCheckout(store_id, visit_date, CommonString.KEY_C);
                     }
 
+
+                } else {
+                 /*   if (result.toString().equalsIgnoreCase(CommonString.KEY_FALSE)) {
+                        return CommonString.METHOD_Checkout_StatusNew;
+                    }*/
+                    return CommonString.METHOD_Checkout_StatusNew;
                     // for failure
                 }
                 return CommonString.KEY_SUCCESS;

@@ -99,6 +99,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     boolean promotion_flag = true;
     boolean asset_flag = true;
 
+    boolean success_flag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,14 +176,14 @@ public class CompleteDownloadActivity extends AppCompatActivity {
             try {
                 data = new Data();
 
-                // JCP
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
 
-                SoapObject request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                // Store List Master
+                SoapObject  request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
-                request.addProperty("Type", "JOURNEY_PLAN");
+                request.addProperty("Type", "SKU_MASTER");
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
@@ -191,40 +193,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
 
                 Object result = (Object) envelope.getResponse();
-
-                if (result.toString() != null) {
-                    xpp.setInput(new StringReader(result.toString()));
-                    xpp.next();
-                    eventType = xpp.getEventType();
-
-                    jcpgettersetter = XMLHandlers.JCPXMLHandler(xpp, eventType);
-
-                    if (jcpgettersetter.getStore_cd().size() > 0) {
-                        resultHttp = CommonString.KEY_SUCCESS;
-                        String jcpTable = jcpgettersetter.getTable_journey_plan();
-                        TableBean.setjcptable(jcpTable);
-                    } else {
-                        return "JOURNEY_PLAN";
-                    }
-                    data.value = 10;
-                    data.name = "JCP Data Downloading";
-                }
-                publishProgress(data);
-
-
-                // Store List Master
-                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
-                request.addProperty("UserName", _UserId);
-                request.addProperty("Type", "SKU_MASTER");
-
-                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                envelope.dotNet = true;
-                envelope.setOutputSoapObject(request);
-
-                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
-
-                result = (Object) envelope.getResponse();
 
                 if (result.toString() != null) {
                     xpp.setInput(new StringReader(result.toString()));
@@ -767,6 +735,41 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "AUDIT_QUESTION_CATEGORYWISE Downloading";
                 }
 
+                // JCP
+
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "JOURNEY_PLAN");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object result_jcp = (Object) envelope.getResponse();
+
+                if (result_jcp.toString() != null) {
+                    xpp.setInput(new StringReader(result_jcp.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    jcpgettersetter = XMLHandlers.JCPXMLHandler(xpp, eventType);
+                    String jcpTable = jcpgettersetter.getTable_journey_plan();
+                    TableBean.setjcptable(jcpTable);
+
+                    if (jcpgettersetter.getStore_cd().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+
+                        data.name = "JCP Data Downloading";
+                        publishProgress(data);
+                    } else {
+                        //return "JOURNEY_PLAN";
+                    }
+                    //data.value = 10;
+
+                }
 
                 //Database insert method calling
                 db.open();
@@ -815,11 +818,12 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 if (payslipGetterSetter != null) {
                     db.insertPaySlipdata(payslipGetterSetter);
                 }
+                else{
+                    db.deletePaySlipData();
+                }
 
                 //Audit
-                if (audit_questionGetterSetter != null) {
-                    db.insertAuditQuestionData(audit_questionGetterSetter);
-                }
+                db.insertAuditQuestionData(audit_questionGetterSetter);
 
                 db.insertNonComplianceChecklistData(nonComplianceChecklistGetterSetter);
                 db.insertMappingAssetChecklistReasonData(mappingAssetChecklistreasonGetterSetter);
@@ -831,6 +835,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 return resultHttp;
 
             } catch (MalformedURLException e) {
+                success_flag = false;
+
                 final AlertMessage message = new AlertMessage(
                         CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION, "download", e);
                 runOnUiThread(new Runnable() {
@@ -840,6 +846,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                 });
             } catch (IOException e) {
+                success_flag = false;
+
                 final AlertMessage message = new AlertMessage(
                         CompleteDownloadActivity.this, AlertMessage.MESSAGE_SOCKETEXCEPTION, "socket", e);
                 runOnUiThread(new Runnable() {
@@ -849,6 +857,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
+                success_flag = false;
+
                 final AlertMessage message = new AlertMessage(
                         CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION + e, "download", e);
                 e.getMessage();
@@ -877,15 +887,18 @@ public class CompleteDownloadActivity extends AppCompatActivity {
             super.onPostExecute(result);
             dialog.dismiss();
 
-            if (result.equals(CommonString.KEY_SUCCESS)) {
-                AlertMessage message = new AlertMessage(
-                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
-                message.showMessage();
-            } else {
-                AlertMessage message = new AlertMessage(
-                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE + result, "success", null);
-                message.showMessage();
+            if(success_flag){
+                if (result.equals(CommonString.KEY_SUCCESS)) {
+                    AlertMessage message = new AlertMessage(
+                            CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
+                    message.showMessage();
+                } else {
+                    AlertMessage message = new AlertMessage(
+                            CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE + result, "success", null);
+                    message.showMessage();
+                }
             }
+
         }
 
     }

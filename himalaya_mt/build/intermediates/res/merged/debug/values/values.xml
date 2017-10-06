@@ -493,7 +493,7 @@
     <string name="total_calls">Total Calls</string>
     <string name="total_stock">Total Stock</string>
     <string name="upload">Upload</string>
-    <string name="version_name">Version 1.5</string>
+    <string name="version_name">Version 1.1</string>
     <string name="wallet_buy_button_place_holder" translation_description="Text on a button that allows a user to make a payment with Google Wallet [CHAR LIMIT=30]">Buy with Google</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>

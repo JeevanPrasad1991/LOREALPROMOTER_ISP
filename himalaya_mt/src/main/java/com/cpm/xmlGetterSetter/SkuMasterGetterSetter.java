@@ -29,7 +29,9 @@ public class SkuMasterGetterSetter {
 	ArrayList<String> sku_sequence = new ArrayList<String>();
 	ArrayList<String> brand_sequence = new ArrayList<String>();
 	ArrayList<String> category_sequence = new ArrayList<String>();
-	
+
+	ArrayList<String> HIMALAYA_PHOTO = new ArrayList<>();
+	ArrayList<String> CATEGORY_PHOTO = new ArrayList<>();
 
 	/*public ArrayList<String> getPacking_size() {
 		return packing_size;
@@ -151,4 +153,19 @@ public class SkuMasterGetterSetter {
 	}
 
 
+	public ArrayList<String> getHIMALAYA_PHOTO() {
+		return HIMALAYA_PHOTO;
+	}
+
+	public void setHIMALAYA_PHOTO(String HIMALAYA_PHOTO) {
+		this.HIMALAYA_PHOTO.add(HIMALAYA_PHOTO);
+	}
+
+	public ArrayList<String> getCATEGORY_PHOTO() {
+		return CATEGORY_PHOTO;
+	}
+
+	public void setCATEGORY_PHOTO(String CATEGORY_PHOTO) {
+		this.CATEGORY_PHOTO.add(CATEGORY_PHOTO);
+	}
 }

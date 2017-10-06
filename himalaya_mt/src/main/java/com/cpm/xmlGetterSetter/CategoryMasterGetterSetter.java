@@ -27,4 +27,22 @@ public class CategoryMasterGetterSetter {
 	ArrayList<String> category_cd=new ArrayList<>();
 	ArrayList<String> category=new ArrayList<>();
 
+	ArrayList<String> HIMALAYA_PHOTO = new ArrayList<>();
+	ArrayList<String> CATEGORY_PHOTO = new ArrayList<>();
+
+	public ArrayList<String> getHIMALAYA_PHOTO() {
+		return HIMALAYA_PHOTO;
+	}
+
+	public void setHIMALAYA_PHOTO(String HIMALAYA_PHOTO) {
+		this.HIMALAYA_PHOTO.add(HIMALAYA_PHOTO);
+	}
+
+	public ArrayList<String> getCATEGORY_PHOTO() {
+		return CATEGORY_PHOTO;
+	}
+
+	public void setCATEGORY_PHOTO(String CATEGORY_PHOTO) {
+		this.CATEGORY_PHOTO.add(CATEGORY_PHOTO);
+	}
 }
