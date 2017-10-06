@@ -64,7 +64,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     List<Integer> checkHeaderArray = new ArrayList<Integer>();
 
     private String image1 = "";
-    String _pathforcheck, _path, str, img1 = "";
+    String _pathforcheck, _path, str, img1 = "", img2 = "", img3 = "";
 
     static int grp_position = -1;
     boolean checkflag = true;
@@ -107,6 +107,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     Snackbar snackbar;
     ImageView img_camOpeningStock;
     boolean isDialogOpen = true;
+    boolean cam_flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -289,7 +290,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             if (snackbar == null || !snackbar.isShown()) {
                 if (validateData(listDataChild, listDataHeader)) {
 
-                    if (validateImg()) {
+                    if (isValidateImages()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setMessage("Are you sure you want to save")
                                 .setCancelable(false)
@@ -298,11 +299,15 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                                         db.open();
                                         //getMid();
 
-                                        dataExists = db.checkStock(store_cd);
-                                        if (dataExists) {
+                                        //dataExists = db.checkStock(store_cd);
+
+                                        //If data already inserted
+                                        if (db.checkStock(store_cd)) {
+                                            //Update
                                             db.UpdateHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
                                             db.UpdateOpeningStocklistData(store_cd, listDataChild, listDataHeader);
                                         } else {
+                                            //Insert
                                             db.InsertHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
                                             db.InsertOpeningStocklistData(store_cd, listDataChild, listDataHeader);
                                         }
@@ -475,7 +480,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing("");
 
-                    } else if (childText.getCompany_cd().equals("1")&&stock.equals("")) {
+                    } else if (childText.getCompany_cd().equals("1") && stock.equals("")) {
                         if (isDialogOpen) {
                             isDialogOpen = !isDialogOpen;
                             AlertDialog.Builder builder = new AlertDialog.Builder(OpeningStock.this);
@@ -496,7 +501,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         /*Snackbar.make(expListView, "First fill Stock data", Snackbar.LENGTH_LONG).show();
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(position).setEd_openingFacing("");
                         finalHolder.ed_openingFacing.setText("");*/
-                    } else if(childText.getCompany_cd().equals("1")){
+                    } else if (childText.getCompany_cd().equals("1")) {
                         int totalstk = 0;
                         totalstk = Integer.parseInt(stock);
                         int facing = Integer.parseInt(value1);
@@ -531,7 +536,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             });
 
-           if (childText.getCompany_cd().equals("1")) {
+            if (childText.getCompany_cd().equals("1")) {
                 holder.ed_openingStock.setVisibility(View.VISIBLE);
             } else {
                 holder.ed_openingStock.setVisibility(View.INVISIBLE);
@@ -666,17 +671,61 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
             //final int position = convertView.getId();
             TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
-            ImageView imgcam = (ImageView) convertView.findViewById(R.id.imgcamstk);
+            ImageView imgcamhim = (ImageView) convertView.findViewById(R.id.img_cam_himalaya);
+            ImageView imgcamcat1 = (ImageView) convertView.findViewById(R.id.img_cam_cat1);
+            ImageView imgcamcat2 = (ImageView) convertView.findViewById(R.id.img_cam_cat2);
 
-            imgcam.setOnClickListener(new View.OnClickListener() {
+            if (headerTitle.getHimalaya_camera().equals("1")) {
+                imgcamhim.setVisibility(View.VISIBLE);
+            } else {
+                imgcamhim.setVisibility(View.INVISIBLE);
+            }
+
+            if (headerTitle.getCategory_camera().equals("1")) {
+                imgcamcat1.setVisibility(View.VISIBLE);
+            } else {
+                imgcamcat1.setVisibility(View.INVISIBLE);
+            }
+
+            if (headerTitle.getCategory_camera().equals("1")) {
+                imgcamcat2.setVisibility(View.VISIBLE);
+            } else {
+                imgcamcat2.setVisibility(View.INVISIBLE);
+            }
+
+            imgcamhim.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     grp_position = groupPosition;
-                    _pathforcheck = store_cd + "_" + headerTitle.getCategory_cd() + "_OpeningStockImage"
+                    _pathforcheck = store_cd + "_" + headerTitle.getCategory_cd() + "HimalayaSTKImg"
                             + visit_date.replace("/", "") + getCurrentTime().replace(":", "") + ".jpg";
                     _path = CommonString.FILE_PATH + _pathforcheck;
 
                     startCameraActivity(0);
+                }
+            });
+
+            imgcamcat1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    grp_position = groupPosition;
+                    _pathforcheck = store_cd + "_" + headerTitle.getCategory_cd() + "CatSTKImgOne"
+                            + visit_date.replace("/", "") + getCurrentTime().replace(":", "") + ".jpg";
+                    _path = CommonString.FILE_PATH + _pathforcheck;
+
+                    startCameraActivity(1);
+                }
+            });
+
+            imgcamcat2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    grp_position = groupPosition;
+                    _pathforcheck = store_cd + "_" + headerTitle.getCategory_cd() + "CatSTKImgTwo"
+                            + visit_date.replace("/", "") + getCurrentTime().replace(":", "") + ".jpg";
+                    _path = CommonString.FILE_PATH + _pathforcheck;
+
+                    startCameraActivity(1);
                 }
             });
 
@@ -692,14 +741,44 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             }
 
-
-            if (headerTitle.getImg_cam() != null && !headerTitle.getImg_cam().equals("")) {
-                imgcam.setBackgroundResource(R.drawable.camera_done);
-            } else {
-                imgcam.setBackgroundResource(R.drawable.camera);
+            if (!img2.equalsIgnoreCase("")) {
+                if (groupPosition == grp_position) {
+                    //childText.get(childPosition).setCamera("YES");
+                    headerTitle.setImg_cat_one(img2);
+                    //childText.setImg(img1);
+                    img2 = "";
+                }
             }
 
-            if (!checkflag) {
+            if (!img3.equalsIgnoreCase("")) {
+                if (groupPosition == grp_position) {
+                    //childText.get(childPosition).setCamera("YES");
+                    headerTitle.setImg_cat_two(img3);
+                    //childText.setImg(img1);
+                    img3 = "";
+                }
+            }
+
+
+            if (headerTitle.getImg_cam() != null && !headerTitle.getImg_cam().equals("")) {
+                imgcamhim.setBackgroundResource(R.mipmap.h_camera_orange);
+            } else {
+                imgcamhim.setBackgroundResource(R.mipmap.h_camera_white);
+            }
+
+            if (headerTitle.getImg_cat_one() != null && !headerTitle.getImg_cat_one().equals("")) {
+                imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
+            } else {
+                imgcamcat1.setBackgroundResource(R.mipmap.camera_white);
+            }
+
+            if (headerTitle.getImg_cat_two() != null && !headerTitle.getImg_cat_two().equals("")) {
+                imgcamcat2.setBackgroundResource(R.mipmap.camera_orange);
+            } else {
+                imgcamcat2.setBackgroundResource(R.mipmap.camera_white);
+            }
+
+            if (!checkflag || !cam_flag) {
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
@@ -709,13 +788,13 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
             }
 
-            if (!validate) {
+           /* if (!cam_flag) {
                 if (checkValidHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
-            }
+            }*/
             //convertView.setId(groupPosition);
 
             return convertView;
@@ -762,7 +841,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     Error_Message = "Please fill all the data";
                     break;
                 } else if (company_cd.equals("1") && openstocktotal.equalsIgnoreCase("")) {
-                //} else if ( openstocktotal.equalsIgnoreCase("")) {
+                    //} else if ( openstocktotal.equalsIgnoreCase("")) {
 
                     checkflag = false;
 
@@ -786,6 +865,37 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         listAdapter.notifyDataSetChanged();
 
         return checkflag;
+    }
+
+    public boolean isValidateImages() {
+        boolean flag = true;
+        cam_flag = true;
+
+        for (int i = 0; i < listDataHeader.size(); i++) {
+
+            if (listDataHeader.get(i).getHimalaya_camera().equals("1") && listDataHeader.get(i).getImg_cam().equals("")) {
+                flag = false;
+                Error_Message = "Please click Himalaya image";
+                //break;
+            }
+
+            if (flag && listDataHeader.get(i).getCategory_camera().equals("1") && listDataHeader.get(i).getImg_cat_one().equals("")
+                    && listDataHeader.get(i).getImg_cat_two().equals("")) {
+                flag = false;
+                Error_Message = "Please click at least one of two Category images";
+                //break;
+            }
+
+            if (flag == false) {
+                if (!checkHeaderArray.contains(i)) {
+                    checkHeaderArray.add(i);
+                }
+                cam_flag = false;
+                break;
+            }
+        }
+
+        return flag;
     }
 
     public boolean validateImg() {
@@ -1005,12 +1115,16 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
                 break;
 
-            /*case 1:
+            case 1:
                 if (resultCode == -1) {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
-                            image1 = _pathforcheck;
-                            img1 = _pathforcheck;
+                            if (_pathforcheck.contains("ImgTwo")) {
+                                img3 = _pathforcheck;
+                            } else {
+                                img2 = _pathforcheck;
+                            }
+
                             expListView.invalidateViews();
                             _pathforcheck = "";
                         }
@@ -1019,7 +1133,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     Log.i("MakeMachine", "User cancelled");
                     _pathforcheck = "";
                 }
-                break;*/
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

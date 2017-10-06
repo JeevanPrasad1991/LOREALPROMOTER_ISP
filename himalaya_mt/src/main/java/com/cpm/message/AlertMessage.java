@@ -4,7 +4,7 @@ import org.acra.ACRA;
 
 import com.cpm.download.CompleteDownloadActivity;
 import com.cpm.himalaya.LoginActivity;
-import com.cpm.himalaya.MainActivity;
+import com.cpm.himalaya.MainMenuActivity;
 import com.cpm.himalaya.MainMenuActivity;
 
 import android.app.Activity;
@@ -43,6 +43,8 @@ public class AlertMessage {
 	public static final String MESSAGE_NO_UPDATE = "No Update Available";
 	public static final String MESSAGE_LEAVE = "On Leave";
 	public static final String MESSAGE_CHECKOUT = "Store Successfully Checkedout";
+
+    public static final String MESSAGE_XmlPull = "Problem Occured xml pull: Report The Problem To Parinaam";
 
 	private Exception exception;
 	String value;
@@ -146,7 +148,7 @@ public class AlertMessage {
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 
-					//	Intent i = new Intent(activity, MainActivity.class);
+					//	Intent i = new Intent(activity, MainMenuActivity.class);
 
 						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
@@ -229,7 +231,7 @@ public class AlertMessage {
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 
 						activity.finish();
@@ -238,7 +240,7 @@ public class AlertMessage {
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 
 						activity.finish();
@@ -266,7 +268,7 @@ public class AlertMessage {
 										exception);
 
 								Intent i = new Intent(activity,
-										MainActivity.class);
+										MainMenuActivity.class);
 								activity.startActivity(i);
 
 								activity.finish();
@@ -276,7 +278,7 @@ public class AlertMessage {
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 						activity.finish();
 
@@ -312,7 +314,7 @@ public class AlertMessage {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.cancel();
 								Intent i = new Intent(activity,
-										MainActivity.class);
+										MainMenuActivity.class);
 								activity.startActivity(i);
 
 								activity.finish();
@@ -359,7 +361,7 @@ public class AlertMessage {
 					public void onClick(DialogInterface dialog, int id) {
 
 						dialog.cancel();
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 
 						activity.finish();
@@ -390,7 +392,7 @@ public class AlertMessage {
 					public void onClick(DialogInterface dialog, int id) {
 
 						dialog.cancel();
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 
 						activity.finish();
@@ -402,7 +404,7 @@ public class AlertMessage {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.cancel();
 								Intent i = new Intent(activity,
-										MainActivity.class);
+										MainMenuActivity.class);
 								activity.startActivity(i);
 
 								activity.finish();
@@ -424,7 +426,7 @@ public class AlertMessage {
 					public void onClick(DialogInterface dialog, int id) {
 
 						dialog.cancel();
-						Intent i = new Intent(activity, MainActivity.class);
+						Intent i = new Intent(activity, MainMenuActivity.class);
 						activity.startActivity(i);
 
 						activity.finish();
@@ -436,7 +438,7 @@ public class AlertMessage {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.cancel();
 								Intent i = new Intent(activity,
-										MainActivity.class);
+										MainMenuActivity.class);
 								activity.startActivity(i);
 
 								activity.finish();
@@ -470,7 +472,7 @@ public class AlertMessage {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.cancel();
 								Intent i = new Intent(activity,
-										MainActivity.class);
+										MainMenuActivity.class);
 								activity.startActivity(i);
 
 								activity.finish();

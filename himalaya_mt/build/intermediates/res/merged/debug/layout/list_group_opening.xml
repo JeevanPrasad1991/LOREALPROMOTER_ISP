@@ -25,7 +25,7 @@
                 android:id="@+id/lblListHeader"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_weight="7"
                 android:gravity="center_vertical"
                 android:paddingBottom="10dp"
                 android:paddingLeft="25dp"
@@ -37,15 +37,43 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:gravity="center_horizontal">
 
-                <ImageView
-                    android:id="@+id/imgcamstk"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/camera" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="5dp"
+                   >
+
+                    <ImageView
+                        android:id="@+id/img_cam_himalaya"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/h_camera_orange"
+                        android:layout_weight="1"
+                        android:layout_marginRight="2dp"/>
+                    <ImageView
+                        android:id="@+id/img_cam_cat1"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/camera_orange"
+                        android:layout_weight="1"
+                        android:layout_marginRight="2dp"/>
+                    <ImageView
+                        android:id="@+id/img_cam_cat2"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/camera_orange"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+
             </RelativeLayout>
         </LinearLayout>
 

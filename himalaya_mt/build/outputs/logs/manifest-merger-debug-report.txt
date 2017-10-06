@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:2:1-218:12
+ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:2:1-222:12
 	package
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:3:5-31
 		INJECTED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml
@@ -73,7 +73,7 @@ ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.
 	android:name
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:19:22-66
 application
-ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:21:5-216:19
+ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:21:5-220:19
 MERGED from [com.android.support:design:23.1.1] C:\Users\yadavendras.CPMIN\.android\build-cache\bcec6de4a75cca00516d3122b7f31cfeea723056\output\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:23.1.1] C:\Users\yadavendras.CPMIN\.android\build-cache\5456f83b7ff07360b7e97bfd3b520582efffc4ba\output\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:cardview-v7:23.1.1] C:\Users\yadavendras.CPMIN\.android\build-cache\f3c70af77bd2cef614a737ae677acdd0c8eea54e\output\AndroidManifest.xml:22:5-20
@@ -426,27 +426,33 @@ ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.
 	android:name
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:202:13-64
 activity#com.cpm.dailyentry.StoreImageActivity
-ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:205:9-208:59
+ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:205:9-212:15
+	android:screenOrientation
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:209:13-49
 	android:label
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:207:13-63
+	android:windowSoftInputMode
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:210:13-52
+	android:configChanges
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:211:13-74
 	android:theme
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:208:13-56
 	android:name
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:206:13-65
 activity#com.cpm.dailyentry.AuditQuestionActivity
-ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:209:9-211:59
+ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:213:9-215:59
 	android:label
-		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:211:13-56
-	android:name
-		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:210:13-68
-activity#com.cpm.dailyentry.QuizTabbedActivity
-ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:212:9-215:68
-	android:label
-		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:214:13-56
-	android:theme
 		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:215:13-56
 	android:name
-		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:213:13-65
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:214:13-68
+activity#com.cpm.dailyentry.QuizTabbedActivity
+ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:216:9-219:68
+	android:label
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:218:13-56
+	android:theme
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:219:13-56
+	android:name
+		ADDED from E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\src\main\AndroidManifest.xml:217:13-65
 meta-data#com.google.android.gms.version
 ADDED from [com.google.android.gms:play-services:6.5.87] C:\Users\yadavendras.CPMIN\.android\build-cache\0a77b6f72100ebdb00cb4f87ad6be734125c92c5\output\AndroidManifest.xml:21:9-23:69
 	android:value

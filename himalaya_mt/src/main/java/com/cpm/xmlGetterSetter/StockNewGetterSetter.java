@@ -6,9 +6,9 @@ package com.cpm.xmlGetterSetter;
 public class StockNewGetterSetter {
     String openning_total_stock, opening_facing, total_mid_stock_received, closing_stock;
 
-    String store_cd, brand_cd, brand, sku_cd, sku, img_cam, visit_date, category_cd, category,
+    String store_cd, brand_cd, brand, sku_cd, sku, img_cam="", img_cat_one="", img_cat_two="",visit_date, category_cd, category,
             ed_openingStock, ed_openingFacing, ed_midFacing, ed_closingFacing, asset_cd,
-            chk_skuBox, stock_under45days,company_cd;
+            chk_skuBox, stock_under45days,company_cd, himalaya_camera, category_camera;
 
 
     public String getOpenning_total_stock() {
@@ -177,5 +177,37 @@ public class StockNewGetterSetter {
 
     public void setCompany_cd(String company_cd) {
         this.company_cd = company_cd;
+    }
+
+    public String getHimalaya_camera() {
+        return himalaya_camera;
+    }
+
+    public void setHimalaya_camera(String himalaya_camera) {
+        this.himalaya_camera = himalaya_camera;
+    }
+
+    public String getCategory_camera() {
+        return category_camera;
+    }
+
+    public void setCategory_camera(String category_camera) {
+        this.category_camera = category_camera;
+    }
+
+    public String getImg_cat_one() {
+        return img_cat_one;
+    }
+
+    public void setImg_cat_one(String img_cat_one) {
+        this.img_cat_one = img_cat_one;
+    }
+
+    public String getImg_cat_two() {
+        return img_cat_two;
+    }
+
+    public void setImg_cat_two(String img_cat_two) {
+        this.img_cat_two = img_cat_two;
     }
 }

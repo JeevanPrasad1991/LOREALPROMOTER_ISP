@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cpm.himalaya"
-    android:versionCode="2"
-    android:versionName="1.1" > <!-- //package="com.cpm.capitalfoods" -->
+    android:versionCode="5"
+    android:versionName="1.4" >
+
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="22" />
@@ -204,8 +205,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.cpm.dailyentry.StoreImageActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
             android:label="@string/title_activity_store_image"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.cpm.dailyentry.AuditQuestionActivity"
             android:label="@string/title_activity_audi" />

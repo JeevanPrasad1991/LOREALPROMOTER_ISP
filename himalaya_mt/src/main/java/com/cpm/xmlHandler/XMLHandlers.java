@@ -689,6 +689,12 @@ public class XMLHandlers {
                     if (xpp.getName().equals("CATEGORY_CD")) {
                         skumaster.setCategory_cd(xpp.nextText());
                     }
+                    if (xpp.getName().equals("HIMALAYA_PHOTO")) {
+                        skumaster.setHIMALAYA_PHOTO(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CATEGORY_PHOTO")) {
+                        skumaster.setCATEGORY_PHOTO(xpp.nextText());
+                    }
                     /*if (xpp.getName().equals("MRP")) {
 						skumaster.setMrp(xpp.nextText());
 					}*/
@@ -1346,6 +1352,13 @@ public static NonComplianceChecklistGetterSetter nonComplianceChecklistXML(XmlPu
                     }
                     if (xpp.getName().equals("CATEGORY")) {
                         category.setCategory(xpp.nextText());
+                    }
+
+                    if (xpp.getName().equals("HIMALAYA_PHOTO")) {
+                        category.setHIMALAYA_PHOTO(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CATEGORY_PHOTO")) {
+                        category.setCATEGORY_PHOTO(xpp.nextText());
                     }
 
                 }

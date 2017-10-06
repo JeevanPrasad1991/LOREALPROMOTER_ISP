@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="LOGIN"
+            android:text="Parinaam for Himalaya MT"
             android:textColor="#fff" />
     </LinearLayout>
 
@@ -36,7 +36,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_weight="13"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp">
 
         <ImageView
 
@@ -45,8 +47,8 @@
             android:layout_height="wrap_content"
 
             android:layout_centerInParent="true"
-            android:background="@drawable/rt_logo_new"
-            android:visibility="invisible"></ImageView>
+            android:background="@drawable/parinaam_logo"
+            ></ImageView>
     </RelativeLayout>
 
     <TextView
@@ -257,10 +259,9 @@
 
         <ImageView
             android:id="@+id/loginfooter"
-            android:layout_width="262dp"
-            android:layout_height="170dp"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="97"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:background="@drawable/himalaya_logo" />
 
     </RelativeLayout>

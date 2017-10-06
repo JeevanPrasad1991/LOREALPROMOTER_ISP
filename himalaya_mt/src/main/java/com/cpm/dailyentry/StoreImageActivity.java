@@ -54,6 +54,7 @@ public class StoreImageActivity extends AppCompatActivity implements
     GoogleApiClient mGoogleApiClient;
     ArrayList<CoverageBean> coverage_list;
     Intent intent;
+    boolean flag_deviation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class StoreImageActivity extends AppCompatActivity implements
         date = preferences.getString(CommonString.KEY_DATE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
+
+        flag_deviation = getIntent().getBooleanExtra(CommonString.KEY_PJP_DEVIATION,false);
 
         str = CommonString.FILE_PATH;
 
@@ -172,11 +175,15 @@ public class StoreImageActivity extends AppCompatActivity implements
                                     cdata.setLongitude(lon);
                                     cdata.setImage(img_str);
                                     cdata.setRemark("");
-                                    cdata.setStatus(CommonString.KEY_CHECK_IN);
+                                    cdata.setStatus(CommonString.KEY_INVALID);
+                                    cdata.setPJPDeviation(flag_deviation);
                                     // cdata.setImage01("");
                                     // cdata.setOutTime(getCurrentTime());
 
                                     database.InsertCoverageData(cdata);
+
+                                    if(flag_deviation)
+                                    database.InsertPJPDeviationData(store_cd, visit_date);
 
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");

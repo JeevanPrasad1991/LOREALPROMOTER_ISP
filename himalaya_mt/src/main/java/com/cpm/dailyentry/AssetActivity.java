@@ -341,6 +341,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setRemark("");
                     }
 
+                    expListView.clearFocus();
                     expListView.invalidateViews();
                 }
             });
@@ -404,7 +405,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                 //holder.etremark.setVisibility(View.INVISIBLE);
                 holder.remark_layout.setVisibility(View.GONE);
                 holder.cam_layout.setVisibility(View.VISIBLE);
-                holder.btn_skuList.setVisibility(View.VISIBLE);
+               // holder.btn_skuList.setVisibility(View.VISIBLE);
 
                 if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg() != null &&
                         !_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg().equals("")) {
@@ -688,7 +689,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
 
                 }
 
-                if (checkflag && present.equalsIgnoreCase("YES")) {
+              /*  if (checkflag && present.equalsIgnoreCase("YES")) {
 
                     if (skuaddedlist.size() > 0) {
                         checkflag = true;
@@ -697,7 +698,7 @@ public class AssetActivity extends AppCompatActivity implements OnClickListener 
                         checkflag = false;
                         break;
                     }
-                }
+                }*/
 
                 if (!checkflag) {
                     if (!checkHeaderArray.contains(i)) {

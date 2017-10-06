@@ -180,12 +180,12 @@
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-mdpi\\ic_action_headphones.png"
     },
     {
-        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\common_signin_btn_icon_disabled_focus_dark.9.png",
-        "source": "C:\\Users\\yadavendras.CPMIN\\.android\\build-cache\\0a77b6f72100ebdb00cb4f87ad6be734125c92c5\\output\\res\\drawable-mdpi\\common_signin_btn_icon_disabled_focus_dark.9.png"
-    },
-    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_menu_camera.png",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_menu_camera.png"
+    },
+    {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\common_signin_btn_icon_disabled_focus_dark.9.png",
+        "source": "C:\\Users\\yadavendras.CPMIN\\.android\\build-cache\\0a77b6f72100ebdb00cb4f87ad6be734125c92c5\\output\\res\\drawable-mdpi\\common_signin_btn_icon_disabled_focus_dark.9.png"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_action_place_light.png",
@@ -588,16 +588,16 @@
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-mdpi\\ic_action_send_now.png"
     },
     {
-        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_menu_send.png",
-        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_menu_send.png"
-    },
-    {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\sync.png",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-mdpi\\sync.png"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\parinaam_logo_ico.png",
         "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\src\\main\\res\\drawable-mdpi\\parinaam_logo_ico.png"
+    },
+    {
+        "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_menu_send.png",
+        "source": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_menu_send.png"
     },
     {
         "merged": "E:\\Himalya_MTLatest\\Himalaya_MT\\himalaya_mt\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\abc_scrubber_control_to_pressed_mtrl_005.png",

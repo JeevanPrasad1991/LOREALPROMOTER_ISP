@@ -6,15 +6,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +33,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -36,10 +41,26 @@ import android.widget.TextView;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
+import com.cpm.delegates.TableBean;
 import com.cpm.himalaya.R;
+import com.cpm.message.AlertMessage;
 import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
+import com.cpm.xmlHandler.XMLHandlers;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,20 +79,28 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     String storeVisited = null;
     public static String currLatitude = "0.0";
     public static String currLongitude = "0.0";
-    String user_type;
+    String user_type, username;
     CardView cardView;
     LinearLayout parent_linear, nodata_linear;
     ArrayList<CoverageBean> coverage;
     boolean result_flag = false, leaveflag = false;
+    MyAdapter myAdapter;
+
+    FloatingActionButton fab_button;
+    JourneyPlanGetterSetter jcpgettersetter;
+
+    boolean flag_deviation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.storelistlayout);
+        setContentView(R.layout.activity_storelist_layout);
 
         lv = (ListView) findViewById(R.id.list);
         nodata_linear = (LinearLayout) findViewById(R.id.no_data_lay);
         parent_linear = (LinearLayout) findViewById(R.id.parent_linear);
+
+        fab_button = (FloatingActionButton) findViewById(R.id.fab);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,31 +113,105 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         date = preferences.getString(CommonString.KEY_DATE, null);
         store_intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+        username = preferences.getString(CommonString.KEY_USERNAME, null);
         editor = preferences.edit();
 
         setTitle("Store List - " + date);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fab_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(database.isSkuMasterDownloaded()){
+
+                    if(isStoreInvalid()){
+                        Snackbar.make(lv, "Please checkout from current store", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
+                    }
+                    else{
+
+                        if(database.getPJPDeviationData(date).size()>0){
+
+                            showPJPDeviationStoreList();
+                        }
+                        else {
+                            new PJPDownloadTask(DailyEntryScreen.this).execute();
+                        }
+
+                    }
+                }
+                else{
+                    Snackbar.make(lv, "Please download data first", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                }
+
+            }
+        });
+    }
+
+    public void showPJPDeviationStoreList(){
+
+
+        flag_deviation = true;
+        jcplist = database.getPJPDeviationData(date);
+        setCheckOutData();
+        myAdapter = new MyAdapter();
+        lv.setAdapter(myAdapter);
+        lv.setOnItemClickListener(DailyEntryScreen.this);
+        lv.setVisibility(View.VISIBLE);
+        setTitle("PJP Deviation " + date);
+        fab_button.setVisibility(View.GONE);
+        nodata_linear.setVisibility(View.GONE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        jcplist = database.getJCPData(date);
+        setListdata();
+    }
+
+    public void setListdata() {
+
+
         coverage = database.getCoverageData(date);
 
-        if (jcplist.size() > 0) {
-            setCheckOutData();
+        if(database.isSkuMasterDownloaded()){
+            if(isPJPDeviationInvalid()){
+                //new PJPDownloadTask(DailyEntryScreen.this).execute();
+                showPJPDeviationStoreList();
+            }
+            else{
 
-            lv.setAdapter(new MyAdapter());
-            lv.setOnItemClickListener(this);
-        } else {
+                fab_button.setVisibility(View.VISIBLE);
+                setTitle("Store List " + date);
+
+                jcplist = database.getJCPData(date);
+
+                if (jcplist.size() > 0) {
+                    setCheckOutData();
+
+                    myAdapter = new MyAdapter();
+                    lv.setAdapter(myAdapter);
+                    lv.setOnItemClickListener(this);
+                    flag_deviation = false;
+
+                } else{
+                    lv.setVisibility(View.GONE);
+                    parent_linear.setBackgroundColor((getResources().getColor(R.color.grey_light)));
+                    nodata_linear.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        else{
             lv.setVisibility(View.GONE);
             parent_linear.setBackgroundColor((getResources().getColor(R.color.grey_light)));
             nodata_linear.setVisibility(View.VISIBLE);
         }
+
     }
 
     public void setCheckOutData() {
@@ -188,8 +291,18 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
 
                 if (flag) {
-                    database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
-                    jcplist = database.getJCPData(date);
+
+                    database.updateCoverageStatusNew(storeCd,CommonString.KEY_VALID);
+
+                    if(flag_deviation){
+                        database.updateDeviationStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
+                        jcplist = database.getPJPDeviationData(date);
+                    }
+                    else{
+                        database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_VALID);
+                        jcplist = database.getJCPData(date);
+                    }
+
                 }
                 //}
 
@@ -294,6 +407,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                                         editor.commit();
 
                                         Intent i = new Intent(DailyEntryScreen.this, CheckOutStoreActivity.class);
+                                        i.putExtra(CommonString.KEY_PJP_DEVIATION, flag_deviation);
                                         startActivity(i);
                                     } else {
                                         Snackbar.make(lv, "No Network", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -314,6 +428,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             });
 
             String storecd = jcplist.get(position).getStore_cd().get(0);
+            ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(storecd);
+
 
             if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_U)) {
 
@@ -324,7 +440,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             }
             // else if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS + storecd, "").equals("No"))
             //else if (coverage.get(position).getStatus().equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE))
-            else if (isStoreCoverageLeave(storecd)) {
+            //else if (isStoreCoverageLeave(storecd)) {
+            else if (coveragespecific.size()>0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE)) {
                 holder.img.setBackgroundResource(R.drawable.leave_tick);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
@@ -334,13 +451,13 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.checkinclose.setVisibility(View.VISIBLE);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
-            } else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_VALID))) {
+            } else if (coveragespecific.size()>0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_VALID)) {
 
                 holder.checkout.setBackgroundResource(R.drawable.checkout);
                 holder.checkout.setVisibility(View.VISIBLE);
                 holder.checkout.setEnabled(true);
 
-            } else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_INVALID))) {
+            } else if (coveragespecific.size()>0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_INVALID)) {
 
                 holder.checkout.setVisibility(View.INVISIBLE);
                 holder.checkinclose.setBackgroundResource(R.drawable.checkin_ico);
@@ -403,8 +520,43 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             Snackbar.make(lv, "Store already checked out", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             //Toast.makeText(getApplicationContext(), "Store Checkout", Toast.LENGTH_SHORT).show();
 
-        } else if (preferences.getString(CommonString.KEY_STOREVISITED_STATUS + store_cd, "").equals("No")) {
-            Snackbar.make(lv, "Store Already Closed", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+        } else if (isStoreCoverageLeave(store_cd)) {
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Parinaam");
+            builder1.setMessage("Want to enter store, it is already closed. \nData will be deleted.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(store_cd);
+                            String reason_cd = coveragespecific.get(0).getReasonid();
+                            String entry_allow = database.getNonEntryAllowReasonData(reason_cd);
+
+                            if (entry_allow.equals("0")) {
+                                database.deleteAllCoverage();
+                                //jcplist = database.getJCPData(date);
+                                setListdata();
+                            } else {
+                                // jcplist = database.getJCPData(date);
+                                database.deleteSpecificCoverage(store_cd);
+                                setListdata();
+                            }
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+
+                                }
+                            });
+            AlertDialog alert = builder1.create();
+            alert.show();
+
+            //Snackbar.make(lv, "Store Already Closed", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             //Toast.makeText(getApplicationContext(), "Store Already Closed", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -574,7 +726,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
                     }
 
-                    database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_INVALID);
+                    //database.updateStoreStatusOnCheckout(storeCd, date, CommonString.KEY_INVALID);
 
                     editor.commit();
 
@@ -601,6 +753,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
                     if (flag == true) {
                         Intent in = new Intent(DailyEntryScreen.this, StoreImageActivity.class);
+                        in.putExtra(CommonString.KEY_PJP_DEVIATION, flag_deviation);
                         startActivity(in);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     } else {
@@ -770,15 +923,13 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 //	break;
             }
 
-
         }
-
 
         return result_flag;
     }
 
     public boolean isStoreCoverageLeave(String store_cd) {
-         boolean result = false;
+        boolean result = false;
         for (int i = 0; i < coverage.size(); i++) {
 
             if (store_cd.equals(coverage.get(i).getStoreId())) {
@@ -794,4 +945,187 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         return result;
     }
 
+    public boolean isStoreInvalid(){
+        boolean flag_is_invalid = false;
+
+        for(int i=0; i<coverage.size();i++){
+
+            if(coverage.get(i).getStatus().equals(CommonString.KEY_INVALID)){
+                flag_is_invalid = true;
+                break;
+            }
+        }
+
+        return flag_is_invalid;
+    }
+
+    public boolean isPJPDeviationInvalid(){
+        boolean flag_is_invalid = false;
+
+        for(int i=0; i<coverage.size();i++){
+
+            if(coverage.get(i).getStatus().equals(CommonString.KEY_INVALID) || coverage.get(i).getStatus().equals(CommonString.KEY_VALID) ){
+                if(coverage.get(i).isPJPDeviation())
+                flag_is_invalid = true;
+
+                break;
+            }
+        }
+
+        return flag_is_invalid;
+    }
+
+    //Download PJP Deviation JCP
+
+    private ProgressBar pb;
+    private TextView percentage, message;
+
+    Data data;
+    int eventType;
+    String str;
+
+    boolean ResultFlag = true;
+
+    private class PJPDownloadTask extends AsyncTask<Void, Data, String> {
+        private Context context;
+
+        PJPDownloadTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.custom);
+            pb = (ProgressBar) dialog.findViewById(R.id.progressBar1);
+            percentage = (TextView) dialog.findViewById(R.id.percentage);
+            message = (TextView) dialog.findViewById(R.id.message);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String resultHttp = "";
+                data = new Data();
+
+                data.value = 10;
+                data.name = "PJP Deviation Downloading";
+                publishProgress(data);
+
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                XmlPullParser xpp = factory.newPullParser();
+
+                SoapObject request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", username);
+                request.addProperty("Type", "JOURNEY_DEVIATION");
+
+                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                HttpTransportSE androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object result = envelope.getResponse();
+
+                if (result.toString() != null) {
+                    //InputStream stream = new ByteArrayInputStream(result.toString().getBytes("UTF-8"));
+
+                    xpp.setInput(new StringReader(result.toString()));
+                    // xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                    // xpp.setInput(stream,"UTF-8");
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    jcpgettersetter = XMLHandlers.JCPXMLHandler(xpp, eventType);
+
+                    if (jcpgettersetter.getStore_cd().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+
+                    } else {
+                        return "JOURNEY_DEVIATION";
+                    }
+
+                    data.value = 10;
+                    data.name = "PJP Deviation Data Downloading";
+                }
+                publishProgress(data);
+
+                database.open();
+                database.insertPJPDeviationData(jcpgettersetter);
+
+            } catch (MalformedURLException e) {
+
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_EXCEPTION;
+                return AlertMessage.MESSAGE_EXCEPTION;
+            } catch (SocketTimeoutException e) {
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_SOCKETEXCEPTION;
+                return AlertMessage.MESSAGE_SOCKETEXCEPTION;
+            } catch (InterruptedIOException e) {
+
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_EXCEPTION;
+                return AlertMessage.MESSAGE_EXCEPTION;
+
+            } catch (IOException e) {
+
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_SOCKETEXCEPTION;
+                return AlertMessage.MESSAGE_SOCKETEXCEPTION;
+            } catch (XmlPullParserException e) {
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_XmlPull;
+                return AlertMessage.MESSAGE_XmlPull;
+            } catch (Exception e) {
+                ResultFlag = false;
+                str = AlertMessage.MESSAGE_EXCEPTION;
+                return AlertMessage.MESSAGE_EXCEPTION;
+            }
+
+            if (ResultFlag) {
+                return "";
+            } else {
+                return str;
+            }
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Data... values) {
+            // TODO Auto-generated method stub
+
+            pb.setProgress(values[0].value);
+            percentage.setText(values[0].value + "%");
+            message.setText(values[0].name);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s.equalsIgnoreCase("")) {
+                dialog.dismiss();
+                showPJPDeviationStoreList();
+                //showAlert(getString(R.string.data_downloaded_successfully));
+            } else {
+                dialog.dismiss();
+                Snackbar.make(lv,"No PJP Deviation data found ",Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    class Data {
+        int value;
+        String name;
+    }
 }

@@ -30,6 +30,8 @@ public class CommonString {
     public static final String TABLE_INSERT_SECONDARY_SKU_DATA = "SECONDARY_SKU_DATA";
     // public static final String KEY_APPVERSION = "1.1";
 
+    public static final String KEY_ID = "_id";
+
     public static final String KEY_USER_TYPE = "RIGHTNAME";
 
     public static final String KEY_DATE = "date";
@@ -255,6 +257,8 @@ public class CommonString {
     public static final String TABLE_ASSET_DATA = "ASSET_DATA";
     public static final String CREATE_TABLE_ASSET_DATA = "CREATE TABLE IF NOT EXISTS ASSET_DATA" +
             "(" +
+            KEY_ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
             "Common_Id INTEGER," +
             "ASSET_CD INTEGER," +
             "STORE_CD VARCHAR, " +
@@ -498,6 +502,8 @@ public class CommonString {
 
     public static final String TABLE_ATTENDENCE_DATA = "ATTENDENCE_DATA";
 
+    public static final String TABLE_PJP_DEVIATION = "PJP_DEVIATION";
+
     public static final String TABLE_HEADER_DATA = "HEADER_DATA";
 
     public static final String TABLE_CHILD_DATA = "CHILD_DATA";
@@ -515,7 +521,7 @@ public class CommonString {
 
     // FOR JCP DOWNLOAD
 
-    public static final String KEY_ID = "_id";
+
     public static final String KEY_STORE_ID = "STORE_ID";
     public static final String KEY_DISTRIBUTOR_ID = "DISTRIBUTOR_ID";
 
@@ -624,6 +630,8 @@ public class CommonString {
     public static final String KEY_SPECIAL = "Special";
     public static final String KEY_PERSON_NAME = "Name";
     public static final String KEY_CONTACT_NUMBER = "Number";
+
+    public static final String KEY_PJP_DEVIATION = "PJP_DEVIATION";
 
     public static final String TABLE_STORE_DETAIL = "STORE_DETAIL";
     public static final String TABLE_STORE_DATA = "STORE_DATA";
@@ -970,7 +978,11 @@ public class CommonString {
             + KEY_LATITUDE + " VARCHAR," + KEY_LONGITUDE + " VARCHAR," + KEY_MERCHANDISER_ID + " VARCHAR,"
             + KEY_COVERAGE_STATUS + " VARCHAR," + KEY_IMAGE + " VARCHAR,"
 
-            + KEY_REASON_ID + " VARCHAR," + KEY_COVERAGE_REMARK
+            + KEY_REASON_ID + " VARCHAR,"
+
+            + KEY_PJP_DEVIATION + " VARCHAR,"
+
+            + KEY_COVERAGE_REMARK
             + " VARCHAR," + KEY_REASON + " VARCHAR)";
 
 
@@ -999,6 +1011,12 @@ public class CommonString {
             + " VARCHAR, " + KEY_CATEGORY + " VARCHAR,"
             + KEY_STATUS + " VARCHAR,"
             + KEY_COMMMON_ID + " VARCHAR)";
+
+    public static final String CREATE_TABLE_PJP_DEVIATION = "CREATE TABLE  IF NOT EXISTS "
+            + TABLE_PJP_DEVIATION + " (" + KEY_ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_STORE_CD + " VARCHAR, "
+            + KEY_VISIT_DATE + " VARCHAR)";
 
 
     public static final String CREATE_TABLE_LIST_CHILD = "CREATE TABLE  IF NOT EXISTS "
@@ -1113,15 +1131,27 @@ public class CommonString {
                     " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                     "STORE_CD" +
-                    " VARCHAR, " +
+                    " INTEGER, " +
 
                     "CATEGORY_CD" +
-                    " VARCHAR, " +
+                    " INTEGER, " +
+
+                    "HIMALAYA_PHOTO" +
+                    " INTEGER, " +
+
+                    "CATEGORY_PHOTO" +
+                    " INTEGER, " +
 
                     "CATEGORY" +
                     " VARCHAR, " +
 
                     "IMAGE_STK" +
+                    " VARCHAR, " +
+
+                    "IMAGE_CAT_ONE" +
+                    " VARCHAR, " +
+
+                    "IMAGE_CAT_TWO" +
                     " VARCHAR, " +
 
                     "VISIT_DATE" +

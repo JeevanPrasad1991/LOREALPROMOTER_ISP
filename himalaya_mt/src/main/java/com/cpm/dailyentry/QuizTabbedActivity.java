@@ -1,5 +1,7 @@
 package com.cpm.dailyentry;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -62,13 +64,14 @@ public class QuizTabbedActivity extends AppCompatActivity implements QuizFragmen
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
 
-        setTitle("Category Audit - " + visit_date);
+        setTitle("KRA - " + visit_date);
 
         db = new GSKDatabase(getApplicationContext());
         db.open();
@@ -103,20 +106,6 @@ public class QuizTabbedActivity extends AppCompatActivity implements QuizFragmen
         return true;
     }*/
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_settings) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onListFragmentInteraction(ArrayList<Audit_QuestionDataGetterSetter> listDataHeader,String store_cd, String category_cd,int tab_position) {
@@ -221,15 +210,61 @@ public class QuizTabbedActivity extends AppCompatActivity implements QuizFragmen
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
+
+           /* switch (position) {
                 case 0:
                     return "Face Cleansers";
                 case 1:
                     return "Shampoos and Conditioners";
                 case 2:
                     return "Oral Care";
-            }
-            return null;
+            }*/
+            return category_list.get(position).getCATEGORY().get(0);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(QuizTabbedActivity.this);
+            builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuizTabbedActivity.this);
+        builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
