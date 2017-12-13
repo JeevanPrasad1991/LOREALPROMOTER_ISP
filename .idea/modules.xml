@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Himalaya_MT.iml" filepath="$PROJECT_DIR$/Himalaya_MT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LOREALPROMOTER.iml" filepath="$PROJECT_DIR$/LOREALPROMOTER.iml" />
       <module fileurl="file://$PROJECT_DIR$/cardview/cardview.iml" filepath="$PROJECT_DIR$/cardview/cardview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/himalaya_mt/himalaya_mt.iml" filepath="$PROJECT_DIR$/himalaya_mt/himalaya_mt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lorealp/lorealp.iml" filepath="$PROJECT_DIR$/lorealp/lorealp.iml" />
     </modules>
   </component>
 </project>

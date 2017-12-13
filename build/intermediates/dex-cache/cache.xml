@@ -3,21 +3,21 @@
 
     <item
         is-multidex="false"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\acra-4.4.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\acra-4.4.0_f5ca1a583414bc445a3151a3110a897a1550431a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jar="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="E:\Himalya_MTLatest\Himalaya_MT\himalaya_mt\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.0.0-jar-with-dependencies_b7667a2ef31817176fdb70f4e18c7a8419196b51.jar" />
+        <dex dex="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.0.0-jar-with-dependencies_1b3cba075e33fe62965c462e13d79f85e67ef5dd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\libs\acra-4.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
+        <dex dex="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\build\intermediates\pre-dexed\debug\acra-4.4.0_47d3b9f6fd4196571c248de4b5ab5cc0f674ab34.jar" />
     </item>
 
 </items>
