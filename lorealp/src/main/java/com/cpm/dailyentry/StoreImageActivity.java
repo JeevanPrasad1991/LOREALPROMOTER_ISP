@@ -9,6 +9,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -45,6 +48,8 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,13 +63,13 @@ public class StoreImageActivity extends AppCompatActivity implements
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    ImageView img_cam, img_clicked;
+    ImageView img_cam, img_clicked, img_cam2, img_clicked2;
     Button btn_save;
-    String _pathforcheck, _path, str;
-    String store_cd, visit_date, username, intime, date;
+    String _pathforcheck, _pathforcheck2, _path, str;
+    String store_cd, visit_date, username, date;
     private SharedPreferences preferences;
     AlertDialog alert;
-    String img_str;
+    String img_str, img_str2;
     private GSKDatabase database;
     String lat = "0.0", lon = "0.0";
     GoogleApiClient mGoogleApiClient;
@@ -87,13 +92,14 @@ public class StoreImageActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         img_cam = (ImageView) findViewById(R.id.img_selfie);
         img_clicked = (ImageView) findViewById(R.id.img_cam_selfie);
+        img_cam2 = (ImageView) findViewById(R.id.img_selfie2);
+        img_clicked2 = (ImageView) findViewById(R.id.img_cam_selfie2);
         btn_save = (Button) findViewById(R.id.btn_save_selfie);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         date = preferences.getString(CommonString.KEY_DATE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
-        intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
         app_ver = preferences.getString(CommonString.KEY_VERSION, "");
         str = CommonString.FILE_PATH;
         database = new GSKDatabase(this);
@@ -101,6 +107,7 @@ public class StoreImageActivity extends AppCompatActivity implements
         coverage_list = database.getCoverageData(date);
         img_cam.setOnClickListener(this);
         img_clicked.setOnClickListener(this);
+        img_clicked2.setOnClickListener(this);
         btn_save.setOnClickListener(this);
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -145,11 +152,16 @@ public class StoreImageActivity extends AppCompatActivity implements
             case R.id.img_cam_selfie:
                 _pathforcheck = store_cd + "_STOREIMG_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
                 _path = CommonString.FILE_PATH + _pathforcheck;
-                intime = getCurrentTime();
+
+                startCameraActivity();
+                break;
+            case R.id.img_cam_selfie2:
+                _pathforcheck2 = store_cd + "_STOREIMG2_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
+                _path = CommonString.FILE_PATH + _pathforcheck2;
                 startCameraActivity();
                 break;
             case R.id.btn_save_selfie:
-                if (img_str != null) {
+                if (img_str != null && img_str2 != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(StoreImageActivity.this);
                     builder.setMessage("Do you want to save the data ")
                             .setCancelable(false)
@@ -160,12 +172,13 @@ public class StoreImageActivity extends AppCompatActivity implements
                                     cdata.setStoreId(store_cd);
                                     cdata.setVisitDate(visit_date);
                                     cdata.setUserId(username);
-                                    cdata.setInTime(intime);
+                                    cdata.setInTime(getCurrentTime());
                                     cdata.setReason("");
                                     cdata.setReasonid("0");
                                     cdata.setLatitude(lat);
                                     cdata.setLongitude(lon);
                                     cdata.setImage(img_str);
+                                    cdata.setImage1(img_str2);
                                     cdata.setRemark("");
                                     cdata.setStatus(CommonString.KEY_INVALID);
                                     cdata.setPJPDeviation(flag_deviation);
@@ -177,7 +190,7 @@ public class StoreImageActivity extends AppCompatActivity implements
                                     editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
                                     editor.commit();
 
-                                   new selfiesUpload(StoreImageActivity.this).execute();
+                                    new selfiesUpload(StoreImageActivity.this).execute();
                                    /* Intent in = new Intent(StoreImageActivity.this, StoreEntry.class);
                                     startActivity(in);
                                     overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
@@ -192,7 +205,7 @@ public class StoreImageActivity extends AppCompatActivity implements
                     alert = builder.create();
                     alert.show();
                 } else {
-                    Snackbar.make(btn_save, "Please click the image", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(btn_save, "Please click Both images", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -225,11 +238,67 @@ public class StoreImageActivity extends AppCompatActivity implements
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
                         Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                        Canvas cs = new Canvas(dest);
+                        Paint tPaint = new Paint();
+                        tPaint.setTextSize(100);
+                        tPaint.setColor(Color.RED);
+                        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                        cs.drawBitmap(bmp, 0f, 0f, null);
+                        float height = tPaint.measureText("yY");
+                        cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                        try {
+                            dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                    new FileOutputStream(new File(str + _pathforcheck)));
+                        } catch (FileNotFoundException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        bmp = BitmapFactory.decodeFile(str + _pathforcheck);
                         img_cam.setImageBitmap(bmp);
                         img_clicked.setVisibility(View.GONE);
                         img_cam.setVisibility(View.VISIBLE);
                         img_str = _pathforcheck;
                         _pathforcheck = "";
+                    }
+                }
+
+
+
+
+                if (_pathforcheck2 != null && !_pathforcheck2.equals("")) {
+                    if (new File(str + _pathforcheck2).exists()) {
+                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck2);
+                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                        Canvas cs = new Canvas(dest);
+                        Paint tPaint = new Paint();
+                        tPaint.setTextSize(100);
+                        tPaint.setColor(Color.RED);
+                        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                        cs.drawBitmap(bmp, 0f, 0f, null);
+                        float height = tPaint.measureText("yY");
+                        cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                        try {
+                            dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                    new FileOutputStream(new File(str + _pathforcheck2)));
+                        } catch (FileNotFoundException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        bmp = BitmapFactory.decodeFile(str + _pathforcheck2);
+                        img_cam2.setImageBitmap(bmp);
+                        img_clicked2.setVisibility(View.GONE);
+                        img_cam2.setVisibility(View.VISIBLE);
+                        img_str2 = _pathforcheck2;
+                        _pathforcheck2 = "";
                     }
                 }
                 break;
@@ -240,7 +309,7 @@ public class StoreImageActivity extends AppCompatActivity implements
 
     public String getCurrentTime() {
         Calendar m_cal = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:mmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         String cdate = formatter.format(m_cal.getTime());
         return cdate;
     }
@@ -310,7 +379,7 @@ public class StoreImageActivity extends AppCompatActivity implements
                 if (coverageBeanlist.size() > 0) {
                     for (int i = 0; i < coverageBeanlist.size(); i++) {
 
-                       onXML = "[DATA]" + "[USER_DATA]"
+                        onXML = "[DATA]" + "[USER_DATA]"
                                 + "[STORE_CD]" + coverageBeanlist.get(i).getStoreId() + "[/STORE_CD]"
                                 + "[VISIT_DATE]" + coverageBeanlist.get(i).getVisitDate() + "[/VISIT_DATE]"
                                 + "[LATITUDE]" + coverageBeanlist.get(i).getLatitude() + "[/LATITUDE]"
@@ -321,6 +390,7 @@ public class StoreImageActivity extends AppCompatActivity implements
                                 + "[UPLOAD_STATUS]" + "I" + "[/UPLOAD_STATUS]"
                                 + "[USER_ID]" + username + "[/USER_ID]"
                                 + "[IMAGE_URL]" + coverageBeanlist.get(i).getImage() + "[/IMAGE_URL]"
+                                + "[IMAGE_URL1]" + coverageBeanlist.get(i).getImage1() + "[/IMAGE_URL1]"
                                 + "[REASON_ID]" + coverageBeanlist.get(i).getReasonid() + "[/REASON_ID]"
                                 + "[REASON_REMARK]" + "" + "[/REASON_REMARK]"
                                 + "[/USER_DATA]"
@@ -368,7 +438,7 @@ public class StoreImageActivity extends AppCompatActivity implements
                 startActivity(in);
                 overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
                 finish();
-               // new GeoTagActivity.GeoTagImageUpload(GeoTagActivity.this).execute();
+                // new GeoTagActivity.GeoTagImageUpload(GeoTagActivity.this).execute();
 
             } else if (!result.equals(CommonString.KEY_SUCCESS)) {
                 AlertMessage message = new AlertMessage(

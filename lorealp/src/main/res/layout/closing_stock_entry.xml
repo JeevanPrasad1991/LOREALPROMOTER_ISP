@@ -54,7 +54,18 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:weightSum="1">
+                        android:weightSum="1.5">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Stock : "
+                            android:gravity="center|center_horizontal"
+                            android:paddingTop="10dp"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15dp" />
+
 
                         <TextView
                             android:id="@+id/txt_closingStock_openingStock"
@@ -62,6 +73,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
+                            android:visibility="gone"
                             android:layout_weight=".8"
                             android:background="@drawable/edit_text_border"
                             android:hint="OS : "
@@ -73,7 +85,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -99,7 +111,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:weightSum="1">

@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpm.Constants.CommonString;
+import com.cpm.GetterSetter.ShareOfShelfGetterSetter;
+import com.cpm.GetterSetter.StoreStockinGetterSetter;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.MainMenuActivity;
@@ -37,6 +39,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,6 +84,13 @@ public class CheckoutNUpload extends Activity {
     String exceptionMessage = "";
     String resultFinal;
 
+
+    ArrayList<ShareOfShelfGetterSetter> shareOfShelImgData= new ArrayList<>();
+    ArrayList<ShareOfShelfGetterSetter> shareOfShelfData= new ArrayList<>();
+    StoreStockinGetterSetter storeSpinner;
+    ArrayList<StockNewGetterSetter> stockInData = new ArrayList<>();
+    JourneyPlanGetterSetter journeyPlanGetterSetter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +101,7 @@ public class CheckoutNUpload extends Activity {
         username = preferences.getString(CommonString.KEY_USERNAME, "");
         app_ver = preferences.getString(CommonString.KEY_VERSION, "");
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
+        storeSpinner=new StoreStockinGetterSetter();
         Path = CommonString.FILE_PATH;
         if (!isCheckoutDataExist()) {
             new UploadTask(this).execute();
@@ -99,6 +110,7 @@ public class CheckoutNUpload extends Activity {
 
     public boolean isCheckoutDataExist() {
         boolean flag = false;
+        database.open();
         jcplist = database.getAllJCPData();
         for (int i = 0; i < jcplist.size(); i++) {
             if (!jcplist.get(i).getVISIT_DATE().get(0).equals(visit_date)) {
@@ -106,7 +118,7 @@ public class CheckoutNUpload extends Activity {
                 coverageBean = database.getCoverageSpecificData(jcplist.get(i).getStore_cd().get(0));
                 if (coverageBean.size() > 0) {
                     for (int i1 = 0; i1 < coverageBean.size(); i1++) {
-                        if (coverageBean.get(i1).getStatus().equalsIgnoreCase(CommonString.KEY_VALID)) {
+                        if (coverageBean.get(i1).getStatus().equalsIgnoreCase(CommonString.KEY_VALID)||coverageBean.get(i1).getStatus().equalsIgnoreCase(CommonString.KEY_INVALID)) {
                             store_out_time = coverageBean.get(0).getOutTime();
                             if (store_out_time == null || store_out_time.equals("")) {
                                 store_out_time = getCurrentTime();
@@ -154,12 +166,16 @@ public class CheckoutNUpload extends Activity {
                 data.value = 10;
                 data.name = "Uploading....";
                 publishProgress(data);
+                database.open();
                 coverageBeanlist = database.getCoverageData(prev_date);
                 String final_xml = "";
                 String onXML = "";
                 if (coverageBeanlist.size() > 0) {
                     for (int i = 0; i < coverageBeanlist.size(); i++) {
-                        if (!coverageBeanlist.get(i).getStatus().equalsIgnoreCase(CommonString.KEY_U)) {
+                        // if (!coverageBeanlist.get(i).getStatus().equalsIgnoreCase(CommonString.KEY_U)) {
+                        journeyPlanGetterSetter = database.getStoreStatus(coverageBeanlist.get(i).getStoreId());
+                        if (!journeyPlanGetterSetter.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)
+                                && !journeyPlanGetterSetter.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_D)) {
                             onXML = "[DATA]" + "[USER_DATA]"
                                     + "[STORE_CD]" + coverageBeanlist.get(i).getStoreId() + "[/STORE_CD]"
                                     + "[VISIT_DATE]" + coverageBeanlist.get(i).getVisitDate() + "[/VISIT_DATE]"
@@ -171,6 +187,7 @@ public class CheckoutNUpload extends Activity {
                                     + "[UPLOAD_STATUS]" + "N" + "[/UPLOAD_STATUS]"
                                     + "[USER_ID]" + username + "[/USER_ID]"
                                     + "[IMAGE_URL]" + coverageBeanlist.get(i).getImage() + "[/IMAGE_URL]"
+                                    + "[IMAGE_URL1]" + coverageBeanlist.get(i).getImage1() + "[/IMAGE_URL1]"
                                     + "[REASON_ID]" + coverageBeanlist.get(i).getReasonid() + "[/REASON_ID]"
                                     + "[REASON_REMARK]" + coverageBeanlist.get(i).getRemark() + "[/REASON_REMARK]"
                                     + "[/USER_DATA]"
@@ -200,22 +217,19 @@ public class CheckoutNUpload extends Activity {
                             data.name = "Uploading";
                             publishProgress(data);
 
-
                             //LOREALPRO_STOCK_DATA
                             final_xml = "";
                             onXML = "";
                             stockData = database.getOpeningStockUpload(coverageBeanlist.get(i).getStoreId());
                             if (stockData.size() > 0) {
                                 for (int j = 0; j < stockData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_DATA]"
+                                    onXML = "[LOREAL_STOCK_FLOOR_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK]" + stockData.get(j).getStock1() + "[/STOCK]"
-                                            + "[FACING]" + stockData.get(j).getStock2() + "[/FACING]"
-                                            + "[MIDDAY_STOCK]" + stockData.get(j).getEd_midFacing() + "[/MIDDAY_STOCK]"
                                             + "[CLOSING_STOCK]" + stockData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_DATA]";
+                                            + "[/LOREAL_STOCK_FLOOR_DATA]";
 
                                     final_xml = final_xml + onXML;
                                 }
@@ -223,7 +237,7 @@ public class CheckoutNUpload extends Activity {
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_FLOOR_DATA");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -236,31 +250,24 @@ public class CheckoutNUpload extends Activity {
                                     isError = true;
                                 }
                                 data.value = 20;
-                                data.name = "LOREAL_STOCK_DATA Data";
+                                data.name = "LOREAL_STOCK_FLOOR_DATA Data";
                                 publishProgress(data);
                             }
-
 
                             //LOREALPRO_STOCK_IMAGE_DATA
                             final_xml = "";
                             onXML = "";
                             stockImages = database.getStockImageUploadData(coverageBeanlist.get(i).getStoreId());
-                          /*  if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") || !stockImages.get(0).getCatstock().equals("") ) {*/
-                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals(""))) {
+                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") ||  (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals("") )) {
                                 for (int j = 0; j < stockImages.size(); j++) {
-                                   /* if (!stockImages.get(j).getImg_cam().equals("") || !stockImages.get(j).getImg_cat_one().equals("")
-                                            || !stockImages.get(j).getImg_cat_two().equals("")) {*/
 
                                     onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[CATEGORY_CD]" + stockImages.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                            + "[CATEGORY_STOCK]" + stockImages.get(j).getCatstock() + "[/CATEGORY_STOCK]"
-                                            + "[CATEGORY__ONE_CHILLER_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY__ONE_CHILLER_IMAGE]"
+                                            + "[CATEGORY_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY_IMAGE]"
                                             + "[/LOREAL_STOCK_CATEGORY_IMAGE_DATA]";
-
                                     final_xml = final_xml + onXML;
-                                    // }
 
                                 }
 
@@ -284,7 +291,6 @@ public class CheckoutNUpload extends Activity {
                                 publishProgress(data);
                             }
 
-
                             //LOREAL_STOCK_BACKROOM_DATA
                             final_xml = "";
                             onXML = "";
@@ -295,11 +301,9 @@ public class CheckoutNUpload extends Activity {
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK_1]" + stockbackroomData.get(j).getStock1() + "[/STOCK_1]"
-                                            + "[STOCK_2]" + stockbackroomData.get(j).getStock2() + "[/STOCK_2]"
+                                            + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
                                             + "[CLOSING_STOCK]" + stockbackroomData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
                                             + "[/LOREAL_STOCK_BACKROOM_DATA]";
-
                                     final_xml = final_xml + onXML;
                                 }
 
@@ -324,7 +328,7 @@ public class CheckoutNUpload extends Activity {
                             }
 
 
-                            //LOREAL_STOCK_BACKROOM_IMAGE_DATA
+                            /*//LOREAL_STOCK_BACKROOM_IMAGE_DATA
                             final_xml = "";
                             onXML = "";
                             stockbackroomImages = database.getStockBackRoomImageUploadData(coverageBeanlist.get(i).getStoreId());
@@ -363,10 +367,116 @@ public class CheckoutNUpload extends Activity {
                                     isError = true;
                                 }
                                 data.value = 25;
-                                data.name = "LOREAL_STOCK_BACKROOM_IMAGE_DATA Image Data";
+                                data.name = "LOREAL_STOCK_BACKROOM Image Data";
+                                publishProgress(data);
+                            }*/
+
+                            //upendra_12jan
+                            //LOREALPRO_STOCK_IN_DATA
+                            final_xml = "";
+                            onXML = "";
+                            storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
+                                stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
+                                if (stockInData.size()>0){
+                                String stock_in_exit="",stock_in_brandListXml="";
+                                for (int j = 0; j < stockInData.size(); j++) {
+                                    stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            + "[SKU_CD]" + stockInData.get(j).getSku_cd() + "[/SKU_CD]"
+                                            + "[STOCK_IN_DATA]" + stockInData.get(j).getEd_midFacing() + "[/STOCK_IN_DATA]"
+                                            + "[/LOREAL_STOCK_IN_DATA]";
+
+                                    stock_in_exit = stock_in_exit + stock_in_brandListXml;
+                                }
+                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
+                                        + "[MID]" + mid + "[/MID]"
+                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
+                                        + "[SHARE_OF_SHELF_BRAND_FACING]" + stock_in_exit + "[/SHARE_OF_SHELF_BRAND_FACING]"
+                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
+
+                                final_xml = final_xml + onXML;
+
+                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                request.addProperty("XMLDATA", sos_xml);
+                                request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
+                                request.addProperty("USERNAME", username);
+                                request.addProperty("MID", mid);
+                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                envelope.dotNet = true;
+                                envelope.setOutputSoapObject(request);
+                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                result = (Object) envelope.getResponse();
+                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                    isError = true;
+                                }
+                                data.value = 21;
+                                data.name = "LOREAL_STOCK_IN_EXIT_DATA Data";
                                 publishProgress(data);
                             }
 
+                            //shareOfShelImgData
+                            final_xml = "";
+                            onXML = "";
+                            shareOfShelImgData = database.getHeaderShareOfSelfImgUploadData1(coverageBeanlist.get(i).getStoreId());
+                            if (shareOfShelImgData.size() > 0) {
+                                for (int j = 0; j < shareOfShelImgData.size(); j++) {
+                                    shareOfShelfData=   database.getShareofShelfBrandDataUpload(shareOfShelImgData.get(j).getKey_id(), coverageBeanlist.get(i).getStoreId());
+                                    String share_of_shelf_List="",share_ofShef_ImageListXml="";
+                                    for (int c = 0; c < shareOfShelfData.size(); c++) {
+                                        share_ofShef_ImageListXml = "[LOREAL_SHARE_OF_SHELF_DATA]"
+                                                + "[MID]" + mid + "[/MID]"
+                                                + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                                + "[COMMON_ID]" + shareOfShelImgData.get(j).getKey_id() + "[/COMMON_ID]"
+                                                + "[CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                                + "[BRAND_CD]" + shareOfShelfData.get(c).getBrand_cd() + "[/BRAND_CD]"
+                                              //  + "[BRAND]" + shareOfShelfData.get(c).getBrand() + "[/BRAND]"
+                                                + "[BRAND_FACING]" + shareOfShelfData.get(c).getFacing() + "[/BRAND_FACING]"
+                                                + "[/LOREAL_SHARE_OF_SHELF_DATA]";
+
+                                        share_of_shelf_List = share_of_shelf_List + share_ofShef_ImageListXml;
+                                    }
+                                    // final String share_of_xml =  share_ofShef_ImageListXml;
+
+                                    onXML = "[LOREAL_SHARE_OF_SHELF_IMAGE_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            + "[COMMON_ID]" + shareOfShelImgData.get(j).getKey_id() + "[/COMMON_ID]"
+                                            + "[CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                           // + "[CATEGORY]" + shareOfShelImgData.get(j).getCategory() + "[/CATEGORY]"
+                                            + "[CATEGORY_FACING]" + shareOfShelImgData.get(j).getCat_facing() + "[/CATEGORY_FACING]"
+                                            + "[IMAGE_CATEGORY_FACING]" + shareOfShelImgData.get(j).getImg_cat_facing() + "[/IMAGE_CATEGORY_FACING]"
+                                            + "[SHARE_OF_SHELF_BRAND_FACING]"
+                                            + share_of_shelf_List
+                                            + "[/SHARE_OF_SHELF_BRAND_FACING]"
+                                            + "[/LOREAL_SHARE_OF_SHELF_IMAGE_DATA]";
+
+                                    final_xml = final_xml + onXML;
+                                }
+                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                request.addProperty("XMLDATA", sos_xml);
+                                request.addProperty("KEYS", "LOREAL_SHARE_OF_SHELF_DATA");
+                                request.addProperty("USERNAME", username);
+                                request.addProperty("MID", mid);
+                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                envelope.dotNet = true;
+                                envelope.setOutputSoapObject(request);
+                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                result = (Object) envelope.getResponse();
+                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                    isError = true;
+                                }
+                                data.value = 23;
+                                data.name = "LOREAL_SHARE_OF_SHELF_IMAGE_DATA Data";
+                                publishProgress(data);
+                            }
+                            // //upendra_12jan END
+                            //
 
                             //Promotion Data
                             final_xml = "";
@@ -409,7 +519,6 @@ public class CheckoutNUpload extends Activity {
                                 publishProgress(data);
                             }
 
-
                             //Paid Visibility Data
                             final_xml = "";
                             String paid_visibility = "";
@@ -417,6 +526,7 @@ public class CheckoutNUpload extends Activity {
                             paidVisibility = database.getAssetUploadData(coverageBeanlist.get(i).getStoreId());
                             if (paidVisibility.size() > 0) {
                                 for (int j = 0; j < paidVisibility.size(); j++) {
+
                                     onXML = "[LOREAL_PAID_VISIBILITY]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
@@ -451,7 +561,6 @@ public class CheckoutNUpload extends Activity {
 
                             }
 
-
                             final_xml = "";
                             onXML = "";
                             paid_visibility = "";
@@ -463,7 +572,6 @@ public class CheckoutNUpload extends Activity {
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[BRAND_CD]" + additionalVisibilityData.get(j).getCompany_cd() + "[/BRAND_CD]"
                                             + "[DISPLAY_CD]" + additionalVisibilityData.get(j).getCategory_cd() + "[/DISPLAY_CD]"
-                                           /* + "[CATEGORY_CD]" + marketintelligenceData.get(j).getPromotype_cd() + "[/CATEGORY_CD]"*/
                                             + "[PHOTO]" + additionalVisibilityData.get(j).getPhoto() + "[/PHOTO]"
                                             + "[REMARK]" + additionalVisibilityData.get(j).getRemark() + "[/REMARK]"
                                             + "[/LOREAL_ADDITIONAL_VISIBILITY]";
@@ -485,18 +593,19 @@ public class CheckoutNUpload extends Activity {
                                 if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                     isError = true;
                                 }
-                                data.value = 47;
+                                data.value = 50;
                                 data.name = "ADDITIONAL VISIBILITY Data";
                                 publishProgress(data);
 
                             }
 
-                            final_xml = "";
+                          /*  final_xml = "";
                             onXML = "";
                             paid_visibility = "";
                             sampledData = database.getinsertedsampledData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (sampledData.size() > 0) {
                                 for (int j = 0; j < sampledData.size(); j++) {
+
                                     onXML = "[LOREAL_SAMPLED_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
@@ -528,173 +637,7 @@ public class CheckoutNUpload extends Activity {
                                 data.name = "Market Intelligence Data";
                                 publishProgress(data);
 
-                            }
-
-
-                            //Store Image
-                            if (coverageBeanlist.size() > 0) {
-                                if (coverageBeanlist.get(i).getImage() != null && !coverageBeanlist.get(i).getImage().equals("")) {
-                                    if (new File(CommonString.FILE_PATH + coverageBeanlist.get(i).getImage()).exists()) {
-                                        result = UploadImage(coverageBeanlist.get(i).getImage(), "StoreImages");
-                                        if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                            //    return "StoreImages";
-                                            isError = true;
-                                        }
-
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                message.setText("Store Images Uploaded");
-                                            }
-                                        });
-                                    }
-                                }
-                                data.value = 50;
-                                data.name = "Store Images";
-                                publishProgress(data);
-                            }
-                            //Stock Images
-                            if (stockImages.size() > 0) {
-                                for (int j = 0; j < stockImages.size(); j++) {
-
-                                    if (stockImages.get(j).getImg_cam() != null && !stockImages.get(j).getImg_cam().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + stockImages.get(j).getImg_cam()).exists()) {
-                                            result = UploadImage(stockImages.get(j).getImg_cam(), "StockImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                //    return "StoreImages";
-                                                isError = true;
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Stock Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    if (stockImages.get(j).getImg_cat_one() != null && !stockImages.get(j).getImg_cat_one().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + stockImages.get(j).getImg_cat_one()).exists()) {
-                                            result = UploadImage(stockImages.get(j).getImg_cat_one(), "StockImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                isError = true;
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Stock Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                    if (stockImages.get(j).getImg_cat_two() != null && !stockImages.get(j).getImg_cat_two().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + stockImages.get(j).getImg_cat_two()).exists()) {
-                                            result = UploadImage(stockImages.get(j).getImg_cat_two(), "StockImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                isError = true;
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Stock Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            }
-
-                            data.value = 55;
-                            data.name = "Stock Images";
-                            publishProgress(data);
-
-
-                            //Promotion Images
-                            if (promotionData.size() > 0) {
-                                for (int j = 0; j < promotionData.size(); j++) {
-                                    if (promotionData.get(j).getCamera() != null && !promotionData.get(j).getCamera().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + promotionData.get(j).getCamera()).exists()) {
-                                            result = UploadImage(promotionData.get(j).getCamera(), "PromotionImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                isError = true;
-                                            }
-
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Promotion Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                                data.value = 60;
-                                data.name = "PromotionImages";
-                                publishProgress(data);
-                            }
-
-
-                            //Paid Visibility Images
-                            if (paidVisibility.size() > 0) {
-                                for (int j = 0; j < paidVisibility.size(); j++) {
-                                    if (paidVisibility.get(j).getImg() != null && !paidVisibility.get(j).getImg().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + paidVisibility.get(j).getImg()).exists()) {
-                                            result = UploadImage(paidVisibility.get(j).getImg(), "AssetImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                //    return "StoreImages";
-                                                isError = true;
-                                            }
-
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Asset Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                                data.value = 70;
-                                data.name = "PaidVisibilityImage";
-                                publishProgress(data);
-                            }
-
-                            if (additionalVisibilityData.size() > 0) {
-                                for (int j = 0; j < additionalVisibilityData.size(); j++) {
-                                    if (additionalVisibilityData.get(j).getPhoto() != null && !additionalVisibilityData.get(j).getPhoto().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + additionalVisibilityData.get(j).getPhoto()).exists()) {
-                                            result = UploadImage(additionalVisibilityData.get(j).getPhoto(), "CompPromotionImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                isError = true;
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("CompPromotion Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                                data.value = 70;
-                                data.name = "CompPromotion Images";
-                                publishProgress(data);
-                            }
-
-                            if (sampledData.size() > 0) {
-                                for (int j = 0; j < sampledData.size(); j++) {
-                                    if (sampledData.get(j).getSampled_img() != null && !sampledData.get(j).getSampled_img().equals("")) {
-                                        if (new File(CommonString.FILE_PATH + sampledData.get(j).getSampled_img()).exists()) {
-                                            result = UploadImage(sampledData.get(j).getSampled_img(), "SamplingImages");
-                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                                isError = true;
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    message.setText("Sampling Images Uploaded");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                                data.value = 80;
-                                data.name = "SamplingImages";
-                                publishProgress(data);
-                            }
-
+                            }*/
 
                             // SET COVERAGE STATUS
                             String final_xml1 = "";
@@ -703,7 +646,7 @@ public class CheckoutNUpload extends Activity {
                                     + "[STORE_ID]" + coverageBeanlist.get(i).getStoreId() + "[/STORE_ID]"
                                     + "[VISIT_DATE]" + coverageBeanlist.get(i).getVisitDate() + "[/VISIT_DATE]"
                                     + "[USER_ID]" + coverageBeanlist.get(i).getUserId() + "[/USER_ID]"
-                                    + "[STATUS]" + CommonString.KEY_U + "[/STATUS]"
+                                    + "[STATUS]" + CommonString.KEY_D + "[/STATUS]"
                                     + "[/COVERAGE_STATUS]";
 
                             final_xml1 = final_xml1 + onXML1;
@@ -721,20 +664,113 @@ public class CheckoutNUpload extends Activity {
                             Object result1 = (Object) envelope1.getResponse();
                             if (result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 database.open();
-                                database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_U);
-                                database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_U);
-                                database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());
+                                database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_D);
+                                database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_D);
+
                             }
                             if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                // return "COVERAGE_STATUS";
                                 isError = true;
                             }
                             data.value = 100;
                             data.name = "Covrage Status";
                             publishProgress(data);
-                            resultFinal = result.toString();
+                            // resultFinal = result.toString();
                         }
                     }
+
                 }
+                File dir = new File(CommonString.FILE_PATH);
+                ArrayList<String> list = new ArrayList();
+                list = getFileNames(dir.listFiles());
+                if (list.size() > 0) {
+                    for (int i1 = 0; i1 < list.size(); i1++) {
+                        if (list.get(i1).contains("_STOREIMG_") || list.get(i1).contains("_STOREIMG2_") || list.get(i1).contains("_NONWORKING_IMG_")) {
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage(originalFile.getName(), "StoreImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 70;
+                            data.name = "Store Images";
+                            publishProgress(data);
+                        }else   if (list.get(i1).contains("_PROMO_")) {
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage( originalFile.getName(), "PromotionImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 75;
+                            data.name = "Promotion Images";
+                            publishProgress(data);
+                        }else if (list.get(i1).contains("_PAID_VISIBILITY_IMG_")) {
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage( originalFile.getName(), "PaidVisibility");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 80;
+                            data.name = "PaidVisibility Images";
+                            publishProgress(data);
+                        }else if (list.get(i1).contains("_ADDITIONAL_VIS_")) {
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage( originalFile.getName(), "AdditionalVisibility");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 85;
+                            data.name = "AdditionalVisibility Images";
+                            publishProgress(data);
+                        }else if (list.get(i1).contains("_OPENING_STOCK_IMAGE_")) {
+                            File originalFile = new File(Path + list.get(i1));
+
+                            result = UploadImage( originalFile.getName(), "StockImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 90;
+                            data.name = "Stock Images";
+                            publishProgress(data);
+                        }else if (list.get(i1).contains("_SHARE_OF_SHELF_IMAGE_")) {
+                            File originalFile = new File(Path + list.get(i1));
+
+                            result = UploadImage( originalFile.getName(), "ShareOfShelf");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 95;
+                            data.name = "ShareOfShelf Images";
+                            publishProgress(data);
+                        }
+                        else if (list.get(i1).contains("_GeoTag_")) {
+                            File originalFile = new File(Path + list.get(i1));
+
+                            result = UploadImage( originalFile.getName(), "GeotagImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 97;
+                            data.name = "Geotag Images";
+                            publishProgress(data);
+                        }
+
+                    }
+                    String response = updateStatus();
+                    if (!response.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                        return CommonString.KEY_FAILURE;
+                    } else {
+                        return CommonString.KEY_SUCCESS;
+                    }
+
+                }else {
+                    String response = updateStatus();
+                    if (response.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                        return CommonString.KEY_SUCCESS;
+                    } else {
+                        return AlertMessage.MESSAGE_SOCKETEXCEPTION;
+                    }
+                }
+
             } catch (MalformedURLException e) {
                 up_success_flag = false;
                 exceptionMessage = e.toString();
@@ -927,6 +963,7 @@ public class CheckoutNUpload extends Activity {
                     androidHttpTransport.call(CommonString.SOAP_ACTION + "Upload_Store_ChecOut_Status", envelope);
                     Object result = (Object) envelope.getResponse();
                     if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS_chkout)) {
+                        database.open();
                         database.updateCoverageStoreOutTime(coverageBean.get(0).getStoreId(), coverageBean.get(0).getVisitDate(), store_out_time, CommonString.KEY_C);
                         database.updateStoreStatusOnCheckout(coverageBean.get(0).getStoreId(),
                                 coverageBean.get(0).getVisitDate(), CommonString.KEY_C);
@@ -1005,14 +1042,77 @@ public class CheckoutNUpload extends Activity {
     }
 
     public String getCurrentTime() {
-
         Calendar m_cal = Calendar.getInstance();
-
-        String intime = m_cal.get(Calendar.HOUR_OF_DAY) + ":"
-                + m_cal.get(Calendar.MINUTE) + ":" + m_cal.get(Calendar.SECOND);
-
+        String intime = m_cal.get(Calendar.HOUR_OF_DAY) + ":" + m_cal.get(Calendar.MINUTE) + ":" + m_cal.get(Calendar.SECOND);
         return intime;
 
     }
+
+
+    private String updateStatus() throws IOException, XmlPullParserException {
+        String final_xml = "";
+        String onXML = "";
+        Object result1 = "";
+        try {
+            database.open();
+            coverageBeanlist = database.getCoveragePreviousData(visit_date);
+            for (int i = 0; i < coverageBeanlist.size(); i++) {
+                journeyPlanGetterSetter = database.getStoreStatus(coverageBeanlist.get(i).getStoreId());
+                if (!journeyPlanGetterSetter.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)){
+                    String final_xml1 = "";
+                    String onXML1 = "";
+                    onXML1 = "[COVERAGE_STATUS]"
+                            + "[STORE_ID]" + coverageBeanlist.get(i).getStoreId() + "[/STORE_ID]"
+                            + "[VISIT_DATE]" + coverageBeanlist.get(i).getVisitDate() + "[/VISIT_DATE]"
+                            + "[USER_ID]" + coverageBeanlist.get(i).getUserId() + "[/USER_ID]"
+                            + "[STATUS]" + CommonString.KEY_U + "[/STATUS]"
+                            + "[/COVERAGE_STATUS]";
+
+                    final_xml1 = final_xml1 + onXML1;
+
+                    final String sos_xml = "[DATA]" + final_xml1 + "[/DATA]";
+
+                    SoapObject request1 = new SoapObject(CommonString.NAMESPACE, CommonString.MEHTOD_UPLOAD_COVERAGE_STATUS);
+                    request1.addProperty("onXML", sos_xml);
+                    SoapSerializationEnvelope envelope1 = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envelope1.dotNet = true;
+                    envelope1.setOutputSoapObject(request1);
+
+                    HttpTransportSE androidHttpTransport1 = new HttpTransportSE(CommonString.URL);
+                    androidHttpTransport1.call(CommonString.SOAP_ACTION + CommonString.MEHTOD_UPLOAD_COVERAGE_STATUS, envelope1);
+                    result1 = (Object) envelope1.getResponse();
+                    if (result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                        database.open();
+                        database.updateStoreStatusOnLeave(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate(), CommonString.KEY_U);
+                        database.updateCoverageStatus(coverageBeanlist.get(i).getMID(), CommonString.KEY_U);
+                        database.deleteSpecificStoreData(coverageBeanlist.get(i).getStoreId());
+                    }
+                    if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                        isError = true;
+                    }
+
+
+                    data.value = 100;
+                    data.name = "Covrage Status";
+                    //publishProgress(data);
+                    resultFinal = result1.toString();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result1.toString();
+
+    }
+    public ArrayList<String> getFileNames(File[] file) {
+        ArrayList<String> arrayFiles = new ArrayList<String>();
+        if (file.length > 0) {
+            for (int i = 0; i < file.length; i++)
+                arrayFiles.add(file[i].getName());
+        }
+        return arrayFiles;
+    }
+
 
 }

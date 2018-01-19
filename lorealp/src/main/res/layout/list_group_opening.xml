@@ -53,16 +53,17 @@
                         android:id="@+id/catfacing"
                         android:layout_width="0dp"
                         android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight=".5"
                         android:background="@drawable/edit_text_border"
                         android:gravity="center_horizontal"
-                        android:layout_gravity="center"
-                        android:inputType="number"
-                        android:paddingTop="10dp"
                         android:hint="Cat Facing"
-                        android:textSize="13sp"
+                        android:inputType="number"
                         android:maxLength="3"
-                        android:layout_weight="1"
-                        android:layout_marginRight="2dp"/>
+                        android:visibility="invisible"
+                        android:paddingTop="10dp"
+                        android:textSize="13sp" />
 <!--
                     <ImageView
                         android:id="@+id/img_cam_himalaya"
@@ -77,18 +78,18 @@
                     <ImageView
                         android:id="@+id/img_cam_cat1"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="45dp"
                         android:layout_centerInParent="true"
                         android:background="@mipmap/camera_orange"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:visibility="invisible"
                         android:layout_marginRight="2dp"/>
                     <ImageView
                         android:id="@+id/img_cam_cat2"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="45dp"
                         android:layout_centerInParent="true"
-                        android:visibility="gone"
+                        android:visibility="invisible"
                         android:background="@mipmap/camera_orange"
                         android:layout_weight="1" />
 

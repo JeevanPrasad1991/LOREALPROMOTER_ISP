@@ -94,11 +94,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
         _UserId = preferences.getString(CommonString.KEY_USERNAME, "");
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         tb = new TableBean();
-        db = new GSKDatabase(this);
 
+        db = new GSKDatabase(this);
+        db.open();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         new BackgroundTask(this).execute();
     }
@@ -690,15 +690,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }
 
                 db.insertMappingAssetData(mappingassetgettersetter);
-
                 db.insertAssetMasterData(assetmastergettersetter);
                 db.insertCompanyMasterData(companyGetterSetter);
                 db.insertBrandMasterData(brandGetterSetter);
                 db.insertSubCetegoryMasterData(subCategoryGetterSetter);
-
-
                 db.insertCategoryMasterData(categorygettersetter);
-
                 db.insertNonWorkingReasonData(nonworkinggettersetter);
                 if (payslipGetterSetter != null) {
                     db.insertPaySlipdata(payslipGetterSetter);

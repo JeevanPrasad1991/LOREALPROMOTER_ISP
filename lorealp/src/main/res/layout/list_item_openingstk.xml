@@ -46,21 +46,23 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center_horizontal"
+                        android:text="Stock :"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15dp"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:text="Stock :" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
+
                     <EditText
                         android:id="@+id/etOpening_Stock"
                         android:layout_width="match_parent"
@@ -80,17 +82,18 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight=".5"
+                    android:visibility="invisible">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center_horizontal"
+                        android:text="Facing :"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15dp"
-                        android:textStyle="bold"
-                        android:text="Facing :" />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -98,7 +101,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/etOpening_Stock_Facingg"
@@ -125,7 +129,7 @@
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-            android:visibility="gone"
+                android:visibility="gone"
                 android:weightSum="2.5">
 
                 <LinearLayout
@@ -174,24 +178,24 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-<!--
-                    <EditText
-                        android:id="@+id/etOpening_Stock"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1.5"
-                        android:background="@drawable/edit_text_border"
-                        android:gravity="center_horizontal"
-                        android:hint="Stock"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
--->
+                    <!--
+                                        <EditText
+                                            android:id="@+id/etOpening_Stock"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_weight="1.5"
+                                            android:background="@drawable/edit_text_border"
+                                            android:gravity="center_horizontal"
+                                            android:hint="Stock"
+                                            android:inputType="number"
+                                            android:maxLength="4"
+                                            android:paddingBottom="10dp"
+                                            android:paddingTop="10dp"
+                                            android:textColor="@color/black"
+                                            android:textSize="14sp" />
+                    -->
 
                     <ImageView
                         android:layout_width="0dp"
@@ -262,24 +266,24 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-<!--
-                    <EditText
-                        android:id="@+id/etOpening_Stock_Facingg"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1.5"
-                        android:background="@drawable/edit_text_border"
-                        android:gravity="center_horizontal"
-                        android:hint="Facing"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
--->
+                    <!--
+                                        <EditText
+                                            android:id="@+id/etOpening_Stock_Facingg"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_weight="1.5"
+                                            android:background="@drawable/edit_text_border"
+                                            android:gravity="center_horizontal"
+                                            android:hint="Facing"
+                                            android:inputType="number"
+                                            android:maxLength="4"
+                                            android:paddingBottom="10dp"
+                                            android:paddingTop="10dp"
+                                            android:textColor="@color/black"
+                                            android:textSize="14sp" />
+                    -->
 
                     <ImageView
                         android:layout_width="0dp"
@@ -296,12 +300,11 @@
             </LinearLayout>
 
 
-
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:weightSum="7">
 
                 <LinearLayout

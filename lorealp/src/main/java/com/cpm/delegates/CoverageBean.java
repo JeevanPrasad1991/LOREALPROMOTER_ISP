@@ -55,7 +55,6 @@ public class CoverageBean
 		this.selfieImage = selfieImage;
 	}
 
-	protected String image2;
 	protected String remarkis;
 	protected String coveargestatus;
 	public String getCoveargestatus() {
@@ -82,13 +81,7 @@ public class CoverageBean
 		this.image1 = image1;
 	}
 
-	public String getImage2() {
-		return image2;
-	}
 
-	public void setImage2(String image2) {
-		this.image2 = image2;
-	}
 
 	protected String Remark;
 	

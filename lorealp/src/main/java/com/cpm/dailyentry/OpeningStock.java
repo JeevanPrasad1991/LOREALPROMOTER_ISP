@@ -5,6 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +49,8 @@ import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,9 +71,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     List<StockNewGetterSetter> listDataHeader;
     HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild;
     private SharedPreferences preferences;
-
     String store_cd,account_cd,city_cd,storetype_cd;
-
     ArrayList<StockNewGetterSetter> brandData;
     ArrayList<StockNewGetterSetter> skuData;
     GSKDatabase db;
@@ -111,8 +116,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
 
 
-
-        setTitle("Opening - " + visit_date);
+        setTitle("Opening STK Floor - " + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
@@ -198,6 +202,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         }
         if (brandData.size() > 0) {
             // Adding child data
+
             for (int i = 0; i < brandData.size(); i++) {
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
@@ -223,7 +228,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         if (id == R.id.save_btn) {
             expListView.clearFocus();
             expListView.invalidateViews();
-
             if (snackbar == null || !snackbar.isShown()) {
                 if (validateData(listDataChild, listDataHeader)) {
                     if (condition()) {
@@ -259,8 +263,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         } else {
 
                         }
-
-
                     } else {
 
                         Snackbar.make(expListView, "Invalid Faceup, Faceup Should Be Less Than The Stock at line "
@@ -438,11 +440,11 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     holder.etOpening_Stock.setHint("Empty");
                     tempflag = true;
                 }
-                if (holder.etOpening_Stock_Facingg.getText().toString().equals("")) {
+               /* if (holder.etOpening_Stock_Facingg.getText().toString().equals("")) {
                     holder.etOpening_Stock_Facingg.setHintTextColor(getResources().getColor(R.color.red));
                     holder.etOpening_Stock_Facingg.setHint("Empty");
                     tempflag = true;
-                }
+                }*/
 
                 if (tempflag) {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
@@ -458,16 +460,16 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         boolean tempflag = false;
                         if (flagmccain) {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.red));
-                            holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.red));
+                         //   holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.red));
                             tempflag = true;
                         } else {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                            holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+                         //   holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
                         }
 
                         if (!flagcoldroom && !flagmccain && !flagstoredf) {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                            holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+                          //  holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
                             holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
                             tempflag = false;
                         } else {
@@ -476,13 +478,13 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         }
                     } else {
                         holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                        holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+                      //  holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                     }
 
                 } else {
                     holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                    holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+                   // holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 }
             }
@@ -586,7 +588,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 public void onClick(View v) {
                     grp_position = groupPosition;
                     _pathforcheck = store_cd + "_" +
-                            headerTitle.getCategory_cd() + "_CATEGORY_STOCK_IMAGE_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
+                            headerTitle.getCategory_cd() + "_OPENING_STOCK_IMAGE_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
                     _path = CommonString.FILE_PATH + _pathforcheck;
                     startCameraActivity(1);
                     getCurrentFocus().clearFocus();
@@ -704,8 +706,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             String catstock = listDataHeader2.get(i).getCatstock();
             String opningimage = listDataHeader2.get(i).getImg_cat_one();
             for (int j = 0; j < listDataChild2.get(listDataHeader2.get(i)).size(); j++) {
-                //String company_cd = listDataChild2.get(listDataHeader2.get(i)).get(j).getCompany_cd();
-                //String openfacing = listDataChild2.get(listDataHeader2.get(i)).get(j).getEd_openingFacing();
 
                 String openingstock = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock1();
                 String openingfacing = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock2();
@@ -718,21 +718,29 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         break;
                     }
                 }
-                if (catstock.equals("")) {
+               /* if (catstock.equals("")) {
                     checkflag = false;
                     flag = false;
                     Error_Message = "Please fill all category stock the data";
                     break;
-                }
+                }*/
 
 
-                if ((openingstock.equalsIgnoreCase("")) || (openingfacing.equalsIgnoreCase(""))) {
+/*                if ((openingstock.equalsIgnoreCase("")) || (openingfacing.equalsIgnoreCase(""))) {
                     checkflag = false;
                     flag = false;
                     Error_Message = "Please fill all the data";
                     break;
 
-                } else {
+                }*/
+
+                if ((openingstock.equalsIgnoreCase(""))) {
+                    checkflag = false;
+                    flag = false;
+                    Error_Message = "Please fill all the data";
+                    break;
+
+                }else {
                     checkflag = true;
                     flag = true;
                 }
@@ -954,6 +962,30 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (resultCode == -1) {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
+
+                            //jee
+                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                            String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                            Canvas cs = new Canvas(dest);
+                            Paint tPaint = new Paint();
+                            tPaint.setTextSize(100);
+                            tPaint.setColor(Color.RED);
+                            tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                            cs.drawBitmap(bmp, 0f, 0f, null);
+                            float height = tPaint.measureText("yY");
+                            cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                            try {
+                                dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                        new FileOutputStream(new File(str + _pathforcheck)));
+                            } catch (FileNotFoundException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+//endjee
+
                             img1 = _pathforcheck;
                             expListView.invalidateViews();
                             _pathforcheck = "";
@@ -969,6 +1001,30 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (resultCode == -1) {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
+
+                            //jee
+                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                            String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                            Canvas cs = new Canvas(dest);
+                            Paint tPaint = new Paint();
+                            tPaint.setTextSize(100);
+                            tPaint.setColor(Color.RED);
+                            tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                            cs.drawBitmap(bmp, 0f, 0f, null);
+                            float height = tPaint.measureText("yY");
+                            cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                            try {
+                                dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                        new FileOutputStream(new File(str + _pathforcheck)));
+                            } catch (FileNotFoundException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+//endjee
+
                             if (_pathforcheck.contains("ImgTwo")) {
                                 img3 = _pathforcheck;
                             } else {

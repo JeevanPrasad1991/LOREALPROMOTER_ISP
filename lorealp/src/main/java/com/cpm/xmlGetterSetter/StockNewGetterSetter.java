@@ -10,6 +10,7 @@ public class StockNewGetterSetter {
     String closing_stock;
     String catstock="";
 
+
     public String getCatstock() {
         return catstock;
     }

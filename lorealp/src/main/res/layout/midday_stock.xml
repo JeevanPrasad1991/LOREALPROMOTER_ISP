@@ -52,14 +52,70 @@
         android:layout_above="@+id/linearLayout1"
         android:layout_below="@+id/appbar"
         layout="@layout/opening_stock_entry"
-        android:visibility="invisible" /> 
+        android:visibility="invisible" />
+
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/appbar"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:text=" Stock Received ?"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linsppiner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/linear"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".4"
+            android:text="@string/brand"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:padding="7dp"
+            android:background="@drawable/rouded_corner"
+            android:layout_width="0dp"
+            android:layout_weight=".6"
+            android:textSize="12sp"
+            android:layout_height="match_parent" >
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:id="@+id/sp_brand">
+            </Spinner>
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <ExpandableListView
         android:id="@+id/lvExp"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         android:layout_above="@+id/linearLayout1"
-        android:layout_below="@+id/appbar"
+        android:layout_below="@+id/linsppiner"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0dp"

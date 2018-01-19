@@ -1,6 +1,8 @@
 package com.cpm.dailyentry;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +11,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -182,6 +189,30 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
             case -1:
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
+
+                        //jee
+                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                        Canvas cs = new Canvas(dest);
+                        Paint tPaint = new Paint();
+                        tPaint.setTextSize(100);
+                        tPaint.setColor(Color.RED);
+                        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                        cs.drawBitmap(bmp, 0f, 0f, null);
+                        float height = tPaint.measureText("yY");
+                        cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                        try {
+                            dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                    new FileOutputStream(new File(str + _pathforcheck)));
+                        } catch (FileNotFoundException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+//endjee
+
                         camera.setImageDrawable(getResources().getDrawable(R.drawable.camera_green));
                         image1 = _pathforcheck;
                     }

@@ -45,6 +45,8 @@
     <string name="total_calls">Total Calls</string>
     <string name="productive_calls">Productive Calls</string>
     <string name="success">success</string>
+    <string name="geotag">Geotag Saved Successfully</string>
+
 
     <string name="calls">Calls Panel</string>
 

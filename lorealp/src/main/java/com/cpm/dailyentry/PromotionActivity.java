@@ -6,6 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +50,8 @@ import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -126,7 +133,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
     }
 
     // Preparing the list data
-    private void prepareListData() {
+    private void prepareListData()
+    {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
        /* brandData = db.getPromotionBrandData(store_cd);*/
@@ -139,8 +147,6 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 skuData = db.getPromotionDataFromDatabase(store_cd, brandData.get(i).getBrand_cd());
                 if (!(skuData.size() > 0) || (skuData.get(0).getPromotion_txt() == null) || (skuData.get(0).getPromotion_txt().equals(""))) {
                     skuData = db.getPromotionSkuData(brandData.get(i).getBrand_cd(),account_cd,city_cd,storetype_cd);
-
-
                 } else {
                     updateflag = true;
                     btnSave.setText("Update");
@@ -294,6 +300,12 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     } else {
                         tempflag = false;
                     }
+                }else{
+                    if (childText.getReason_cd().equals("0")) {
+                        tempflag = true;
+                    } else {
+                        tempflag = false;
+                    }
                 }
 
                 if (tempflag) {
@@ -301,8 +313,6 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 } else {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 }
-
-
             }
 
             return convertView;
@@ -431,7 +441,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                         break;
                     }
                 } else if (presentspinValue.equals("0")) {
-                    if (reasonCdP.equals("")) {
+                    if (reasonCdP.equals("0"))
+                    {
                         if (!checkHeaderArray.contains(i)) {
                             checkHeaderArray.add(i);
                         }
@@ -533,6 +544,30 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             case -1:
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
+
+                        //jee
+                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+                        Canvas cs = new Canvas(dest);
+                        Paint tPaint = new Paint();
+                        tPaint.setTextSize(100);
+                        tPaint.setColor(Color.RED);
+                        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                        cs.drawBitmap(bmp, 0f, 0f, null);
+                        float height = tPaint.measureText("yY");
+                        cs.drawText(dateTime, 20f, height + 15f, tPaint);
+                        try {
+                            dest.compress(Bitmap.CompressFormat.JPEG, 100,
+                                    new FileOutputStream(new File(str + _pathforcheck)));
+                        } catch (FileNotFoundException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+//endjee
+
                         img1 = _pathforcheck;
                         expListView.invalidateViews();
                         listAdapter.notifyDataSetChanged();

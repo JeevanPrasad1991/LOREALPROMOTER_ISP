@@ -14,7 +14,7 @@
     <dimen name="text_size_small">16sp</dimen>
 
     <dimen name="store_entry_icon_size">65dp</dimen>
-    <dimen name="store_entry_text_size">20sp</dimen>
+    <dimen name="store_entry_text_size">18sp</dimen>
 
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->

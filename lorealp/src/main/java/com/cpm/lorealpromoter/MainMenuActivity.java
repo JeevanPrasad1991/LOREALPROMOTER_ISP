@@ -25,29 +25,25 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cpm.Constants.CommonString;
 import com.cpm.GeoTag.GeoTagStoreList;
 import com.cpm.dailyentry.DailyEntryScreen;
 import com.cpm.dailyentry.IncentiveActivity;
 import com.cpm.dailyentry.MyPerformance;
 import com.cpm.dailyentry.PaySlip;
-import com.cpm.dailyentry.Performance;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.download.CompleteDownloadActivity;
 import com.cpm.fragment.HelpFragment;
 import com.cpm.fragment.MainFragment;
 import com.cpm.message.AlertMessage;
-import com.cpm.retrofit.PostApiForFile;
+import com.cpm.retrofit.PostApi;
 import com.cpm.retrofit.StringConverterFactory;
 import com.cpm.upload.CheckoutNUpload;
 import com.cpm.upload.UploadAllImageActivity;
 import com.cpm.upload.UploadDataActivity;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.RequestBody;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,6 +52,10 @@ import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.RequestBody;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -356,21 +356,22 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                                         dst.close();
                                     }
                                 }
-                                //usk
-                              /*  File dir = new File(CommonString.BACKUP_PATH);
+
+                                File dir = new File(CommonString.BACKUP_PATH);
                                 ArrayList<String> list = new ArrayList();
                                 list = getFileNames(dir.listFiles());
+
                                 if (list.size() > 0) {
                                     for (int i1 = 0; i1 < list.size(); i1++) {
                                         if (list.get(i1).contains("Lorealpromoter_backup")) {
                                             File originalFile = new File(CommonString.BACKUP_PATH + list.get(i1));
                                             Object result = uploadBackup(MainMenuActivity.this, originalFile.getName(), "DBBackup");
-                                            if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
 
                                             }
                                         }
                                     }
-                                }*/
+                                }
                                 Snackbar.make(frameLayout, "Database Exported And Uploaded Successfully", Snackbar.LENGTH_SHORT).show();
 
                             } catch (Exception e) {
@@ -462,6 +463,16 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         return flag_is_invalid;
     }
 
+
+    public ArrayList<String> getFileNames(File[] file) {
+        ArrayList<String> arrayFiles = new ArrayList<String>();
+        if (file.length > 0) {
+            for (int i = 0; i < file.length; i++)
+                arrayFiles.add(file[i].getName());
+        }
+        return arrayFiles;
+    }
+
     private String uploadBackup(final Context context, String file_name, String folder_name) {
         RequestBody body1;
         result = "";
@@ -470,13 +481,13 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         RequestBody photo = RequestBody.create(MediaType.parse("application/octet-stream"), originalFile);
         body1 = new MultipartBuilder().type(MultipartBuilder.FORM)
                 .addFormDataPart("file", originalFile.getName(), photo)
-                .addFormDataPart("Foldername", folder_name)
+                .addFormDataPart("FolderName", folder_name)
                 .build();
         Retrofit adapter = new Retrofit.Builder()
-                .baseUrl(CommonString.URL+"/")
+                .baseUrl(CommonString.URL + "/")
                 .addConverterFactory(new StringConverterFactory())
                 .build();
-        PostApiForFile api = adapter.create(PostApiForFile.class);
+        PostApi api = adapter.create(PostApi.class);
         Call<String> call = api.getUploadImage(body1);
         call.enqueue(new Callback<String>() {
             @Override
@@ -502,18 +513,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 } else {
                     result = AlertMessage.MESSAGE_SOCKETEXCEPTION;
                 }
-                Toast.makeText(context, originalFile.getName() + " not uploaded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, originalFile.getName() + " not uploaded. Check Your Network Connection.", Toast.LENGTH_LONG).show();
             }
         });
         return result;
-    }
-
-    public ArrayList<String> getFileNames(File[] file) {
-        ArrayList<String> arrayFiles = new ArrayList<String>();
-        if (file.length > 0) {
-            for (int i = 0; i < file.length; i++)
-                arrayFiles.add(file[i].getName());
-        }
-        return arrayFiles;
     }
 }

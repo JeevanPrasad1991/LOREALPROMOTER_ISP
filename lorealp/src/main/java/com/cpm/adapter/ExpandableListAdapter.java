@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
 
-import com.cpm.dailyentry.AssetActivity;
+import com.cpm.dailyentry.PaidVisibilityActivity;
 import com.cpm.dailyentry.ClosingStock;
-import com.cpm.dailyentry.MidDayStock;
+import com.cpm.dailyentry.StockInActivity;
 import com.cpm.dailyentry.OpeningStock;
 import com.cpm.dailyentry.PromotionActivity;
 import com.cpm.lorealpromoter.R;
@@ -130,7 +130,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
                 else if(childText.equals("Midday Stock")){
 
-                    Intent in = new Intent(mContext, MidDayStock.class);
+                    Intent in = new Intent(mContext, StockInActivity.class);
                     mContext.startActivity(in);
 
                 }else if(childText.equals("Closing Stock")){
@@ -145,7 +145,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
                 }else if(childText.equals("Asset")){
 
-                    Intent in = new Intent(mContext, AssetActivity.class);
+                    Intent in = new Intent(mContext, PaidVisibilityActivity.class);
                     mContext.startActivity(in);
 
                 }

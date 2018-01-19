@@ -236,12 +236,19 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             });
             String storecd = jcplist.get(position).getStore_cd().get(0);
             ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(storecd);
+
             if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_U)) {
                 holder.img.setVisibility(View.VISIBLE);
                 holder.img.setBackgroundResource(R.drawable.store_tick_u);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
-            }  else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_C))) {
+            } else if ((jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_D))) {
+               // holder.img.setVisibility(View.INVISIBLE);
+                holder.checkinclose.setBackgroundResource(R.drawable.tick_d);
+                holder.checkinclose.setVisibility(View.VISIBLE);
+                holder.checkout.setVisibility(View.INVISIBLE);
+            }
+            else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_C))) {
                 holder.checkinclose.setBackgroundResource(R.drawable.tick_c);
                 holder.checkinclose.setVisibility(View.VISIBLE);
                 holder.checkout.setVisibility(View.INVISIBLE);
@@ -267,10 +274,12 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.checkinclose.setEnabled(false);
                 holder.checkinclose.setVisibility(View.INVISIBLE);
             }
-           /* if (jcplist.get(position).getGeotagStatus().get(0).equalsIgnoreCase("Y")){
+/*
+            if (jcplist.get(position).getGeotagStatus().get(0).equalsIgnoreCase("Y")){
                 holder.geotag.setVisibility(View.VISIBLE);
                 holder.geotag.setBackgroundResource(R.drawable.store_with_location);
-            }*/
+            }
+*/
             holder.storename.setText(jcplist.get(position).getStore_name().get(0));
             holder.city.setText(jcplist.get(position).getCity().get(0));
             holder.keyaccount.setText(jcplist.get(position).getKey_account().get(0));
@@ -488,16 +497,13 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         alert.show();
                     } else {
                         UpdateData(storeCd);
-
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString(CommonString.KEY_STORE_CD, storeCd);
                         editor.putString(CommonString.KEY_STORE_IN_TIME, "");
                         editor.putString(CommonString.KEY_STOREVISITED, "");
-
                         editor.putString(CommonString.KEY_KEYACCOUNT_CD, keyaccount_cd);
                         editor.putString(CommonString.KEY_CITY_CD, city_cd);
                         editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
-
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
                         editor.commit();
                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);

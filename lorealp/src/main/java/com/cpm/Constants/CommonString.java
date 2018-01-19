@@ -48,6 +48,7 @@ public class CommonString {
     public static final String KEY_CHANGED = "Changed";
     public static final String KEY_NO_DATA = "NoData";
     public static final String KEY_IMAGE = "IMAGE1";
+    public static final String KEY_IMAGE2 = "IMAGE2";
     public static final String KEY_COVERAGE_REMARK = "REMARK";
 
     public static final String METHOD_UPLOAD_IMAGE = "GetImageWithFolderName";
@@ -294,13 +295,14 @@ public class CommonString {
             + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_STORE_ID
             + " INTEGER,USER_ID VARCHAR, " + KEY_IN_TIME + " VARCHAR,"
             + KEY_OUT_TIME + " VARCHAR," + KEY_VISIT_DATE + " VARCHAR,"
-            + KEY_LATITUDE + " VARCHAR," + KEY_LONGITUDE + " VARCHAR," + KEY_MERCHANDISER_ID + " INTEGER,"
+            + KEY_LATITUDE + " VARCHAR," + KEY_LONGITUDE + " VARCHAR,"
+            + KEY_MERCHANDISER_ID + " INTEGER,"
             + KEY_COVERAGE_STATUS + " VARCHAR," + KEY_IMAGE + " VARCHAR,"
+            + KEY_IMAGE2 + " VARCHAR,"
             + KEY_REASON_ID + " INTEGER,"
             + KEY_PJP_DEVIATION + " VARCHAR,"
             + KEY_COVERAGE_REMARK
             + " VARCHAR,"
-
             + KEY_REASON + " VARCHAR" +
             ")";
 
@@ -344,10 +346,10 @@ public class CommonString {
 
 
     //New Changes 12-04-2017
-    public static final String TABLE_INSERT_OPENINGHEADER_DATA = "openingHeader_data";
+
     public static final String TABLE_INSERT_OPENINGHEADER_BACKOFFICE_DATA = "openingHeaderBackOffice_data";
 
-
+    public static final String TABLE_INSERT_OPENINGHEADER_DATA = "openingHeader_data";
     public static final String CREATE_TABLE_insert_OPENINGHEADER_DATA =
             "CREATE TABLE IF NOT EXISTS " + TABLE_INSERT_OPENINGHEADER_DATA
                     + " ("
@@ -387,9 +389,10 @@ public class CommonString {
                     + ")";
 
 
-    public static final String TABLE_STOCK_DATA = "STOCK_DATA";
+
     public static final String TABLE_STOCK_BACKOFFICE_DATA = "STOCK_BACKOFFICE_DATA";
 
+    public static final String TABLE_STOCK_DATA = "STOCK_DATA";
     public static final String CREATE_TABLE_STOCK_DATA =
             "CREATE TABLE IF NOT EXISTS " + TABLE_STOCK_DATA +
                     "(" +
@@ -771,5 +774,142 @@ public class CommonString {
             + " VARCHAR,"
 
             + "FRONT_IMAGE" + " VARCHAR)";
+
+
+
+    public static final String TABLE_SHARE_OF_SHELF_DATA = "STOCK_IN_SPINNER_DATA";
+    public static final String CREATE_TABLE_SHARE_OF_SHELF_DATA_DATA = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_SHARE_OF_SHELF_DATA
+            + "("
+            + "KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + "STOCK_BRAND"
+            + " INTEGER,"
+            + "VISIT_DATE"
+            + " VARCHAR,"
+            + "STORE_ID"
+            + " INTEGER)";
+
+
+    public static final String TABLE_CATEGORY_SHARE_OF_SHELF_IMAGE = "DR_CATEGORY_SHARE_OF_SHELF_IMAGE";
+
+    public static final String CREATE_TABLE_SHARE_OF_SHELF_IMAGE =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY_SHARE_OF_SHELF_IMAGE +
+                    "(" +
+                    "Key_Id" +
+                    " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "STORE_CD" +
+                    " INTEGER, " +
+                    "CATEGORY_CD" +
+                    " INTEGER, " +
+                    "CATEGORY" +
+                    " VARCHAR, " +
+                    "IMAGE_CAT_FACING" +
+                    " VARCHAR, " +
+                    "CAT_FACING" +
+                    " INTEGER, " +
+                    "VISIT_DATE" +
+                    " VARCHAR" +
+                    ")";
+
+    public static final String TABLE_INSERT_MID_DAY_HEADER_DATA = "MID_DAY_HEADER_DATA";
+    public static final String CREATE_TABLE_insert_mid_day_HEADER_DATA =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_INSERT_MID_DAY_HEADER_DATA
+                    + " ("
+                    + "KEY_ID" +
+                    " INTEGER PRIMARY KEY AUTOINCREMENT,"
+
+                    + "STORE_CD" +
+                    " VARCHAR," +
+
+                     "VISIT_DATE" +
+                    " VARCHAR," +
+
+                    "BRAND_CD" +
+                    " INTEGER, " +
+
+                     "BRAND" +
+                    " VARCHAR"
+                    + ")";
+
+
+    public static final String TABLE_MID_DAY_DATA = "MID_DAY_DATA";
+    public static final String CREATE_TABLE_MID_DAY_DATA =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_MID_DAY_DATA +
+                    "(" +
+                    "Common_Id" +
+                    " INTEGER, " +
+
+                    "STORE_CD" +
+                    " INTEGER, " +
+
+                    "BRAND_CD" +
+                    " INTEGER, " +
+
+                    "BRAND" +
+                    " VARCHAR, " +
+
+                    "VISIT_DATE" +
+                    " VARCHAR, " +
+
+                    "SKU_CD" +
+                    " INTEGER," +
+
+                    "SKU" +
+                    " VARCHAR, " +
+
+                    "MIDDAY_STOCK" +
+                    " INTEGER, " +
+
+                    "COMPANY_CD" +
+                    " INTEGER" +
+                    ")";
+
+
+
+    public static final String TABLE_INSERT_SHAREOF_SHELF_HEADER_DATA = "DR_shareofShelfHeader_data";
+    public static final String CREATE_TABLE_insert_share_of_shelf_HEADER_DATA =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_INSERT_SHAREOF_SHELF_HEADER_DATA
+                    + " ("
+                    + "KEY_ID" +
+                    " INTEGER PRIMARY KEY AUTOINCREMENT,"
+
+                    + "STORE_CD" +
+                    " VARCHAR," +
+
+                    "CATEGORY_CD" +
+                    " VARCHAR,"
+
+                    + "CATEGORY" +
+                    " VARCHAR"
+                    + ")";
+
+
+    public static final String TABLE_SHARE_OF_SHELF_FACING_DATA = "DR_SHARE_OF_SHELF_FACING_DATA";
+    public static final String CREATE_TABLE_SHARE_OF_SHELF_FACING_DATA =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_SHARE_OF_SHELF_FACING_DATA +
+                    "(" +
+                    "Common_Id" +
+                    " INTEGER, " +
+
+                    "STORE_CD" +
+                    " INTEGER, " +
+
+                    "CATEGORY_CD" +
+                    " INTEGER, " +
+
+                    "CATEGORY" +
+                    " VARCHAR, " +
+
+                    "BRAND_CD" +
+                    " INTEGER, " +
+
+                    "BRAND" +
+                    " VARCHAR, " +
+
+                    "FACING" +
+                    " INTEGER" +
+                    ")";
+
 
 }

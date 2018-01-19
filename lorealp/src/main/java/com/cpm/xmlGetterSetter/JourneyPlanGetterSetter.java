@@ -19,7 +19,6 @@ public class JourneyPlanGetterSetter {
 	ArrayList<String> geotagStatus = new ArrayList<String>();
 	ArrayList<String> latitude = new ArrayList<String>();
 	ArrayList<String> longitude = new ArrayList<String>();
-
 	ArrayList<String> keyaccount_cd = new ArrayList<String>();
 	ArrayList<String> city_cd = new ArrayList<String>();
 	ArrayList<String> storetype_cd = new ArrayList<String>();

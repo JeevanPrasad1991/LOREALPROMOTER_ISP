@@ -3,21 +3,33 @@
 
     <item
         is-multidex="false"
-        jar="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jar="G:\AndroidStudioProject\LorealPromoter_\LOREALPROMOTER\LOREALPROMOTER\lorealp\libs\acra-4.4.0.jar"
         jumboMode="false"
+        min-sdk-version="15"
         optimize="true"
-        revision="25.0.0"
-        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
-        <dex dex="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.0.0-jar-with-dependencies_1b3cba075e33fe62965c462e13d79f85e67ef5dd.jar" />
+        revision="26.0.2"
+        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
+        <dex dex="G:\AndroidStudioProject\LorealPromoter_\LOREALPROMOTER\LOREALPROMOTER\lorealp\build\intermediates\transforms\preDex\release\1.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\libs\acra-4.4.0.jar"
+        jar="C:\Users\upendrak\.gradle\caches\transforms-1\files-1.1\multidex-1.0.1.aar\16643ab848e102ffc5c7ae97328e1f53\jars\classes.jar"
         jumboMode="false"
+        min-sdk-version="15"
         optimize="true"
-        revision="25.0.0"
-        sha1="7864f0ac6c74d84e465aa5449fa14408b0a1418f">
-        <dex dex="G:\AndroidStudioProject\lorealPro\LOREALPROMOTER\lorealp\build\intermediates\pre-dexed\debug\acra-4.4.0_47d3b9f6fd4196571c248de4b5ab5cc0f674ab34.jar" />
+        revision="26.0.2"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="G:\AndroidStudioProject\LorealPromoter_\LOREALPROMOTER\LOREALPROMOTER\lorealp\build\intermediates\transforms\preDex\release\14.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="G:\AndroidStudioProject\LorealPromoter_\LOREALPROMOTER\LOREALPROMOTER\lorealp\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar"
+        jumboMode="false"
+        min-sdk-version="15"
+        optimize="true"
+        revision="26.0.2"
+        sha1="224c93f1824fa17b96db7250c2e5e2703d45e052">
+        <dex dex="G:\AndroidStudioProject\LorealPromoter_\LOREALPROMOTER\LOREALPROMOTER\lorealp\build\intermediates\transforms\preDex\release\2.jar" />
     </item>
 
 </items>
