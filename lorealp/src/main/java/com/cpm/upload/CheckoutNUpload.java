@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpm.Constants.CommonString;
+import com.cpm.GetterSetter.GeotaggingBeans;
 import com.cpm.GetterSetter.ShareOfShelfGetterSetter;
 import com.cpm.GetterSetter.StoreStockinGetterSetter;
 import com.cpm.database.GSKDatabase;
@@ -90,6 +91,7 @@ public class CheckoutNUpload extends Activity {
     StoreStockinGetterSetter storeSpinner;
     ArrayList<StockNewGetterSetter> stockInData = new ArrayList<>();
     JourneyPlanGetterSetter journeyPlanGetterSetter;
+    ArrayList<GeotaggingBeans> geotaglist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,9 +378,17 @@ public class CheckoutNUpload extends Activity {
                             final_xml = "";
                             onXML = "";
                             storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
-                                stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
-                                if (stockInData.size()>0){
-                                String stock_in_exit="",stock_in_brandListXml="";
+                            stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
+                            if (stockInData.size() > 0) {
+                                String stock_in_exit = "", stock_in_brandListXml = "";
+
+                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
+                                        + "[MID]" + mid + "[/MID]"
+                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
+                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
+                                stock_in_exit = stock_in_exit + onXML;
+
                                 for (int j = 0; j < stockInData.size(); j++) {
                                     stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
                                             + "[MID]" + mid + "[/MID]"
@@ -386,19 +396,12 @@ public class CheckoutNUpload extends Activity {
                                             + "[SKU_CD]" + stockInData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK_IN_DATA]" + stockInData.get(j).getEd_midFacing() + "[/STOCK_IN_DATA]"
                                             + "[/LOREAL_STOCK_IN_DATA]";
+                                    final_xml = final_xml + stock_in_brandListXml;
 
-                                    stock_in_exit = stock_in_exit + stock_in_brandListXml;
                                 }
-                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
-                                        + "[MID]" + mid + "[/MID]"
-                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
-                                        + "[SHARE_OF_SHELF_BRAND_FACING]" + stock_in_exit + "[/SHARE_OF_SHELF_BRAND_FACING]"
-                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
 
-                                final_xml = final_xml + onXML;
 
-                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                                final String sos_xml = "[DATA]" +final_xml+stock_in_exit + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
                                 request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
@@ -519,6 +522,58 @@ public class CheckoutNUpload extends Activity {
                                 publishProgress(data);
                             }
 
+                            geotaglist = database.getinsertGeotaggingData(coverageBeanlist.get(i).getStoreId());
+                            String geo_xml = "";
+                            boolean geotag_status = false;
+                            if (geotaglist.size() > 0) {
+                                for (int j = 0; j < geotaglist.size(); j++) {
+
+                                    if (!geotaglist.get(j).getStatus().equals("Y")) {
+                                        geotag_status = true;
+                                        String onXML1 = "[GeoTag_DATA][STORE_ID]"
+                                                + geotaglist.get(j).getStoreid()
+                                                + "[/STORE_ID]"
+                                                + "[LATTITUDE]"
+                                                + geotaglist.get(j).getLatitude()
+                                                + "[/LATTITUDE]"
+                                                + "[LONGITUDE]"
+                                                + geotaglist.get(j).getLongitude()
+                                                + "[/LONGITUDE]"
+                                                + "[FRONT_IMAGE]"
+                                                + geotaglist.get(j).getUrl1()
+                                                + "[/FRONT_IMAGE]"
+                                                + "[CREATED_BY]" + username
+                                                + "[/CREATED_BY][/GeoTag_DATA]";
+
+                                        geo_xml = geo_xml + onXML1;
+
+                                    }
+
+                                }
+                                if (geotag_status) {
+                                    geo_xml = "[DATA]" + geo_xml + "[/DATA]";
+                                    request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                    request.addProperty("MID", "0");
+                                    request.addProperty("KEYS", "GEOTAG_DATA");
+                                    request.addProperty("USERNAME", username);
+                                    request.addProperty("XMLDATA", geo_xml);
+                                    envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                    envelope.dotNet = true;
+                                    envelope.setOutputSoapObject(request);
+                                    androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                    androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                    result = (Object) envelope.getResponse();
+                                    if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+
+                                    } else {
+                                        return CommonString.METHOD_UPLOAD_XML;
+
+                                    }
+                                }
+
+                            }
+
+
                             //Paid Visibility Data
                             final_xml = "";
                             String paid_visibility = "";
@@ -564,9 +619,17 @@ public class CheckoutNUpload extends Activity {
                             final_xml = "";
                             onXML = "";
                             paid_visibility = "";
+                            String valueex="";
                             additionalVisibilityData = database.getinsertedMarketIntelligenceData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (additionalVisibilityData.size() > 0) {
                                 for (int j = 0; j < additionalVisibilityData.size(); j++) {
+                                    valueex="";
+                                    boolean exist=additionalVisibilityData.get(j).isExists();
+                                    if (exist){
+                                        valueex="1";
+                                    }else {
+                                        valueex="0";
+                                    }
                                     onXML = "[LOREAL_ADDITIONAL_VISIBILITY]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
@@ -574,6 +637,7 @@ public class CheckoutNUpload extends Activity {
                                             + "[DISPLAY_CD]" + additionalVisibilityData.get(j).getCategory_cd() + "[/DISPLAY_CD]"
                                             + "[PHOTO]" + additionalVisibilityData.get(j).getPhoto() + "[/PHOTO]"
                                             + "[REMARK]" + additionalVisibilityData.get(j).getRemark() + "[/REMARK]"
+                                            + "[EXIST]" +valueex + "[/EXIST]"
                                             + "[/LOREAL_ADDITIONAL_VISIBILITY]";
 
                                     paid_visibility = paid_visibility + onXML;

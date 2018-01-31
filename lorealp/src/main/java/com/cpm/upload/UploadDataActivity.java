@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
+import com.cpm.GetterSetter.GeotaggingBeans;
 import com.cpm.GetterSetter.ShareOfShelfGetterSetter;
 import com.cpm.GetterSetter.StoreStockinGetterSetter;
 import com.cpm.database.GSKDatabase;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+
 @SuppressWarnings("deprecation")
 public class UploadDataActivity extends Activity {
     private Dialog dialog;
@@ -83,10 +85,12 @@ public class UploadDataActivity extends Activity {
     ArrayList<SampledGetterSetter> sampledData = new ArrayList<>();
     StoreStockinGetterSetter storeSpinner;
     ArrayList<StockNewGetterSetter> stockInData = new ArrayList<>();
-    ArrayList<ShareOfShelfGetterSetter> shareOfShelImgData= new ArrayList<>();
-    ArrayList<ShareOfShelfGetterSetter> shareOfShelfData= new ArrayList<>();
+    ArrayList<ShareOfShelfGetterSetter> shareOfShelImgData = new ArrayList<>();
+    ArrayList<ShareOfShelfGetterSetter> shareOfShelfData = new ArrayList<>();
     JourneyPlanGetterSetter journeyPlanGetterSetter;
     String result;
+    ArrayList<GeotaggingBeans> geotaglist = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +102,7 @@ public class UploadDataActivity extends Activity {
         app_ver = preferences.getString(CommonString.KEY_VERSION, "");
         database = new GSKDatabase(this);
         database.open();
-        storeSpinner=new StoreStockinGetterSetter();
+        storeSpinner = new StoreStockinGetterSetter();
         Path = CommonString.FILE_PATH;
         new UploadTask(this).execute();
     }
@@ -222,16 +226,16 @@ public class UploadDataActivity extends Activity {
                             final_xml = "";
                             onXML = "";
                             stockImages = database.getStockImageUploadData(coverageBeanlist.get(i).getStoreId());
-                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") ||  (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals("") )) {
+                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals(""))) {
                                 for (int j = 0; j < stockImages.size(); j++) {
 
-                                        onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
-                                                + "[MID]" + mid + "[/MID]"
-                                                + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                                + "[CATEGORY_CD]" + stockImages.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                                + "[CATEGORY_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY_IMAGE]"
-                                                + "[/LOREAL_STOCK_CATEGORY_IMAGE_DATA]";
-                                        final_xml = final_xml + onXML;
+                                    onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            + "[CATEGORY_CD]" + stockImages.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                            + "[CATEGORY_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY_IMAGE]"
+                                            + "[/LOREAL_STOCK_CATEGORY_IMAGE_DATA]";
+                                    final_xml = final_xml + onXML;
 
                                 }
 
@@ -340,9 +344,17 @@ public class UploadDataActivity extends Activity {
                             final_xml = "";
                             onXML = "";
                             storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
-                                stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
-                                if (stockInData.size()>0){
-                                String stock_in_exit="",stock_in_brandListXml="";
+                            stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
+                            if (stockInData.size() > 0) {
+                                String stock_in_exit = "", stock_in_brandListXml = "";
+
+                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
+                                        + "[MID]" + mid + "[/MID]"
+                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
+                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
+                                stock_in_exit = stock_in_exit + onXML;
+
                                 for (int j = 0; j < stockInData.size(); j++) {
                                     stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
                                             + "[MID]" + mid + "[/MID]"
@@ -350,19 +362,12 @@ public class UploadDataActivity extends Activity {
                                             + "[SKU_CD]" + stockInData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK_IN_DATA]" + stockInData.get(j).getEd_midFacing() + "[/STOCK_IN_DATA]"
                                             + "[/LOREAL_STOCK_IN_DATA]";
+                                    final_xml = final_xml + stock_in_brandListXml;
 
-                                    stock_in_exit = stock_in_exit + stock_in_brandListXml;
                                 }
-                                        onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
-                                        + "[MID]" + mid + "[/MID]"
-                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
-                                                + "[SHARE_OF_SHELF_BRAND_FACING]" + stock_in_exit + "[/SHARE_OF_SHELF_BRAND_FACING]"
-                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
 
-                                final_xml = final_xml + onXML;
 
-                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                                final String sos_xml = "[DATA]" +final_xml+stock_in_exit + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
                                 request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
@@ -382,14 +387,14 @@ public class UploadDataActivity extends Activity {
                                 publishProgress(data);
                             }
 
-                           //shareOfShelImgData
+                            //shareOfShelImgData
                             final_xml = "";
                             onXML = "";
                             shareOfShelImgData = database.getHeaderShareOfSelfImgUploadData1(coverageBeanlist.get(i).getStoreId());
                             if (shareOfShelImgData.size() > 0) {
                                 for (int j = 0; j < shareOfShelImgData.size(); j++) {
-                                    shareOfShelfData=   database.getShareofShelfBrandDataUpload(shareOfShelImgData.get(j).getKey_id(), coverageBeanlist.get(i).getStoreId());
-                                    String share_of_shelf_List="",share_ofShef_ImageListXml="";
+                                    shareOfShelfData = database.getShareofShelfBrandDataUpload(shareOfShelImgData.get(j).getKey_id(), coverageBeanlist.get(i).getStoreId());
+                                    String share_of_shelf_List = "", share_ofShef_ImageListXml = "";
                                     for (int c = 0; c < shareOfShelfData.size(); c++) {
                                         share_ofShef_ImageListXml = "[LOREAL_SHARE_OF_SHELF_DATA]"
                                                 + "[MID]" + mid + "[/MID]"
@@ -403,7 +408,7 @@ public class UploadDataActivity extends Activity {
 
                                         share_of_shelf_List = share_of_shelf_List + share_ofShef_ImageListXml;
                                     }
-                                   // final String share_of_xml =  share_ofShef_ImageListXml;
+                                    // final String share_of_xml =  share_ofShef_ImageListXml;
 
                                     onXML = "[LOREAL_SHARE_OF_SHELF_IMAGE_DATA]"
                                             + "[MID]" + mid + "[/MID]"
@@ -480,6 +485,57 @@ public class UploadDataActivity extends Activity {
                                 publishProgress(data);
                             }
 
+                            geotaglist = database.getinsertGeotaggingData(coverageBeanlist.get(i).getStoreId());
+                            String geo_xml = "";
+                            boolean geotag_status = false;
+                            if (geotaglist.size() > 0) {
+                                for (int j = 0; j < geotaglist.size(); j++) {
+
+                                    if (!geotaglist.get(j).getStatus().equals("Y")) {
+                                        geotag_status = true;
+                                        String onXML1 = "[GeoTag_DATA][STORE_ID]"
+                                                + geotaglist.get(j).getStoreid()
+                                                + "[/STORE_ID]"
+                                                + "[LATTITUDE]"
+                                                + geotaglist.get(j).getLatitude()
+                                                + "[/LATTITUDE]"
+                                                + "[LONGITUDE]"
+                                                + geotaglist.get(j).getLongitude()
+                                                + "[/LONGITUDE]"
+                                                + "[FRONT_IMAGE]"
+                                                + geotaglist.get(j).getUrl1()
+                                                + "[/FRONT_IMAGE]"
+                                                + "[CREATED_BY]" + username
+                                                + "[/CREATED_BY][/GeoTag_DATA]";
+
+                                        geo_xml = geo_xml + onXML1;
+
+                                    }
+
+                                }
+                                if (geotag_status) {
+                                    geo_xml = "[DATA]" + geo_xml + "[/DATA]";
+                                    request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                    request.addProperty("MID", "0");
+                                    request.addProperty("KEYS", "GEOTAG_DATA");
+                                    request.addProperty("USERNAME", username);
+                                    request.addProperty("XMLDATA", geo_xml);
+                                    envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                    envelope.dotNet = true;
+                                    envelope.setOutputSoapObject(request);
+                                    androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                    androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                    result = (Object) envelope.getResponse();
+                                    if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+
+                                    } else {
+                                        return CommonString.METHOD_UPLOAD_XML;
+
+                                    }
+                                }
+
+                            }
+
 
                             //Paid Visibility Data
                             final_xml = "";
@@ -526,9 +582,17 @@ public class UploadDataActivity extends Activity {
                             final_xml = "";
                             onXML = "";
                             paid_visibility = "";
+                            String valueex="";
                             additionalVisibilityData = database.getinsertedMarketIntelligenceData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (additionalVisibilityData.size() > 0) {
                                 for (int j = 0; j < additionalVisibilityData.size(); j++) {
+                                    valueex="";
+                                    boolean exist=additionalVisibilityData.get(j).isExists();
+                                    if (exist){
+                                        valueex="1";
+                                    }else {
+                                        valueex="0";
+                                    }
                                     onXML = "[LOREAL_ADDITIONAL_VISIBILITY]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
@@ -536,6 +600,7 @@ public class UploadDataActivity extends Activity {
                                             + "[DISPLAY_CD]" + additionalVisibilityData.get(j).getCategory_cd() + "[/DISPLAY_CD]"
                                             + "[PHOTO]" + additionalVisibilityData.get(j).getPhoto() + "[/PHOTO]"
                                             + "[REMARK]" + additionalVisibilityData.get(j).getRemark() + "[/REMARK]"
+                                            + "[EXIST]" +valueex + "[/EXIST]"
                                             + "[/LOREAL_ADDITIONAL_VISIBILITY]";
 
                                     paid_visibility = paid_visibility + onXML;
@@ -631,13 +696,13 @@ public class UploadDataActivity extends Activity {
 
                             }
                             if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                               // return "COVERAGE_STATUS";
+                                // return "COVERAGE_STATUS";
                                 isError = true;
                             }
                             data.value = 100;
                             data.name = "Covrage Status";
                             publishProgress(data);
-                           // resultFinal = result.toString();
+                            // resultFinal = result.toString();
                         }
                     }
 
@@ -657,58 +722,57 @@ public class UploadDataActivity extends Activity {
                             data.value = 70;
                             data.name = "Store Images";
                             publishProgress(data);
-                        }else   if (list.get(i1).contains("_PROMO_")) {
+                        } else if (list.get(i1).contains("_PROMO_")) {
                             File originalFile = new File(Path + list.get(i1));
-                            result = UploadImage( originalFile.getName(), "PromotionImages");
+                            result = UploadImage(originalFile.getName(), "PromotionImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
                             data.value = 75;
                             data.name = "Promotion Images";
                             publishProgress(data);
-                        }else if (list.get(i1).contains("_PAID_VISIBILITY_IMG_")) {
+                        } else if (list.get(i1).contains("_PAID_VISIBILITY_IMG_")) {
                             File originalFile = new File(Path + list.get(i1));
-                            result = UploadImage( originalFile.getName(), "PaidVisibility");
+                            result = UploadImage(originalFile.getName(), "PaidVisibility");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
                             data.value = 80;
                             data.name = "PaidVisibility Images";
                             publishProgress(data);
-                        }else if (list.get(i1).contains("_ADDITIONAL_VIS_")) {
+                        } else if (list.get(i1).contains("_ADDITIONAL_VIS_")) {
                             File originalFile = new File(Path + list.get(i1));
-                            result = UploadImage( originalFile.getName(), "AdditionalVisibility");
+                            result = UploadImage(originalFile.getName(), "AdditionalVisibility");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
                             data.value = 85;
                             data.name = "AdditionalVisibility Images";
                             publishProgress(data);
-                        }else if (list.get(i1).contains("_OPENING_STOCK_IMAGE_")) {
+                        } else if (list.get(i1).contains("_OPENING_STOCK_IMAGE_")) {
                             File originalFile = new File(Path + list.get(i1));
 
-                            result = UploadImage( originalFile.getName(), "StockImages");
+                            result = UploadImage(originalFile.getName(), "StockImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
                             data.value = 90;
                             data.name = "StockImages";
                             publishProgress(data);
-                        }else if (list.get(i1).contains("_SHARE_OF_SHELF_IMAGE_")) {
+                        } else if (list.get(i1).contains("_SHARE_OF_SHELF_IMAGE_")) {
                             File originalFile = new File(Path + list.get(i1));
 
-                            result = UploadImage( originalFile.getName(), "ShareOfShelf");
+                            result = UploadImage(originalFile.getName(), "ShareOfShelf");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
                             data.value = 95;
                             data.name = "ShareOfShelf Images";
                             publishProgress(data);
-                        }
-                        else if (list.get(i1).contains("_GeoTag_")) {
+                        } else if (list.get(i1).contains("_GeoTag_")) {
                             File originalFile = new File(Path + list.get(i1));
 
-                            result = UploadImage( originalFile.getName(), "GeotagImages");
+                            result = UploadImage(originalFile.getName(), "GeotagImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
                             }
@@ -725,7 +789,7 @@ public class UploadDataActivity extends Activity {
                         return CommonString.KEY_SUCCESS;
                     }
 
-                }else {
+                } else {
                     String response = updateStatus();
                     if (response.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                         return CommonString.KEY_SUCCESS;
@@ -773,7 +837,8 @@ public class UploadDataActivity extends Activity {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //temporary code
-                                Intent i = new Intent(getBaseContext(), MainMenuActivity.class);startActivity(i);
+                                Intent i = new Intent(getBaseContext(), MainMenuActivity.class);
+                                startActivity(i);
                                 finish();
                             }
                         });
@@ -787,7 +852,8 @@ public class UploadDataActivity extends Activity {
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     //temparory code
-                                    Intent i = new Intent(getBaseContext(), MainMenuActivity.class);startActivity(i);
+                                    Intent i = new Intent(getBaseContext(), MainMenuActivity.class);
+                                    startActivity(i);
                                     finish();
                                 }
                             });
@@ -890,7 +956,6 @@ public class UploadDataActivity extends Activity {
     }
 
 
-
     private String updateStatus() throws IOException, XmlPullParserException {
         String final_xml = "";
         String onXML = "";
@@ -900,7 +965,7 @@ public class UploadDataActivity extends Activity {
             coverageBeanlist = database.getCoverageData(visit_date);
             for (int i = 0; i < coverageBeanlist.size(); i++) {
                 journeyPlanGetterSetter = database.getStoreStatus(coverageBeanlist.get(i).getStoreId());
-                if (!journeyPlanGetterSetter.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)){
+                if (!journeyPlanGetterSetter.getUploadStatus().get(0).equalsIgnoreCase(CommonString.KEY_U)) {
                     String final_xml1 = "";
                     String onXML1 = "";
                     onXML1 = "[COVERAGE_STATUS]"
@@ -947,6 +1012,7 @@ public class UploadDataActivity extends Activity {
         return result1.toString();
 
     }
+
     public ArrayList<String> getFileNames(File[] file) {
         ArrayList<String> arrayFiles = new ArrayList<String>();
         if (file.length > 0) {

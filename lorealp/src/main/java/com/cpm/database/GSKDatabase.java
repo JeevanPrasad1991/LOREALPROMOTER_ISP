@@ -5727,6 +5727,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     data.setLatitude(Double.parseDouble(dbcursor.getString(dbcursor.getColumnIndexOrThrow("LATITUDE"))));
                     data.setLongitude(Double.parseDouble(dbcursor.getString(dbcursor.getColumnIndexOrThrow("LONGITUDE"))));
                     data.setUrl1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FRONT_IMAGE")));
+                    data.setStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow("GEO_TAG")));
+
+
+
                     geodata.add(data);
                     dbcursor.moveToNext();
                 }
