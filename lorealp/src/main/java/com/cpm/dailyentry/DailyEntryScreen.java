@@ -68,6 +68,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     FloatingActionButton fab_button;
     boolean flag_deviation = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
