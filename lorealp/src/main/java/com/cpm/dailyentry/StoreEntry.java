@@ -398,45 +398,31 @@ public class StoreEntry extends AppCompatActivity {
         } else {
             marketIntelligence = R.drawable.audit;
         }
-
         if (db.isClosingBackOfficeDataFilled(store_cd)) {
             closingBackoffice = R.drawable.closing_stock_backroom_done;
         } else {
             closingBackoffice = R.drawable.closing_stock_backroom;
         }
-
         if (db.isAssetDataFilled(store_cd)) {
             assetImg = R.drawable.asset_done;
         } else {
             assetImg = R.drawable.asset;
         }
-
         if (db.isPromotionDataFilled(store_cd)) {
             promotionImg = R.drawable.promotion_done;
         } else {
             promotionImg = R.drawable.promotion;
         }
-
         if (db.isShareOfShelfDataFilled(store_cd)) {
             shareofshelf = R.drawable.share_of_shelf_done;
         } else {
             shareofshelf = R.drawable.share_of_shelf;
         }
-
         if (db.isClosingDataFilled(store_cd)) {
             closingImg = R.drawable.closing_stock_done;
         } else {
             closingImg = R.drawable.closing_stock;
         }
-
-
-
-
-       /* if (db.issampledDataFilled(store_cd)) {
-            sampled = R.drawable.competition_done;
-        } else {
-            sampled = R.drawable.competition;
-        }*/
 
      /*   if (user_type.equals("Promoter")) {
             int img[] = {openingImg, openningstockbackoffice, middayImg, closingImg, closingBackoffice, promotionImg, assetImg, marketIntelligence};//, additionalImg, competitionImg};
@@ -479,7 +465,6 @@ public class StoreEntry extends AppCompatActivity {
                 }
             }
         }
-
         //promotion
         if (flag) {
             if (db.getPromotionBrandData(store_cd).size() > 0) {
@@ -511,7 +496,6 @@ public class StoreEntry extends AppCompatActivity {
             }
         }
 
-
         if (flag) {
             if (db.getMiddayDataFromCheckoutDatabase(store_cd).size() > 0) {
                 flag = true;
@@ -527,7 +511,6 @@ public class StoreEntry extends AppCompatActivity {
                     flag = false;
             }
         }
-
 
         return flag;
     }

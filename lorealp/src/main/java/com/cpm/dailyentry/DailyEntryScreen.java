@@ -423,12 +423,11 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                     editor.putString(CommonString.KEY_STOREVISITED, storeCd);
                     editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
                     editor.putString(CommonString.KEY_STORE_NAME, storeName);
-
                     editor.putString(CommonString.KEY_KEYACCOUNT_CD, keyaccount_cd);
                     editor.putString(CommonString.KEY_CITY_CD, city_cd);
                     editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
-
                     editor.putString(CommonString.KEY_STORE_CD, storeCd);
+
                     if (status.equals("Yes")) {
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
                     }
@@ -475,11 +474,9 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                                         editor.putString(CommonString.KEY_STORE_CD, storeCd);
                                         editor.putString(CommonString.KEY_STORE_IN_TIME, "");
                                         editor.putString(CommonString.KEY_STOREVISITED, "");
-
                                         editor.putString(CommonString.KEY_KEYACCOUNT_CD, keyaccount_cd);
                                         editor.putString(CommonString.KEY_CITY_CD, city_cd);
                                         editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
-
                                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
                                         editor.commit();
                                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);
@@ -574,7 +571,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     public boolean setcheckedmenthod(String store_cd) {
         for (int i = 0; i < coverage.size(); i++) {
 
-
             if (store_cd.equals(coverage.get(i).getStoreId())) {
 
                 if (coverage.get(i).getOutTime() != null) {
@@ -582,7 +578,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
                     break;
                 }
-
 
             } else {
                 result_flag = false;
