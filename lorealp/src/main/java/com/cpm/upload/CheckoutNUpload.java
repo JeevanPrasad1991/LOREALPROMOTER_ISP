@@ -33,6 +33,7 @@ import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.SampledGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.cpm.xmlHandler.FailureXMLHandler;
+import com.crashlytics.android.Crashlytics;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -66,6 +67,7 @@ public class CheckoutNUpload extends Activity {
     private ArrayList<CoverageBean> coverageBeanlist = new ArrayList<CoverageBean>();
     String app_ver;
     String datacheck = "";
+    String img_str="";
     String[] words;
     String validity;
     int mid;
@@ -749,7 +751,7 @@ public class CheckoutNUpload extends Activity {
                 list = getFileNames(dir.listFiles());
                 if (list.size() > 0) {
                     for (int i1 = 0; i1 < list.size(); i1++) {
-                        if (list.get(i1).contains("_STOREIMG_") || list.get(i1).contains("_STOREIMG2_") || list.get(i1).contains("_NONWORKING_IMG_")) {
+                        if (list.get(i1).contains("_STORE_IMG_SELFIE_") || list.get(i1).contains("_STORE_IMG_GROOMING_") || list.get(i1).contains("_NONWORKING_IMG_") || list.get(i1).contains("_CHECKOUT_IMG_")) {
                             File originalFile = new File(Path + list.get(i1));
                             result = UploadImage(originalFile.getName(), "StoreImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
@@ -844,6 +846,8 @@ public class CheckoutNUpload extends Activity {
                 exceptionMessage = e.toString();
 
             } catch (Exception e) {
+                Crashlytics.logException(e);
+
                 up_success_flag = false;
                 exceptionMessage = e.toString();
 
@@ -1014,6 +1018,7 @@ public class CheckoutNUpload extends Activity {
                             + "[CHECK_OUTTIME]" + store_out_time + "[/CHECK_OUTTIME]"
                             + "[CHECK_INTIME]" + coverageBean.get(0).getInTime() + "[/CHECK_INTIME]"
                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                            + "[CHECKOUT_IMAGE]" + coverageBean.get(0).getCheckout_img() + "[/CHECKOUT_IMAGE]"
                             + "[/STORE_CHECK_OUT_STATUS]";
 
                     final String sos_xml = "[DATA]" + onXML + "[/DATA]";
@@ -1028,9 +1033,9 @@ public class CheckoutNUpload extends Activity {
                     Object result = (Object) envelope.getResponse();
                     if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS_chkout)) {
                         database.open();
-                        database.updateCoverageStoreOutTime(coverageBean.get(0).getStoreId(), coverageBean.get(0).getVisitDate(), store_out_time, CommonString.KEY_C);
-                        database.updateStoreStatusOnCheckout(coverageBean.get(0).getStoreId(),
-                                coverageBean.get(0).getVisitDate(), CommonString.KEY_C);
+                      //  db.updateCoverageStoreOutTime(store_id, specificCdata.get(0).getVisitDate(),img_str, getCurrentTime(), CommonString.KEY_C);
+                        database.updateCoverageStoreOutTime(coverageBean.get(0).getStoreId(), coverageBean.get(0).getVisitDate(),coverageBean.get(0).getCheckout_img(), store_out_time, CommonString.KEY_C);
+                        database.updateStoreStatusOnCheckout(coverageBean.get(0).getStoreId(), coverageBean.get(0).getVisitDate(), CommonString.KEY_C);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString(CommonString.KEY_STOREVISITED, "");
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
@@ -1064,6 +1069,8 @@ public class CheckoutNUpload extends Activity {
                     }
                 });
             } catch (Exception e) {
+                Crashlytics.logException(e);
+
                 final AlertMessage message = new AlertMessage(CheckoutNUpload.this, AlertMessage.MESSAGE_EXCEPTION, "download", e);
                 runOnUiThread(new Runnable() {
 
@@ -1163,6 +1170,8 @@ public class CheckoutNUpload extends Activity {
                 }
             }
         } catch (Exception e) {
+            Crashlytics.logException(e);
+
             e.printStackTrace();
         }
 

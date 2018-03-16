@@ -24,6 +24,7 @@ public class AlertMessage {
 	public static final String MESSAGE_UPLOAD_DATA = "Data Uploaded Successfully";
 	public static final String MESSAGE_UPLOAD_IMAGE = "Images Uploaded Successfully";
 	public static final String MESSAGE_FALSE = "Invalid User";
+	public static final String MESSAGE_NOT_ALLOWED_LOGIN = "You are not allowed to login before 6:50 AM. or after 7:30 PM.";
 	public static final String MESSAGE_CHANGED = "Invalid UserId Or Password / Password Has Been Changed.";
 	public static final String MESSAGE_EXIT = "Do You Want To Exit";
 	public static final String MESSAGE_BACK = "Use Back Button";
@@ -521,8 +522,8 @@ public class AlertMessage {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 
-								ACRA.getErrorReporter().handleException(
-										exception);
+								/*ACRA.getErrorReporter().handleException(
+										exception);*/
 								dialog.cancel();
 
 							}

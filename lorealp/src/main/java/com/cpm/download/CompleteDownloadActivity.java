@@ -38,6 +38,7 @@ import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
 import com.cpm.xmlHandler.XMLHandlers;
+import com.crashlytics.android.Crashlytics;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -108,11 +109,15 @@ public class CompleteDownloadActivity extends AppCompatActivity {
         super.onResume();
 
         // db.open();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MainFragment cartfrag = new MainFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, cartfrag)
-                .commit();
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            MainFragment cartfrag = new MainFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, cartfrag)
+                    .commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -185,7 +190,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
                 }
 
-                // Store List Master
+              /*  // Store List Master
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "SKU_MASTER");
@@ -478,8 +483,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Asset Master Data Downloading";
                 }
                 publishProgress(data);
-
-
+*/
                 //Non Working Reason data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -514,7 +518,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
-                //Payment Slip Data
+              /*  //Payment Slip Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "EMP_SALARY");
@@ -595,7 +599,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "AUDIT_QUESTION_CATEGORYWISE Downloading";
                 }
 
-
                 //NON_ASSET_REASON FOR ASSET Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -674,14 +677,14 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 99;
                     data.name = "PROMO_TYPE_MASTER Downloading";
-                }
-
+                }*/
 
                 //Database insert method calling
                 db.open();
-                //  db.jcpjourneyPlan(jcpgettersetter.getTable_journey_plan());
                 db.insertJCPData(jcpgettersetter);
-                db.insertSkuMasterData(skumastergettersetter);
+                db.insertNonWorkingReasonData(nonworkinggettersetter);
+
+               /* db.insertSkuMasterData(skumastergettersetter);
                 db.insertMappingstockData(mappingstockgettersetter);
                 if (promotion_flag) {
                     db.insertMappingPromotionData(mappingprormotgettersetter);
@@ -695,20 +698,17 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertBrandMasterData(brandGetterSetter);
                 db.insertSubCetegoryMasterData(subCategoryGetterSetter);
                 db.insertCategoryMasterData(categorygettersetter);
-                db.insertNonWorkingReasonData(nonworkinggettersetter);
+
                 if (payslipGetterSetter != null) {
                     db.insertPaySlipdata(payslipGetterSetter);
                 } else {
                     db.deletePaySlipData();
                 }
-                //Audit
                 db.insertAuditQuestionData(audit_questionGetterSetter);
-
-                //asset noreason
                 db.insertAssetNonReasonData(assetNonReasonGetterSetter);
                 db.insertNonPromotionReasonData(nonPromotionReasonGetterSetter);
                 db.insertpromoTypeData(promoTypeGetterSetter);
-                db.insertIncentiveTypeData(incentiveGetterSetter);
+                db.insertIncentiveTypeData(incentiveGetterSetter);*/
 
                 data.value = 100;
                 data.name = "Finishing";
@@ -728,6 +728,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                 });
             } catch (IOException e) {
+
                 success_flag = false;
 
                 final AlertMessage message = new AlertMessage(
@@ -739,6 +740,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
+                Crashlytics.logException(e);
                 success_flag = false;
 
                 final AlertMessage message = new AlertMessage(

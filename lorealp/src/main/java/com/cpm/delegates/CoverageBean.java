@@ -45,7 +45,7 @@ public class CoverageBean
 		this.merchanId = merchanId;
 	}
 
-	protected String image1;
+	protected String image1="";
 	protected String selfieImage;
 	public String getSelfieImage() {
 		return selfieImage;
@@ -128,7 +128,15 @@ public class CoverageBean
 	private String status="N";
 	
 	private String image="";
-	
+	private String checkout_img="";
+
+	public String getCheckout_img() {
+		return checkout_img;
+	}
+
+	public void setCheckout_img(String checkout_img) {
+		this.checkout_img = checkout_img;
+	}
 
 	public String getImage() {
 		return image;

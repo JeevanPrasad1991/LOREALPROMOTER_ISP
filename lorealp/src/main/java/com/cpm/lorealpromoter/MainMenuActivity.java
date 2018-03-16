@@ -53,6 +53,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -124,7 +125,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            // super.onBackPressed();
+             super.onBackPressed();
         }
     }
 
@@ -188,8 +189,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                                 } else {
                                     try {
                                         database.open();
+                                        //5 march comment
                                         database.deletePreviousUploadedData(visit_date);
                                     } catch (Exception e) {
+                                        Crashlytics.logException(e);
                                         e.printStackTrace();
                                     }
                                     Intent startDownload = new Intent(getApplicationContext(), CompleteDownloadActivity.class);
@@ -221,8 +224,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             if (checkNetIsAvailable()) {
+                                database.open();
                                 jcplist = database.getJCPData(date);
-                                if (database.isSkuMasterDownloaded()) {
+                                //database.isSkuMasterDownloaded()
+                                if (jcplist.size()>0) {
                                     cdata = database.getCoverageData(date);
                                     if (isStoreInvalid(cdata)) {
                                         Snackbar.make(frameLayout, "First checkout of store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -408,9 +413,13 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onResume() {
         super.onResume();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MainFragment cartfrag = new MainFragment();
-        fragmentManager.beginTransaction().replace(R.id.frame_layout, cartfrag).commit();
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            MainFragment cartfrag = new MainFragment();
+            fragmentManager.beginTransaction().replace(R.id.frame_layout, cartfrag).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean validate_data() {

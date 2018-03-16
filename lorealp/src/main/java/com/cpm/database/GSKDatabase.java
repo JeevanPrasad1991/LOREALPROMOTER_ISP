@@ -64,8 +64,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE1";
-    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE4";
+    public static final int DATABASE_VERSION = 5;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -86,13 +86,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TableBean.getjcptable());
-        db.execSQL(TableBean.getSkumastertable());
+        db.execSQL(TableBean.getNonworkingtable());
+        db.execSQL(CommonString.CREATE_TABLE_STORE_GEOTAGGING);
+        db.execSQL(CommonString.CREATE_TABLE_COVERAGE_DATA);
+       /* db.execSQL(TableBean.getSkumastertable());
         db.execSQL(TableBean.getMappingavailtable());
         db.execSQL(TableBean.getMappingpromotable());
         db.execSQL(TableBean.getMappingassettable());
         db.execSQL(TableBean.getAssetmastertable());
         db.execSQL(TableBean.getCompanytable());
-        db.execSQL(TableBean.getNonworkingtable());
+
         db.execSQL(TableBean.getBrandtable());
         db.execSQL(TableBean.getEmp_payslip_table());
         db.execSQL(TableBean.getCategorymastertable());
@@ -120,7 +123,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(CommonString.CREATE_TABLE_FACING_COMPETITOR_DATA);
         db.execSQL(CommonString.CREATE_TABLE_FOOD_STORE_DATA);
         db.execSQL(CommonString.CREATE_TABLE_insert_HEADER_FOOD_STORE_DATA);
-        db.execSQL(CommonString.CREATE_TABLE_COVERAGE_DATA);
+
         db.execSQL(CommonString.CREATE_TABLE_STOCK_DATA);
         db.execSQL(CommonString.CREATE_TABLE_COMPETITION_POI);
         db.execSQL(CommonString.CREATE_TABLE_POI);
@@ -136,18 +139,15 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(CommonString.CREATE_TABLE_insert_OPENINGHEADER_BACKOFFICE_DATA);
         db.execSQL(CommonString.CREATE_TABLE_STOCK_BACKOFFICE_DATA);
         //upendra
-        db.execSQL(CommonString.CREATE_TABLE_STORE_GEOTAGGING);
+
         db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_DATA_DATA);
         db.execSQL(CommonString.CREATE_TABLE_insert_mid_day_HEADER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_MID_DAY_DATA);
         db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_IMAGE);
         db.execSQL(CommonString.CREATE_TABLE_insert_share_of_shelf_HEADER_DATA);
-        db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_FACING_DATA);
+        db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_FACING_DATA);*/
 
 
-       /* db.execSQL(CommonString.CREATE_TABLE_insert_share_of_shelf_HEADER_DATA);
-        db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_DATA);
-*/
 
     }
 
@@ -158,8 +158,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     public void deleteSpecificStoreData(String storeid) {
-        db.delete(CommonString.TABLE_PJP_DEVIATION, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_COVERAGE_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
+      //  db.delete(CommonString.TABLE_STORE_GEOTAGGING, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
+       /* db.delete(CommonString.TABLE_PJP_DEVIATION, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_STOCK_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_INSERT_PROMOTION_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
@@ -177,9 +178,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_SHARE_OF_SHELF_FACING_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_MID_DAY_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_INSERT_MID_DAY_HEADER_DATA, CommonString.KEY_STORE_CD + "='" + storeid + "'", null);
-        db.delete(CommonString.TABLE_STORE_GEOTAGGING, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
         db.delete(CommonString.TABLE_SHARE_OF_SHELF_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
-
+*/
 
     }
 
@@ -202,9 +202,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 int icount = dbcursor.getCount();
                 dbcursor.close();
                 if (icount > 0) {
-
-                    db.delete(CommonString.TABLE_PJP_DEVIATION, null, null);
                     db.delete(CommonString.TABLE_COVERAGE_DATA, null, null);
+                    db.delete(CommonString.TABLE_STORE_GEOTAGGING, null, null);
+                   /* db.delete(CommonString.TABLE_PJP_DEVIATION, null, null);
                     db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, null, null);
                     db.delete(CommonString.TABLE_STOCK_DATA, null, null);
                     db.delete(CommonString.TABLE_INSERT_PROMOTION_HEADER_DATA, null, null);
@@ -222,8 +222,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     db.delete(CommonString.TABLE_SHARE_OF_SHELF_FACING_DATA, null, null);
                     db.delete(CommonString.TABLE_MID_DAY_DATA, null, null);
                     db.delete(CommonString.TABLE_INSERT_MID_DAY_HEADER_DATA, null, null);
-                    db.delete(CommonString.TABLE_STORE_GEOTAGGING, null, null);
-                    db.delete(CommonString.TABLE_SHARE_OF_SHELF_DATA, null, null);
+                    db.delete(CommonString.TABLE_SHARE_OF_SHELF_DATA, null, null);*/
 
 
                 }
@@ -238,7 +237,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     public void deleteAllTables() {
         db.delete(CommonString.TABLE_COVERAGE_DATA, null, null);
-        db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, null, null);
+      /*  db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_DATA, null, null);
         db.delete(CommonString.TABLE_STOCK_DATA, null, null);
         db.delete(CommonString.TABLE_INSERT_PROMOTION_HEADER_DATA, null, null);
         db.delete(CommonString.TABLE_PROMOTION_DATA, null, null);
@@ -247,15 +246,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_AUDIT_DATA_SAVE, null, null);
         db.delete(CommonString.TABLE_INSERT_MARKET_INTELLI_DATA, null, null);
         db.delete(CommonString.TABLE_INSERT_SAMPLED_DATA, null, null);
-
         db.delete(CommonString.TABLE_STOCK_BACKOFFICE_IMAGE, null, null);
         db.delete(CommonString.TABLE_INSERT_OPENINGHEADER_BACKOFFICE_DATA, null, null);
         db.delete(CommonString.TABLE_STOCK_BACKOFFICE_DATA, null, null);
-
         db.delete(CommonString.TABLE_CATEGORY_SHARE_OF_SHELF_IMAGE, null, null);
         db.delete(CommonString.TABLE_SHARE_OF_SHELF_FACING_DATA, null, null);
         db.delete(CommonString.TABLE_MID_DAY_DATA, null, null);
-        db.delete(CommonString.TABLE_INSERT_MID_DAY_HEADER_DATA, null, null);
+        db.delete(CommonString.TABLE_INSERT_MID_DAY_HEADER_DATA, null, null);*/
     }
 
     public void deleteStockData() {
@@ -353,12 +350,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("GEO_TAG", data.getGeotagStatus().get(i));
                 values.put("LATTITUDE", data.getLatitude().get(i));
                 values.put("LONGITUDE", data.getLongitude().get(i));
-
-
                 values.put("KEYACCOUNT_CD", data.getKeyaccount_cd().get(i));
                 values.put("CITY_CD", data.getCity_cd().get(i));
                 values.put("STORETYPE_CD", data.getStoretype_cd().get(i));
-
                 db.insert("JOURNEY_PLAN", null, values);
 
             }
@@ -4186,6 +4180,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setLongitude(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_LONGITUDE)));
                     sb.setStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_COVERAGE_STATUS)));
                     sb.setReasonid(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_REASON_ID)));
+
+                    if (dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_IMAGE3)) == null) {
+                        sb.setCheckout_img("");
+                    } else {
+                        sb.setCheckout_img((((dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_IMAGE3))))));
+                    }
+
                     list.add(sb);
                     dbcursor.moveToNext();
                 }
@@ -4258,11 +4259,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-    public long updateCoverageStoreOutTime(String StoreId, String VisitDate, String outtime, String status) {
+    public long updateCoverageStoreOutTime(String StoreId, String VisitDate,String checkout_img, String outtime, String status) {
         long l=0;
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_OUT_TIME, outtime);
+            values.put(CommonString.KEY_IMAGE3, checkout_img);
             values.put(CommonString.KEY_COVERAGE_STATUS, status);
           l=  db.update(CommonString.TABLE_COVERAGE_DATA, values, CommonString.KEY_STORE_ID + "='" + StoreId + "' AND " + CommonString.KEY_VISIT_DATE + "='" + VisitDate + "'", null);
         } catch (Exception e) {

@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.cpm.Constants.CommonString;
 import com.cpm.lorealpromoter.R;
 import com.cpm.message.AlertMessage;
+import com.crashlytics.android.Crashlytics;
 
 
 public class AutoupdateActivity extends Activity {
@@ -50,7 +51,6 @@ public class AutoupdateActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getIntent();
@@ -236,6 +236,7 @@ public class AutoupdateActivity extends Activity {
 				});
 
 			} catch (IOException e) {
+
 				final AlertMessage message = new AlertMessage(
 						AutoupdateActivity.this,
 						AlertMessage.MESSAGE_SOCKETEXCEPTION, "update", e);
@@ -248,6 +249,7 @@ public class AutoupdateActivity extends Activity {
 					}
 				});
 			} catch (Exception e) {
+				Crashlytics.logException(e);
 				final AlertMessage message = new AlertMessage(
 						AutoupdateActivity.this,
 						AlertMessage.MESSAGE_EXCEPTION, "download", e);

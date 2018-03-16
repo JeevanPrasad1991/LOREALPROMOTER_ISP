@@ -47,6 +47,7 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -948,6 +949,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
             startActivityForResult(intent, position);
         } catch (Exception e) {
+            Crashlytics.logException(e);
             e.printStackTrace();
         }
     }

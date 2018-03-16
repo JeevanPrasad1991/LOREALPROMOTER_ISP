@@ -151,6 +151,7 @@ public class FacingCompetitor extends AppCompatActivity implements OnClickListen
 			}
 		}
 		catch(Exception e){
+
 			Log.d("Exception when fetching",
 					e.toString());
 		}

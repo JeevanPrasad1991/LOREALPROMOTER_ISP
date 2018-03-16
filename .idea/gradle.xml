@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/cardview" />
+            <option value="$PROJECT_DIR$/customCamera" />
             <option value="$PROJECT_DIR$/lorealp" />
           </set>
         </option>

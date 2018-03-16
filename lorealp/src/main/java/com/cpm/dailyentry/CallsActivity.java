@@ -9,6 +9,7 @@ import com.cpm.lorealpromoter.R;
 import com.cpm.keyboard.BasicOnKeyboardActionListener;
 import com.cpm.keyboard.CustomKeyboardView;
 import com.cpm.xmlGetterSetter.CallsGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -201,6 +202,7 @@ public class CallsActivity extends Activity implements OnFocusChangeListener{
 					
 				}
 				catch(Exception e){
+					Crashlytics.logException(e);
 					System.out.println(e.toString());
 				}
 				

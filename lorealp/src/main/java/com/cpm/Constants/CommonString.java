@@ -45,10 +45,12 @@ public class CommonString {
     public static final String KEY_SUCCESS = "Success";
     public static final String KEY_FAILURE = "Failure";
     public static final String KEY_FALSE = "False";
+    public static final String KEY_FAIL = "Fail";
     public static final String KEY_CHANGED = "Changed";
     public static final String KEY_NO_DATA = "NoData";
     public static final String KEY_IMAGE = "IMAGE1";
     public static final String KEY_IMAGE2 = "IMAGE2";
+    public static final String KEY_IMAGE3 = "IMAGE3";
     public static final String KEY_COVERAGE_REMARK = "REMARK";
 
     public static final String METHOD_UPLOAD_IMAGE = "GetImageWithFolderName";
@@ -299,6 +301,7 @@ public class CommonString {
             + KEY_MERCHANDISER_ID + " INTEGER,"
             + KEY_COVERAGE_STATUS + " VARCHAR," + KEY_IMAGE + " VARCHAR,"
             + KEY_IMAGE2 + " VARCHAR,"
+            + KEY_IMAGE3 + " VARCHAR,"
             + KEY_REASON_ID + " INTEGER,"
             + KEY_PJP_DEVIATION + " VARCHAR,"
             + KEY_COVERAGE_REMARK

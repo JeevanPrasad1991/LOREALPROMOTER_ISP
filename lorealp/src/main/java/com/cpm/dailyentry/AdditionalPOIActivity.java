@@ -33,6 +33,7 @@ import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
 import com.cpm.xmlGetterSetter.POIGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -451,6 +452,7 @@ public class AdditionalPOIActivity extends AppCompatActivity implements AdapterV
 
             startActivityForResult(intent, 0);
         } catch (Exception e) {
+            Crashlytics.logException(e);
 
             e.printStackTrace();
         }

@@ -149,19 +149,6 @@ public class StoreEntry extends AppCompatActivity {
                         }
                     }
 */
-/*
-                    if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
-                        if (db.isClosingDataFilled(store_cd)) {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                        } else if (db.isOpeningDataFilled(store_cd)) {
-                            Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
-                            startActivity(in3);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-*/
                     if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
                         if (db.isOpeningDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
@@ -171,33 +158,8 @@ public class StoreEntry extends AppCompatActivity {
                             Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
                         }
 
-                       /* if (db.isClosingDataFilled(store_cd)) {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                        } else if (db.isOpeningDataFilled(store_cd)) {
-                            Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
-                            startActivity(in3);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                        }*/
                     }
 
-
-                    //upe today 12
-/*
-                    if (current.getIconImg() == R.drawable.share_of_shelf || current.getIconImg() == R.drawable.share_of_shelf_done) {
-                        if (db.isClosingDataFilled(store_cd)) {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                        } else if (db.isOpeningDataFilled(store_cd)) {
-                            Intent in3 = new Intent(getApplicationContext(), ShareOfShelfActivity.class);
-                            startActivity(in3);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                        }
-
-                    }
-*/
                     if (current.getIconImg() == R.drawable.share_of_shelf || current.getIconImg() == R.drawable.share_of_shelf_done) {
                         if (db.isOpeningDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), ShareOfShelfActivity.class);
@@ -284,12 +246,6 @@ public class StoreEntry extends AppCompatActivity {
 
                     }
 
-                   /* if (current.getIconImg() == R.drawable.c_add_display || current.getIconImg() == R.drawable.c_add_display_done) {
-                        Intent in5 = new Intent(getApplicationContext(), AdditionalPOIActivity.class);
-                        startActivity(in5);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                    }
-*/
                     //SampleActivity
 /*
                     if (current.getIconImg() == R.drawable.competition || current.getIconImg() == R.drawable.competition_done) {

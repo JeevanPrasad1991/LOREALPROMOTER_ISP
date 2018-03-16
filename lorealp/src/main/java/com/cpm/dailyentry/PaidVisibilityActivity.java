@@ -53,6 +53,7 @@ import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.AssetInsertdataGetterSetter;
 import com.cpm.xmlGetterSetter.AssetNonReasonGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -557,7 +558,7 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
 
             startActivityForResult(intent, 0);
         } catch (Exception e) {
-
+            Crashlytics.logException(e);
             e.printStackTrace();
         }
     }

@@ -182,6 +182,7 @@
                     android:background="@drawable/txt_box_b_ico"
                     android:paddingLeft="5dp"
                     android:text=""
+                    android:singleLine="true"
                     android:textColorHint="#333"
                     android:textSize="14dp"></EditText>
 
@@ -210,6 +211,7 @@
                     android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:text=""
+                    android:singleLine="true"
                     android:textColorHint="#333"
                     android:textSize="14dp"></EditText>
 

@@ -1,2 +1,2 @@
-include ':cardview'
-include ':lorealp'
+
+include ':lorealp', ':customCamera'

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="artifacts:customCamera">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customCamera.aar/44475c537cb447b5a97c8580a5d5e202/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customCamera.aar/44475c537cb447b5a97c8580a5d5e202/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

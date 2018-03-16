@@ -33,6 +33,7 @@ import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.SampledGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.cpm.xmlHandler.FailureXMLHandler;
+import com.crashlytics.android.Crashlytics;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -713,7 +714,7 @@ public class UploadDataActivity extends Activity {
                 list = getFileNames(dir.listFiles());
                 if (list.size() > 0) {
                     for (int i1 = 0; i1 < list.size(); i1++) {
-                        if (list.get(i1).contains("_STOREIMG_") || list.get(i1).contains("_STOREIMG2_") || list.get(i1).contains("_NONWORKING_IMG_")) {
+                        if (list.get(i1).contains("_STORE_IMG_SELFIE_") || list.get(i1).contains("_STORE_IMG_GROOMING_") || list.get(i1).contains("_NONWORKING_IMG_") || list.get(i1).contains("_CHECKOUT_IMG_")) {
                             File originalFile = new File(Path + list.get(i1));
                             result = UploadImage(originalFile.getName(), "StoreImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
@@ -807,6 +808,8 @@ public class UploadDataActivity extends Activity {
                 exceptionMessage = e.toString();
 
             } catch (Exception e) {
+                Crashlytics.logException(e);
+
                 up_success_flag = false;
                 exceptionMessage = e.toString();
 
@@ -1006,6 +1009,8 @@ public class UploadDataActivity extends Activity {
                 }
             }
         } catch (Exception e) {
+            Crashlytics.logException(e);
+
             e.printStackTrace();
         }
 

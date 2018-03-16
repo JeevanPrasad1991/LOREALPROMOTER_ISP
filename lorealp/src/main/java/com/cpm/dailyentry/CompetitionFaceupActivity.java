@@ -37,6 +37,7 @@ import com.cpm.lorealpromoter.R;
 import com.cpm.keyboard.BasicOnKeyboardActionListener;
 import com.cpm.keyboard.CustomKeyboardView;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -261,6 +262,7 @@ public class CompetitionFaceupActivity extends AppCompatActivity implements View
             }
         }
         catch(Exception e){
+            Crashlytics.logException(e);
             Log.d("Exception when fetching",
                     e.toString());
         }

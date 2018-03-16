@@ -43,6 +43,7 @@ import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
+import com.crashlytics.android.Crashlytics;
 
 
 public class NonWorkingReason extends AppCompatActivity implements OnItemSelectedListener, OnClickListener {
@@ -103,6 +104,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                     }
                 }
             } catch (Exception e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
         }
@@ -190,7 +192,6 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
 
-                        //jee
                         Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
                         Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -211,7 +212,6 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-//endjee
 
                         camera.setImageDrawable(getResources().getDrawable(R.drawable.camera_green));
                         image1 = _pathforcheck;
@@ -261,6 +261,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                                             int id) {
                                         alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                                         if (entry_allow.equals("0")) {
+                                            database.open();
                                             database.deleteAllTables();
                                             jcp = database.getJCPData(visit_date);
                                             for (int i = 0; i < jcp.size(); i++) {

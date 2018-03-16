@@ -35,6 +35,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
+import com.cpm.GetterSetter.GeotaggingBeans;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.R;
@@ -53,7 +54,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     private SharedPreferences preferences;
     private String date, store_intime;
     ListView lv;
-    String store_cd;
+    String store_cd, visit_date;
     private SharedPreferences.Editor editor = null;
     private Dialog dialog;
     String storeVisited = null;
@@ -67,6 +68,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     MyAdapter myAdapter;
     FloatingActionButton fab_button;
     boolean flag_deviation = false;
+
+    ArrayList<GeotaggingBeans> geotaglist = new ArrayList<GeotaggingBeans>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         editor = preferences.edit();
-        setTitle("Store List - " + date);
+        setTitle("Store Name - " + date);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fab_button.setOnClickListener(new View.OnClickListener() {
@@ -200,7 +203,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.img = (ImageView) convertView.findViewById(R.id.img);
                 holder.checkout = (Button) convertView.findViewById(R.id.chkout);
                 holder.checkinclose = (ImageView) convertView.findViewById(R.id.closechkin);
-                holder.geotag=(ImageView)convertView.findViewById(R.id.geotag);
+                holder.geotag = (ImageView) convertView.findViewById(R.id.geotag);
 
                 convertView.setTag(holder);
             } else {
@@ -235,20 +238,20 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 }
             });
             String storecd = jcplist.get(position).getStore_cd().get(0);
+            //15fab
+            String visit_date = jcplist.get(position).getVISIT_DATE().get(0);
             ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(storecd);
-
             if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_U)) {
                 holder.img.setVisibility(View.VISIBLE);
                 holder.img.setBackgroundResource(R.drawable.store_tick_u);
                 holder.checkout.setVisibility(View.INVISIBLE);
 
             } else if ((jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_D))) {
-               // holder.img.setVisibility(View.INVISIBLE);
+                // holder.img.setVisibility(View.INVISIBLE);
                 holder.checkinclose.setBackgroundResource(R.drawable.tick_d);
                 holder.checkinclose.setVisibility(View.VISIBLE);
                 holder.checkout.setVisibility(View.INVISIBLE);
-            }
-            else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_C))) {
+            } else if ((jcplist.get(position).getCheckOutStatus().get(0).equals(CommonString.KEY_C))) {
                 holder.checkinclose.setBackgroundResource(R.drawable.tick_c);
                 holder.checkinclose.setVisibility(View.VISIBLE);
                 holder.checkout.setVisibility(View.INVISIBLE);
@@ -256,14 +259,12 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             } else if (coveragespecific.size() > 0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.STORE_STATUS_LEAVE)) {
                 holder.img.setBackgroundResource(R.drawable.leave_tick);
                 holder.checkout.setVisibility(View.INVISIBLE);
-            }
-            else if (coveragespecific.size() > 0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_INVALID)) {
+            } else if (coveragespecific.size() > 0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_INVALID)) {
                 holder.checkout.setVisibility(View.INVISIBLE);
                 holder.checkinclose.setBackgroundResource(R.drawable.checkin_ico);
                 holder.checkinclose.setVisibility(View.VISIBLE);
 
-            }
-            else if (coveragespecific.size() > 0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_VALID)) {
+            } else if (coveragespecific.size() > 0 && coveragespecific.get(0).getStatus().equalsIgnoreCase(CommonString.KEY_VALID)) {
                 holder.checkout.setBackgroundResource(R.drawable.checkout);
                 holder.checkout.setVisibility(View.VISIBLE);
                 holder.checkout.setEnabled(true);
@@ -288,7 +289,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
         private class ViewHolder {
             TextView storename, city, keyaccount;
-            ImageView img, checkinclose,geotag;
+            ImageView img, checkinclose, geotag;
 
             Button checkout;
         }
@@ -308,13 +309,11 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         final String checkoutstatus = jcplist.get(position).getCheckOutStatus().get(0);
         final String geotag = jcplist.get(position).getGeotagStatus().get(0);
 
-        if (geotag.equalsIgnoreCase("N")){
-          //  holder.geotag.setVisibility(View.VISIBLE);
-            //holder.geotag.setBackgroundResource(R.drawable.store_with_location);
-            Snackbar.make(lv, "Please first the Geotag store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-        }
+        /*if (geotag.equalsIgnoreCase("N")) {
 
-       else if (upload_status.equals(CommonString.KEY_U)) {
+            Snackbar.make(lv, "Please first the Geotag store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();*/
+       /* } else */
+       if (upload_status.equals(CommonString.KEY_U)) {
             Snackbar.make(lv, "All Data Uploaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
         } else if (((checkoutstatus.equals(CommonString.KEY_C)))) {
@@ -376,7 +375,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             jcplist.get(position).getCheckOutStatus().get(0),
                             jcplist.get(position).getKeyaccount_cd().get(0),
                             jcplist.get(position).getCity_cd().get(0),
-                            jcplist.get(position).getStoretype_cd().get(0));
+                            jcplist.get(position).getStoretype_cd().get(0),
+                            jcplist.get(position).getGeotagStatus().get(0));
                 }
             } else {
                 Snackbar.make(lv, "Data already filled ", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -410,55 +410,65 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     }
 
     void showMyDialog(final String storeCd, final String storeName, final String status, final String visitDate, final String checkout_status,
-                      final String keyaccount_cd,final String city_cd,final String store_ype_cd) {
+                      final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag) {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialogbox);
-        RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radiogrpvisit);
+
+       final RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radiogrpvisit);
         radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.yes) {
-                    editor = preferences.edit();
-                    editor.putString(CommonString.KEY_STOREVISITED, storeCd);
-                    editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
-                    editor.putString(CommonString.KEY_STORE_NAME, storeName);
-                    editor.putString(CommonString.KEY_KEYACCOUNT_CD, keyaccount_cd);
-                    editor.putString(CommonString.KEY_CITY_CD, city_cd);
-                    editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
-                    editor.putString(CommonString.KEY_STORE_CD, storeCd);
 
-                    if (status.equals("Yes")) {
+                    geotaglist = database.getinsertGeotaggingData(storeCd);
+                    if (geotag.equals("Y") || geotaglist.size() > 0) {
+                        editor = preferences.edit();
+                        editor.putString(CommonString.KEY_STOREVISITED, storeCd);
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
-                    }
-                    editor.commit();
+                        editor.putString(CommonString.KEY_STORE_NAME, storeName);
+                        editor.putString(CommonString.KEY_KEYACCOUNT_CD, keyaccount_cd);
+                        editor.putString(CommonString.KEY_CITY_CD, city_cd);
+                        editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
+                        editor.putString(CommonString.KEY_STORE_CD, storeCd);
 
-                    if (store_intime.equalsIgnoreCase("")) {
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString(CommonString.KEY_STORE_IN_TIME, getCurrentTime());
-                        editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
+                        if (status.equals("Yes")) {
+                            editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
+                        }
                         editor.commit();
-                    }
-                    dialog.cancel();
-                    boolean flag = true;
-                    if (coverage.size() > 0) {
-                        for (int i = 0; i < coverage.size(); i++) {
-                            if (store_cd.equals(coverage.get(i).getStoreId())) {
-                                flag = false;
-                                break;
+
+                        if (store_intime.equalsIgnoreCase("")) {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(CommonString.KEY_STORE_IN_TIME, getCurrentTime());
+                            editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
+                            editor.commit();
+                        }
+                        dialog.cancel();
+                        boolean flag = true;
+                        if (coverage.size() > 0) {
+                            for (int i = 0; i < coverage.size(); i++) {
+                                if (store_cd.equals(coverage.get(i).getStoreId())) {
+                                    flag = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (flag == true) {
-                        Intent in = new Intent(DailyEntryScreen.this, StoreImageActivity.class);
-                        startActivity(in);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                    } else {
-                        Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
-                        startActivity(in);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                    }
+                        if (flag == true) {
+                            Intent in = new Intent(DailyEntryScreen.this, StoreImageActivity.class);
+                            startActivity(in);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                        } else {
 
+                      /* Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
+                        startActivity(in);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);*/
+                            Snackbar.make(lv, "Please checkout from current store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                        }
+
+                    } else {
+                        Snackbar.make(radioGroup, "Please do the Geotag first", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    }
                 } else if (checkedId == R.id.no) {
                     dialog.cancel();
                     if (checkout_status.equals(CommonString.KEY_INVALID) || checkout_status.equals(CommonString.KEY_VALID)) {
