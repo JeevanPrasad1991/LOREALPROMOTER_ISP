@@ -87,7 +87,6 @@ public class CheckoutNUpload extends Activity {
     String exceptionMessage = "";
     String resultFinal;
 
-
     ArrayList<ShareOfShelfGetterSetter> shareOfShelImgData= new ArrayList<>();
     ArrayList<ShareOfShelfGetterSetter> shareOfShelfData= new ArrayList<>();
     StoreStockinGetterSetter storeSpinner;
@@ -262,7 +261,7 @@ public class CheckoutNUpload extends Activity {
                             final_xml = "";
                             onXML = "";
                             stockImages = database.getStockImageUploadData(coverageBeanlist.get(i).getStoreId());
-                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") ||  (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals("") )) {
+                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals("") ||  (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals("") )) {
                                 for (int j = 0; j < stockImages.size(); j++) {
 
                                     onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
@@ -306,7 +305,7 @@ public class CheckoutNUpload extends Activity {
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
-                                            + "[CLOSING_STOCK]" + stockbackroomData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
+                                            + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
                                             + "[/LOREAL_STOCK_BACKROOM_DATA]";
                                     final_xml = final_xml + onXML;
                                 }
@@ -480,8 +479,6 @@ public class CheckoutNUpload extends Activity {
                                 data.name = "LOREAL_SHARE_OF_SHELF_IMAGE_DATA Data";
                                 publishProgress(data);
                             }
-                            // //upendra_12jan END
-                            //
 
                             //Promotion Data
                             final_xml = "";
@@ -853,9 +850,8 @@ public class CheckoutNUpload extends Activity {
 
             }
 
-           /* if (up_success_flag) {*/
             if (up_success_flag == true) {
-               /* return resultFinal;*/
+
                 return CommonString.KEY_SUCCESS;
             } else {
                 return exceptionMessage;
@@ -1070,7 +1066,6 @@ public class CheckoutNUpload extends Activity {
                 });
             } catch (Exception e) {
                 Crashlytics.logException(e);
-
                 final AlertMessage message = new AlertMessage(CheckoutNUpload.this, AlertMessage.MESSAGE_EXCEPTION, "download", e);
                 runOnUiThread(new Runnable() {
 

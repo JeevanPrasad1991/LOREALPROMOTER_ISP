@@ -50,8 +50,10 @@ import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,6 +88,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     boolean ischangedflag = false;
     String _pathforcheck, _path, str, img1 = "", img2 = "", img3 = "";
     static int grp_position = -1;
+    Bitmap bmp,dest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,16 +119,15 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
-
-
         setTitle("Opening STK Floor - " + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-
+        //expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         btnSave.setOnClickListener(this);
+
         expListView.setOnScrollListener(new OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -132,6 +135,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
+
                 InputMethodManager inputManager = (InputMethodManager) getApplicationContext()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (getCurrentFocus() != null) {
@@ -139,7 +143,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     getCurrentFocus().clearFocus();
                 }
                 expListView.invalidateViews();
-
             }
         });
 
@@ -147,8 +150,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         expListView.setOnGroupClickListener(new OnGroupClickListener() {
 
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
                 return false;
             }
         });
@@ -205,10 +208,11 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             // Adding child data
 
             for (int i = 0; i < brandData.size(); i++) {
+
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
-                   /* skuData = db.getStockSkuData(store_cd, brandData.get(i).getCategory_cd());*/
+
                     skuData = db.getStockSkuData(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
@@ -311,11 +315,9 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 convertView = infalInflater.inflate(R.layout.list_item_openingstk, null);
                 holder = new ViewHolder();
                 holder.cardView = (CardView) convertView.findViewById(R.id.card_view);
-
                 holder.etOpening_Stock = (EditText) convertView.findViewById(R.id.etOpening_Stock);
                 holder.etOpening_Stock_Facingg = (EditText) convertView.findViewById(R.id.etOpening_Stock_Facingg);
                 holder.ed_openingFacing = (EditText) convertView.findViewById(R.id.etOpening_Stock_Facing);
-
                 holder.txt_date = (TextView) convertView.findViewById(R.id.txt_date);
                 convertView.setTag(holder);
             } else {
@@ -326,9 +328,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             txtListChild.setText(childText.getBrand() + " - " + childText.getSku());
             _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setSku_cd(childText.getSku_cd());
 
-            // holder.txt_date.setText(_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getDate1());
-
-            //upendra code
             holder.etOpening_Stock.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -349,7 +348,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                                             public void onClick(
                                                     DialogInterface dialog, int id) {
                                                 _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setStock2("");
-                                                //finalHolder.etOpening_Stock_Facingg.setText("");
+
                                                 expListView.invalidateViews();
                                             }
                                         })
@@ -371,10 +370,44 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             });
 
+
+//new code
+
+            holder.etOpening_Stock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if (!hasFocus) {
+                        final EditText Caption = (EditText) v;
+                        String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                        if (value1.equals("")) {
+                            childText.setStock1("");
+                        } else {
+                            childText.setStock1(value1);
+
+                        }
+                    }
+                }
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             holder.etOpening_Stock_Facingg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    // int total = Integer.parseInt(childText.getSumofSTOCK());
+
                     if (!hasFocus) {
                         final EditText Caption = (EditText) v;
                         String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
@@ -628,14 +661,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             }
 
-           /* if (!img3.equalsIgnoreCase("")) {
-                if (groupPosition == grp_position) {
-                    headerTitle.setImg_cat_two(img3);
-                    img3 = "";
-                }
-            }
-
-*/
           /*  if (headerTitle.getImg_cam() != null && !headerTitle.getImg_cam().equals("")) {
                 imgcamhim.setBackgroundResource(R.mipmap.h_camera_orange);
             } else {
@@ -644,7 +669,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             if (headerTitle.getImg_cat_one() != null && !headerTitle.getImg_cat_one().equals("")) {
                 imgcamcat1.setBackgroundResource(R.mipmap.camera_green);
             } else {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_white);
+                imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
             }
             catfacing.setText(headerTitle.getCatstock());
            /* if (headerTitle.getCatstock() != null && !headerTitle.getCatstock().equals("")) {
@@ -867,8 +892,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        finish();
                         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                        finish();
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -964,10 +989,9 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (resultCode == -1) {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
-
-                            //jee
-                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                           // Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                            bmp = convertBitmap(str + _pathforcheck);
+                            dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -986,7 +1010,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-//endjee
 
                             img1 = _pathforcheck;
                             expListView.invalidateViews();
@@ -1004,9 +1027,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                            //jee
-                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                             bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                             dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -1025,7 +1047,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-//endjee
 
                             if (_pathforcheck.contains("ImgTwo")) {
                                 img3 = _pathforcheck;
@@ -1045,6 +1066,42 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+
+    public static Bitmap convertBitmap(String path)   {
+        Bitmap bitmap=null;
+        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+        ourOptions.inDither=false;
+        ourOptions.inPurgeable=true;
+        ourOptions.inInputShareable=true;
+        ourOptions.inTempStorage=new byte[32 * 1024];
+        File file=new File(path);
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(fs!=null)
+            {
+                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
+    }
+
 
 
 }

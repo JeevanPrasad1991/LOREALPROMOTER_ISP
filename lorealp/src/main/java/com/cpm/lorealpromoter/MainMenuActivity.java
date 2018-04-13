@@ -124,8 +124,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-             super.onBackPressed();
         }
     }
 
@@ -157,7 +155,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_daily) {
-            // Handle the camera action
             Intent startDownload = new Intent(this, DailyEntryScreen.class);
             startActivity(startDownload);
             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -189,7 +186,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                                 } else {
                                     try {
                                         database.open();
-                                        //5 march comment
                                         database.deletePreviousUploadedData(visit_date);
                                     } catch (Exception e) {
                                         Crashlytics.logException(e);
@@ -302,7 +298,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         }
-        else if (id==R.id.nav_payslip){
+       /* else if (id==R.id.nav_payslip){
             jcplist = database.getJCPData(date);
             if (jcplist.size()>0){
                 Intent in=new Intent(this, PaySlip.class);
@@ -331,7 +327,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         }
-
+*/
 
 
         else if (id == R.id.nav_export_database) {
@@ -342,7 +338,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                         @SuppressWarnings("resource")
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                File file = new File(Environment.getExternalStorageDirectory(), "Lorealpromoter_backup");
+                                File file = new File(Environment.getExternalStorageDirectory(), "LorealPromoter_backup");
                                 if (!file.isDirectory()) {
                                     file.mkdir();
                                 }

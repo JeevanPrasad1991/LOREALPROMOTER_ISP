@@ -9,7 +9,42 @@ public class StockNewGetterSetter {
     String total_mid_stock_received;
     String closing_stock;
     String catstock="";
+    String stock_in="";
+    String opening_stk_bk="";
+    String closing_stk_backroom="";
+    String cls_backroom="";
 
+    public String getCls_backroom() {
+        return cls_backroom;
+    }
+
+    public void setCls_backroom(String cls_backroom) {
+        this.cls_backroom = cls_backroom;
+    }
+
+    public String getClosing_stk_backroom() {
+        return closing_stk_backroom;
+    }
+
+    public void setClosing_stk_backroom(String closing_stk_backroom) {
+        this.closing_stk_backroom = closing_stk_backroom;
+    }
+
+    public String getOpening_stk_bk() {
+        return opening_stk_bk;
+    }
+
+    public void setOpening_stk_bk(String opening_stk_bk) {
+        this.opening_stk_bk = opening_stk_bk;
+    }
+
+    public String getStock_in() {
+        return stock_in;
+    }
+
+    public void setStock_in(String stock_in) {
+        this.stock_in = stock_in;
+    }
 
     public String getCatstock() {
         return catstock;
@@ -27,7 +62,7 @@ public class StockNewGetterSetter {
         this.opening_stock_backroom = opening_stock_backroom;
     }
 
-    String opening_stock_backroom;
+    String opening_stock_backroom="";
 
     String store_cd, brand_cd, brand, sku_cd, sku, img_cam="", img_cat_one="", img_cat_two="",visit_date, category_cd, category,
              ed_openingFacing, ed_midFacing, ed_closingFacing, asset_cd,

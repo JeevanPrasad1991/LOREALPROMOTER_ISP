@@ -39,6 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
+                android:background="@color/light_teal"
                 android:gravity="center_horizontal">
 
                 <LinearLayout
@@ -56,34 +57,25 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="2dp"
                         android:layout_weight=".5"
-                        android:background="@drawable/edit_text_border"
                         android:gravity="center_horizontal"
                         android:hint="Cat Facing"
                         android:inputType="number"
                         android:maxLength="3"
+                        android:background="@drawable/edit_text_border"
                         android:visibility="invisible"
                         android:paddingTop="10dp"
                         android:textSize="13sp" />
-<!--
-                    <ImageView
-                        android:id="@+id/img_cam_himalaya"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_centerInParent="true"
-                        android:background="@mipmap/h_camera_orange"
-                        android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:layout_marginRight="2dp"/>
--->
+
+
                     <ImageView
                         android:id="@+id/img_cam_cat1"
-                        android:layout_width="0dp"
+                        android:layout_width="55dip"
                         android:layout_height="45dp"
                         android:layout_centerInParent="true"
-                        android:background="@mipmap/camera_orange"
+                        android:layout_marginRight="2dp"
                         android:layout_weight="1.5"
-                        android:visibility="invisible"
-                        android:layout_marginRight="2dp"/>
+                        android:background="@mipmap/camera_orange"
+                        android:visibility="invisible" />
                     <ImageView
                         android:id="@+id/img_cam_cat2"
                         android:layout_width="0dp"
@@ -94,7 +86,6 @@
                         android:layout_weight="1" />
 
                 </LinearLayout>
-
 
             </RelativeLayout>
         </LinearLayout>

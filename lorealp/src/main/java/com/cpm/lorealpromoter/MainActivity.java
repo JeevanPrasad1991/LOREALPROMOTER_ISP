@@ -98,8 +98,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(startDownload);
 			
 			overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-			
-			//finish();
+			finish();
 		}
 		else if(v.getId()==R.id.exit){
 			Intent startDownload = 	new Intent(MainActivity.this,LoginActivity.class);
@@ -134,8 +133,7 @@ public class MainActivity extends Activity implements OnClickListener {
 									Toast.LENGTH_LONG).show();
 
 						} else {
-							Intent i = new Intent(getBaseContext(),
-									UploadDataActivity.class);
+							Intent i = new Intent(getBaseContext(), UploadDataActivity.class);
 							i.putExtra("UploadAll", false);
 							startActivity(i);
 

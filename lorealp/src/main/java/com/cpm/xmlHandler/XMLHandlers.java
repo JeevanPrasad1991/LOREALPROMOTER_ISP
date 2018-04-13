@@ -27,6 +27,7 @@ import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
+import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
@@ -165,6 +166,9 @@ public class XMLHandlers {
                     }
                     if (xpp.getName().equals("STORETYPE_CD")) {
                         jcpGetterSetter.setStoretype_cd(xpp.nextText());
+
+                    }  if (xpp.getName().equals("INSTOCK_ALLOW")) {
+                        jcpGetterSetter.setInstock_allow(xpp.nextText());
                     }
 
 
@@ -983,12 +987,6 @@ public class XMLHandlers {
                     if (xpp.getName().equals("META_DATA")) {
                         mappingavail.setMapping_avail_table(xpp.nextText());
                     }
-                  /*  if (xpp.getName().equals("STORE_CD")) {
-                        mappingavail.setStore_cd(xpp.nextText());
-                    }*/
-
-
-
                     if (xpp.getName().equals("KEYACCOUNT_CD")) {
                         mappingavail.setKeyaccount_cd(xpp.nextText());
                     }
@@ -1003,20 +1001,6 @@ public class XMLHandlers {
                         mappingavail.setSku_cd(xpp.nextText());
                     }
 
-
-
-
-
-					/*if (xpp.getName().equals("CATEGORY_SEQUENCE")) {
-						mappingavail.setCategory_sequence(xpp.nextText());
-					}
-					if (xpp.getName().equals("BRAND_SEQUENCE")) {
-						mappingavail.setBrand_sequence(xpp.nextText());
-					}
-					if (xpp.getName().equals("SKU_SEQUENCE")) {
-						mappingavail.setSku_sequence(xpp.nextText());
-					}*/
-
                 }
                 xpp.next();
             }
@@ -1029,6 +1013,35 @@ public class XMLHandlers {
         }
         return mappingavail;
     }
+
+
+    public static MappingSosGetterSetter mappingSOSXML(XmlPullParser xpp, int eventType) {
+        MappingSosGetterSetter mappingsos = new MappingSosGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingsos.setMapping_sos_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("BRAND_CD")) {
+                        mappingsos.setBrand_cd(xpp.nextText());
+                    }
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingsos;
+    }
+
+
 
 
     public static MappingPromotionGetterSetter mappingpromotXML(XmlPullParser xpp,

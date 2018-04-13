@@ -46,6 +46,7 @@ import java.util.List;
 
 public class ClosingStock extends AppCompatActivity implements OnClickListener {
     boolean checkflag = true;
+    boolean checkpopup = false;
     boolean validate = true;
     boolean flagcoldroom = false;
     boolean flagmccain = false;
@@ -67,7 +68,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     ArrayList<StockNewGetterSetter> skuData;
     GSKDatabase db;
     String visit_date, username, intime;
-    String store_cd,account_cd,city_cd,storetype_cd;
+    String store_cd, account_cd, city_cd, storetype_cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +90,9 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
-        account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
-        city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
-        storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
+        city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
+        storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
         setTitle("Closing STK Floor- " + visit_date);
 
@@ -189,17 +190,21 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
         db.open();
-        brandData = db.getmappingStockData(account_cd,city_cd,storetype_cd);
+        brandData = db.getmappingStockData(account_cd, city_cd, storetype_cd);
         if (brandData.size() > 0) {
             // Adding child data
             for (int i = 0; i < brandData.size(); i++) {
                 listDataHeader.add(brandData.get(i));
-                skuData = db.getClosingStockDataFromDatabase(account_cd, brandData.get(i).getCategory_cd());
-                if (!(skuData.size() > 0) || ((skuData.get(0).getEd_closingFacing() == null) || (skuData.get(0).getEd_closingFacing().equals("")))) {
-                    skuData = db.getStockSkuClosingData(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
-                } else {
-                    btnSave.setText("Update");
+                skuData = db.getClosingStockDataFromDatabase(account_cd, brandData.get(i).getCategory_cd(), store_cd);
+                if (skuData.size()>0){
+                    if (skuData.get(0).getEd_closingFacing() == null || skuData.get(0).getEd_closingFacing().equals("")) {
+                        btnSave.setText("Save");
+                    } else {
+                        btnSave.setText("Update");
+                    }
                 }
+
+
 
                 List<StockNewGetterSetter> skulist = new ArrayList<StockNewGetterSetter>();
                 for (int j = 0; j < skuData.size(); j++) {
@@ -216,31 +221,35 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
 
         if (id == R.id.save_btn) {
             expListView.clearFocus();
-            flagcoldroom = flagmccain = flagstoredf = false;
-            if (validateData(listDataChild, listDataHeader)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to save")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                db.open();
-                                db.UpdateClosingStocklistData(store_cd, listDataChild, listDataHeader);
-                                Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
-                                overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            } else {
-                listAdapter.notifyDataSetChanged();
-                Snackbar.make(expListView, "Please fill all the fields", Snackbar.LENGTH_LONG).show();
+            expListView.invalidateViews();
+            if(!checkpopup){
+                flagcoldroom = flagmccain = flagstoredf = false;
+                if (validateData(listDataChild, listDataHeader)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Are you sure you want to save")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    db.open();
+                                    db.UpdateClosingStocklistData(store_cd, listDataChild, listDataHeader);
+                                    Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
+                                    overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    listAdapter.notifyDataSetChanged();
+                    Snackbar.make(expListView, "Please fill all the fields", Snackbar.LENGTH_LONG).show();
+                }
             }
+
         }
     }
 
@@ -281,55 +290,48 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                 holder.txt_skuHeader = (TextView) convertView.findViewById(R.id.txt_closingStock_skuHeader);
                 holder.txt_openingStock = (TextView) convertView.findViewById(R.id.txt_closingStock_openingStock);
                 holder.txt_midValue = (TextView) convertView.findViewById(R.id.txt_closingStock_midValue);
-
-                //  holder.txt_closingStock_openingStockbackroom = (TextView) convertView.findViewById(R.id.txt_closingStock_openingStockbackroom);
+                holder.txt_openingfloreStock = (TextView) convertView.findViewById(R.id.txt_closingStock_openingfloreStock);
+                holder.txt_closingStock_br = (TextView) convertView.findViewById(R.id.txt_closingStock_br);
 
                 convertView.setTag(holder);
             }
             holder = (ViewHolder) convertView.getTag();
             holder.txt_skuHeader.setText(childText.getBrand() + " - " + childText.getSku());
-/*
-            int consolidateValue = Integer.parseInt(childText.getEd_midFacing()) + Integer.parseInt(childText.getSumofSTOCK()) + Integer.parseInt(childText.getOpening_stock_backroom());
-*/
 
-         /*   int consolidateValue = Integer.parseInt(childText.getEd_midFacing()) + Integer.parseInt(childText.getSumofSTOCK());*/
-            int consolidateValue = Integer.parseInt(childText.getSumofSTOCK());
+            holder.txt_midValue.setText("STK-IN :" + childText.getEd_midFacing());
+            holder.txt_openingfloreStock.setText("OS-BR :" + childText.getOpening_stock_backroom());
+            holder.txt_openingStock.setText("OS-FLR : " + childText.getSumofSTOCK());
+            holder.txt_closingStock_br.setText("CS-BR : " + childText.getClosing_stk_backroom());
 
-            holder.txt_midValue.setText("MDS :"+childText.getEd_midFacing());
-            holder.txt_openingStock.setText("OS : " + String.valueOf(consolidateValue));
-            // holder.txt_closingStock_openingStockbackroom.setText("OSBR :"+);
             final ViewHolder finalHolder = holder;
-/*
+
+
             holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-*/
-/*
-                    int total = Integer.parseInt(childText.getSumofSTOCK()) + Integer.parseInt(childText.getEd_midFacing()) + Integer.parseInt(childText.getOpening_stock_backroom());
-*//*
-
-                    int total = Integer.parseInt(childText.getSumofSTOCK()) + Integer.parseInt(childText.getEd_midFacing());
+                    int consolidateValue = Integer.parseInt(childText.getSumofSTOCK()) +
+                            Integer.parseInt(childText.getOpening_stock_backroom()) + Integer.parseInt(childText.getEd_midFacing()) -
+                            Integer.parseInt(childText.getClosing_stk_backroom());
 
                     final EditText Caption = (EditText) v;
                     String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
                     if (value1.equals("")) {
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing("");
                     } else {
-                        if (Integer.parseInt(value1) <= total) {
+                        int closingS = Integer.parseInt(value1);
+                        if (closingS <= consolidateValue) {
                             ischangedflag = true;
                             _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing(value1);
                         } else {
+                            checkpopup=true;
                             AlertDialog.Builder builder = new AlertDialog.Builder(ClosingStock.this);
-                            builder.setMessage("Closing stock cannot be greater than opening stock and mid day stock")
-                          */
-/*  builder.setMessage("Sum of SKU Opening stock and mid day stock cannot be greater then closing stock")*//*
-
+                            builder.setMessage("Closing stock cannot be greater than sum of Opening Stock and Stock-in")
                                     .setCancelable(false)
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(
                                                 DialogInterface dialog, int id) {
-                                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing("");
-                                            finalHolder.ed_closingStock.setText("");
+                                            checkpopup=false;
+                                            expListView.invalidateViews();
                                         }
                                     })
                                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -342,10 +344,15 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                             alert.show();
                         }
                     }
+
                 }
                 //  }
             });
-*/
+
+
+
+
+/*
             holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -361,6 +368,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                     }
                 }
             });
+*/
 
             holder.ed_closingStock.setText(childText.getEd_closingFacing());
             if (!checkflag) {
@@ -467,10 +475,9 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     }
 
     public class ViewHolder {
-        TextView txt_skuHeader, txt_openingStock, txt_midValue;
+        TextView txt_skuHeader, txt_openingStock, txt_midValue, txt_openingfloreStock, txt_closingStock_br;
         EditText ed_closingStock;
         CardView cardView;
-        //txt_closingStock_openingStockbackroom
     }
 
     boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2,
@@ -480,7 +487,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
         for (int i = 0; i < listDataHeader2.size(); i++) {
             for (int j = 0; j < listDataChild2.get(listDataHeader.get(i)).size(); j++) {
                 String coldroom = listDataChild.get(listDataHeader.get(i)).get(j).getEd_closingFacing();
-                if (coldroom.equalsIgnoreCase("")) {
+                if (coldroom == null || coldroom.equalsIgnoreCase("")) {
                     if (!checkHeaderArray.contains(i)) {
                         checkHeaderArray.add(i);
                     }
@@ -532,7 +539,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-//
+
     }
 
     @Override

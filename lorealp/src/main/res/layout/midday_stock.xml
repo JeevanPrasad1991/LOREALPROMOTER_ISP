@@ -61,6 +61,7 @@
         android:layout_below="@+id/appbar"
         android:orientation="horizontal"
         android:layout_margin="5dp"
+        android:visibility="gone"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="match_parent"
@@ -76,14 +77,14 @@
         android:id="@+id/linsppiner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/linear"
         android:layout_weight="1"
         android:orientation="horizontal">
         <TextView
             android:layout_width="0dp"
             android:layout_weight=".4"
-            android:text="@string/brand"
+            android:text="Stock Received"
             android:gravity="center"
             android:layout_marginRight="10dp"
             android:textColor="@color/black"
@@ -119,6 +120,7 @@
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:groupIndicator="@drawable/custom_expandable"
         android:scrollingCache="false" />
 
     <LinearLayout

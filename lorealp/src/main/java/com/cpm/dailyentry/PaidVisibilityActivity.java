@@ -56,8 +56,10 @@ import com.cpm.xmlGetterSetter.AssetNonReasonGetterSetter;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,7 +88,8 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
     static int grp_position = -1;
     static int child_position = -1;
     String msg_error = "Please fill all the fields";
-    String account_cd,city_cd,storetype_cd;
+    String account_cd, city_cd, storetype_cd;
+    Bitmap bmp, dest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +111,9 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
-        account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
-        city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
-        storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
+        city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
+        storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
         setTitle("Paid Visibility - " + visit_date);
         str = CommonString.FILE_PATH;
@@ -142,7 +145,7 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
         categoryData = db.getAssetCategoryData(store_cd);
 
 
-       // brandData = db.getPromotionBrandData1(account_cd,city_cd,storetype_cd);
+        // brandData = db.getPromotionBrandData1(account_cd,city_cd,storetype_cd);
 
         if (categoryData.size() > 0) {
             // Adding child data
@@ -245,20 +248,33 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
                 convertView.setTag(holder);
             }
             holder = (ViewHolder) convertView.getTag();
+            final ViewHolder finalHolder = holder;
+            final ViewHolder finalHolder1 = holder;
             holder.tbpresent.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     ischangedflag = true;
                     String val = ((ToggleButton) v).getText().toString();
                     _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setPresent(val);
                     if (val.equals("NO")) {
+                        finalHolder1.remark_layout.setVisibility(View.VISIBLE);
+                        finalHolder1.cam_layout.setVisibility(View.GONE);
+                        finalHolder.asset_remark.setSelection(0);
+
+                        if (new File(CommonString.FILE_PATH + _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg()).exists()){
+                            new File(CommonString.FILE_PATH + _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg()).delete();
+                        }
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setImg("");
+
                     } else {
+                        finalHolder1.remark_layout.setVisibility(View.GONE);
+                        finalHolder1.cam_layout.setVisibility(View.VISIBLE);
+                        finalHolder.asset_remark.setSelection(0);
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setRemark("");
+                        childText.setReason_cd("0");
+                        childText.setReason("-Select Reason-");
                     }
 
-                    expListView.clearFocus();
                     expListView.invalidateViews();
                 }
             });
@@ -287,12 +303,11 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
                         !_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg().equals("")) {
                     holder.btn_cam.setBackgroundResource(R.drawable.camera_green);
                 } else {
-                    holder.btn_cam.setBackgroundResource(R.drawable.camera_black);
+                    holder.btn_cam.setBackgroundResource(R.drawable.camera_orange);
                 }
             } else if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getPresent().equals("NO")) {
                 holder.remark_layout.setVisibility(View.VISIBLE);
                 holder.cam_layout.setVisibility(View.GONE);
-
             }
 
             TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
@@ -306,7 +321,6 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
             reason_list.add(0, non);
 
             holder.asset_remark.setAdapter(new ReasonSpinnerAdapter(_context, R.layout.spinner_text_view, reason_list));
-
             for (int i = 0; i < reason_list.size(); i++) {
                 if (reason_list.get(i).getAreason_cd().get(0).equals(childText.getReason_cd())) {
                     holder.asset_remark.setSelection(i);
@@ -333,7 +347,7 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
             if (!checkflag) {
                 boolean tempflag = false;
                 if (_listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).getImg().equals("")) {
-                    holder.btn_cam.setBackgroundResource(R.drawable.camera_black);
+                    holder.btn_cam.setBackgroundResource(R.drawable.camera_orange);
                 } else {
                     holder.btn_cam.setBackgroundResource(R.drawable.camera_green);
                 }
@@ -576,9 +590,8 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
 
-                        //jee
-                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        bmp = convertBitmap(str + _pathforcheck);
+                        dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -597,9 +610,8 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-//endjee
 
-                        image1 = _pathforcheck;
+                      // image1 = _pathforcheck;
                         img1 = _pathforcheck;
                         expListView.invalidateViews();
                         _pathforcheck = "";
@@ -703,4 +715,37 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
             super.onPageStarted(view, url, favicon);
         }
     }
+
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
+    }
+
 }

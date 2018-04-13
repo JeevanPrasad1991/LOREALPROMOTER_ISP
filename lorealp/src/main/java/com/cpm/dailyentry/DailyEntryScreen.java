@@ -156,6 +156,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     }
 
     public void setListdata() {
+        database.open();
         coverage = database.getCoverageData(date);
         jcplist = database.getJCPData(date);
         if (jcplist.size() > 0) {
@@ -238,8 +239,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 }
             });
             String storecd = jcplist.get(position).getStore_cd().get(0);
-            //15fab
-            String visit_date = jcplist.get(position).getVISIT_DATE().get(0);
             ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(storecd);
             if (jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_U)) {
                 holder.img.setVisibility(View.VISIBLE);
@@ -275,12 +274,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.checkinclose.setEnabled(false);
                 holder.checkinclose.setVisibility(View.INVISIBLE);
             }
-/*
-            if (jcplist.get(position).getGeotagStatus().get(0).equalsIgnoreCase("Y")){
-                holder.geotag.setVisibility(View.VISIBLE);
-                holder.geotag.setBackgroundResource(R.drawable.store_with_location);
-            }
-*/
+
             holder.storename.setText(jcplist.get(position).getStore_name().get(0));
             holder.city.setText(jcplist.get(position).getCity().get(0));
             holder.keyaccount.setText(jcplist.get(position).getKey_account().get(0));
@@ -290,7 +284,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         private class ViewHolder {
             TextView storename, city, keyaccount;
             ImageView img, checkinclose, geotag;
-
             Button checkout;
         }
     }
@@ -309,10 +302,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         final String checkoutstatus = jcplist.get(position).getCheckOutStatus().get(0);
         final String geotag = jcplist.get(position).getGeotagStatus().get(0);
 
-        /*if (geotag.equalsIgnoreCase("N")) {
-
-            Snackbar.make(lv, "Please first the Geotag store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();*/
-       /* } else */
        if (upload_status.equals(CommonString.KEY_U)) {
             Snackbar.make(lv, "All Data Uploaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
@@ -421,6 +410,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.yes) {
 
+                    database.open();
                     geotaglist = database.getinsertGeotaggingData(storeCd);
                     if (geotag.equals("Y") || geotaglist.size() > 0) {
                         editor = preferences.edit();
@@ -454,15 +444,14 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             }
                         }
                         if (flag == true) {
-                            Intent in = new Intent(DailyEntryScreen.this, StoreImageActivity.class);
+                            Intent in = new Intent(DailyEntryScreen.this, SelfieActivity.class);
                             startActivity(in);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                         } else {
 
-                      /* Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
+                        Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
                         startActivity(in);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);*/
-                            Snackbar.make(lv, "Please checkout from current store", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
                         }
 

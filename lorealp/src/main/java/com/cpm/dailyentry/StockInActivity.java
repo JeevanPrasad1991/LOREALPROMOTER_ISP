@@ -41,6 +41,7 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
+import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 
 import java.text.SimpleDateFormat;
@@ -74,6 +75,8 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
     String store_cd, account_cd, city_cd, storetype_cd;
     StoreStockinGetterSetter storeStockinGetterSetter;
     ArrayList<BrandGetterSetter> brandmasterData = new ArrayList<>();
+    ArrayList<JourneyPlanGetterSetter> jcplist;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,22 +106,21 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
         city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
         setTitle("Store Stock in - " + visit_date);
-//spinner
+
+        jcplist = db.getJCPDataStore_id(store_cd);
+
         ArrayAdapter aa3 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, irep_registered);
         aa3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_registered.setAdapter(aa3);
-
-        //sp_registered.setOnItemSelectedListener(this);
         sp_registered.setOnItemSelectedListener(this);
         storeStockinGetterSetter = db.getStockInSpinnerData(store_cd);
 
 
-//usk1111
-        // preparing list data
         prepareListData();
         // setting list adapter
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
+       // expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         if (!storeStockinGetterSetter.getSelect_brand().equals("")) {
             if (storeStockinGetterSetter.getSelect_brand().equals("1")) {
                 sp_registered.setSelection(1);
@@ -126,6 +128,16 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                 sp_registered.setSelection(2);
             }
 
+        }else {
+           if (jcplist.get(0).getInstock_allow().get(0).equals("1")){
+               sp_registered.setSelection(1);
+               sp_registered.setEnabled(false);
+           }else {
+               if (jcplist.get(0).getInstock_allow().get(0).equals("0")){
+                   sp_registered.setSelection(2);
+                   sp_registered.setEnabled(true);
+               }
+           }
         }
 
 
@@ -221,13 +233,12 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                 // Adding child data
                 for (int i = 0; i < brandData.size(); i++) {
                     listDataHeader.add(brandData.get(i));
-                    // skuData = db.getMiddayStockDataFromDatabase(account_cd, brandData.get(i).getCategory_cd());
+
                     skuData = db.getMiddayDataFromDatabase(store_cd, brandData.get(i).getBrand_cd());
                     if (skuData.size() == 0 || (skuData.get(0).getEd_midFacing() == null) || (skuData.get(0).getEd_midFacing().equals(""))) {
-                        // skuData = db.getStockSkuMiddayData(account_cd, city_cd, storetype_cd, brandData.get(i).getCategory_cd());
+
                         skuData = db.getSkuMiddayData(brandData.get(i).getBrand_cd());
 
-                        // db.getStockSkuData(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
                     } else {
                         btnSave.setText("Update");
                     }
@@ -299,11 +310,12 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
 
         if (id == R.id.save_btn) {
             expListView.clearFocus();
+            expListView.invalidateViews();
             if (storeStockinGetterSetter != null && !storeStockinGetterSetter.getSelect_brand().equals("")) {
 
                 if (storeStockinGetterSetter.getSelect_brand().equalsIgnoreCase("1")) {
 
-                    if (validateData1(listDataChild, listDataHeader)) {
+                    if (validateData(listDataChild, listDataHeader)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setMessage("Are you sure you want to save")
                                 .setCancelable(false)
@@ -314,10 +326,8 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                                         id_ = db.InsertSpinnereStockinData(storeStockinGetterSetter, store_cd, visit_date);
                                         if (id_ > 0) {
                                             db.InsertMidDayStockInlistData(store_cd, listDataChild, listDataHeader, spinner_irepregisterd, visit_date);
-                                            Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_SHORT).show();
-                                            finish();
-                                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
                                             Snackbar.make(btnSave, "Data saved successfully", Snackbar.LENGTH_SHORT).show();
+                                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
                                             finish();
                                         } else {
                                             Snackbar.make(btnSave, "Data not saved", Snackbar.LENGTH_SHORT).show();
@@ -347,8 +357,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                                     id_ = db.InsertSpinnereStockinData(storeStockinGetterSetter, store_cd, visit_date);
                                     if (id_ > 0) {
                                         db.InsertMidDayStockInlistData(store_cd, listDataChild, listDataHeader, spinner_irepregisterd, visit_date);
-                                        Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_SHORT).show();
-                                        finish();
                                         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
                                         Snackbar.make(btnSave, "Data saved successfully", Snackbar.LENGTH_SHORT).show();
                                         finish();
@@ -378,85 +386,32 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
     }
 
     boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2,
-                         List<StockNewGetterSetter> listDataHeader2) {
-        boolean flag = true;
-
-        checkHeaderArray.clear();
-        for (int i = 0; i < listDataHeader2.size(); i++) {
-
-            // String brand_cd=listDataHeader2.get(i).getBrand_cd();
-
-            for (int j = 0; j < listDataChild2.get(listDataHeader.get(i)).size(); j++) {
-                String miday_stock = listDataChild.get(listDataHeader.get(i)).get(j).getEd_midFacing();
-                String brand_cd = listDataChild.get(listDataHeader.get(i)).get(j).getBrand_cd();
-
-                if (miday_stock.equalsIgnoreCase("")) {
-                    if (!checkHeaderArray.contains(i)) {
-                        checkHeaderArray.add(i);
-                    }
-                    flag = false;
-                    break;
-                } else {
-                    flag = true;
-                }
-
-
-            }
-
-            if (!flag) {
-                break;
-            }
-        }
-        //expListView.invalidate();
-
-        if (!flag) {
-            return checkflag = false;
-        } else {
-            return checkflag = true;
-        }
-    }
-
-    boolean validateData1(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2,
                           List<StockNewGetterSetter> listDataHeader2) {
-        boolean flag = true;
-
+        boolean flag = false;
         checkHeaderArray.clear();
         loop1:
         for (int i = 0; i < listDataHeader2.size(); i++) {
-            //  String brand_cd=listDataHeader2.get(i).getBrand_cd();
-            flag = false;
+
             for (int j = 0; j < listDataChild2.get(listDataHeader.get(i)).size(); j++) {
                 String miday_stock = listDataChild.get(listDataHeader.get(i)).get(j).getEd_midFacing();
                 if (miday_stock != null && !miday_stock.equalsIgnoreCase("") && !miday_stock.equalsIgnoreCase("0")) {
                     flag = true;
+                    break;
                 }
 
-               /* if (miday_stock.equalsIgnoreCase("")) {
-                    if (!checkHeaderArray.contains(i)) {
-                        checkHeaderArray.add(i);
-                    }
-                    flag = false;
-                    break;
-                } else {
-                    flag = true;
-                }*/
             }
             if (flag) {
-                continue loop1;
-            } else {
-                if (!checkHeaderArray.contains(i)) {
-                    checkHeaderArray.add(i);
-                }
+                //continue loop1;
                 break;
             }
         }
-        //expListView.invalidate();
-
-        if (!flag) {
-            return checkflag = false;
-        } else {
+        if (flag) {
             return checkflag = true;
+        } else {
+
+            return checkflag = false;
         }
+
     }
 
     /**
@@ -585,7 +540,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                         ischangedflag = true;
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_midFacing(value1);
                     }
-                    //}
+
                 }
             });
             holder.etmidstock.setText(childText.getEd_midFacing());
@@ -639,7 +594,8 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
             lblListHeader.setTypeface(null, Typeface.BOLD);
             lblListHeader.setText(headerTitle.getBrand());
 
-            if (!checkflag) {
+            //red header
+            /*if (!checkflag) {
                 if (checkHeaderArray.contains(groupPosition)) {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.red));
                 } else {
@@ -647,7 +603,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                 }
             } else {
                 lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
-            }
+            }*/
 
             return convertView;
         }
@@ -703,7 +659,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            // NavUtils.navigateUpFromSameTask(this);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(StockInActivity.this);
             builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE)
@@ -728,7 +683,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
     @Override
     protected void onPause() {
         super.onPause();
-//
+
     }
 
     @Override

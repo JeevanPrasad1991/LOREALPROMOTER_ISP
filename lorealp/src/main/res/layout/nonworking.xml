@@ -73,7 +73,7 @@
             android:layout_alignBottom="@+id/testview4"
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/testview4"
-            android:background="@drawable/camera_black"
+            android:background="@drawable/camera_orange"
             android:visibility="invisible" />
         
     </RelativeLayout>
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@null"
-            android:src="@drawable/camera_black" />
+            android:src="@drawable/camera_orange" />
     </RelativeLayout>
     
       <RelativeLayout
@@ -118,6 +118,7 @@
             android:id="@+id/reasontxt"
              android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:layout_centerInParent="true"
             android:ems="20"
             />

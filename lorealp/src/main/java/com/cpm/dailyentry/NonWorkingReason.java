@@ -64,6 +64,8 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
     private ArrayAdapter<CharSequence> reason_adapter;
     ArrayList<NonWorkingReasonGetterSetter> reasondata = new ArrayList<>();
     ArrayList<JourneyPlanGetterSetter> jcp;
+
+    String remarkvalue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -120,6 +122,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
         reasonspinner.setAdapter(reason_adapter);
         reason_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reasonspinner.setOnItemSelectedListener(this);
+
     }
 
     @Override
@@ -235,7 +238,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
 
     public boolean textAllowed() {
         boolean result = true;
-        if (text.getText().toString().equalsIgnoreCase("")) {
+        if (text.getText().toString().replaceAll("[(!@#$%^&*?%')<>\"]", " ").trim().equalsIgnoreCase("")) {
             result = false;
         }
         return result;
@@ -277,7 +280,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                                                 cdata.setLatitude("0.0");
                                                 cdata.setLongitude("0.0");
                                                 cdata.setImage(image1);
-                                                cdata.setRemark(text.getText().toString().replaceAll("[&^<>{}'$]", " "));
+                                                cdata.setRemark(text.getText().toString().replaceAll("[(!@#$%^&*?)\"]", " ").trim());
                                                 cdata.setStatus(CommonString.STORE_STATUS_LEAVE);
                                                 database.InsertCoverageData(cdata);
                                                 database.updateStoreStatusOnLeave(store_id, visit_date, CommonString.STORE_STATUS_LEAVE);
@@ -299,7 +302,7 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
                                             cdata.setLatitude("0.0");
                                             cdata.setLongitude("0.0");
                                             cdata.setImage(image1);
-                                            cdata.setRemark(text.getText().toString().replaceAll("[&^<>{}'$]", " "));
+                                            cdata.setRemark(text.getText().toString().replaceAll("[(!@#$%^&*?)\"]", " ").trim());
                                             cdata.setStatus(CommonString.STORE_STATUS_LEAVE);
                                             database.InsertCoverageData(cdata);
                                             database.updateStoreStatusOnLeave(store_id, visit_date, CommonString.STORE_STATUS_LEAVE);

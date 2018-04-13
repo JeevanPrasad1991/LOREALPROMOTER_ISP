@@ -4,7 +4,12 @@ import android.os.Environment;
 
 public class CommonString {
 
-    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/LorealPromoter_Images/";
+    public static final String MESSAGE_SOCKETEXCEPTION = "Network Communication Failure. Please Check Your Network Connection";
+    public static final String MESSAGE_INTERNET_NOT_AVALABLE = "No Internet Connection.Please Check Your Network Connection";
+    public static final String MESSAGE_EXCEPTION = "Problem Occured : Report The Problem To Parinaam ";
+
+
+    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
     public static final String BACKUP_PATH = Environment.getExternalStorageDirectory() + "/Lorealpromoter_backup/";
 
     public static final String PLS_FILL_DATA = "Please fill the data";
@@ -17,6 +22,7 @@ public class CommonString {
     public static final String KEY_IS_QUIZ_DONE = "is_quiz_done";
 
     public static final String KEY_USERNAME = "username";
+    public static final String KEY_SELFIE_IMAGE = "SELFIE_IMAGE";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_REMEMBER = "remember";
     public static final String KEY_PATH = "path";
@@ -237,7 +243,8 @@ public class CommonString {
     public static final String URL_Notice_Board = "http://lipromo.parinaam.in/notice/notice.html";
 
 
-    public static final String METHOD_LOGIN = "UserLoginDetail";
+  //  public static final String METHOD_LOGIN = "UserLoginDetail";
+    public static final String METHOD_LOGIN = "UserLoginDetail_New";
     public static final String SOAP_ACTION_LOGIN = "http://tempuri.org/" + METHOD_LOGIN;
     // Upload Coverage
     public static final String METHOD_UPLOAD_DR_STORE_COVERAGE = "UPLOAD_COVERAGE";
@@ -803,7 +810,11 @@ public class CommonString {
                     " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "STORE_CD" +
                     " INTEGER, " +
+                   /* "CATEGORY_CD" +
+                    " INTEGER, " +*/
                     "CATEGORY_CD" +
+                    " INTEGER, " +
+                    "SUB_CATEGORY_CD" +
                     " INTEGER, " +
                     "CATEGORY" +
                     " VARCHAR, " +

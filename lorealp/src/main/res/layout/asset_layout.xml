@@ -29,6 +29,7 @@
         android:layout_above="@+id/linearLayout1"
         android:layout_below="@+id/appbar"
         android:cacheColorHint="#00000000"
+        android:groupIndicator="@drawable/custom_expandable"
          android:divider="@null"
         android:dividerHeight="0dp"
         android:scrollingCache="false"

@@ -31,6 +31,7 @@ import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
+import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
@@ -75,19 +76,18 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     Audit_QuestionGetterSetter audit_questionGetterSetter;
     PromoTypeGetterSetter promoTypeGetterSetter;
     IncentiveGetterSetter incentiveGetterSetter;
+    MappingSosGetterSetter mappingSosGetterSetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
     private SharedPreferences preferences;
     boolean promotion_flag = true;
     boolean asset_flag = true;
-
     boolean success_flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.mainpage);
 
         setContentView(R.layout.activity_main_menu);
 
@@ -190,7 +190,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
                 }
 
-              /*  // Store List Master
+                // Store List Master
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "SKU_MASTER");
@@ -383,6 +383,37 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
+                //MAPPING_SOS
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_SOS");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                Object resultmappingsos = (Object) envelope.getResponse();
+                if (resultmappingsos.toString() != null) {
+                    xpp.setInput(new StringReader(resultmappingsos.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    mappingSosGetterSetter = XMLHandlers.mappingSOSXML(xpp, eventType);
+                    if (mappingSosGetterSetter.getMapping_sos_table() != null) {
+                        String mappingtable = mappingSosGetterSetter.getMapping_sos_table();
+                        TableBean.setMappingsos_table(mappingtable);
+                    }
+                    if (mappingSosGetterSetter.getBrand_cd().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                        data.value = 52;
+                        data.name = "MAPPING_SOS data Downloading";
+                    }
+                }
+                publishProgress(data);
+
+
+
+
                 // Mapping Promotion data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -483,7 +514,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Asset Master Data Downloading";
                 }
                 publishProgress(data);
-*/
                 //Non Working Reason data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -518,7 +548,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
-              /*  //Payment Slip Data
+                //Payment Slip Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "EMP_SALARY");
@@ -677,14 +707,13 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 99;
                     data.name = "PROMO_TYPE_MASTER Downloading";
-                }*/
+                }
 
                 //Database insert method calling
+
                 db.open();
                 db.insertJCPData(jcpgettersetter);
-                db.insertNonWorkingReasonData(nonworkinggettersetter);
-
-               /* db.insertSkuMasterData(skumastergettersetter);
+                db.insertSkuMasterData(skumastergettersetter);
                 db.insertMappingstockData(mappingstockgettersetter);
                 if (promotion_flag) {
                     db.insertMappingPromotionData(mappingprormotgettersetter);
@@ -698,17 +727,22 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertBrandMasterData(brandGetterSetter);
                 db.insertSubCetegoryMasterData(subCategoryGetterSetter);
                 db.insertCategoryMasterData(categorygettersetter);
-
+                db.insertNonWorkingReasonData(nonworkinggettersetter);
                 if (payslipGetterSetter != null) {
                     db.insertPaySlipdata(payslipGetterSetter);
                 } else {
                     db.deletePaySlipData();
                 }
+                //Audit
                 db.insertAuditQuestionData(audit_questionGetterSetter);
+
+                //asset noreason
                 db.insertAssetNonReasonData(assetNonReasonGetterSetter);
                 db.insertNonPromotionReasonData(nonPromotionReasonGetterSetter);
                 db.insertpromoTypeData(promoTypeGetterSetter);
-                db.insertIncentiveTypeData(incentiveGetterSetter);*/
+                db.insertIncentiveTypeData(incentiveGetterSetter);
+                db.insertMappingSosData(mappingSosGetterSetter);
+
 
                 data.value = 100;
                 data.name = "Finishing";
@@ -728,9 +762,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                 });
             } catch (IOException e) {
-
                 success_flag = false;
-
                 final AlertMessage message = new AlertMessage(
                         CompleteDownloadActivity.this, AlertMessage.MESSAGE_SOCKETEXCEPTION, "socket", e);
                 runOnUiThread(new Runnable() {
@@ -742,9 +774,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Crashlytics.logException(e);
                 success_flag = false;
-
                 final AlertMessage message = new AlertMessage(
-                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION + e, "download", e);
+                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION , "download", e);
                 e.getMessage();
                 e.printStackTrace();
                 e.getCause();
@@ -775,8 +806,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 if (result.equals(CommonString.KEY_SUCCESS)) {
                     AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
                     message.showMessage();
+                }else if (result.equalsIgnoreCase("JOURNEY_PLAN")){
+                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP, "success", null);
+                    message.showMessage();
                 } else {
-                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE + result, "success", null);
+                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
                     message.showMessage();
                 }
             }

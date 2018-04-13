@@ -40,6 +40,15 @@ public class TableBean {
     public static String table_MAPPING_ASSET_CHECKLIST_REASON;
     public static String subcetegory_table;
     public static String incentive_table;
+    public static String mappingsos_table;
+
+    public static String getMappingsos_table() {
+        return mappingsos_table;
+    }
+
+    public static void setMappingsos_table(String mappingsos_table) {
+        TableBean.mappingsos_table = mappingsos_table;
+    }
 
     public static String getIncentive_table() {
         return incentive_table;

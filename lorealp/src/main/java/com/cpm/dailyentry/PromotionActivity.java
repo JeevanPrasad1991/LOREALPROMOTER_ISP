@@ -51,8 +51,10 @@ import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,7 +82,9 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
     static int child_position = -1;
     String errorMessage = "";
     boolean updateflag = false;
-    String account_cd,city_cd,storetype_cd;
+    String account_cd, city_cd, storetype_cd;
+    Bitmap bmp, dest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -103,9 +107,9 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
 
-        account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
-        city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
-        storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
+        city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
+        storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
         setTitle("Promotion - " + visit_date);
         str = CommonString.FILE_PATH;
         // preparing list data
@@ -134,12 +138,11 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
     }
 
     // Preparing the list data
-    private void prepareListData()
-    {
+    private void prepareListData() {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
        /* brandData = db.getPromotionBrandData(store_cd);*/
-        brandData = db.getPromotionBrandData1(account_cd,city_cd,storetype_cd);
+        brandData = db.getPromotionBrandData1(account_cd, city_cd, storetype_cd);
 
         if (brandData.size() > 0) {
             // Adding child data
@@ -147,7 +150,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getPromotionDataFromDatabase(store_cd, brandData.get(i).getBrand_cd());
                 if (!(skuData.size() > 0) || (skuData.get(0).getPromotion_txt() == null) || (skuData.get(0).getPromotion_txt().equals(""))) {
-                    skuData = db.getPromotionSkuData(brandData.get(i).getBrand_cd(),account_cd,city_cd,storetype_cd);
+                    skuData = db.getPromotionSkuData(brandData.get(i).getBrand_cd(), account_cd, city_cd, storetype_cd);
                 } else {
                     updateflag = true;
                     btnSave.setText("Update");
@@ -260,20 +263,23 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             if (childText.getCamera() != null && !childText.getCamera().equals("")) {
                 holder.promotion_img_.setImageResource(R.drawable.camera_green);
             } else {
-                holder.promotion_img_.setImageResource(R.drawable.camera_black);
+                holder.promotion_img_.setImageResource(R.drawable.camera_orange);
             }
 
             final ViewHolder finalHolder = holder;
-            holder.present_toggleV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            final ViewHolder finalHolder1 = holder;
+            holder.present_toggleV.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
+                public void onClick(View view) {
+                    expListView.clearFocus();
+                    expListView.invalidateViews();
+                    if (finalHolder1.present_toggleV.isChecked()) {
                         finalHolder.rlp_remark.setVisibility(View.GONE);
                         finalHolder.rlP_camera.setVisibility(View.VISIBLE);
                         childText.setPresentSpi("1");
                         childText.setReason("");
                         childText.setReason_cd("");
-                        // expListView.invalidateViews();
                     } else {
                         finalHolder.rlP_camera.setVisibility(View.GONE);
                         finalHolder.rlp_remark.setVisibility(View.VISIBLE);
@@ -282,6 +288,29 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     }
                 }
             });
+
+/*
+            holder.present_toggleV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    expListView.clearFocus();
+                    expListView.invalidateViews();
+                    if (isChecked) {
+                        finalHolder.rlp_remark.setVisibility(View.GONE);
+                        finalHolder.rlP_camera.setVisibility(View.VISIBLE);
+                        childText.setPresentSpi("1");
+                        childText.setReason("");
+                        childText.setReason_cd("");
+
+                    } else {
+                        finalHolder.rlP_camera.setVisibility(View.GONE);
+                        finalHolder.rlp_remark.setVisibility(View.VISIBLE);
+                        childText.setPresentSpi("0");
+                        childText.setCamera("");
+                    }
+                }
+            });
+*/
 
             if (childText.getPresentSpi().equals("0")) {
                 holder.present_toggleV.setChecked(false);
@@ -301,7 +330,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     } else {
                         tempflag = false;
                     }
-                }else{
+                } else {
                     if (childText.getReason_cd().equals("0")) {
                         tempflag = true;
                     } else {
@@ -318,6 +347,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
 
             return convertView;
         }
+
         @Override
         public int getChildrenCount(int groupPosition) {
             return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
@@ -362,15 +392,18 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             }
             return convertView;
         }
+
         @Override
         public boolean hasStableIds() {
             return false;
         }
+
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
     }
+
     public class ViewHolder {
         CardView cardView;
         TextView txt_brandSkuName;
@@ -442,8 +475,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                         break;
                     }
                 } else if (presentspinValue.equals("0")) {
-                    if (reasonCdP.equals("0"))
-                    {
+                    if (reasonCdP.equals("0")) {
                         if (!checkHeaderArray.contains(i)) {
                             checkHeaderArray.add(i);
                         }
@@ -547,9 +579,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
 
-                        //jee
-                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                        bmp = convertBitmap(str + _pathforcheck);
+                        dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -568,11 +599,9 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-//endjee
-
                         img1 = _pathforcheck;
                         expListView.invalidateViews();
-                        listAdapter.notifyDataSetChanged();
+                        // listAdapter.notifyDataSetChanged();
                         _pathforcheck = "";
                     }
                 }
@@ -658,6 +687,38 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             return view;
         }
 
+    }
+
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
     }
 
 }

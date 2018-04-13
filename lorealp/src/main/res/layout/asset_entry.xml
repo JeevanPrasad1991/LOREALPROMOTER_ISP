@@ -27,12 +27,6 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <!--<ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/store" />-->
 
                 <TextView
                     android:layout_width="0dp"
@@ -45,7 +39,7 @@
                     android:text="Display Name"
                     android:textColor="@color/black"
                     android:textSize="15dip" />
-                <!--android:text="Category"-->
+
 
                 <TextView
                     android:id="@+id/lblListItem"
@@ -271,12 +265,12 @@
 
                         <Button
                             android:id="@+id/btncam"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_centerVertical="true"
                             android:layout_margin="5dp"
                             android:layout_marginBottom="4dp"
-                            android:background="@drawable/camera_black" />
+                            android:background="@drawable/camera_orange" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -1,101 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/grey_background"
-    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:padding="3dp"
+    card_view:cardBackgroundColor="@color/light_teal"
+    card_view:cardCornerRadius="2dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:padding="1dp"
         card_view:cardBackgroundColor="@color/light_teal"
-        card_view:cardCornerRadius="2dp">
+        android:weightSum="11">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/lblListHeader"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:id="@+id/lblListHeader"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:gravity="center_vertical"
-                android:paddingBottom="10dp"
-                android:paddingLeft="25dp"
-                android:paddingTop="10dp"
-                android:text="Header"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-
-            <RelativeLayout
-                android:visibility="visible"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center_horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-
-                    <EditText
-                        android:id="@+id/catfacing"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/edit_text_border"
-                        android:gravity="center_horizontal"
-                        android:layout_gravity="center"
-                        android:inputType="number"
-                        android:paddingTop="10dp"
-                        android:hint="Cat Facing"
-                        android:textSize="13sp"
-                        android:maxLength="3"
-                        android:layout_weight="1"
-                        android:layout_marginRight="2dp"/>
-                    <!--
-                                        <ImageView
-                                            android:id="@+id/img_cam_himalaya"
-                                            android:layout_width="0dp"
-                                            android:layout_height="40dp"
-                                            android:layout_centerInParent="true"
-                                            android:background="@mipmap/h_camera_orange"
-                                            android:layout_weight="1"
-                                            android:visibility="invisible"
-                                            android:layout_marginRight="2dp"/>
-                    -->
-                    <ImageView
-                        android:id="@+id/img_cam_cat1"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_centerInParent="true"
-                        android:background="@mipmap/camera_orange"
-                        android:layout_weight="1"
-                        android:layout_marginRight="2dp"/>
-                    <ImageView
-                        android:id="@+id/img_cam_cat2"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_centerInParent="true"
-                        android:visibility="gone"
-                        android:background="@mipmap/camera_orange"
-                        android:layout_weight="1" />
-
-                </LinearLayout>
+            android:layout_weight="6"
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="25dp"
+            android:paddingTop="10dp"
+            android:text="Header"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
 
 
-            </RelativeLayout>
-        </LinearLayout>
+        <EditText
+            android:id="@+id/catfacing"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="2dp"
+            android:layout_weight="3"
+            android:background="@drawable/edit_text_border"
+            android:gravity="center_horizontal"
+            android:hint="SubCat Facing"
+            android:inputType="number"
+            android:maxLength="3"
+            android:paddingTop="10dp"
+            android:textSize="12sp" />
 
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+        <ImageView
+            android:id="@+id/img_cam_cat1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="2dp"
+            android:layout_weight="2"
+            android:background="@mipmap/camera_orange" />
+
+        <ImageView
+            android:id="@+id/img_cam_cat2"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_weight="2"
+            android:background="@mipmap/camera_orange"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="1dip"></View>
+</android.support.v7.widget.CardView>

@@ -36,14 +36,13 @@ import com.cpm.lorealpromoter.R;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.message.AlertMessage;
 import com.crashlytics.android.Crashlytics;
-
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,7 +57,6 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
     String _pathforcheck, _path, str;
     AlertDialog alert;
     Button btn_save;
-
     private Dialog dialog;
     private ProgressBar pb;
     private TextView percentage, message;
@@ -69,7 +67,8 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
     ArrayList<CoverageBean> specificCdata = new ArrayList<>();
     String img_str;
     //today image
-
+    int size = 5;
+    Bitmap bmp,dest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +89,6 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
         btn_save.setOnClickListener(this);
         store_id = getIntent().getStringExtra(CommonString.KEY_STORE_CD);
         specificCdata = db.getCoverageSpecificData(store_id);
-        //   new BackgroundTask(this).execute();
     }
 
     @Override
@@ -217,6 +215,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
                 androidHttpTransport.call(CommonString.SOAP_ACTION + "Upload_Store_ChecOut_Status", envelope);
                 Object result = (Object) envelope.getResponse();
                 if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS_chkout)) {
+
                     db.open();
                     db.updateCoverageStoreOutTime(store_id, specificCdata.get(0).getVisitDate(),img_str, getCurrentTime(), CommonString.KEY_C);
                     db.updateStoreStatusOnCheckout(store_id, specificCdata.get(0).getVisitDate(), CommonString.KEY_C);
@@ -245,7 +244,6 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
 
             } catch (IOException e) {
                 final AlertMessage message = new AlertMessage(CheckOutStoreActivity.this, AlertMessage.MESSAGE_SOCKETEXCEPTION, "socket", e);
-                // counter++;
                 runOnUiThread(new Runnable() {
 
                     @Override
@@ -330,8 +328,9 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
             case -1:
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
-                        Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                        Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                      //  Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                        bmp = convertBitmap(str + _pathforcheck);
+                        dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -351,15 +350,19 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
                             e.printStackTrace();
                         }
 
+                        try {
+                            bmp = convertBitmap(str + _pathforcheck);
+                            Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bmp,bmp.getWidth() / size, bmp.getHeight() / size, true);
+                            bmp.recycle();
+                            img_cam.setImageBitmap(bitmapsimplesize);
+                            img_clicked.setVisibility(View.GONE);
+                            img_cam.setVisibility(View.VISIBLE);
+                            img_str = _pathforcheck;
+                            _pathforcheck = "";
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-
-                        bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                        img_cam.setImageBitmap(bmp);
-                        img_clicked.setVisibility(View.GONE);
-                        img_cam.setVisibility(View.VISIBLE);
-                        //Set Clicked image to Imageview
-                        img_str = _pathforcheck;
-                        _pathforcheck = "";
                     }
                 }
                 break;
@@ -373,5 +376,38 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
+    public static Bitmap convertBitmap(String path)   {
+        Bitmap bitmap=null;
+        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+        ourOptions.inDither=false;
+        ourOptions.inPurgeable=true;
+        ourOptions.inInputShareable=true;
+        ourOptions.inTempStorage=new byte[32 * 1024];
+        File file=new File(path);
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(fs!=null)
+            {
+                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
+    }
+
 
 }

@@ -22,6 +22,15 @@ public class JourneyPlanGetterSetter {
 	ArrayList<String> keyaccount_cd = new ArrayList<String>();
 	ArrayList<String> city_cd = new ArrayList<String>();
 	ArrayList<String> storetype_cd = new ArrayList<String>();
+	ArrayList<String> instock_allow = new ArrayList<String>();
+
+	public ArrayList<String> getInstock_allow() {
+		return instock_allow;
+	}
+
+	public void setInstock_allow(String instock_allow) {
+		this.instock_allow.add(instock_allow);
+	}
 
 	public ArrayList<String> getKeyaccount_cd() {
 		return keyaccount_cd;

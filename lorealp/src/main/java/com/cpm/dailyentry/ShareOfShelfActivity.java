@@ -42,8 +42,10 @@ import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.StockNewGetterSetter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,13 +80,13 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
     boolean ischangedflag = false;
     String _pathforcheck, _path, str, img1 = "", img2 = "", img3 = "";
     static int grp_position = -1;
+    Bitmap bmp,dest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_of_shelf);
         currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        // get the list view
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
         btnSave = (Button) findViewById(R.id.save_btn);
         tvheader = (TextView) findViewById(R.id.txt_idealFor);
@@ -108,14 +110,13 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
 
-
         setTitle("Share of Shelf- " + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-
+       // expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         btnSave.setOnClickListener(this);
         expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -130,7 +131,6 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                     getCurrentFocus().clearFocus();
                 }
-                expListView.invalidateViews();
 
             }
         });
@@ -187,6 +187,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
 
     //Preparing the list data
     private void prepareListData() {
+
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<ShareOfShelfGetterSetter, List<ShareOfShelfGetterSetter>>();
         brandData = db.getHeaderShareOfSelfImageData(store_cd);
@@ -196,14 +197,9 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         if (brandData.size() > 0) {
             // Adding child data
             for (int i = 0; i < brandData.size(); i++) {
+
                 listDataHeader.add(brandData.get(i));
-                //   skuData = db.getShareOfShelfDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
-                //  if (skuData.size()==0) {
-                   /* skuData = db.getStockSkuData(store_cd, brandData.get(i).getCategory_cd());*/
                 skuData = db.getShareofShelfBrandData(brandData.get(i).getCategory_cd(),store_cd);
-                //  } else {
-                //   btnSave.setText("Update");
-                //  }
                 List<ShareOfShelfGetterSetter> skulist = new ArrayList<ShareOfShelfGetterSetter>();
                 for (int j = 0; j < skuData.size(); j++) {
                     skulist.add(skuData.get(j));
@@ -235,17 +231,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                                             Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
                                             finish();
                                             overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                                            /*if (db.checkStock(store_cd)) {
-                                                //Update
-                                               // db.UpdateHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
-                                                //db.UpdateOpeningStocklistData(store_cd, listDataChild, listDataHeader);
-                                            } else {
-                                               // db.InsertHeaderCategorylistData(store_cd, visit_date, listDataHeader);
-                                                db.InsertCategoryFacinglistData(store_cd,visit_date, listDataChild, listDataHeader);
-                                            }*/
-                                           /* Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
-                                            finish();
-                                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);*/
+
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -449,11 +435,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
 
             if (!checkflag) {
                 boolean tempflag = false;
-               /* if (holder.etOpening_Stock.getText().toString().equals("")) {
-                    holder.etOpening_Stock.setHintTextColor(getResources().getColor(R.color.red));
-                    holder.etOpening_Stock.setHint("Empty");
-                    tempflag = true;
-                }*/
+
                 if (holder.etOpening_Stock_Facingg.getText().toString().equals("")) {
                     holder.etOpening_Stock_Facingg.setHintTextColor(getResources().getColor(R.color.red));
                     holder.etOpening_Stock_Facingg.setHint("Empty");
@@ -597,7 +579,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
             if (headerTitle.getImg_cat_facing() != null && !headerTitle.getImg_cat_facing().equals("")) {
                 imgcamcat1.setBackgroundResource(R.mipmap.camera_green);
             } else {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_white);
+                imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
             }
             catfacing.setText(headerTitle.getCat_facing());
 
@@ -661,10 +643,10 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                 if (catfacing.equals("")) {
                     checkflag = false;
                     flag = false;
-                    Error_Message = "Please fill all category facing the data";
+                    Error_Message = "Please fill all Sub category facing the data";
                     break;
                 }
-                if ( facing.equalsIgnoreCase("")) {
+                if (facing.equalsIgnoreCase("")) {
                     checkflag = false;
                     flag = false;
                     Error_Message = "Please fill all the data";
@@ -725,7 +707,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     header_flag = true;
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShareOfShelfActivity.this);
                     final int finalI = i;
-                    builder.setMessage("Sum of facing cannot be greater than category facing")
+                    builder.setMessage("Sum of facing cannot be greater than Sub category facing")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(
@@ -894,9 +876,8 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                            //jee
-                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                            bmp = convertBitmap(str + _pathforcheck);
+                            dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -915,7 +896,6 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-//endjee
 
                             img1 = _pathforcheck;
                             expListView.invalidateViews();
@@ -933,9 +913,8 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                            //jee
-                            Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                            Bitmap dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                            bmp = convertBitmap(str + _pathforcheck);
+                            dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
@@ -954,7 +933,6 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-//endjee
 
                             if (_pathforcheck.contains("ImgTwo")) {
                                 img3 = _pathforcheck;
@@ -975,5 +953,37 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public static Bitmap convertBitmap(String path)   {
+        Bitmap bitmap=null;
+        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+        ourOptions.inDither=false;
+        ourOptions.inPurgeable=true;
+        ourOptions.inInputShareable=true;
+        ourOptions.inTempStorage=new byte[32 * 1024];
+        File file=new File(path);
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(fs!=null)
+            {
+                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
+    }
 
 }

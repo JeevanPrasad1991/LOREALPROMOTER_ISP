@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LOREALPROMOTER.iml" filepath="$PROJECT_DIR$/LOREALPROMOTER.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LOREALPROMOTER_ISP.iml" filepath="$PROJECT_DIR$/LOREALPROMOTER_ISP.iml" />
       <module fileurl="file://$PROJECT_DIR$/customCamera/customCamera.iml" filepath="$PROJECT_DIR$/customCamera/customCamera.iml" />
       <module fileurl="file://$PROJECT_DIR$/lorealp/lorealp.iml" filepath="$PROJECT_DIR$/lorealp/lorealp.iml" />
     </modules>

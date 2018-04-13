@@ -2,6 +2,7 @@ package com.cpm.message;
 
 import org.acra.ACRA;
 
+import com.cpm.dailyentry.StoreImageActivity;
 import com.cpm.download.CompleteDownloadActivity;
 import com.cpm.lorealpromoter.LoginActivity;
 import com.cpm.lorealpromoter.MainMenuActivity;
@@ -18,6 +19,7 @@ public class AlertMessage {
 	public static final String MESSAGE_SAVE = "Do You Want To Save The Data ";
 	public static final String MESSAGE_FAILURE = "Server Eroor.Please Access After Some Time";
 	public static final String MESSAGE_JCP_FALSE = "Data is not found in ";
+	public static final String MESSAGE_JCP_FALSE_NOJCP = "No Journey plan for today Please Contact your Supervisor For";
 	public static final String MESSAGE_INVALID_DATA = "Enter Data";
 	public static final String MESSAGE_DUPLICATE_DATA = "Data Already Exist";
 	public static final String MESSAGE_DOWNLOAD = "Data Downloaded Successfully";
@@ -117,6 +119,13 @@ public class AlertMessage {
 		} else if (condition.equals("store")) {
 			ShowAlert1(data);
 		}
+		else if (condition.equals("store_checking")) {
+			ShowAlertchecking(data);
+		}
+
+
+
+
 
 	}
 
@@ -161,6 +170,24 @@ public class AlertMessage {
 		alert.show();
 
 	}
+
+	public void ShowAlertchecking(String str) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setTitle("Parinaam");
+		builder.setMessage(str).setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+
+
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+
+	}
+
 
 //	public void uploadall(String str) {
 //

@@ -48,6 +48,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
@@ -227,7 +229,7 @@ public class UploadDataActivity extends Activity {
                             final_xml = "";
                             onXML = "";
                             stockImages = database.getStockImageUploadData(coverageBeanlist.get(i).getStoreId());
-                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cam().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getCatstock().equals(""))) {
+                            if (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals(""))) {
                                 for (int j = 0; j < stockImages.size(); j++) {
 
                                     onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
@@ -237,7 +239,6 @@ public class UploadDataActivity extends Activity {
                                             + "[CATEGORY_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY_IMAGE]"
                                             + "[/LOREAL_STOCK_CATEGORY_IMAGE_DATA]";
                                     final_xml = final_xml + onXML;
-
                                 }
 
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
@@ -271,7 +272,7 @@ public class UploadDataActivity extends Activity {
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
-                                            + "[CLOSING_STOCK]" + stockbackroomData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
+                                            + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
                                             + "[/LOREAL_STOCK_BACKROOM_DATA]";
                                     final_xml = final_xml + onXML;
                                 }
@@ -368,7 +369,7 @@ public class UploadDataActivity extends Activity {
                                 }
 
 
-                                final String sos_xml = "[DATA]" +final_xml+stock_in_exit + "[/DATA]";
+                                final String sos_xml = "[DATA]" + final_xml + stock_in_exit + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
                                 request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
@@ -583,16 +584,16 @@ public class UploadDataActivity extends Activity {
                             final_xml = "";
                             onXML = "";
                             paid_visibility = "";
-                            String valueex="";
+                            String valueex = "";
                             additionalVisibilityData = database.getinsertedMarketIntelligenceData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (additionalVisibilityData.size() > 0) {
                                 for (int j = 0; j < additionalVisibilityData.size(); j++) {
-                                    valueex="";
-                                    boolean exist=additionalVisibilityData.get(j).isExists();
-                                    if (exist){
-                                        valueex="1";
-                                    }else {
-                                        valueex="0";
+                                    valueex = "";
+                                    boolean exist = additionalVisibilityData.get(j).isExists();
+                                    if (exist) {
+                                        valueex = "1";
+                                    } else {
+                                        valueex = "0";
                                     }
                                     onXML = "[LOREAL_ADDITIONAL_VISIBILITY]"
                                             + "[MID]" + mid + "[/MID]"
@@ -601,7 +602,7 @@ public class UploadDataActivity extends Activity {
                                             + "[DISPLAY_CD]" + additionalVisibilityData.get(j).getCategory_cd() + "[/DISPLAY_CD]"
                                             + "[PHOTO]" + additionalVisibilityData.get(j).getPhoto() + "[/PHOTO]"
                                             + "[REMARK]" + additionalVisibilityData.get(j).getRemark() + "[/REMARK]"
-                                            + "[EXIST]" +valueex + "[/EXIST]"
+                                            + "[EXIST]" + valueex + "[/EXIST]"
                                             + "[/LOREAL_ADDITIONAL_VISIBILITY]";
 
                                     paid_visibility = paid_visibility + onXML;
@@ -708,7 +709,7 @@ public class UploadDataActivity extends Activity {
                     }
 
                 }
-                //UP
+
                 File dir = new File(CommonString.FILE_PATH);
                 ArrayList<String> list = new ArrayList();
                 list = getFileNames(dir.listFiles());
@@ -805,13 +806,13 @@ public class UploadDataActivity extends Activity {
 
             } catch (IOException e) {
                 up_success_flag = false;
-                exceptionMessage = e.toString();
+                exceptionMessage = CommonString.MESSAGE_SOCKETEXCEPTION;
 
             } catch (Exception e) {
                 Crashlytics.logException(e);
-
+                e.printStackTrace();
                 up_success_flag = false;
-                exceptionMessage = e.toString();
+                exceptionMessage = CommonString.MESSAGE_EXCEPTION;
 
             }
 

@@ -91,6 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
+        android:visibility="gone"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -112,6 +113,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="2dp"
+        android:visibility="gone"
         android:layout_weight="4"
         card_view:cardBackgroundColor="@color/white"
         card_view:cardCornerRadius="5dp">
@@ -120,12 +122,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             android:weightSum="10">
 
             <RelativeLayout
                 android:id="@+id/rel_selfie"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 android:layout_weight="10">
 
                 <ImageView
@@ -151,7 +155,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -172,8 +177,8 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_weight="4"
+        android:layout_marginTop="10dp"
+        android:layout_weight="6"
         card_view:cardBackgroundColor="@color/white"
         card_view:cardCornerRadius="5dp">
 
@@ -181,6 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+
             android:weightSum="10">
 
 
@@ -188,6 +194,8 @@
                 android:id="@+id/rel_selfie2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
                 android:layout_weight="10">
 
                 <ImageView
@@ -201,7 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/camera_black" />
+                    android:background="@drawable/camera_orange" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -215,6 +223,8 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="5dp"
         android:layout_weight="1"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/save"
