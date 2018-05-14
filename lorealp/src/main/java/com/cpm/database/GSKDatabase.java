@@ -65,8 +65,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE6";
-    public static final int DATABASE_VERSION = 6;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE7";
+    public static final int DATABASE_VERSION = 7;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -99,6 +99,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getEmp_payslip_table());
         db.execSQL(TableBean.getCategorymastertable());
         db.execSQL(TableBean.getAudit_question_table());
+        db.execSQL(TableBean.getPerformancetable());
         //reason non asset
         db.execSQL(TableBean.getAssetnoreasonTable());
         db.execSQL(TableBean.getNonpromotionnoreasonTable());
@@ -352,6 +353,26 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("INSTOCK_ALLOW", data.getInstock_allow().get(i));
                 db.insert("JOURNEY_PLAN", null, values);
 
+            }
+
+        } catch (Exception ex) {
+            Log.d("Database Exception while Insert JCP Data ",
+                    ex.toString());
+        }
+
+    }
+
+
+    public void insertPerformanceData(PerformanceGetterSetter data) {
+        db.delete("STORE_SALES_PERFORMANCE", null, null);
+        ContentValues values = new ContentValues();
+        try {
+            for (int i = 0; i < data.getSTORE_CD().size(); i++) {
+                values.put("STORE_CD", Integer.parseInt(data.getSTORE_CD().get(i)));
+                values.put("STORE_TARGET", Float.valueOf(data.getSTORE_TARGET().get(i)));
+                values.put("SALES",Float.valueOf(data.getSALES().get(i)));
+
+                db.insert("STORE_SALES_PERFORMANCE", null, values);
             }
 
         } catch (Exception ex) {
@@ -1163,7 +1184,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
     //get Facing Competitor Data
-    public ArrayList<PerformanceGetterSetter> getPerformrmance(String store_cd) {
+    public ArrayList<PerformanceGetterSetter> getPerformrmance() {
 
         Log.d("Fetching facing competitor--------------->Start<------------",
                 "------------------");
@@ -1171,23 +1192,20 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT * from MY_PERFORMANCE where STORE_CD = '" + store_cd + "'"
+            dbcursor = db.rawQuery("SELECT * from STORE_SALES_PERFORMANCE"
                     , null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
-                    PerformanceGetterSetter fc = new PerformanceGetterSetter();
+                    PerformanceGetterSetter pgs = new PerformanceGetterSetter();
 
+                    pgs.setSTORE_TARGET(Float.valueOf(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("STORE_TARGET"))));
+                    pgs.setSALES(Float.valueOf(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("SALES"))));
 
-                    fc.setMonthly_target(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("TARGET")));
-                    fc.setMtd_sales(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("SALE")));
-                    fc.setAchievement(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow("ACH")));
-
-                    list.add(fc);
+                    list.add(pgs);
                     dbcursor.moveToNext();
                 }
                 dbcursor.close();

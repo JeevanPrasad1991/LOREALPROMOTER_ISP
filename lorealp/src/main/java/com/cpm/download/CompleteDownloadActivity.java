@@ -35,6 +35,7 @@ import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
+import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
@@ -68,6 +69,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     CompanyGetterSetter companyGetterSetter;
     BrandGetterSetter brandGetterSetter;
     SubCategoryGetterSetter subCategoryGetterSetter;
+    PerformanceGetterSetter  performanceGetterSetter;
     NonWorkingReasonGetterSetter nonworkinggettersetter;
     CategoryMasterGetterSetter categorygettersetter;
     PayslipGetterSetter payslipGetterSetter;
@@ -350,6 +352,40 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 40;
                     data.name = "Category Master Downloading";
+                }
+                publishProgress(data);
+
+
+
+
+                //Category master data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "STORE_SALES_PERFORMANCE");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object performanceMaster = (Object) envelope.getResponse();
+
+                if (performanceMaster.toString() != null) {
+                    xpp.setInput(new StringReader(performanceMaster.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    performanceGetterSetter = XMLHandlers.performanceXML(xpp, eventType);
+                    String performanceTable = performanceGetterSetter.getPerformance_table();
+                    TableBean.setPerformancetable(performanceTable);
+                    if (performanceGetterSetter.getSTORE_CD().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                      //  return "STORE_SALES_PERFORMANCE";
+                    }
+                    data.value = 45;
+                    data.name = "Performance Data Downloading";
                 }
                 publishProgress(data);
 
@@ -721,6 +757,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     db.deletePromotionMapping();
                 }
 
+                db.insertPerformanceData(performanceGetterSetter);
                 db.insertMappingAssetData(mappingassetgettersetter);
                 db.insertAssetMasterData(assetmastergettersetter);
                 db.insertCompanyMasterData(companyGetterSetter);

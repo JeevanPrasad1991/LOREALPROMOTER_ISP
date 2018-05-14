@@ -393,17 +393,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
             holder.etOpening_Stock_Facingg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -1027,8 +1016,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                             bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                             dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+                            bmp = convertBitmap(str + _pathforcheck);
+                            dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 

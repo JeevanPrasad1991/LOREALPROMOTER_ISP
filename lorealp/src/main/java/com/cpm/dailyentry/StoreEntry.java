@@ -149,16 +149,17 @@ public class StoreEntry extends AppCompatActivity {
                         }
                     }
 */
+                  //  isClosingDataFilled
                     if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
-                       // if (db.isOpeningDataFilled(store_cd)) {
+                        if (!db.isClosingDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
                             startActivity(in3);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        }/* else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
                         }
 
-                    }*/
+                    }
 
                     if (current.getIconImg() == R.drawable.share_of_shelf || current.getIconImg() == R.drawable.share_of_shelf_done) {
                        // if (db.isOpeningDataFilled(store_cd)) {
@@ -260,8 +261,8 @@ public class StoreEntry extends AppCompatActivity {
                         if (db.isOpeningDataFilled(store_cd)) {
                             if (db.isOpeningBackOfficeDataFilled(store_cd) ){
                              if (db.isMiddayDataFilled(store_cd)) {
-                                     Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
-                                startActivity(in2);
+                                 Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
+                                 startActivity(in2);
                                 overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                                } else {
                                  Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
@@ -293,11 +294,11 @@ public class StoreEntry extends AppCompatActivity {
                         */
 
                     }
-
                     //opennig stock back room activity
                     if (current.getIconImg() == R.drawable.opening_stock_backroom_done || current.getIconImg() == R.drawable.opening_stock_backroom) {
                        // if (db.isOpeningDataFilled(store_cd)) {
-                            if (!db.isClosingBackOfficeDataFilled(store_cd)) {
+                           //  if (!db.isClosingBackOfficeDataFilled(store_cd)) {
+                             if (!db.isClosingDataFilled(store_cd)) {
                                 Intent in8 = new Intent(getApplicationContext(), OpenningStockBackofficeActivity.class);
                                 startActivity(in8);
                                 overridePendingTransition(R.anim.activity_in, R.anim.activity_out);

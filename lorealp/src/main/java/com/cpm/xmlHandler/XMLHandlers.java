@@ -1386,18 +1386,14 @@ public class XMLHandlers {
                         performanceGetterSetter.setPerformance_table(xpp.nextText());
                     }
                     if (xpp.getName().equals("STORE_CD")) {
-                        performanceGetterSetter.setStore_cd(xpp.nextText());
+                        performanceGetterSetter.setSTORE_CD(xpp.nextText());
                     }
-                    if (xpp.getName().equals("TARGET")) {
-                        performanceGetterSetter.setMonthly_target(xpp.nextText());
-                    }
-
-                    if (xpp.getName().equals("SALE")) {
-                        performanceGetterSetter.setMtd_sales(xpp.nextText());
+                    if (xpp.getName().equals("STORE_TARGET")) {
+                        performanceGetterSetter.setSTORE_TARGET(Float.valueOf(xpp.nextText()));
                     }
 
-                    if (xpp.getName().equals("ACH")) {
-                        performanceGetterSetter.setAchievement(xpp.nextText());
+                    if (xpp.getName().equals("SALES")) {
+                        performanceGetterSetter.setSALES(Float.valueOf(xpp.nextText()));
                     }
 
                 }

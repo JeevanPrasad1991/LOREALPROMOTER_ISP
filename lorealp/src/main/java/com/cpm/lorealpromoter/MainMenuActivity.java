@@ -318,7 +318,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         }
 
 
-        else if (id==R.id.nav_performance){
+
+    */  else if (id==R.id.nav_performance){
             jcplist = database.getJCPData(date);
             if (jcplist.size()>0){
                 Intent in=new Intent(this, MyPerformance.class);
@@ -327,7 +328,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         }
-*/
 
 
         else if (id == R.id.nav_export_database) {

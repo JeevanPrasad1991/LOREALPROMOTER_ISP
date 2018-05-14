@@ -226,6 +226,7 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
     public static Bitmap convertBitmap(String path)   {
         Bitmap bitmap=null;
         BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+        ourOptions.inPreferredConfig = Bitmap.Config.RGB_565;
         ourOptions.inDither=false;
         ourOptions.inPurgeable=true;
         ourOptions.inInputShareable=true;
