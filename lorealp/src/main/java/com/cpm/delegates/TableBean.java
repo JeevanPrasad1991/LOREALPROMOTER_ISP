@@ -20,6 +20,16 @@ public class TableBean {
     public static String nonworkingtable;
     public static String categorymastertable;
     public static String performancetable;
+    public static String focusperformancetable;
+
+    public static String getFocusperformancetable() {
+        return focusperformancetable;
+    }
+
+    public static void setFocusperformancetable(String focusperformancetable) {
+        TableBean.focusperformancetable = focusperformancetable;
+    }
+
     public static String Emp_payslip_table;
 
     public static String closingcoldtable;

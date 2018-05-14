@@ -26,6 +26,7 @@ import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
 import com.cpm.xmlGetterSetter.CompanyGetterSetter;
+import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
@@ -70,6 +71,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     BrandGetterSetter brandGetterSetter;
     SubCategoryGetterSetter subCategoryGetterSetter;
     PerformanceGetterSetter  performanceGetterSetter;
+    FocusPerformanceGetterSetter focusperformanceGetterSetter;
     NonWorkingReasonGetterSetter nonworkinggettersetter;
     CategoryMasterGetterSetter categorygettersetter;
     PayslipGetterSetter payslipGetterSetter;
@@ -388,6 +390,40 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Performance Data Downloading";
                 }
                 publishProgress(data);
+
+
+
+                        //STORE_FOCUS_SKU_PERFORMANCE master data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "STORE_FOCUS_SKU_PERFORMANCE");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object focusperformanceMaster = (Object) envelope.getResponse();
+
+                if (focusperformanceMaster.toString() != null) {
+                    xpp.setInput(new StringReader(focusperformanceMaster.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    focusperformanceGetterSetter = XMLHandlers.focusperformanceXML(xpp, eventType);
+                    String focusperformanceTable = focusperformanceGetterSetter.getFocusperformance_table();
+                    TableBean.setFocusperformancetable(focusperformanceTable);
+                    if (focusperformanceGetterSetter.getSTORE_CD().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                        //  return "STORE_SALES_PERFORMANCE";
+                    }
+                    data.value = 46;
+                    data.name = "Focus Performance Data Downloading";
+                }
+                publishProgress(data);
+
 
 
                 // Mapping Availability data
@@ -758,6 +794,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }
 
                 db.insertPerformanceData(performanceGetterSetter);
+                db.insertfocusPerformanceData(focusperformanceGetterSetter);
                 db.insertMappingAssetData(mappingassetgettersetter);
                 db.insertAssetMasterData(assetmastergettersetter);
                 db.insertCompanyMasterData(companyGetterSetter);

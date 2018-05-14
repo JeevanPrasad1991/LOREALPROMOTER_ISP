@@ -120,7 +120,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
         // setting list adapter
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
-       // expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         if (!storeStockinGetterSetter.getSelect_brand().equals("")) {
             if (storeStockinGetterSetter.getSelect_brand().equals("1")) {
                 sp_registered.setSelection(1);

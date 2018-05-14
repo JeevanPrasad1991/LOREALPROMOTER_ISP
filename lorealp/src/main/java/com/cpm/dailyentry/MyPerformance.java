@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.lorealpromoter.R;
+import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 
 import java.util.ArrayList;
@@ -25,12 +26,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class MyPerformance extends AppCompatActivity {
-    private RecyclerView lv_route;
+    private RecyclerView lv_route,lv_focus;
     GSKDatabase db;
-    String store_cd;
+    String store_cd,visit_date;
     ArrayList<PerformanceGetterSetter> list=new ArrayList<>();
+    ArrayList<FocusPerformanceGetterSetter> focuslist=new ArrayList<>();
     private SharedPreferences preferences;
     RouteAdapter routeAdapter;
+    focusAdapter focusAdapter;
     Toolbar toolbar;
     LinearLayout linearLayout,no_data_lay;
     @Override
@@ -43,18 +46,32 @@ public class MyPerformance extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lv_route=(RecyclerView)findViewById(R.id.lv_routewise);
+        lv_focus=(RecyclerView)findViewById(R.id.lv_focus);
         linearLayout = findViewById(R.id.ll_layout);
         no_data_lay = findViewById(R.id.no_data_lay);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
+        store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
+        visit_date = preferences.getString(CommonString.KEY_DATE, null);
+        setTitle("Performance - " + visit_date);
         db=new GSKDatabase(getApplicationContext());
         db.open();
         list = db.getPerformrmance();
+        focuslist = db.getFocusPerformrmance();
         if(list.size()>0){
             routeAdapter = new RouteAdapter(getApplicationContext(), list);
             lv_route.setAdapter(routeAdapter);
             lv_route.setLayoutManager(new LinearLayoutManager(this));
+            linearLayout.setVisibility(View.VISIBLE);
+            no_data_lay.setVisibility(View.GONE);
+        }else{
+            linearLayout.setVisibility(View.GONE);
+            no_data_lay.setVisibility(View.VISIBLE);
+        }
+
+        if(focuslist.size()>0){
+            focusAdapter = new focusAdapter(getApplicationContext(), focuslist);
+            lv_focus.setAdapter(focusAdapter);
+            lv_focus.setLayoutManager(new LinearLayoutManager(this));
             linearLayout.setVisibility(View.VISIBLE);
             no_data_lay.setVisibility(View.GONE);
         }else{
@@ -127,5 +144,50 @@ public class MyPerformance extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    public class focusAdapter extends RecyclerView.Adapter<focusAdapter.MyViewHolderfocus>{
+        private LayoutInflater inflator;
+        List<FocusPerformanceGetterSetter> data = Collections.emptyList();
+
+        public focusAdapter(Context context, List<FocusPerformanceGetterSetter> data) {
+            inflator = LayoutInflater.from(context);
+            this.data = data;
+        }
+
+        @Override
+        public focusAdapter.MyViewHolderfocus onCreateViewHolder(ViewGroup parent, int i) {
+            View view = inflator.inflate(R.layout.focusroute_item, parent, false);
+            focusAdapter.MyViewHolderfocus holder = new focusAdapter.MyViewHolderfocus(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final focusAdapter.MyViewHolderfocus viewHolder, final int position) {
+
+            final FocusPerformanceGetterSetter current = data.get(position);
+
+            viewHolder.tvroute.setText(String.valueOf(current.getFOCUS_TARGET().get(0)));
+            viewHolder.tvpss.setText(String.valueOf(current.getSALES().get(0)));
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class MyViewHolderfocus extends RecyclerView.ViewHolder {
+            TextView tvroute, tvpss,tvmerchandise;
+
+            public MyViewHolderfocus(View itemView) {
+                super(itemView);
+                tvroute = (TextView) itemView.findViewById(R.id.tvroute);
+                tvpss = (TextView) itemView.findViewById(R.id.tvpss);
+                tvmerchandise = (TextView) itemView.findViewById(R.id.tvmerchandise);
+            }
+        }
+    }
+
 
 }

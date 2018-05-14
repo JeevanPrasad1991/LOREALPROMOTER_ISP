@@ -31,6 +31,7 @@ import com.cpm.xmlGetterSetter.CompetitionPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerTypeGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
+import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.FoodStoreInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.HeaderGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
@@ -65,8 +66,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE7";
-    public static final int DATABASE_VERSION = 7;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE8";
+    public static final int DATABASE_VERSION = 8;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -107,6 +108,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getSubcetegory_table());
         db.execSQL(TableBean.getIncentive_table());
         db.execSQL(TableBean.getMappingsos_table());
+        db.execSQL(TableBean.getFocusperformancetable());
+
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
         db.execSQL(CommonString.CREATE_TABLE_CLOSING_STOCK_DATA);
@@ -373,6 +376,26 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("SALES",Float.valueOf(data.getSALES().get(i)));
 
                 db.insert("STORE_SALES_PERFORMANCE", null, values);
+            }
+
+        } catch (Exception ex) {
+            Log.d("Database Exception while Insert JCP Data ",
+                    ex.toString());
+        }
+
+    }
+
+
+    public void insertfocusPerformanceData(FocusPerformanceGetterSetter data) {
+        db.delete("STORE_FOCUS_SKU_PERFORMANCE", null, null);
+        ContentValues values = new ContentValues();
+        try {
+            for (int i = 0; i < data.getSTORE_CD().size(); i++) {
+                values.put("STORE_CD", Integer.parseInt(data.getSTORE_CD().get(i)));
+                values.put("FOCUS_TARGET", Float.valueOf(data.getFOCUS_TARGET().get(i)));
+                values.put("SALES",Float.valueOf(data.getSALES().get(i)));
+
+                db.insert("STORE_FOCUS_SKU_PERFORMANCE", null, values);
             }
 
         } catch (Exception ex) {
@@ -6576,6 +6599,43 @@ public ArrayList<ShareOfShelfGetterSetter> getHeaderShareOfSelfImageData(String 
 
         Log.d("Fetching", "JCP data---------------------->Stop<-----------");
         return list;
+    }
+    public ArrayList<FocusPerformanceGetterSetter> getFocusPerformrmance() {
+
+        Log.d("Fetching facing competitor--------------->Start<------------",
+                "------------------");
+        ArrayList<FocusPerformanceGetterSetter> list = new ArrayList<FocusPerformanceGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * from STORE_FOCUS_SKU_PERFORMANCE"
+                    , null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    FocusPerformanceGetterSetter pgs = new FocusPerformanceGetterSetter();
+
+                    pgs.setFOCUS_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET"))));
+                    pgs.setSALES(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SALES"))));
+
+                    list.add(pgs);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            Log.d("Exception when fetching Facing Competitor!!!!!!!!!!!!!!!!!!!!!",
+                    e.toString());
+            return list;
+        }
+
+        Log.d("Fetching facing Competitor---------------------->Stop<-----------",
+                "-------------------");
+        return list;
+
     }
 
 

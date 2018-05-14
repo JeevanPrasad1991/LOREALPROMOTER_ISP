@@ -17,6 +17,7 @@ import com.cpm.xmlGetterSetter.ComplianceByMappingGetterSetter;
 import com.cpm.xmlGetterSetter.ComplianceGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.FailureGetterSetter;
+import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JCPGetterSetter;
 import com.cpm.xmlGetterSetter.JcpTypeGetterSetter;
@@ -1408,6 +1409,43 @@ public class XMLHandlers {
         }
         return performanceGetterSetter;
     }
+
+//
+public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp,
+                                                                                       int eventType) {
+    FocusPerformanceGetterSetter performanceGetterSetter = new FocusPerformanceGetterSetter();
+
+    try {
+        while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+            if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                if (xpp.getName().equals("META_DATA")) {
+                    performanceGetterSetter.setFocusperformance_table(xpp.nextText());
+                }
+                if (xpp.getName().equals("STORE_CD")) {
+                    performanceGetterSetter.setSTORE_CD(xpp.nextText());
+                }
+                if (xpp.getName().equals("FOCUS_TARGET")) {
+                    performanceGetterSetter.setFOCUS_TARGET(Float.valueOf(xpp.nextText()));
+                }
+
+                if (xpp.getName().equals("SALES")) {
+                    performanceGetterSetter.setSALES(Float.valueOf(xpp.nextText()));
+                }
+
+            }
+            xpp.next();
+        }
+    } catch (XmlPullParserException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    return performanceGetterSetter;
+}
+
 
 
     //Closing Cold
