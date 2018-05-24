@@ -1,6 +1,7 @@
 package com.cpm.fragment;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.preference.PreferenceManager;
 
 import com.cpm.Constants.CommonString;
 import com.cpm.lorealpromoter.R;
@@ -19,11 +21,11 @@ import com.cpm.lorealpromoter.R;
  */
 public class MainFragment extends Fragment {
 
-
+    private SharedPreferences preferences = null;
+    String noticeboard;
     public MainFragment() {
         // Required empty public constructor
     }
-
 
     WebView webView;
     ImageView imageView;
@@ -31,19 +33,22 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
        View view = inflater.inflate(R.layout.fragment_main, container, false);
-
         imageView = (ImageView) view.findViewById(R.id.img_main);
-
         webView = (WebView) view.findViewById(R.id.webview);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        noticeboard = preferences.getString(CommonString.KEY_notice_board, null);
         webView.setWebViewClient(new MyWebViewClient());
 
-        String url = CommonString.URL_Notice_Board;
+       /* String url = CommonString.URL_Notice_Board;
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(url);
+        webView.loadUrl(url);*/
 
+        webView.getSettings().setJavaScriptEnabled(true);
+        if (noticeboard!=null){
+            webView.loadUrl(noticeboard);
+        }
         return view;
     }
 
@@ -61,15 +66,6 @@ public class MainFragment extends Fragment {
         }*/
 
     }
-
-   /* private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-    }*/
-
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -93,7 +89,6 @@ public class MainFragment extends Fragment {
             WebViewActivity.this.progress.setProgress(0);*/
             super.onPageStarted(view, url, favicon);
         }
-
 
     }
 }

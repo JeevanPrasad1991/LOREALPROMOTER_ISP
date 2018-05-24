@@ -45,6 +45,7 @@ public class CommonString {
     public static final String KEY_MERCHANDISER_ID = "MERCHANDISER_ID";
     public static final String ERROR = " PROBLEM OCCURED IN ";
     public static final String KEY_SUCCESS_chkout = "Success";
+    public static final String KEY_notice_board = "notice_board";
 
 
     // webservice constants
@@ -788,6 +789,7 @@ public class CommonString {
 
 
     public static final String TABLE_SHARE_OF_SHELF_DATA = "STOCK_IN_SPINNER_DATA";
+    public static final String TABLE_SHARE_OF_SHELF_POPUP_DATA = "STOCK_IN_POPUP_DATA";
     public static final String CREATE_TABLE_SHARE_OF_SHELF_DATA_DATA = "CREATE TABLE IF NOT EXISTS "
             + TABLE_SHARE_OF_SHELF_DATA
             + "("
@@ -796,6 +798,20 @@ public class CommonString {
             + "STOCK_BRAND"
             + " INTEGER,"
             + "VISIT_DATE"
+            + " VARCHAR,"
+            + "STORE_ID"
+            + " INTEGER)";
+
+    public static final String CREATE_TABLE_SHARE_OF_SHELF_POPUP_DATA = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_SHARE_OF_SHELF_POPUP_DATA
+            + "("
+            + "KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + "STOCK_BRAND"
+            + " INTEGER,"
+            + "VISIT_DATE"
+            + " VARCHAR,"
+            + "CURRENT_DATE"
             + " VARCHAR,"
             + "STORE_ID"
             + " INTEGER)";

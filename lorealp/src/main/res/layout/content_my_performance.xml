@@ -240,6 +240,72 @@
                 android:layout_height="2dp"
                 android:background="@color/green" />
 
+            //usk
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimary">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="1 QAD"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_medium"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"
+                android:background="@color/blue"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Total Question"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Answered Question"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lv_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/green" />
+
         </LinearLayout>
 
 

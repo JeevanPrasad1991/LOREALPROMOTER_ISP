@@ -87,10 +87,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         setSupportActionBar(toolbar);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         user_name = preferences.getString(CommonString.KEY_USERNAME, null);
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
+
         getSupportActionBar().setTitle("Main Menu - " + visit_date);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -102,15 +102,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         View headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main_menu2, navigationView, false);
         navigationView.addHeaderView(headerView);
 
-
         tv_username = (TextView) headerView.findViewById(R.id.nav_user_name);
         tv_usertype = (TextView) headerView.findViewById(R.id.nav_user_type);
-
         tv_username.setText(user_name);
         tv_usertype.setText(user_type);
 
         navigationView.setNavigationItemSelectedListener(this);
-
         database = new GSKDatabase(this);
         database.open();
 

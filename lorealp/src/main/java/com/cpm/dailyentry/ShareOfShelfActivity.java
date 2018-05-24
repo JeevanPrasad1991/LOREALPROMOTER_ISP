@@ -116,7 +116,6 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-       // expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         btnSave.setOnClickListener(this);
         expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -192,7 +191,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         listDataChild = new HashMap<ShareOfShelfGetterSetter, List<ShareOfShelfGetterSetter>>();
         brandData = db.getHeaderShareOfSelfImageData(store_cd);
         if (!(brandData.size() > 0)) {
-            brandData = db.getmappingShareOfShelfData();
+           // brandData = db.getmappingShareOfShelfData();
         }
         if (brandData.size() > 0) {
             // Adding child data

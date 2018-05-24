@@ -20,20 +20,23 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.lorealpromoter.R;
 import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
+import com.cpm.xmlGetterSetter.TodayQuestionGetterSetter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MyPerformance extends AppCompatActivity {
-    private RecyclerView lv_route,lv_focus;
+    private RecyclerView lv_route,lv_focus,lv_today;
     GSKDatabase db;
     String store_cd,visit_date;
     ArrayList<PerformanceGetterSetter> list=new ArrayList<>();
     ArrayList<FocusPerformanceGetterSetter> focuslist=new ArrayList<>();
+    ArrayList<TodayQuestionGetterSetter> todaylist=new ArrayList<>();
     private SharedPreferences preferences;
     RouteAdapter routeAdapter;
     focusAdapter focusAdapter;
+    todayAdapter todayAdapter;
     Toolbar toolbar;
     LinearLayout linearLayout,no_data_lay;
     @Override
@@ -47,6 +50,7 @@ public class MyPerformance extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lv_route=(RecyclerView)findViewById(R.id.lv_routewise);
         lv_focus=(RecyclerView)findViewById(R.id.lv_focus);
+        lv_today=(RecyclerView)findViewById(R.id.lv_today);
         linearLayout = findViewById(R.id.ll_layout);
         no_data_lay = findViewById(R.id.no_data_lay);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -57,6 +61,7 @@ public class MyPerformance extends AppCompatActivity {
         db.open();
         list = db.getPerformrmance();
         focuslist = db.getFocusPerformrmance();
+        todaylist = db.getTodayQuestionAnsData();
         if(list.size()>0){
             routeAdapter = new RouteAdapter(getApplicationContext(), list);
             lv_route.setAdapter(routeAdapter);
@@ -78,6 +83,19 @@ public class MyPerformance extends AppCompatActivity {
             linearLayout.setVisibility(View.GONE);
             no_data_lay.setVisibility(View.VISIBLE);
         }
+
+        if(todaylist.size()>0){
+            todayAdapter = new todayAdapter(getApplicationContext(), todaylist);
+            lv_today.setAdapter(todayAdapter);
+            lv_today.setLayoutManager(new LinearLayoutManager(this));
+            linearLayout.setVisibility(View.VISIBLE);
+            no_data_lay.setVisibility(View.GONE);
+        }else{
+            linearLayout.setVisibility(View.GONE);
+            no_data_lay.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MyViewHolder>{
@@ -170,6 +188,51 @@ public class MyPerformance extends AppCompatActivity {
 
             viewHolder.tvroute.setText(String.valueOf(current.getFOCUS_TARGET().get(0)));
             viewHolder.tvpss.setText(String.valueOf(current.getSALES().get(0)));
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class MyViewHolderfocus extends RecyclerView.ViewHolder {
+            TextView tvroute, tvpss,tvmerchandise;
+
+            public MyViewHolderfocus(View itemView) {
+                super(itemView);
+                tvroute = (TextView) itemView.findViewById(R.id.tvroute);
+                tvpss = (TextView) itemView.findViewById(R.id.tvpss);
+                tvmerchandise = (TextView) itemView.findViewById(R.id.tvmerchandise);
+            }
+        }
+    }
+
+
+    ///
+
+    public class todayAdapter extends RecyclerView.Adapter<MyPerformance.todayAdapter.MyViewHolderfocus>{
+        private LayoutInflater inflator;
+        List<TodayQuestionGetterSetter> data = Collections.emptyList();
+
+        public todayAdapter(Context context, List<TodayQuestionGetterSetter> data) {
+            inflator = LayoutInflater.from(context);
+            this.data = data;
+        }
+
+        @Override
+        public MyPerformance.todayAdapter.MyViewHolderfocus onCreateViewHolder(ViewGroup parent, int i) {
+            View view = inflator.inflate(R.layout.focusroute_item, parent, false);
+            MyPerformance.todayAdapter.MyViewHolderfocus holder = new todayAdapter.MyViewHolderfocus(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MyPerformance.todayAdapter.MyViewHolderfocus viewHolder, final int position) {
+
+            final TodayQuestionGetterSetter current = data.get(position);
+
+            viewHolder.tvroute.setText(String.valueOf(current.getTOT_QUESTION().get(0)));
+            viewHolder.tvpss.setText(String.valueOf(current.getRIGHT_ANSWER().get(0)));
         }
 
         @Override

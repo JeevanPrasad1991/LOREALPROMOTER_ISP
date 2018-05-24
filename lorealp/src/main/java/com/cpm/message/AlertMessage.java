@@ -291,8 +291,8 @@ public class AlertMessage {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 
-								ACRA.getErrorReporter().handleException(
-										exception);
+							/*	ACRA.getErrorReporter().handleException(
+										exception);*/
 
 								Intent i = new Intent(activity,
 										MainMenuActivity.class);

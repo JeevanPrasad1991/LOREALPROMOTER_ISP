@@ -51,6 +51,24 @@ public class TableBean {
     public static String subcetegory_table;
     public static String incentive_table;
     public static String mappingsos_table;
+    public static String todayquestion_ans_table;
+    public static String noticboard_table;
+
+    public static String getNoticboard_table() {
+        return noticboard_table;
+    }
+
+    public static void setNoticboard_table(String noticboard_table) {
+        TableBean.noticboard_table = noticboard_table;
+    }
+
+    public static String getTodayquestion_ans_table() {
+        return todayquestion_ans_table;
+    }
+
+    public static void setTodayquestion_ans_table(String todayquestion_ans_table) {
+        TableBean.todayquestion_ans_table = todayquestion_ans_table;
+    }
 
     public static String getMappingsos_table() {
         return mappingsos_table;

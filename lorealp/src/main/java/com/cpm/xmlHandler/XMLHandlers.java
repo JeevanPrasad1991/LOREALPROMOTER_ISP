@@ -33,6 +33,7 @@ import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWrkingMasterGetterSetter;
+import com.cpm.xmlGetterSetter.NoticeurlGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
 import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PosmGetterSetter;
@@ -42,6 +43,7 @@ import com.cpm.xmlGetterSetter.QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMappingGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
+import com.cpm.xmlGetterSetter.TodayQuestionGetterSetter;
 
 
 public class XMLHandlers {
@@ -977,6 +979,41 @@ public class XMLHandlers {
         return incentive;
     }
 
+    public static TodayQuestionGetterSetter todayquesXML(XmlPullParser xpp,
+                                                         int eventType) {
+        TodayQuestionGetterSetter incentive = new TodayQuestionGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        incentive.setToday_question_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("TOT_QUESTION")) {
+                        incentive.setTOT_QUESTION(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("RIGHT_ANSWER")) {
+                        incentive.setRIGHT_ANSWER(xpp.nextText());
+                    }
+
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return incentive;
+    }
+
+
+
+
     public static MappingAvailabilityGetterSetter mappingavailXML(XmlPullParser xpp,
                                                                   int eventType) {
         MappingAvailabilityGetterSetter mappingavail = new MappingAvailabilityGetterSetter();
@@ -1668,19 +1705,22 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
         return payslip;
     }
 
+
+
+
     //usk
-    public static JcpTypeGetterSetter JcpTypeXMLHandler(XmlPullParser xpp, int eventType) {
-        JcpTypeGetterSetter qnsGetterSetter = new JcpTypeGetterSetter();
+    public static NoticeurlGetterSetter NoticeUrlXMLHandler(XmlPullParser xpp, int eventType) {
+        NoticeurlGetterSetter qnsGetterSetter = new NoticeurlGetterSetter();
 
         try {
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (xpp.getEventType() == XmlPullParser.START_TAG) {
                     if (xpp.getName().equals("META_DATA")) {
-                        qnsGetterSetter.setTable(xpp.nextText());
+                        qnsGetterSetter.setNoticeurl_table(xpp.nextText());
                     }
 
-                    if (xpp.getName().equals("JCP_TYPE")) {
-                        qnsGetterSetter.setJcp_type(xpp.nextText());
+                    if (xpp.getName().equals("NOTICE_URL")) {
+                        qnsGetterSetter.setNOTICE_URL(xpp.nextText());
                     }
                 }
                 xpp.next();

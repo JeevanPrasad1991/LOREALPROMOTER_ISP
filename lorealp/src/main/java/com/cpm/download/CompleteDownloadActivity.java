@@ -40,6 +40,7 @@ import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
+import com.cpm.xmlGetterSetter.TodayQuestionGetterSetter;
 import com.cpm.xmlHandler.XMLHandlers;
 import com.crashlytics.android.Crashlytics;
 
@@ -81,6 +82,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     PromoTypeGetterSetter promoTypeGetterSetter;
     IncentiveGetterSetter incentiveGetterSetter;
     MappingSosGetterSetter mappingSosGetterSetter;
+    TodayQuestionGetterSetter todayQuestionGetterSetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -384,7 +386,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     if (performanceGetterSetter.getSTORE_CD().size() > 0) {
                         resultHttp = CommonString.KEY_SUCCESS;
                     } else {
-                      //  return "STORE_SALES_PERFORMANCE";
+
                     }
                     data.value = 45;
                     data.name = "Performance Data Downloading";
@@ -404,7 +406,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
                 androidHttpTransport = new HttpTransportSE(CommonString.URL);
                 androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
-
                 Object focusperformanceMaster = (Object) envelope.getResponse();
 
                 if (focusperformanceMaster.toString() != null) {
@@ -417,7 +418,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     if (focusperformanceGetterSetter.getSTORE_CD().size() > 0) {
                         resultHttp = CommonString.KEY_SUCCESS;
                     } else {
-                        //  return "STORE_SALES_PERFORMANCE";
+
                     }
                     data.value = 46;
                     data.name = "Focus Performance Data Downloading";
@@ -650,6 +651,38 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "EMP_SALARY Downloading";
                 }
 
+
+
+                //PERFORMANCE_OQAD Slip Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "PERFORMANCE_OQAD");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                result1 = (Object) envelope.getResponse();
+
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    todayQuestionGetterSetter = XMLHandlers.todayquesXML(xpp, eventType);
+                    if (todayQuestionGetterSetter.getToday_question_table() != null) {
+                        String payslipTable = todayQuestionGetterSetter.getToday_question_table();
+                        TableBean.setTodayquestion_ans_table(payslipTable);
+                    } else {
+                        return "PERFORMANCE_OQAD";
+                    }
+                    data.value = 95;
+                    data.name = "PERFORMANCE_OQAD Downloading";
+                }
+
                 //Incentive Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -816,6 +849,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertpromoTypeData(promoTypeGetterSetter);
                 db.insertIncentiveTypeData(incentiveGetterSetter);
                 db.insertMappingSosData(mappingSosGetterSetter);
+                db.insertQuestionAnsData(todayQuestionGetterSetter);
 
 
                 data.value = 100;

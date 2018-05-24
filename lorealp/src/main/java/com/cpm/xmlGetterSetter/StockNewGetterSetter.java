@@ -65,7 +65,7 @@ public class StockNewGetterSetter {
     String opening_stock_backroom="";
 
     String store_cd, brand_cd, brand, sku_cd, sku, img_cam="", img_cat_one="", img_cat_two="",visit_date, category_cd, category,
-             ed_openingFacing, ed_midFacing, ed_closingFacing, asset_cd,
+             ed_openingFacing, ed_midFacing="", ed_closingFacing, asset_cd,
             chk_skuBox, stock_under45days,company_cd, himalaya_camera, category_camera;
 
 

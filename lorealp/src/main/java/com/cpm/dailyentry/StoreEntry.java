@@ -325,7 +325,6 @@ public class StoreEntry extends AppCompatActivity {
                                 Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
                             }
                         } else {
-                           // Snackbar.make(recyclerView, "First fill Opening Stock Backroom Data", Snackbar.LENGTH_SHORT).show();
                             Snackbar.make(recyclerView, "First  fill Opening Stock floor,Opening Stock Backroom, Stock in Data", Snackbar.LENGTH_SHORT).show();
 
                         }
@@ -401,14 +400,6 @@ public class StoreEntry extends AppCompatActivity {
             closingImg = R.drawable.closing_stock;
         }
 
-     /*   if (user_type.equals("Promoter")) {
-            int img[] = {openingImg, openningstockbackoffice, middayImg, closingImg, closingBackoffice, promotionImg, assetImg, marketIntelligence};//, additionalImg, competitionImg};
-            for (int i = 0; i < img.length; i++) {
-                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
-                recData.setIconImg(img[i]);
-                data.add(recData);
-            }
-        }*/
         if (user_type.equals("Promoter")) {
             int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {

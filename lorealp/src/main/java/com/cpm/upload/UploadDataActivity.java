@@ -20,6 +20,7 @@ import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.GeotaggingBeans;
 import com.cpm.GetterSetter.ShareOfShelfGetterSetter;
 import com.cpm.GetterSetter.StoreStockinGetterSetter;
+import com.cpm.GetterSetter.StoreStockinPopupGetterSetter;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.lorealpromoter.MainMenuActivity;
@@ -87,6 +88,7 @@ public class UploadDataActivity extends Activity {
     ArrayList<MarketIntelligenceGetterSetter> additionalVisibilityData = new ArrayList<>();
     ArrayList<SampledGetterSetter> sampledData = new ArrayList<>();
     StoreStockinGetterSetter storeSpinner;
+    StoreStockinPopupGetterSetter storepopup;
     ArrayList<StockNewGetterSetter> stockInData = new ArrayList<>();
     ArrayList<ShareOfShelfGetterSetter> shareOfShelImgData = new ArrayList<>();
     ArrayList<ShareOfShelfGetterSetter> shareOfShelfData = new ArrayList<>();
@@ -106,6 +108,7 @@ public class UploadDataActivity extends Activity {
         database = new GSKDatabase(this);
         database.open();
         storeSpinner = new StoreStockinGetterSetter();
+        storepopup = new StoreStockinPopupGetterSetter();
         Path = CommonString.FILE_PATH;
         new UploadTask(this).execute();
     }
@@ -298,33 +301,25 @@ public class UploadDataActivity extends Activity {
                             }
 
 
-                            /*//LOREAL_STOCK_BACKROOM_IMAGE_DATA
+
+                          /*  //LOREAL_Bill_date_DATA
                             final_xml = "";
                             onXML = "";
-                            stockbackroomImages = database.getStockBackRoomImageUploadData(coverageBeanlist.get(i).getStoreId());
-                            if (stockbackroomImages.size() > 0 && !stockbackroomImages.get(0).getImg_cam().equals("")) {
-                                for (int j = 0; j < stockbackroomImages.size(); j++) {
-                                    if (!stockbackroomImages.get(j).getImg_cam().equals("") || !stockbackroomImages.get(j).getImg_cat_one().equals("")
-                                            || !stockbackroomImages.get(j).getImg_cat_two().equals("")) {
-
-                                        onXML = "[LOREAL_STOCK_BACKROOM_IMAGE_DATA]"
-                                                + "[MID]" + mid + "[/MID]"
-                                                + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                                + "[CATEGORY_CD]" + stockbackroomImages.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                                + "[LOREAL_BACKROOM_IMAGE]" + stockbackroomImages.get(j).getImg_cam() + "[/LOREAL_BACKROOM_IMAGE]"
-                                                + "[CATEGORY__ONE_BACKROOM_IMAGE]" + stockbackroomImages.get(j).getImg_cat_one() + "[/CATEGORY__ONE_BACKROOM_IMAGE]"
-                                                + "[CATEGORY__TWO_BACKROOM_IMAGE]" + stockbackroomImages.get(j).getImg_cat_two() + "[/CATEGORY__TWO_BACKROOM_IMAGE]"
-                                                + "[/LOREAL_STOCK_BACKROOM_IMAGE_DATA]";
-
-                                        final_xml = final_xml + onXML;
-                                    }
-
+                            storepopup = database.getStockInPopupuPLOADData(coverageBeanlist.get(i).getStoreId());
+                            if (!storepopup.getCurrent_date().isEmpty()) {
+                                for (int j = 0; j < stockbackroomData.size(); j++) {
+                                    onXML = "[LOREAL_STOCK_IN_POPUP_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            + "[BILL_DATE]" + storepopup.getCurrent_date() + "[/BILL_DATE]"
+                                            + "[/LOREAL_STOCK_IN_POPUP_DATA]";
+                                    final_xml = final_xml + onXML;
                                 }
 
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_BACKROOM_IMAGE_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_IN_POPUP_DATA");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -336,16 +331,16 @@ public class UploadDataActivity extends Activity {
                                 if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                     isError = true;
                                 }
-                                data.value = 25;
-                                data.name = "LOREAL_STOCK_BACKROOM Image Data";
+                                data.value = 20;
+                                data.name = "LOREAL_STOCK_IN_POPUP_DATA Data";
                                 publishProgress(data);
                             }*/
 
-                            //upendra_12jan
                             //LOREALPRO_STOCK_IN_DATA
                             final_xml = "";
                             onXML = "";
                             storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
+                            storepopup = database.getStockInPopupuPLOADData(coverageBeanlist.get(i).getStoreId());
                             stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
                             if (stockInData.size() > 0) {
                                 String stock_in_exit = "", stock_in_brandListXml = "";
@@ -354,8 +349,11 @@ public class UploadDataActivity extends Activity {
                                         + "[MID]" + mid + "[/MID]"
                                         + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                         + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
+                                        + "[BILL_DATE]" + storepopup.getCurrent_date() + "[/BILL_DATE]"
                                         + "[/LOREAL_STOCK_IN_EXIT_DATA]";
                                 stock_in_exit = stock_in_exit + onXML;
+
+
 
                                 for (int j = 0; j < stockInData.size(); j++) {
                                     stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
