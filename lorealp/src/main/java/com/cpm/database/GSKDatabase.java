@@ -103,7 +103,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getCategorymastertable());
         db.execSQL(TableBean.getAudit_question_table());
         db.execSQL(TableBean.getPerformancetable());
-        //reason non asset
         db.execSQL(TableBean.getAssetnoreasonTable());
         db.execSQL(TableBean.getNonpromotionnoreasonTable());
         db.execSQL(TableBean.getPromoTypeTable());
@@ -112,7 +111,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getMappingsos_table());
         db.execSQL(TableBean.getFocusperformancetable());
         db.execSQL(TableBean.getTodayquestion_ans_table());
-        //  db.execSQL(TableBean.getNoticboard_table());
 
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
@@ -141,7 +139,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(CommonString.CREATE_TABLE_STOCK_BACKOFFICE_IMAGE);
         db.execSQL(CommonString.CREATE_TABLE_insert_OPENINGHEADER_BACKOFFICE_DATA);
         db.execSQL(CommonString.CREATE_TABLE_STOCK_BACKOFFICE_DATA);
-        //upendra
         db.execSQL(CommonString.CREATE_TABLE_STORE_GEOTAGGING);
         db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_DATA_DATA);
         db.execSQL(CommonString.CREATE_TABLE_insert_mid_day_HEADER_DATA);
@@ -1048,7 +1045,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values.put("FACING", data.get(save_listDataHeader.get(i)).get(j).getMccaindf());
                     values.put("BRAND", data.get(save_listDataHeader.get(i)).get(j).getBrand());
                     values.put("BRAND_CD", Integer.parseInt(data.get(save_listDataHeader.get(i)).get(j).getBrand_cd()));
-                    //values.put("STORE_DF", data.get(i).getStoredf());
+
                     values.put("STORE_CD", store_cd);
 
                     db.insert(CommonString.TABLE_FACING_COMPETITOR_DATA, null, values);
@@ -1140,8 +1137,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                             .getColumnIndexOrThrow("BRAND_CD")));
                     fc.setMccaindf(dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow("FACING")));
-                        /*	fc.setStoredf(dbcursor.getString(dbcursor
-                                    .getColumnIndexOrThrow("STORE_DF")));*/
+
 
 
                     list.add(fc);
@@ -1276,7 +1272,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
-                    // sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
 
 
@@ -1317,7 +1312,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
-                    // sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
 
                     list.add(sb);
@@ -1357,7 +1351,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
-                    // sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
 
                     list.add(sb);
@@ -1396,9 +1389,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
                     sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
-                  /*  sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
-                    // sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
-                    sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));*/
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -1790,7 +1780,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     //Stock Midday Sku data
     public ArrayList<StockNewGetterSetter> getStockSkuMiddayData(String account_cd, String city_cd, String storetype_cd, String categord_cd) {
         Log.d("Fetching", "Storedata--------------->Start<------------");
@@ -1925,7 +1914,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
                     AssetInsertdataGetterSetter sb = new AssetInsertdataGetterSetter();
-
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
 
@@ -2165,24 +2153,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
 
 
-                  /*  String s1 = data.get(save_listDataHeader.get(i)).get(j).getStock1();
-                    if (s1.equals("")) {
-                        values1.put("STOCK_1", "0");
-                    } else {
-                        values1.put("STOCK_1", data.get(save_listDataHeader.get(i)).get(j).getStock1());
-                    }
-                    String s2 = data.get(save_listDataHeader.get(i)).get(j).getStock2();
-                    if (s2.equals("")) {
-                        values1.put("STOCK_2", "0");
-                    } else {
-                        values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
-                    }
-                    String s3 = data.get(save_listDataHeader.get(i)).get(j).getStock3();
-                    if (s3.equals("")) {
-                        values1.put("STOCK_3", "0");
-                    } else {
-                        values1.put("STOCK_3", data.get(save_listDataHeader.get(i)).get(j).getStock3());
-                    }*/
                     db.insert(CommonString.TABLE_STOCK_DATA, null, values1);
                 }
             }
@@ -2214,37 +2184,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values1.put("BRAND", save_listDataHeader.get(i).getBrand());
                     values1.put("SKU", data.get(save_listDataHeader.get(i)).get(j).getSku());
                     values1.put("SKU_CD", Integer.parseInt(data.get(save_listDataHeader.get(i)).get(j).getSku_cd()));
-
-                 /*   values1.put("OPENING_FACING", "0");
-                    values1.put("STOCK_UNDER_DAYS", "0");*/
                     values1.put("COMPANY_CD", data.get(save_listDataHeader.get(i)).get(j).getCompany_cd());
-
-                 /*   values1.put("DATE_1", data.get(save_listDataHeader.get(i)).get(j).getDate1());
-                    values1.put("DATE_2", data.get(save_listDataHeader.get(i)).get(j).getDate2());
-                    values1.put("DATE_3", data.get(save_listDataHeader.get(i)).get(j).getDate3());*/
-
                     values1.put("STOCK_1", data.get(save_listDataHeader.get(i)).get(j).getStock1());
                     values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
-                    /*  values1.put("STOCK_3", data.get(save_listDataHeader.get(i)).get(j).getStock3());*/
 
-                  /*  String s1 = data.get(save_listDataHeader.get(i)).get(j).getStock1();
-                    if (s1.equals("")) {
-                        values1.put("STOCK_1", "0");
-                    } else {
-                        values1.put("STOCK_1", data.get(save_listDataHeader.get(i)).get(j).getStock1());
-                    }
-                    String s2 = data.get(save_listDataHeader.get(i)).get(j).getStock2();
-                    if (s2.equals("")) {
-                        values1.put("STOCK_2", "0");
-                    } else {
-                        values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
-                    }
-                    String s3 = data.get(save_listDataHeader.get(i)).get(j).getStock3();
-                    if (s3.equals("")) {
-                        values1.put("STOCK_3", "0");
-                    } else {
-                        values1.put("STOCK_3", data.get(save_listDataHeader.get(i)).get(j).getStock3());
-                    }*/
                     db.insert(CommonString.TABLE_STOCK_BACKOFFICE_DATA, null, values1);
                 }
             }
@@ -3260,7 +3203,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setSku(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU")));
                     sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
                     sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
-                    // sb.setEd_openingFacing(dbcursor.getString(dbcursor.getColumnIndexOrThrow("OPENING_FACING")));
                     sb.setStock_under45days(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_UNDER_DAYS")));
                     sb.setCompany_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("COMPANY_CD")));
 
@@ -3395,20 +3337,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.close();
             }
 
-/*
-            if (dbcursor != null) {
-                dbcursor.moveToFirst();
-                int icount = dbcursor.getCount();
-                dbcursor.close();
-                if (icount > 0) {
-                    filled = true;
-                } else {
-                    filled = false;
-                }
-
-            }
-*/
-
 
         } catch (Exception e) {
             Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
@@ -3437,20 +3365,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.close();
             }
 
-
-
-/*
-            if (dbcursor != null) {
-                dbcursor.moveToFirst();
-                int icount = dbcursor.getCount();
-                dbcursor.close();
-                if (icount > 0) {
-                    filled = true;
-                } else {
-                    filled = false;
-                }
-            }
-*/
         } catch (Exception e) {
             Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
             return filled;
@@ -3458,8 +3372,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return filled;
     }
 
-
-//get Closing stock data from database
 
     public ArrayList<StockNewGetterSetter> getClosingStockDataFromDatabase(String account_cd, String category_cd, String store_cd) {
         Log.d("Fetching", "Opening Stock data--------------->Start<------------");
@@ -3533,16 +3445,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "WHERE CD.KEYACCOUNT_CD= '" + account_cd + "' AND SD.CATEGORY_CD ='" + category_cd + "' AND S.COMPANY_CD='1' " + " ORDER BY SD.SKU_SEQUENCE", null);
 
 
-
-           /* SELECT DISTINCT SD.SKU_CD AS SKU_CD, SD.SKU AS SKU,SD.BRAND_CD AS BRAND_CD,SD.BRAND AS BRAND, S.STOCK_1
-            AS OPENING_STOCK, M.MIDDAY_STOCK AS MIDDAY_STOCK, F.STOCK_1 AS OPENING_STOCK_BACKROOM, S.CLOSING_STOCK AS CLOSING_STOCK
-            FROM MAPPING_STOCK CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
-            INNER JOIN (SELECT * FROM STOCK_DATA WHERE STORE_CD = 3 )  S ON SD.SKU_CD=S.SKU_CD
-            INNER JOIN (SELECT * FROM STOCK_BACKOFFICE_DATA WHERE STORE_CD = 3 )  F ON SD.SKU_CD= F.SKU_CD
-            INNER JOIN (SELECT * FROM MID_DAY_DATA WHERE STORE_CD = 3 ) M ON SD.SKU_CD = M.SKU_CD
-            WHERE CD.KEYACCOUNT_CD= '9' AND SD.CATEGORY_CD ='1' AND S.COMPANY_CD='1'  ORDER BY SD.SKU_SEQUENCE*/
-
-
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
@@ -3558,8 +3460,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setClosing_stk_backroom(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK_BACKROOM")));
                     sb.setOpening_stock_backroom(dbcursor.getString(dbcursor.getColumnIndexOrThrow("OPENING_STOCK_BACKROOM")));
 
-                    //getClosing_stk_backroom
-                    // setEd_closingFacing
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -3575,9 +3475,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", "OPening midday---------------------->Stop<-----------");
         return list;
     }
-
-
-//get Closing stock data from database
 
 
     //check if table is empty
@@ -3611,8 +3508,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-//get Midday stock data from database
 
     public ArrayList<StockNewGetterSetter> getMiddayStockDataFromDatabase(String account_cd, String categord_cd) {
         Log.d("Fetching", "Mid Stock data--------------->Start<------------");
@@ -3726,8 +3621,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-//deletecross Food Store data
-
     public void deleteFoodStoreData(String storeid) {
 
         try {
@@ -3745,8 +3638,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         }
     }
 
-
-//deletecross Promotion Data
 
     public void deletePromotionData(String storeid) {
         try {
@@ -3847,7 +3738,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     df.setBrand("");
                     df.setBrand_cd("");
                     df.setMccaindf("");
-                    //df.setStoredf("");
 
                     list.add(df);
                     dbcursor.moveToNext();
@@ -3895,7 +3785,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     df.setBrand("");
                     df.setBrand_cd("");
                     df.setMccaindf("");
-                    //df.setStoredf("");
 
                     list.add(df);
                     dbcursor.moveToNext();
@@ -4352,8 +4241,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-    //get PJP Deviation Stores List Data
-
 
     public void deleteStockRow(int id, String store_cd) {
 
@@ -4542,7 +4429,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-    //Insert Calls Data
     public void insertPOIData(POIGetterSetter poiGetterSetter, String store_cd) {
 
         ContentValues values = new ContentValues();
@@ -4568,7 +4454,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-    //get Calls Data
     public ArrayList<POIGetterSetter> getPOIData(String store_cd) {
 
         Log.d("Fetching calls--------------->Start<------------",
@@ -4634,7 +4519,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-    /// get store Status
     public JourneyPlanGetterSetter getStoreStatus(String id) {
 
         Log.d("FetchingStoredata--------------->Start<------------",
@@ -4923,7 +4807,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-
     public ArrayList<SkuGetterSetter> getPaidVisibilitySkuListData(String key_id) {
         Log.d("Fetching ", "checklist data--------------->Start<------------");
         ArrayList<SkuGetterSetter> list = new ArrayList<>();
@@ -4958,7 +4841,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", " checklist data---------------------->Stop<-----------");
         return list;
     }
-
 
     public boolean isStoreAssetDataFilled(String storeId) {
         boolean filled = false;
@@ -5054,14 +4936,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setStore_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORE_CD")));
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setSku_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CD")));
-                    //   sb.setDate1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_1")));
-                    sb.setStock1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")));
-                    // sb.setDate2(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_2")));
-                    sb.setStock2(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_2")));
-                    //  sb.setDate3(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_3")));
-                    sb.setStock3(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_3")));
 
-                    //  sb.setClosing_stk_backroom(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK_BACKROOM")));
+                    sb.setStock1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")));
+                    sb.setStock2(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_2")));
+                    sb.setStock3(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_3")));
                     String closing_stock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK"));
                     if (closing_stock == null || closing_stock.equals("")) {
                         sb.setClosing_stk_backroom("0");
@@ -5101,12 +4979,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
-                    /*   sb.setImg_cam(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE_STK")));*/
                     sb.setImg_cat_one(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE_CAT_ONE")));
-                    /*  sb.setImg_cat_two(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE_CAT_TWO")));*/
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
-                    //  sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
                     list.add(sb);
                     dbcursor.moveToNext();
                 }
@@ -5469,8 +5344,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCompany(dbcursor.getString(dbcursor.getColumnIndexOrThrow("COMPANY")));
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
-                    /*sb.setPromotype_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMOTYPE_CD")));
-                    sb.setPromotype(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMOTYPE")));*/
                     sb.setPhoto(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PHOTO")));
                     sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow("REMARK")));
                     sb.setKey_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("KEY_ID")));
@@ -6652,7 +6525,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
         try {
             values.put("STORE_ID", storeid);
             values.put("VISIT_DATE", visitdate);
-            //    values.put("STOCK_BRAND", data.getSelect_brand());
             values.put("CURRENT_DATE", dateset.getCurrent_date());
 
             id = db.insert(CommonString.TABLE_SHARE_OF_SHELF_POPUP_DATA, null, values);
