@@ -276,7 +276,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             }
 
             holder.storename.setText(jcplist.get(position).getStore_name().get(0));
-            holder.city.setText(jcplist.get(position).getCity().get(0));
+            holder.city.setText(jcplist.get(position).getCity().get(0)+"\n"+jcplist.get(position).getChannel().get(0));
             holder.keyaccount.setText(jcplist.get(position).getKey_account().get(0));
             return convertView;
         }
@@ -365,7 +365,10 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             jcplist.get(position).getKeyaccount_cd().get(0),
                             jcplist.get(position).getCity_cd().get(0),
                             jcplist.get(position).getStoretype_cd().get(0),
-                            jcplist.get(position).getGeotagStatus().get(0));
+                            jcplist.get(position).getGeotagStatus().get(0),
+                            jcplist.get(position).getChannel_cd().get(0),
+                            jcplist.get(position).getFloor_status().get(0),
+                            jcplist.get(position).getBackroom_status().get(0));
                 }
             } else {
                 Snackbar.make(lv, "Data already filled ", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -399,7 +402,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     }
 
     void showMyDialog(final String storeCd, final String storeName, final String status, final String visitDate, final String checkout_status,
-                      final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag) {
+                      final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag,final String channel_cd,
+                      final  String floor_status,final  String backroom_status) {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialogbox);
@@ -421,6 +425,9 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         editor.putString(CommonString.KEY_CITY_CD, city_cd);
                         editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
                         editor.putString(CommonString.KEY_STORE_CD, storeCd);
+                        editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
+                        editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
+                        editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
 
                         if (status.equals("Yes")) {
                             editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
@@ -477,6 +484,10 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                                         editor.putString(CommonString.KEY_CITY_CD, city_cd);
                                         editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
                                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
+                                        editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
+                                        editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
+                                        editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
+
                                         editor.commit();
                                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);
                                         startActivity(in);
@@ -501,6 +512,9 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         editor.putString(CommonString.KEY_CITY_CD, city_cd);
                         editor.putString(CommonString.KEY_STORETYPE_CD, store_ype_cd);
                         editor.putString(CommonString.KEY_STOREVISITED_STATUS, "");
+                        editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
+                        editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
+                        editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
                         editor.commit();
                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);
                         startActivity(in);

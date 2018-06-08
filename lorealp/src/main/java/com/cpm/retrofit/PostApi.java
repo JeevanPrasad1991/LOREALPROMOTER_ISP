@@ -13,5 +13,8 @@ import retrofit.http.POST;
 public interface PostApi {
     @POST("Uploadimages")
     Call<String> getUploadImage(@Body RequestBody reqesBody);
+
+   /* @retrofit.http.POST("Uploadimages")
+    retrofit.Call<String> getUploadImageRetrofitOne(@retrofit.http.Body com.squareup.okhttp.RequestBody body1);*/
 }
 

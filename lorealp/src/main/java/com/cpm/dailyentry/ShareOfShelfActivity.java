@@ -199,6 +199,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
 
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getShareofShelfBrandData(brandData.get(i).getCategory_cd(),store_cd);
+
                 List<ShareOfShelfGetterSetter> skulist = new ArrayList<ShareOfShelfGetterSetter>();
                 for (int j = 0; j < skuData.size(); j++) {
                     skulist.add(skuData.get(j));

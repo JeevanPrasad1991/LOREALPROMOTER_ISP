@@ -31,6 +31,7 @@ import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
+import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
@@ -83,6 +84,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     IncentiveGetterSetter incentiveGetterSetter;
     MappingSosGetterSetter mappingSosGetterSetter;
     TodayQuestionGetterSetter todayQuestionGetterSetter;
+    MappingChannalSkuGetterSetter mappingChannalSkuGetterSetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -485,6 +487,37 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
+                // MAPPING_CHANNEL_SKU
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_CHANNEL_SKU");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                Object   result2 = (Object) envelope.getResponse();
+
+                if (result2.toString() != null) {
+                    xpp.setInput(new StringReader(result2.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    mappingChannalSkuGetterSetter = XMLHandlers.mappingChannelSkuXML(xpp, eventType);
+                    if (mappingChannalSkuGetterSetter.getMapping_channel_sku_table() != null) {
+                        String incentiveTable = mappingChannalSkuGetterSetter.getMapping_channel_sku_table();
+                        TableBean.setMappingChanneltable(incentiveTable);
+
+                    } else {
+                        return "MAPPING_CHANNEL_SKU";
+                    }
+                    data.value = 97;
+                    data.name = "MAPPING_CHANNEL_SKU Downloading";
+                }
+
 
 
                 // Mapping Promotion data
@@ -695,7 +728,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 androidHttpTransport = new HttpTransportSE(CommonString.URL);
                 androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
 
-                Object result2 = (Object) envelope.getResponse();
+                 result2 = (Object) envelope.getResponse();
 
                 if (result2.toString() != null) {
                     xpp.setInput(new StringReader(result2.toString()));
@@ -760,6 +793,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.value = 96;
                     data.name = "NON_ASSET_REASON Downloading";
                 }
+
 
                 //NON_PROMOTION_REASON FOR ASSET Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
@@ -850,6 +884,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertIncentiveTypeData(incentiveGetterSetter);
                 db.insertMappingSosData(mappingSosGetterSetter);
                 db.insertQuestionAnsData(todayQuestionGetterSetter);
+
+                db.insertMappingChannelData(mappingChannalSkuGetterSetter);
 
 
                 data.value = 100;

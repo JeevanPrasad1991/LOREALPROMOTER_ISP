@@ -31,6 +31,7 @@ import com.cpm.dailyentry.DailyEntryScreen;
 import com.cpm.dailyentry.IncentiveActivity;
 import com.cpm.dailyentry.MyPerformance;
 import com.cpm.dailyentry.PaySlip;
+import com.cpm.dailyentry.VisitorLoginActivity;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.download.CompleteDownloadActivity;
@@ -320,6 +321,15 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             jcplist = database.getJCPData(date);
             if (jcplist.size()>0){
                 Intent in=new Intent(this, MyPerformance.class);
+                startActivity(in);
+            }else {
+                Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            }
+        }
+        else if (id==R.id.visiter_login){
+            jcplist = database.getJCPData(date);
+            if (jcplist.size()>0){
+                Intent in=new Intent(this, VisitorLoginActivity.class);
                 startActivity(in);
             }else {
                 Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();

@@ -7,7 +7,7 @@ public class CommonString {
     public static final String MESSAGE_SOCKETEXCEPTION = "Network Communication Failure. Please Check Your Network Connection";
     public static final String MESSAGE_INTERNET_NOT_AVALABLE = "No Internet Connection.Please Check Your Network Connection";
     public static final String MESSAGE_EXCEPTION = "Problem Occured : Report The Problem To Parinaam ";
-
+    public static final String MESSAGE_INVALID_XML = "Problem Occured while parsing XML : invalid data";
 
     public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
     public static final String BACKUP_PATH = Environment.getExternalStorageDirectory() + "/Lorealpromoter_backup/";
@@ -48,6 +48,7 @@ public class CommonString {
     public static final String KEY_notice_board = "notice_board";
 
 
+
     // webservice constants
     public static final String KEY_SUCCESS = "Success";
     public static final String KEY_FAILURE = "Failure";
@@ -61,6 +62,8 @@ public class CommonString {
     public static final String KEY_COVERAGE_REMARK = "REMARK";
 
     public static final String METHOD_UPLOAD_IMAGE = "GetImageWithFolderName";
+
+    public static final String TABLE_VISITOR_LOGIN = "TABLE_VISITOR_LOGIN";
 
     public static final String SOAP_ACTION_UPLOAD_IMAGE = "http://tempuri.org/" + METHOD_UPLOAD_IMAGE;
     public static final String TABLE_INSERT_OPENINGHEADER_CLOSING_DATA = "openingHeader_Closing_data";
@@ -236,6 +239,7 @@ public class CommonString {
    // public static final String URL = "http://di.parinaam.in/Danonewebservice.asmx";
     public static final String URL = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
 
+    public static String URL2 = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
     //http://lipromo.parinaam.in/LoralMerchandising.asmx/Uploadimages
    /* http://lipromo.parinaam.in/LoralMerchandising.asmx*/
     public static final String URLFORRETROFIT = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
@@ -276,6 +280,9 @@ public class CommonString {
     public static final String KEY_STORETYPE_CD = "STORETYPE_CD";
 
     public static final String KEY_STORE_CD = "STORE_CD";
+    public static final String KEY_CHANNEL_CD = "CHANNEL_CD";
+    public static final String KEY_FLOOR_STATUS = "FLOOR_STATUS";
+    public static final String KEY_BACKROOK_STATUS = "BACKROOK_STATUS";
     public static final String KEY_STOREVISITED = "STORE_VISITED";
     public static final String KEY_STOREVISITED_STATUS = "STORE_VISITED_STATUS";
     public static final String KEY_FOOD_STORE = "FOOD_STORE";
@@ -940,6 +947,27 @@ public class CommonString {
                     "FACING" +
                     " INTEGER" +
                     ")";
+    public static final int TIMEOUT = 20000;
+    public static final String METHOD_NAME_IMAGE = "GetImageWithFolderName";
+    public static final String KEY_EMP_CODE = "EMP_CODE";
+    public static final String KEY_NAME = "NAME";
+    public static final String KEY_DESIGNATION = "DESIGNATION";
+    public static final String KEY_UPLOADSTATUS = "UPLOADSTATUS";
+    public static final String KEY_IN_TIME_IMAGE = "IN_TIME_IMAGE";
+    public static final String KEY_OUT_TIME_IMAGE = "OUT_TIME_IMAGE";
+    public static final String CREATE_TABLE_VISITOR_LOGIN = "CREATE TABLE "
+            + TABLE_VISITOR_LOGIN + " (" + KEY_ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_USERNAME + " VARCHAR,"
+            + KEY_EMP_CODE + " VARCHAR,"
+            + KEY_NAME + " VARCHAR,"
+            + KEY_DESIGNATION + " VARCHAR,"
+            + KEY_UPLOADSTATUS + " VARCHAR,"
+            + KEY_VISIT_DATE + " VARCHAR,"
+            + KEY_IN_TIME + " VARCHAR,"
+            + KEY_OUT_TIME + " VARCHAR,"
+            + KEY_IN_TIME_IMAGE + " VARCHAR,"
+            + KEY_OUT_TIME_IMAGE + " VARCHAR)";
 
 
 }

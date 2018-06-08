@@ -32,6 +32,9 @@
     <string name="save">SAVE</string>
     <string name="start_time">MM/DD/YYYY</string>
     <string name="bill_date">Bill Date</string>
+    <string name="focus_target">Focus Target</string>
+    <string name="store_target">Store Target</string>
+    <string name="answer">Answer</string>
     <string name="cancel">CANCEL</string>
 
     <string name="actual_listed">Actual listed</string>
@@ -104,6 +107,7 @@
     <string name="title_activity_store_image">Store Image</string>
     <string name="title_activity_audi">Category Audit</string>
     <string name="title_activity_quiz_tabbed">QuizTabbedActivity</string>
+    <string name="title_activity_visitor_login">Visitor Login</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="brand">Brand</string>
     <string name="sku">Sku</string>
@@ -115,5 +119,9 @@
     <string name="closed">Close</string>
     <string name="messageM">All the data will be deleted.\n Are you sure you want to delete the data</string>
     <string name="title_activity_geo_tag">GeoTag</string>
+
+    <string name="data_uploaded_successfully">Database Uploaded Successfully</string>
+    <string name="database_not_uploaded">Database Not Uploaded</string>
+    <string name="errordatabase_not_uploaded">Error in Database Uploading</string>
 
 </resources>

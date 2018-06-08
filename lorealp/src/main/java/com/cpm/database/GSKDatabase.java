@@ -14,6 +14,7 @@ import com.cpm.GetterSetter.ShareOfShelfGetterSetter;
 import com.cpm.GetterSetter.StoreBean;
 import com.cpm.GetterSetter.StoreStockinGetterSetter;
 import com.cpm.GetterSetter.StoreStockinPopupGetterSetter;
+import com.cpm.GetterSetter.VisitorDetailGetterSetter;
 import com.cpm.dailyentry.AssetChecklistReasonGettersetter;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.delegates.TableBean;
@@ -42,6 +43,7 @@ import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
+import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.MarketIntelligenceGetterSetter;
@@ -68,8 +70,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE9";
-    public static final int DATABASE_VERSION = 9;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE11";
+    public static final int DATABASE_VERSION = 11;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -112,6 +114,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getFocusperformancetable());
         db.execSQL(TableBean.getTodayquestion_ans_table());
 
+        db.execSQL(TableBean.getMappingChanneltable());
+
+
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
         db.execSQL(CommonString.CREATE_TABLE_CLOSING_STOCK_DATA);
@@ -147,6 +152,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(CommonString.CREATE_TABLE_insert_share_of_shelf_HEADER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_FACING_DATA);
         db.execSQL(CommonString.CREATE_TABLE_SHARE_OF_SHELF_POPUP_DATA);
+
+        //visiter login
+        db.execSQL(CommonString.CREATE_TABLE_VISITOR_LOGIN);
 
 
     }
@@ -357,6 +365,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("CITY_CD", data.getCity_cd().get(i));
                 values.put("STORETYPE_CD", data.getStoretype_cd().get(i));
                 values.put("INSTOCK_ALLOW", data.getInstock_allow().get(i));
+                values.put("CHANNEL_CD", data.getChannel_cd().get(i));
+                values.put("CHANNEL", data.getChannel().get(i));
+                values.put("FLOOR_STATUS", data.getFloor_status().get(i));
+                values.put("BACKROOK_STATUS", data.getBackroom_status().get(i));
+
+
                 db.insert("JOURNEY_PLAN", null, values);
 
             }
@@ -397,6 +411,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put("STORE_CD", Integer.parseInt(data.getSTORE_CD().get(i)));
                 values.put("FOCUS_TARGET", Float.valueOf(data.getFOCUS_TARGET().get(i)));
                 values.put("SALES", Float.valueOf(data.getSALES().get(i)));
+                values.put("ALL_TARGET", Float.valueOf(data.getALL_TARGET().get(i)));
+                values.put("SHOW_TARGET", Float.valueOf(data.getSHOW_TARGET().get(i)));
 
                 db.insert("STORE_FOCUS_SKU_PERFORMANCE", null, values);
             }
@@ -883,6 +899,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCity_cd((dbcursor.getString(dbcursor.getColumnIndexOrThrow("CITY_CD"))));
                     sb.setStoretype_cd((dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORETYPE_CD"))));
                     sb.setInstock_allow((dbcursor.getString(dbcursor.getColumnIndexOrThrow("INSTOCK_ALLOW"))));
+                    sb.setChannel_cd((dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHANNEL_CD"))));
+                    sb.setChannel((dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHANNEL"))));
+                    sb.setFloor_status((dbcursor.getString(dbcursor.getColumnIndexOrThrow("FLOOR_STATUS"))));
+                    sb.setBackroom_status((dbcursor.getString(dbcursor.getColumnIndexOrThrow("BACKROOK_STATUS"))));
+
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -919,15 +940,19 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setStore_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORE_CD")));
                     sb.setKey_account(dbcursor.getString(dbcursor.getColumnIndexOrThrow("KEYACCOUNT")));
-                    sb.setStore_name((dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORENAME"))));
-                    sb.setCity((dbcursor.getString(dbcursor.getColumnIndexOrThrow("CITY"))));
-                    sb.setUploadStatus((dbcursor.getString(dbcursor.getColumnIndexOrThrow("UPLOAD_STATUS"))));
-                    sb.setCheckOutStatus((dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHECKOUT_STATUS"))));
+                    sb.setStore_name(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STORENAME")));
+                    sb.setCity(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CITY")));
+                    sb.setUploadStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow("UPLOAD_STATUS")));
+                    sb.setCheckOutStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHECKOUT_STATUS")));
                     sb.setVISIT_DATE((dbcursor.getString(dbcursor.getColumnIndexOrThrow("VISIT_DATE"))));
-                    sb.setLatitude((dbcursor.getString(dbcursor.getColumnIndexOrThrow("LATTITUDE"))));
-                    sb.setLongitude((dbcursor.getString(dbcursor.getColumnIndexOrThrow("LONGITUDE"))));
-                    sb.setGeotagStatus((dbcursor.getString(dbcursor.getColumnIndexOrThrow("GEO_TAG"))));
+                    sb.setLatitude(dbcursor.getString(dbcursor.getColumnIndexOrThrow("LATTITUDE")));
+                    sb.setLongitude(dbcursor.getString(dbcursor.getColumnIndexOrThrow("LONGITUDE")));
+                    sb.setGeotagStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow("GEO_TAG")));
                     sb.setInstock_allow((dbcursor.getString(dbcursor.getColumnIndexOrThrow("INSTOCK_ALLOW"))));
+                    sb.setChannel_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHANNEL_CD")));
+                    sb.setChannel(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CHANNEL")));
+                    sb.setFloor_status(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FLOOR_STATUS")));
+                    sb.setBackroom_status(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BACKROOK_STATUS")));
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -1139,7 +1164,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                             .getColumnIndexOrThrow("FACING")));
 
 
-
                     list.add(fc);
                     dbcursor.moveToNext();
                 }
@@ -1290,6 +1314,45 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
+
+    public ArrayList<StockNewGetterSetter> getStockAvailabilityDataNew(String channel_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+
+
+            dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO   FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
+                    " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD  WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
+                    sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
+                    sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
+
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching opening stock!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching ", "opening stock---------------------->Stop<-----------");
+        return list;
+    }
+
+
     public ArrayList<StockNewGetterSetter> getStockAvailabilityData1(String account_cd, String city_cd, String storetype_cd) {
         Log.d("Fetching", "Storedata--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
@@ -1343,6 +1406,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "WHERE CD.KEYACCOUNT_CD ='" + account_cd + "' AND CITY_CD  ='" + city_cd + "' AND STORETYPE_CD  ='" + storetype_cd + "'" +
                     " ORDER BY SD.BRAND_SEQUENCE", null);
 
+
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
@@ -1350,6 +1414,46 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
+                    sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
+                    sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching opening stock!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching ", "opening stock---------------------->Stop<-----------");
+        return list;
+    }
+
+
+    // public ArrayList<StockNewGetterSetter> getmappingStockData(String account_cd, String city_cd, String storetype_cd) {
+    public ArrayList<StockNewGetterSetter> getmappingStockDataNew(String channel_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+
+
+            dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO   FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
+                    " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD  WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+
+
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
 
@@ -1412,7 +1516,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY, CAT_STOCK, IMAGE_STK, IMAGE_CAT_ONE, IMAGE_CAT_TWO,HIMALAYA_PHOTO, CATEGORY_PHOTO FROM STOCK_IMAGE WHERE STORE_CD ='" + store_cd + "'AND VISIT_DATE  ='" + visit_date + "'", null);
+            dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY, CAT_STOCK, IMAGE_STK, IMAGE_CAT_ONE, IMAGE_CAT_TWO,HIMALAYA_PHOTO, CATEGORY_PHOTO " +
+                    "FROM STOCK_IMAGE WHERE STORE_CD ='" + store_cd + "'AND VISIT_DATE  ='" + visit_date + "'", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -1555,9 +1660,61 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setStock1("");
                     sb.setStock2("");
                     sb.setStock3("");
-                    sb.setDate1("");
-                    sb.setDate2("");
-                    sb.setDate3("");
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching opening stock!!!!!!!!!!! " + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", " opening stock---------------------->Stop<-----------");
+        return list;
+    }
+
+
+    public ArrayList<StockNewGetterSetter> getStockBackOfficeSkuDataNew(String channel_cd, String categord_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+           /* dbcursor = db.rawQuery("SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD " +
+                    "FROM MAPPING_STOCK CD " +
+                    "INNER JOIN SKU_MASTER SD " +
+                    "ON CD.SKU_CD = SD.SKU_CD " +
+                    "INNER JOIN BRAND_MASTER BM " +
+                    "ON BM.BRAND_CD = SD.BRAND_CD " +
+                    "WHERE CD.KEYACCOUNT_CD ='" + account_cd + "' AND CITY_CD  ='" + city_cd + "' AND STORETYPE_CD  ='" + storetype_cd + "' AND SD.CATEGORY_CD ='" + categord_cd + "' " +
+                    "AND BM.COMPANY_CD = '1' ORDER BY SD.SKU_SEQUENCE ", null);*/
+
+            dbcursor = db.rawQuery("SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD " +
+                    "FROM MAPPING_CHANNEL_SKU CD " +
+                    "INNER JOIN SKU_MASTER SD " +
+                    "ON CD.SKU_CD = SD.SKU_CD " +
+                    "INNER JOIN BRAND_MASTER BM " +
+                    "ON BM.BRAND_CD = SD.BRAND_CD " +
+                    "WHERE CD.CHANNEL_CD ='" + channel_cd + "' AND  BM.BRAND_CD ='" + categord_cd + "' " +
+                    " ORDER BY SD.SKU_SEQUENCE ", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+                    sb.setSku_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CD")));
+                    sb.setSku(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU")));
+                    sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
+                    sb.setCompany_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("COMPANY_CD")));
+                    sb.setEd_openingFacing("");
+                    sb.setStock_under45days("");
+                    sb.setStock1("");
+                    sb.setStock2("");
+                    sb.setStock3("");
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -1591,6 +1748,14 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "WHERE CD.KEYACCOUNT_CD ='" + account_cd + "' AND CITY_CD  ='" + city_cd + "' AND STORETYPE_CD  ='" + storetype_cd + "' AND SD.CATEGORY_CD ='" + categord_cd + "' " +
                     " ORDER BY SD.SKU_SEQUENCE ", null);
 
+
+            //use karna h
+          /*  SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD FROM
+            MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
+            INNER JOIN BRAND_MASTER BM ON BM.BRAND_CD = SD.BRAND_CD
+            WHERE CD.CHANNEL_CD ='2' AND BM.BRAND_CD = 2
+            ORDER BY SD.SKU_SEQUENCE*/
+
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
@@ -1606,10 +1771,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setStock1("");
                     sb.setStock2("");
                     sb.setStock3("");
-                    sb.setDate1("");
-                    sb.setDate2("");
-                    sb.setDate3("");
-
                     list.add(sb);
                     dbcursor.moveToNext();
                 }
@@ -1624,6 +1785,62 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching", " opening stock---------------------->Stop<-----------");
         return list;
     }
+
+    public ArrayList<StockNewGetterSetter> getStockSkuDataNew(String channel_cd, String categord_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+
+            dbcursor = db.rawQuery("SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD " +
+                    "FROM MAPPING_CHANNEL_SKU CD " +
+                    "INNER JOIN SKU_MASTER SD " +
+                    "ON CD.SKU_CD = SD.SKU_CD " +
+                    "INNER JOIN BRAND_MASTER BM " +
+                    "ON BM.BRAND_CD = SD.BRAND_CD " +
+                    "WHERE CD.CHANNEL_CD ='" + channel_cd + "' AND  BM.BRAND_CD ='" + categord_cd + "' " +
+                    " ORDER BY SD.SKU_SEQUENCE ", null);
+
+
+            //use karna h
+          /*  SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD FROM
+            MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
+            INNER JOIN BRAND_MASTER BM ON BM.BRAND_CD = SD.BRAND_CD
+            WHERE CD.CHANNEL_CD ='2' AND BM.BRAND_CD = 2
+            ORDER BY SD.SKU_SEQUENCE*/
+
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    StockNewGetterSetter sb = new StockNewGetterSetter();
+
+                    sb.setSku_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU_CD")));
+                    sb.setSku(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU")));
+                    sb.setBrand_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
+                    sb.setBrand(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
+                    sb.setCompany_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("COMPANY_CD")));
+                    sb.setEd_openingFacing("");
+                    sb.setStock_under45days("");
+                    sb.setStock1("");
+                    sb.setStock2("");
+                    sb.setStock3("");
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching opening stock!!!!!!!!!!! " + e.toString());
+            return list;
+        }
+
+        Log.d("Fetching", " opening stock---------------------->Stop<-----------");
+        return list;
+    }
+
 
     //Food Stock data
     public ArrayList<FoodStoreInsertDataGetterSetter> getFoodSkuData(String brand_cd, String store_cd) {
@@ -2272,10 +2489,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 for (int j = 0; j < data.get(save_listDataHeader.get(i)).size(); j++) {
                     values1.put("OPENING_FACING", data.get(save_listDataHeader.get(i)).get(j).getEd_openingFacing());
                     values1.put("STOCK_UNDER_DAYS", data.get(save_listDataHeader.get(i)).get(j).getStock_under45days());
-                    //jeevan
-                    values1.put("DATE_1", data.get(save_listDataHeader.get(i)).get(j).getDate1());
-                    values1.put("DATE_2", data.get(save_listDataHeader.get(i)).get(j).getDate2());
-                    values1.put("DATE_3", data.get(save_listDataHeader.get(i)).get(j).getDate3());
                     values1.put("STOCK_1", data.get(save_listDataHeader.get(i)).get(j).getStock1());
                     values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
                     values1.put("STOCK_3", data.get(save_listDataHeader.get(i)).get(j).getStock3());
@@ -2308,10 +2521,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 for (int j = 0; j < data.get(save_listDataHeader.get(i)).size(); j++) {
                     values1.put("OPENING_FACING", "0");
                     values1.put("STOCK_UNDER_DAYS", "0");
-                    //jeevan
-                    values1.put("DATE_1", data.get(save_listDataHeader.get(i)).get(j).getDate1());
-                    values1.put("DATE_2", data.get(save_listDataHeader.get(i)).get(j).getDate2());
-                    values1.put("DATE_3", data.get(save_listDataHeader.get(i)).get(j).getDate3());
                     values1.put("STOCK_1", data.get(save_listDataHeader.get(i)).get(j).getStock1());
                     values1.put("STOCK_2", data.get(save_listDataHeader.get(i)).get(j).getStock2());
                     values1.put("STOCK_3", data.get(save_listDataHeader.get(i)).get(j).getStock3());
@@ -3138,7 +3347,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT SD.DATE_1,SD.DATE_2,SD.DATE_3,SD.STOCK_1,SD.STOCK_2,SD.STOCK_3, " +
+            dbcursor = db.rawQuery("SELECT SD.STOCK_1,SD.STOCK_2,SD.STOCK_3, " +
                     "SD.SKU_CD,SD.COMPANY_CD, SD.SKU, SM.BRAND_CD, SM.BRAND, " +
                     " SD.OPENING_FACING ,SD.STOCK_UNDER_DAYS " +
                     "FROM openingHeader_data CD " +
@@ -3146,6 +3355,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "ON CD.KEY_ID=SD.Common_Id " +
                     "INNER JOIN SKU_MASTER SM ON SD.SKU_CD=SM.SKU_CD " +
                     "WHERE CD.STORE_CD= '" + store_cd + "' AND CD.CATEGORY_CD = '" + categord_cd + "'", null);
+
+          /*  dbcursor = db.rawQuery("SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD " +
+                    "FROM MAPPING_CHANNEL_SKU CD " +
+                    "INNER JOIN SKU_MASTER SD " +
+                    "ON CD.SKU_CD = SD.SKU_CD " +
+                    "INNER JOIN BRAND_MASTER BM " +
+                    "ON BM.BRAND_CD = SD.BRAND_CD " +
+                    "WHERE CD.CHANNEL_CD ='" + channel_cd + "' AND  BM.BRAND_CD ='" + categord_cd + "' " +
+                    " ORDER BY SD.SKU_SEQUENCE ", null);*/
+
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -3158,9 +3377,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setEd_openingFacing(dbcursor.getString(dbcursor.getColumnIndexOrThrow("OPENING_FACING")));
                     sb.setStock_under45days(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_UNDER_DAYS")));
                     sb.setCompany_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("COMPANY_CD")));
-                    sb.setDate1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_1")));
-                    sb.setDate2(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_2")));
-                    sb.setDate3(dbcursor.getString(dbcursor.getColumnIndexOrThrow("DATE_3")));
                     sb.setStock1(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")));
                     sb.setStock2(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_2")));
                     sb.setStock3(dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_3")));
@@ -3315,10 +3531,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
 
     //check if table is empty
-    public boolean isOpeningDataAllFilled(String storeId) {
+  /*  public boolean isOpeningDataAllFilled(String storeId) {
         boolean filled = false;
         Cursor dbcursor = null;
-
         try {
             dbcursor = db.rawQuery("SELECT CLOSING_STOCK FROM STOCK_DATA WHERE STORE_CD= '" + storeId + "'", null);
 
@@ -3337,16 +3552,44 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.close();
             }
 
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return filled;
+        }
+        return filled;
+    }*/
+    public boolean isOpeningDataAllFilled(String storeId) {
+        boolean filled = false;
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("SELECT STOCK_1 FROM STOCK_DATA WHERE STORE_CD= '" + storeId + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    if (dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")) == null ||
+                            dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")).equals("")) {
+                        filled = false;
+                        break;
+                    } else {
+                        filled = true;
+                    }
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+            }
 
         } catch (Exception e) {
             Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
             return filled;
         }
-
         return filled;
     }
 
-    public boolean isStockBackRoomDataAllFilled(String storeId) {
+
+
+
+   /* public boolean isStockBackRoomDataAllFilled(String storeId) {
         boolean filled = false;
         Cursor dbcursor = null;
         try {
@@ -3355,6 +3598,33 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
                     if (dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK")) == null || dbcursor.getString(dbcursor.getColumnIndexOrThrow("CLOSING_STOCK")).equals("")) {
+                        filled = false;
+                        break;
+                    } else {
+                        filled = true;
+                    }
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+            }
+
+        } catch (Exception e) {
+            Log.d("Exception ", "when fetching Records!!!!!!!!!!!!!!!!!!!!!" + e.toString());
+            return filled;
+        }
+        return filled;
+    }*/
+
+
+    public boolean isStockBackRoomDataAllFilled(String storeId) {
+        boolean filled = false;
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("SELECT STOCK_1 FROM STOCK_BACKOFFICE_DATA WHERE STORE_CD= '" + storeId + "'", null);
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    if (dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")) == null || dbcursor.getString(dbcursor.getColumnIndexOrThrow("STOCK_1")).equals("")) {
                         filled = false;
                         break;
                     } else {
@@ -6361,7 +6631,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<StockNewGetterSetter> getMiddayDataFromCheckoutDatabase(String store_cd) {
+    public ArrayList<StockNewGetterSetter> getMiddayStockInDatabase(String store_cd) {
         Log.d("Fetching", "Mid Stock data--------------->Start<------------");
         ArrayList<StockNewGetterSetter> list = new ArrayList<StockNewGetterSetter>();
         Cursor dbcursor = null;
@@ -6456,8 +6726,15 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 while (!dbcursor.isAfterLast()) {
                     FocusPerformanceGetterSetter pgs = new FocusPerformanceGetterSetter();
 
-                    pgs.setFOCUS_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET"))));
+                  /*  pgs.setFOCUS_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET"))));
                     pgs.setSALES(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SALES"))));
+                    pgs.setALL_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ALL_TARGET"))));
+                    pgs.setSHOW_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SHOW_TARGET"))));*/
+                    pgs.setFOCUS_TARGET(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET")));
+                    pgs.setSALES(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SALES")));
+                    pgs.setALL_TARGET(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ALL_TARGET")));
+                    pgs.setSHOW_TARGET(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SHOW_TARGET")));
+
 
                     list.add(pgs);
                     dbcursor.moveToNext();
@@ -6604,8 +6881,219 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Log.d("Fetching non working data---------------------->Stop<-----------", "-------------------");
         return sb;
     }
+
     public void deleteStockinbilldate(String storeid) {
         db.delete(CommonString.TABLE_SHARE_OF_SHELF_POPUP_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
     }
+
+
+    public void InsertVisitorLogindata(ArrayList<VisitorDetailGetterSetter> visitorLoginGetterSetter) {
+
+        db.delete(CommonString.TABLE_VISITOR_LOGIN, null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+            for (int i = 0; i < visitorLoginGetterSetter.size(); i++) {
+
+                values.put(CommonString.KEY_USERNAME, visitorLoginGetterSetter.get(i).getUsername());
+                values.put(CommonString.KEY_NAME, visitorLoginGetterSetter.get(i).getName());
+                values.put(CommonString.KEY_DESIGNATION, visitorLoginGetterSetter.get(i).getDesignation());
+                values.put(CommonString.KEY_IN_TIME_IMAGE, visitorLoginGetterSetter.get(i).getIn_time_img());
+                values.put(CommonString.KEY_OUT_TIME_IMAGE, visitorLoginGetterSetter.get(i).getOut_time_img());
+                values.put(CommonString.KEY_EMP_CODE, visitorLoginGetterSetter.get(i).getEmp_code());
+                values.put(CommonString.KEY_VISIT_DATE, visitorLoginGetterSetter.get(i).getVisit_date());
+                values.put(CommonString.KEY_IN_TIME, visitorLoginGetterSetter.get(i).getIn_time());
+                values.put(CommonString.KEY_OUT_TIME, visitorLoginGetterSetter.get(i).getOut_time());
+                values.put(CommonString.KEY_UPLOADSTATUS, visitorLoginGetterSetter.get(i).getUpload_status());
+                db.insert(CommonString.TABLE_VISITOR_LOGIN, null, values);
+            }
+
+        } catch (Exception ex) {
+
+        }
+    }
+
+
+    public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(CommonString.KEY_OUT_TIME_IMAGE, out_time_image);
+            values.put(CommonString.KEY_OUT_TIME, out_time);
+
+            db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                    CommonString.KEY_EMP_CODE + "='" + emp_code + "' and " + CommonString.KEY_USERNAME + " = '" + username + "'", null);
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public boolean isVistorDataExists(String emp_id, String visitdate) {
+
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT  * from TABLE_VISITOR_LOGIN where EMP_CODE = '" + emp_id + "' and VISIT_DATE = '" + visitdate + "'"
+                    , null);
+            int count = 0;
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+
+                    count++;
+
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+
+                if (count > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            return false;
+        }
+
+        return false;
+
+    }
+
+    public ArrayList<VisitorDetailGetterSetter> getVisitorLoginData(String visitdate, String username) {
+
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT  * from TABLE_VISITOR_LOGIN where VISIT_DATE = '" + visitdate + "' and " + CommonString.KEY_USERNAME + " = '" + username + "'"
+                    , null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+                    sb.setUsername((dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_USERNAME))));
+                    sb.setName(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_NAME)));
+                    sb.setDesignation(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_DESIGNATION)));
+                    sb.setIn_time_img(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_IN_TIME_IMAGE)));
+                    sb.setOut_time_img(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_OUT_TIME_IMAGE)));
+                    sb.setEmp_code(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_EMP_CODE)));
+                    sb.setVisit_date(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_VISIT_DATE)));
+                    sb.setIn_time(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_IN_TIME)));
+                    sb.setOut_time(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_OUT_TIME)));
+                    sb.setUpload_status(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_UPLOADSTATUS)));
+
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+
+        }
+        return list;
+
+    }
+
+    public void updateVisitorUploadData(String empid) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(CommonString.KEY_UPLOADSTATUS, "U");
+
+            db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                    CommonString.KEY_EMP_CODE + "='" + empid + "'", null);
+        } catch (Exception e) {
+
+
+        }
+    }
+
+    public ArrayList<VisitorDetailGetterSetter> getVisitorData() {
+
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db
+                    .rawQuery(
+                            "SELECT -1 AS EMP_CD,'Select Visitor' as NAME,'Select' as DESIGNATION union SELECT * FROM VISITOR_DETAIL"
+                            , null);
+
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+
+                    sb.setEmp_code(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("EMP_CD")));
+                    sb.setName(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("NAME")));
+                    sb.setDesignation(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("DESIGNATION")));
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            return list;
+        }
+        return list;
+    }
+
+    public void insertMappingChannelData(MappingChannalSkuGetterSetter data) {
+        db.delete("MAPPING_CHANNEL_SKU", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getChannel_cd().size(); i++) {
+                values.put("CHANNEL_CD", Integer.parseInt(data.getChannel_cd().get(i)));
+                values.put("SKU_CD", Integer.parseInt(data.getChannel().get(i)));
+                db.insert("MAPPING_CHANNEL_SKU", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database MAPPING_CHANNEL_SKU ",
+                    ex.toString());
+        }
+
+    }
+
+
+
+   /* //yestardy use code
+    SELECT DISTINCT SD.BRAND_CD, SD.BRAND, SD.HIMALAYA_PHOTO, SD.CATEGORY_PHOTO FROM MAPPING_CHANNEL_SKU CD
+    INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
+    WHERE CD.CHANNEL_CD ='2'
+    ORDER BY SD.BRAND_SEQUENCE
+
+
+    SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD FROM
+    MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
+    INNER JOIN BRAND_MASTER BM ON BM.BRAND_CD = SD.BRAND_CD
+    WHERE CD.CHANNEL_CD ='2' AND BM.BRAND_CD = 2
+    ORDER BY SD.SKU_SEQUENCE*/
 
 }

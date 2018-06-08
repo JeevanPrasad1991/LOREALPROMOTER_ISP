@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.cpm.GetterSetter.VisitorSearchGetterSetter;
 import com.cpm.xmlGetterSetter.AssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.AssetMasterGetterSetter;
 import com.cpm.xmlGetterSetter.AssetNonReasonGetterSetter;
@@ -27,6 +28,7 @@ import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
+import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
@@ -173,7 +175,18 @@ public class XMLHandlers {
                     }  if (xpp.getName().equals("INSTOCK_ALLOW")) {
                         jcpGetterSetter.setInstock_allow(xpp.nextText());
                     }
-
+                    if (xpp.getName().equals("CHANNEL_CD")) {
+                        jcpGetterSetter.setChannel_cd(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CHANNEL")) {
+                        jcpGetterSetter.setChannel(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FLOOR_STATUS")) {
+                        jcpGetterSetter.setFloor_status(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("BACKROOK_STATUS")) {
+                        jcpGetterSetter.setBackroom_status(xpp.nextText());
+                    }
 
 
                 }
@@ -979,6 +992,37 @@ public class XMLHandlers {
         return incentive;
     }
 
+    public static MappingChannalSkuGetterSetter mappingChannelSkuXML(XmlPullParser xpp,
+                                                                     int eventType) {
+        MappingChannalSkuGetterSetter mapping_channel = new MappingChannalSkuGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mapping_channel.setMapping_channel_sku_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CHANNEL_CD")) {
+                        mapping_channel.setChannel_cd(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("SKU_CD")) {
+                        mapping_channel.setChannel(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return mapping_channel;
+    }
+
     public static TodayQuestionGetterSetter todayquesXML(XmlPullParser xpp,
                                                          int eventType) {
         TodayQuestionGetterSetter incentive = new TodayQuestionGetterSetter();
@@ -1447,7 +1491,7 @@ public class XMLHandlers {
         return performanceGetterSetter;
     }
 
-//
+
 public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp,
                                                                                        int eventType) {
     FocusPerformanceGetterSetter performanceGetterSetter = new FocusPerformanceGetterSetter();
@@ -1463,11 +1507,20 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
                     performanceGetterSetter.setSTORE_CD(xpp.nextText());
                 }
                 if (xpp.getName().equals("FOCUS_TARGET")) {
-                    performanceGetterSetter.setFOCUS_TARGET(Float.valueOf(xpp.nextText()));
+                    performanceGetterSetter.setFOCUS_TARGET(xpp.nextText());
+                }
+                if (xpp.getName().equals("SALES")) {
+                    performanceGetterSetter.setSALES(xpp.nextText());
                 }
 
-                if (xpp.getName().equals("SALES")) {
-                    performanceGetterSetter.setSALES(Float.valueOf(xpp.nextText()));
+                if (xpp.getName().equals("ALL_TARGET")) {
+                    performanceGetterSetter.setALL_TARGET(xpp.nextText());
+                }
+                if (xpp.getName().equals("SHOW_TARGET")) {
+                    performanceGetterSetter.setSHOW_TARGET(xpp.nextText());
+                }
+                if (xpp.getName().equals("STATUS")) {
+                    performanceGetterSetter.setSTATUS(xpp.nextText());
                 }
 
             }
@@ -1483,6 +1536,44 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
     return performanceGetterSetter;
 }
 
+    public static VisitorSearchGetterSetter visitorDataXML(XmlPullParser xpp,
+                                                           int eventType) {
+        VisitorSearchGetterSetter displaytype = new VisitorSearchGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        displaytype.setTable_VISITOR_SEARCH(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("EMP_CD")) {
+                        displaytype.setEMP_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("NAME")) {
+                        displaytype.setEMPLOYEE(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("DESIGNATION")) {
+                        displaytype.setDESIGNATION(xpp.nextText());
+                    }
+
+                    if (xpp.getName().equals("HR_LEGACY")) {
+                        displaytype.setHR_LEGACY(xpp.nextText());
+                    }
+
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return displaytype;
+    }
 
 
     //Closing Cold

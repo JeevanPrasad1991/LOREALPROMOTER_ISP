@@ -56,7 +56,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
     ArrayList<StockNewGetterSetter> brandData;
     ArrayList<StockNewGetterSetter> skuData;
     GSKDatabase db;
-    String visit_date, username, intime;
+    String visit_date, username, intime,channel_cd;
     String Error_Message;
     Snackbar snackbar;
     ImageView img_camOpeningStock;
@@ -88,8 +88,9 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
         city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
 
-        setTitle("Opening STK Backroom -" + visit_date);
+        setTitle("Stock Entry - Backroom -" + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
@@ -173,7 +174,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         brandData = db.getHeaderStockBackOfficeImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
 
-            brandData = db.getStockAvailabilityData(account_cd, city_cd, storetype_cd);
+            brandData = db.getStockAvailabilityDataNew(channel_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data
@@ -181,7 +182,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockBackOfficeDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
-                    skuData = db.getStockBackOfficeSkuData(account_cd, city_cd, storetype_cd, brandData.get(i).getCategory_cd());
+                    skuData = db.getStockBackOfficeSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
                 }
@@ -348,20 +349,6 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
             });
 
 
-/*
-            holder.etOpening_Stock_Facingg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    final EditText Caption = (EditText) v;
-                    String value = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
-                    if (!value.equals("")) {
-                        childText.setStock2(value);
-                    } else {
-                        childText.setStock2("");
-                    }
-                }
-            });
-*/
             holder.etOpening_Stock.setText(childText.getStock1());
             holder.etOpening_Stock_Facingg.setText(childText.getStock2());
 
@@ -467,7 +454,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) this
                         ._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.list_group_opening, null);
+                convertView = infalInflater.inflate(R.layout.list_group_opening_backroom, null);
             }
             CardView card_view = (CardView) convertView.findViewById(R.id.card_view);
             card_view.setOnClickListener(new View.OnClickListener() {
@@ -511,7 +498,6 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
 
     public class ViewHolder {
         EditText edt_stock1, edt_stock2, edt_stock3, etOpening_Stock, etOpening_Stock_Facingg;
-        ;
         CardView cardView;
         TextView txt_date;
 
@@ -522,13 +508,9 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         checkHeaderArray.clear();
         for (int i = 0; i < listDataHeader2.size(); i++) {
             for (int j = 0; j < listDataChild2.get(listDataHeader2.get(i)).size(); j++) {
-                String company_cd = listDataChild2.get(listDataHeader2.get(i)).get(j).getCompany_cd();
                 String date1 = listDataChild2.get(listDataHeader2.get(i)).get(j).getDate1();
-                String date2 = listDataChild2.get(listDataHeader2.get(i)).get(j).getDate2();
-                String date3 = listDataChild2.get(listDataHeader2.get(i)).get(j).getDate3();
                 String stock1 = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock1();
-                String stock2 = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock2();
-                String stock3 = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock3();
+
                 if ((stock1.equalsIgnoreCase(""))) {
                     checkflag = false;
                     flag = false;
@@ -614,7 +596,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
             builder.setMessage(CommonString.ONBACK_ALERT_MESSAGE).setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            // NavUtils.navigateUpFromSameTask(this);
+
                             finish();
                             overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
                         }

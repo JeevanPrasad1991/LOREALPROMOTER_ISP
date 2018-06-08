@@ -197,13 +197,13 @@ public class UploadDataActivity extends Activity {
                             stockData = database.getOpeningStockUpload(coverageBeanlist.get(i).getStoreId());
                             if (stockData.size() > 0) {
                                 for (int j = 0; j < stockData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_FLOOR_DATA]"
+                                    onXML = "[LOREAL_STOCK_FLOOR_DATA_NEW]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK]" + stockData.get(j).getStock1() + "[/STOCK]"
-                                            + "[CLOSING_STOCK]" + stockData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_FLOOR_DATA]";
+                                           // + "[CLOSING_STOCK]" + stockData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
+                                            + "[/LOREAL_STOCK_FLOOR_DATA_NEW]";
 
                                     final_xml = final_xml + onXML;
                                 }
@@ -211,7 +211,7 @@ public class UploadDataActivity extends Activity {
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_FLOOR_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_FLOOR_DATA_NEW");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -224,7 +224,7 @@ public class UploadDataActivity extends Activity {
                                     isError = true;
                                 }
                                 data.value = 20;
-                                data.name = "LOREAL_STOCK_FLOOR_DATA Data";
+                                data.name = "LOREAL_STOCK_FLOOR_DATA_NEW Data";
                                 publishProgress(data);
                             }
 
@@ -235,19 +235,19 @@ public class UploadDataActivity extends Activity {
                             if (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals(""))) {
                                 for (int j = 0; j < stockImages.size(); j++) {
 
-                                    onXML = "[LOREAL_STOCK_CATEGORY_IMAGE_DATA]"
+                                    onXML = "[LOREAL_STOCK_FLOOR_IMAGE_DATA_NEW]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[CATEGORY_CD]" + stockImages.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                            + "[CATEGORY_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/CATEGORY_IMAGE]"
-                                            + "[/LOREAL_STOCK_CATEGORY_IMAGE_DATA]";
+                                            + "[BRAND_CD]" + stockImages.get(j).getCategory_cd() + "[/BRAND_CD]"
+                                            + "[BRAND_IMAGE]" + stockImages.get(j).getImg_cat_one() + "[/BRAND_IMAGE]"
+                                            + "[/LOREAL_STOCK_FLOOR_IMAGE_DATA_NEW]";
                                     final_xml = final_xml + onXML;
                                 }
 
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_CATEGORY_IMAGE_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_FLOOR_IMAGE_DATA_NEW");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -270,20 +270,20 @@ public class UploadDataActivity extends Activity {
                             stockbackroomData = database.getOpeningBackRoomStockUpload(coverageBeanlist.get(i).getStoreId());
                             if (stockbackroomData.size() > 0) {
                                 for (int j = 0; j < stockbackroomData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_BACKROOM_DATA]"
+                                    onXML = "[LOREAL_STOCK_BACKROOM_DATA_NEW]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
                                             + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
-                                            + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_BACKROOM_DATA]";
+                                          //  + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
+                                            + "[/LOREAL_STOCK_BACKROOM_DATA_NEW]";
                                     final_xml = final_xml + onXML;
                                 }
 
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_BACKROOM_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_BACKROOM_DATA_NEW");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -296,7 +296,7 @@ public class UploadDataActivity extends Activity {
                                     isError = true;
                                 }
                                 data.value = 20;
-                                data.name = "LOREAL_STOCK_BACKROOM_DATA Data";
+                                data.name = "LOREAL_STOCK_BACKROOM_DATA_NEW Data";
                                 publishProgress(data);
                             }
 
@@ -353,8 +353,6 @@ public class UploadDataActivity extends Activity {
                                         + "[/LOREAL_STOCK_IN_EXIT_DATA]";
                                 stock_in_exit = stock_in_exit + onXML;
 
-
-
                                 for (int j = 0; j < stockInData.size(); j++) {
                                     stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
                                             + "[MID]" + mid + "[/MID]"
@@ -396,30 +394,26 @@ public class UploadDataActivity extends Activity {
                                     shareOfShelfData = database.getShareofShelfBrandDataUpload(shareOfShelImgData.get(j).getKey_id(), coverageBeanlist.get(i).getStoreId());
                                     String share_of_shelf_List = "", share_ofShef_ImageListXml = "";
                                     for (int c = 0; c < shareOfShelfData.size(); c++) {
-                                        share_ofShef_ImageListXml = "[LOREAL_SHARE_OF_SHELF_DATA]"
+                                        share_ofShef_ImageListXml = "[LOREAL_SHARE_OF_SHELF_DATA_NEW]"
                                                 + "[MID]" + mid + "[/MID]"
                                                 + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                                 + "[COMMON_ID]" + shareOfShelImgData.get(j).getKey_id() + "[/COMMON_ID]"
-                                                + "[CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                                + "[SUB_CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/SUB_CATEGORY_CD]"
                                                 + "[BRAND_CD]" + shareOfShelfData.get(c).getBrand_cd() + "[/BRAND_CD]"
-                                                //+ "[BRAND]" + shareOfShelfData.get(c).getBrand() + "[/BRAND]"
                                                 + "[BRAND_FACING]" + shareOfShelfData.get(c).getFacing() + "[/BRAND_FACING]"
-                                                + "[/LOREAL_SHARE_OF_SHELF_DATA]";
+                                                + "[/LOREAL_SHARE_OF_SHELF_DATA_NEW]";
 
                                         share_of_shelf_List = share_of_shelf_List + share_ofShef_ImageListXml;
                                     }
-                                    // final String share_of_xml =  share_ofShef_ImageListXml;
 
                                     onXML = "[LOREAL_SHARE_OF_SHELF_IMAGE_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[COMMON_ID]" + shareOfShelImgData.get(j).getKey_id() + "[/COMMON_ID]"
-                                            + "[CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                            + "[CATEGORY_FACING]" + shareOfShelImgData.get(j).getCat_facing() + "[/CATEGORY_FACING]"
+                                            + "[SUB_CATEGORY_CD]" + shareOfShelImgData.get(j).getCategory_cd() + "[/SUB_CATEGORY_CD]"
+                                            + "[SUB_CATEGORY_FACING]" + shareOfShelImgData.get(j).getCat_facing() + "[/SUB_CATEGORY_FACING]"
                                             + "[IMAGE_CATEGORY_FACING]" + shareOfShelImgData.get(j).getImg_cat_facing() + "[/IMAGE_CATEGORY_FACING]"
-                                            + "[SHARE_OF_SHELF_BRAND_FACING]"
                                             + share_of_shelf_List
-                                            + "[/SHARE_OF_SHELF_BRAND_FACING]"
                                             + "[/LOREAL_SHARE_OF_SHELF_IMAGE_DATA]";
 
                                     final_xml = final_xml + onXML;
@@ -427,7 +421,7 @@ public class UploadDataActivity extends Activity {
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_SHARE_OF_SHELF_DATA");
+                                request.addProperty("KEYS", "LOREAL_SHARE_OF_SHELF_DATA_NEW");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -696,13 +690,11 @@ public class UploadDataActivity extends Activity {
 
                             }
                             if (!result1.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                // return "COVERAGE_STATUS";
                                 isError = true;
                             }
                             data.value = 100;
                             data.name = "Covrage Status";
                             publishProgress(data);
-                            // resultFinal = result.toString();
                         }
                     }
 

@@ -74,7 +74,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     List<StockNewGetterSetter> listDataHeader;
     HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild;
     private SharedPreferences preferences;
-    String store_cd,account_cd,city_cd,storetype_cd;
+    String store_cd,account_cd,city_cd,storetype_cd,channel_cd;
     ArrayList<StockNewGetterSetter> brandData;
     ArrayList<StockNewGetterSetter> skuData;
     GSKDatabase db;
@@ -114,18 +114,19 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
+        channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
 
         account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
         city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
-        setTitle("Opening STK Floor - " + visit_date);
+        setTitle("Stock Entry - Floor -" + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        //expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+
         btnSave.setOnClickListener(this);
 
         expListView.setOnScrollListener(new OnScrollListener() {
@@ -200,9 +201,10 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     private void prepareListData() {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<StockNewGetterSetter, List<StockNewGetterSetter>>();
+
         brandData = db.getHeaderStockImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
-            brandData = db.getmappingStockData(account_cd,city_cd,storetype_cd);
+            brandData = db.getmappingStockDataNew(channel_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data
@@ -213,7 +215,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
 
-                    skuData = db.getStockSkuData(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
+                    skuData = db.getStockSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
                 }
@@ -235,8 +237,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             expListView.invalidateViews();
             if (snackbar == null || !snackbar.isShown()) {
                 if (validateData(listDataChild, listDataHeader)) {
-                    if (condition()) {
-                        if (condition2()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(this);
                             builder.setMessage("Are you sure you want to save")
                                     .setCancelable(false)
@@ -265,15 +265,8 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                                     });
                             AlertDialog alert = builder.create();
                             alert.show();
-                        } else {
-
                         }
-                    } else {
-
-                        Snackbar.make(expListView, "Invalid Faceup, Faceup Should Be Less Than The Stock at line "
-                                + row_pos, Snackbar.LENGTH_LONG).show();
-                    }
-                } else {
+                        else {
                     Snackbar.make(expListView, Error_Message, Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -371,8 +364,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             });
 
 
-//new code
-
             holder.etOpening_Stock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -463,11 +454,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                     holder.etOpening_Stock.setHint("Empty");
                     tempflag = true;
                 }
-               /* if (holder.etOpening_Stock_Facingg.getText().toString().equals("")) {
-                    holder.etOpening_Stock_Facingg.setHintTextColor(getResources().getColor(R.color.red));
-                    holder.etOpening_Stock_Facingg.setHint("Empty");
-                    tempflag = true;
-                }*/
 
                 if (tempflag) {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
@@ -483,16 +469,15 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         boolean tempflag = false;
                         if (flagmccain) {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.red));
-                         //   holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.red));
                             tempflag = true;
                         } else {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                         //   holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+
                         }
 
                         if (!flagcoldroom && !flagmccain && !flagstoredf) {
                             holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                          //  holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+
                             holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
                             tempflag = false;
                         } else {
@@ -501,13 +486,13 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         }
                     } else {
                         holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                      //  holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                     }
 
                 } else {
                     holder.etOpening_Stock.setTextColor(getResources().getColor(R.color.black));
-                   // holder.etOpening_Stock_Facingg.setTextColor(getResources().getColor(R.color.black));
+
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 }
             }
@@ -555,40 +540,14 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             });
             TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
             EditText catfacing = (EditText) convertView.findViewById(R.id.catfacing);
-            //ImageView imgcamhim = (ImageView) convertView.findViewById(R.id.img_cam_himalaya);
+
             ImageView imgcamcat1 = (ImageView) convertView.findViewById(R.id.img_cam_cat1);
-            //  ImageView imgcamcat2 = (ImageView) convertView.findViewById(R.id.img_cam_cat2);
-           /* if (headerTitle.getHimalaya_camera().equals("1")) {
-                imgcamhim.setVisibility(View.VISIBLE);
-            } else {
-                imgcamhim.setVisibility(View.INVISIBLE);
-            }*/
 
             if (headerTitle.getCategory_camera().equals("1")) {
                 imgcamcat1.setVisibility(View.VISIBLE);
             } else {
                 imgcamcat1.setVisibility(View.INVISIBLE);
             }
-
-          /*  if (headerTitle.getHimalaya_camera().equals("1")) {
-                imgcamcat2.setVisibility(View.VISIBLE);
-            } else {
-                imgcamcat2.setVisibility(View.INVISIBLE);
-            }*/
-
-/*
-            imgcamhim.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    grp_position = groupPosition;
-                    _pathforcheck = store_cd + "_" +
-                            headerTitle.getCategory_cd() + "_DANONECHILLERIMG_" + visit_date.replace("/", "") + "_"
-                            + getCurrentTime().replace(":", "") + ".jpg";
-                    _path = CommonString.FILE_PATH + _pathforcheck;
-                    startCameraActivity(0);
-                }
-            });
-*/
 
             catfacing.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
@@ -618,30 +577,10 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             });
 
-/*
-            imgcamcat2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    grp_position = groupPosition;
-                    _pathforcheck = store_cd + "_" + headerTitle.getCategory_cd()
-                            + "_CATSTKCHILLIMGTWO_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
-                    _path = CommonString.FILE_PATH + _pathforcheck;
-                    startCameraActivity(1);
-                }
-            });
-*/
 
             lblListHeader.setTypeface(null, Typeface.BOLD);
             lblListHeader.setText(headerTitle.getCategory());
 
-
-           /* if (!img1.equalsIgnoreCase("")) {
-                if (groupPosition == grp_position) {
-                    headerTitle.setImg_cam(img1);
-
-                    img1 = "";
-                }
-            }*/
 
             if (!img2.equalsIgnoreCase("")) {
                 if (groupPosition == grp_position) {
@@ -650,29 +589,12 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
             }
 
-          /*  if (headerTitle.getImg_cam() != null && !headerTitle.getImg_cam().equals("")) {
-                imgcamhim.setBackgroundResource(R.mipmap.h_camera_orange);
-            } else {
-                imgcamhim.setBackgroundResource(R.mipmap.h_camera_white);
-            }*/
             if (headerTitle.getImg_cat_one() != null && !headerTitle.getImg_cat_one().equals("")) {
                 imgcamcat1.setBackgroundResource(R.mipmap.camera_green);
             } else {
                 imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
             }
             catfacing.setText(headerTitle.getCatstock());
-           /* if (headerTitle.getCatstock() != null && !headerTitle.getCatstock().equals("")) {
-
-            } else {
-
-            }*/
-
-
-           /* if (headerTitle.getImg_cat_two() != null && !headerTitle.getImg_cat_two().equals("")) {
-                imgcamcat2.setBackgroundResource(R.mipmap.camera_orange);
-            } else {
-                imgcamcat2.setBackgroundResource(R.mipmap.camera_white);
-            }*/
 
             if (!checkflag || !cam_flag) {
                 if (checkHeaderArray.contains(groupPosition)) {
@@ -714,31 +636,21 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     }
 
     boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2, List<StockNewGetterSetter> listDataHeader2) {
-        boolean flag = true;
         checkHeaderArray.clear();
         for (int i = 0; i < listDataHeader2.size(); i++) {
             String category_camera = listDataHeader2.get(i).getCategory_camera();
-            String catstock = listDataHeader2.get(i).getCatstock();
             String opningimage = listDataHeader2.get(i).getImg_cat_one();
             for (int j = 0; j < listDataChild2.get(listDataHeader2.get(i)).size(); j++) {
-
                 String openingstock = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock1();
-                String openingfacing = listDataChild2.get(listDataHeader2.get(i)).get(j).getStock2();
 
                 if (category_camera.equals("1")) {
                     if (opningimage.equals("")) {
                         checkflag = false;
-                        flag = false;
                         Error_Message = "Please click image";
                         break;
                     }
                 }
-               /* if (catstock.equals("")) {
-                    checkflag = false;
-                    flag = false;
-                    Error_Message = "Please fill all category stock the data";
-                    break;
-                }*/
+
 
 
 /*                if ((openingstock.equalsIgnoreCase("")) || (openingfacing.equalsIgnoreCase(""))) {
@@ -751,13 +663,11 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
                 if ((openingstock.equalsIgnoreCase(""))) {
                     checkflag = false;
-                    flag = false;
                     Error_Message = "Please fill all the data";
                     break;
 
                 }else {
                     checkflag = true;
-                    flag = true;
                 }
             }
 

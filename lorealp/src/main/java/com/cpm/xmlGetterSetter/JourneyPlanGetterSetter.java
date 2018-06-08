@@ -23,6 +23,42 @@ public class JourneyPlanGetterSetter {
 	ArrayList<String> city_cd = new ArrayList<String>();
 	ArrayList<String> storetype_cd = new ArrayList<String>();
 	ArrayList<String> instock_allow = new ArrayList<String>();
+	ArrayList<String> channel_cd = new ArrayList<String>();
+	ArrayList<String> channel = new ArrayList<String>();
+	ArrayList<String> floor_status = new ArrayList<String>();
+	ArrayList<String> backroom_status = new ArrayList<String>();
+
+	public ArrayList<String> getFloor_status() {
+		return floor_status;
+	}
+
+	public void setFloor_status(String floor_status) {
+		this.floor_status.add(floor_status);
+	}
+
+	public ArrayList<String> getBackroom_status() {
+		return backroom_status;
+	}
+
+	public void setBackroom_status(String backroom_status) {
+		this.backroom_status.add(backroom_status);
+	}
+
+	public ArrayList<String> getChannel_cd() {
+		return channel_cd;
+	}
+
+	public void setChannel_cd(String channel_cd) {
+		this.channel_cd.add(channel_cd);
+	}
+
+	public ArrayList<String> getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel.add(channel);
+	}
 
 	public ArrayList<String> getInstock_allow() {
 		return instock_allow;

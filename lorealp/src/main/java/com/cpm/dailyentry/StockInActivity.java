@@ -76,7 +76,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
     private Spinner sp_registered;
     String[] irep_registered = {"Select", "YES", "NO"};
     String spinner_irepregisterd = "";
-
     String store_cd, account_cd, city_cd, storetype_cd;
     StoreStockinGetterSetter storeStockinGetterSetter;
     ArrayList<JourneyPlanGetterSetter> jcplist;
@@ -94,7 +93,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.midday_stock);
         currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        // get the listview
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
         btnSave = (Button) findViewById(R.id.save_btn);
         tvheader = (TextView) findViewById(R.id.txt_idealFor);
@@ -109,6 +107,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         db = new GSKDatabase(getApplicationContext());
         db.open();
+
         storeStockinGetterSetter = new StoreStockinGetterSetter();
         storeStockinPopupGetterSetter = new StoreStockinPopupGetterSetter();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -433,10 +432,6 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                     } else {
 
                         storeStockinGetterSetter.setSelect_brand(spinner_irepregisterd);
-                      /*  prepareListData();
-
-                        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-                        expListView.setAdapter(listAdapter);*/
                         expListView.setVisibility(View.GONE);
                         bill_date.setVisibility(View.GONE);
                     }
@@ -607,7 +602,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                 });
         AlertDialog alert = builder.create();
         alert.show();
-        //}
+
     }
 
     @Override
@@ -699,17 +694,24 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar = Calendar.getInstance();
-            int currentYear = calendar.get(Calendar.YEAR);
-            int currentMonth = calendar.get(Calendar.MONTH);
-            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datePickerDialog = null;
+            try {
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, currentYear, currentMonth, currentDay);
-            DatePicker dp = datePickerDialog.getDatePicker();
-            dp.setMaxDate(calendar.getTimeInMillis());
-            dp.setMinDate(calendar.getTimeInMillis() - 86400000 * 3);
+                final Calendar calendar = Calendar.getInstance();
+                int currentYear = calendar.get(Calendar.YEAR);
+                int currentMonth = calendar.get(Calendar.MONTH);
+                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                datePickerDialog = new DatePickerDialog(getActivity(), this, currentYear, currentMonth, currentDay);
+                DatePicker dp = datePickerDialog.getDatePicker();
+
+                dp.setMinDate(calendar.getTimeInMillis() - 86400000 * 3);
+                dp.setMaxDate(calendar.getTimeInMillis());
 
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return datePickerDialog;
         }
 

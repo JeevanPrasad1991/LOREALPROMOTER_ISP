@@ -21,6 +21,15 @@ public class TableBean {
     public static String categorymastertable;
     public static String performancetable;
     public static String focusperformancetable;
+    public static String mappingChanneltable;
+
+    public static String getMappingChanneltable() {
+        return mappingChanneltable;
+    }
+
+    public static void setMappingChanneltable(String mappingChanneltable) {
+        TableBean.mappingChanneltable = mappingChanneltable;
+    }
 
     public static String getFocusperformancetable() {
         return focusperformancetable;

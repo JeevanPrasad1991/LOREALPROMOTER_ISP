@@ -23,13 +23,14 @@ import com.cpm.database.GSKDatabase;
 import com.cpm.lorealpromoter.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class StoreEntry extends AppCompatActivity {
     GSKDatabase db;
     private SharedPreferences preferences;
-    String store_cd, visit_date,account_cd,city_cd,storetype_cd;
+    String store_cd, visit_date, account_cd, city_cd, storetype_cd, floor_status, backroom_status;
     boolean food_flag;
     String user_type = "";
     ValueAdapter adapter;
@@ -49,14 +50,16 @@ public class StoreEntry extends AppCompatActivity {
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
 
-        account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
-        city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
-        storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
+        city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
+        storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        floor_status = preferences.getString(CommonString.KEY_FLOOR_STATUS, null);
+        backroom_status = preferences.getString(CommonString.KEY_BACKROOK_STATUS, null);
 
         food_flag = preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
         setTitle("Store Entry - " + visit_date);
-        user_type="Promoter";
+        user_type = "Promoter";
     }
 
     @Override
@@ -135,21 +138,7 @@ public class StoreEntry extends AppCompatActivity {
                         }
                     }
 
-                    //midday activty
-/*
-                    if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
-                        if (db.isClosingDataFilled(store_cd)) {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                        } else if (db.isOpeningDataFilled(store_cd) && db.isOpeningBackOfficeDataFilled(store_cd)) {
-                            Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
-                            startActivity(in3);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Data", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-*/
-                  //  isClosingDataFilled
+                    //  isClosingDataFilled
                     if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
                         if (!db.isClosingDataFilled(store_cd)) {
                             Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
@@ -162,70 +151,19 @@ public class StoreEntry extends AppCompatActivity {
                     }
 
                     if (current.getIconImg() == R.drawable.share_of_shelf || current.getIconImg() == R.drawable.share_of_shelf_done) {
-                       // if (db.isOpeningDataFilled(store_cd)) {
-                            Intent in3 = new Intent(getApplicationContext(), ShareOfShelfActivity.class);
-                            startActivity(in3);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                        } /*else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }*/
-
-                    //clossing
-/*
-                    if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
-                        if (db.isOpeningDataFilled(store_cd) && db.isOpeningBackOfficeDataFilled(store_cd)) {
-                            if (db.isMiddayDataFilled(store_cd)) {
-                                if (!db.isClosingBackOfficeDataFilled(store_cd)) {
-                                    Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
-                                    startActivity(in2);
-                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                } else {
-                                    Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Snackbar.make(recyclerView, "First fill Midday Stock Data", Snackbar.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock data", Snackbar.LENGTH_SHORT).show();
-                        }
-
+                        Intent in3 = new Intent(getApplicationContext(), ShareOfShelfActivity.class);
+                        startActivity(in3);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     }
-*/
 
 
                     if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.audit_done) {
-                      /*  if (db.isOpeningDataFilled(store_cd)) {*/
                         Intent in7 = new Intent(getApplicationContext(), Additonalvisibility.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                       /* } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Data", Snackbar.LENGTH_SHORT).show();
-                        }*/
 
 
                     }
-
-
-                   /* if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
-                        if (db.isOpeningDataFilled(store_cd)) {
-                            if (db.isMiddayDataFilled(store_cd)) {
-                                if (!db.isClosingBackOfficeDataFilled(store_cd)) {
-                                    Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
-                                    startActivity(in2);
-                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                } else {
-                                    Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Snackbar.make(recyclerView, "First fill Midday Stock Data", Snackbar.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock data", Snackbar.LENGTH_SHORT).show();
-                        }
-
-                    }*/
-
                     ///promotion
                     if (current.getIconImg() == R.drawable.promotion || current.getIconImg() == R.drawable.promotion_done) {
 
@@ -237,46 +175,48 @@ public class StoreEntry extends AppCompatActivity {
                     //asset
                     if (current.getIconImg() == R.drawable.asset || current.getIconImg() == R.drawable.asset_done) {
 
-        /*                if (db.isOpeningDataFilled(store_cd)) {*/
                         Intent in5 = new Intent(getApplicationContext(), PaidVisibilityActivity.class);
                         startActivity(in5);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                       /* } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Data", Snackbar.LENGTH_SHORT).show();
-                        }*/
 
                     }
-
-                    //SampleActivity
-/*
-                    if (current.getIconImg() == R.drawable.competition || current.getIconImg() == R.drawable.competition_done) {
-                        Intent in7 = new Intent(getApplicationContext(), SampleActivity.class);
-                        startActivity(in7);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                    }
-*/
 
 
                     if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
                         if (db.isOpeningDataFilled(store_cd)) {
-                            if (db.isOpeningBackOfficeDataFilled(store_cd) ){
-                             if (db.isMiddayDataFilled(store_cd)) {
-                                 Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
-                                 startActivity(in2);
-                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                               } else {
-                                 Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
-                               }
-                             } else {
+                            if (db.isOpeningBackOfficeDataFilled(store_cd)) {
+                                if (db.isMiddayDataFilled(store_cd)) {
+                                    Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
+                                    startActivity(in2);
+                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                } else {
+                                    Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
+                                }
+                            } else {
 
                                 Snackbar.make(recyclerView, "First fill Opening Stock Backroom Data", Snackbar.LENGTH_SHORT).show();
-                             }
+                            }
                         } else {
 
                             Snackbar.make(recyclerView, "First  fill Opening Stock floor,Opening Stock Backroom, Stock in Data", Snackbar.LENGTH_SHORT).show();
                         }
 
-                       /* if (db.isOpeningBackOfficeDataFilled(store_cd) ) {
+                    }
+                    //opennig stock back room activity
+                    if (current.getIconImg() == R.drawable.opening_stock_backroom_done || current.getIconImg() == R.drawable.opening_stock_backroom) {
+
+                        if (!db.isClosingDataFilled(store_cd)) {
+                            Intent in8 = new Intent(getApplicationContext(), OpenningStockBackofficeActivity.class);
+                            startActivity(in8);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                        } else {
+                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    //closing stock back room activity
+                    if (current.getIconImg() == R.drawable.closing_stock_backroom || current.getIconImg() == R.drawable.closing_stock_backroom_done) {
+                        if (db.isOpeningBackOfficeDataFilled(store_cd)) {
                             if (db.isMiddayDataFilled(store_cd)) {
                                 if (db.isClosingDataFilled(store_cd)) {
                                     Intent in8 = new Intent(getApplicationContext(), ClosingStockBackofficeActvity.class);
@@ -286,42 +226,6 @@ public class StoreEntry extends AppCompatActivity {
                                     Snackbar.make(recyclerView, "First fill Closing Stock Floor Data", Snackbar.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Backroom Data", Snackbar.LENGTH_SHORT).show();
-                        }
-                        */
-
-                    }
-                    //opennig stock back room activity
-                    if (current.getIconImg() == R.drawable.opening_stock_backroom_done || current.getIconImg() == R.drawable.opening_stock_backroom) {
-                       // if (db.isOpeningDataFilled(store_cd)) {
-                           //  if (!db.isClosingBackOfficeDataFilled(store_cd)) {
-                             if (!db.isClosingDataFilled(store_cd)) {
-                                Intent in8 = new Intent(getApplicationContext(), OpenningStockBackofficeActivity.class);
-                                startActivity(in8);
-                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                            } else {
-                                Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
-                            }
-                        }/*else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Floor data", Snackbar.LENGTH_SHORT).show();
-                        }*/
-                  //  }
-
-                    //closing stock back room activity
-                    if (current.getIconImg() == R.drawable.closing_stock_backroom || current.getIconImg() == R.drawable.closing_stock_backroom_done) {
-                        if (db.isOpeningBackOfficeDataFilled(store_cd) ) {
-                             if (db.isMiddayDataFilled(store_cd)) {
-                            if (db.isClosingDataFilled(store_cd)) {
-                                Intent in8 = new Intent(getApplicationContext(), ClosingStockBackofficeActvity.class);
-                                startActivity(in8);
-                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                            } else {
-                                Snackbar.make(recyclerView, "First fill Closing Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                            }
-                        } else {
                                 Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
                             }
                         } else {
@@ -342,6 +246,7 @@ public class StoreEntry extends AppCompatActivity {
         class MyViewHolder extends RecyclerView.ViewHolder {
             //TextView txt;
             ImageView icon;
+
             public MyViewHolder(View itemView) {
                 super(itemView);
                 icon = (ImageView) itemView.findViewById(R.id.list_icon);
@@ -352,98 +257,147 @@ public class StoreEntry extends AppCompatActivity {
     public List<NavMenuItemGetterSetter> getdata() {
         List<NavMenuItemGetterSetter> data = new ArrayList<>();
 
-        int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg;
-
-        if (db.isOpeningDataFilled(store_cd)) {
-            openingImg = R.drawable.opening_stock_done;
-        } else {
-            openingImg = R.drawable.opening_stock;
-        }
-        if (db.isOpeningBackOfficeDataFilled(store_cd)) {
-            openningstockbackoffice = R.drawable.opening_stock_backroom_done;
-        } else {
-            openningstockbackoffice = R.drawable.opening_stock_backroom;
-        }
-        if (db.isMiddayDataFilled(store_cd)) {
-            middayImg = R.drawable.midday_stock_done;
-        } else {
-            middayImg = R.drawable.midday_stock;
-        }
-        if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-            marketIntelligence = R.drawable.audit_done;
-        } else {
-            marketIntelligence = R.drawable.audit;
-        }
-        if (db.isClosingBackOfficeDataFilled(store_cd)) {
+        int openingImg = 0, openningstockbackoffice = 0, middayImg = 0, marketIntelligence = 0, closingBackoffice = 0, promotionImg = 0, assetImg = 0, shareofshelf = 0, closingImg = 0;
+        if (floor_status.equals("1") && backroom_status.equals("1")) {
+            if (db.isOpeningDataFilled(store_cd)) {
+                openingImg = R.drawable.opening_stock_done;
+            } else {
+                openingImg = R.drawable.opening_stock;
+            }
+            if (db.isOpeningBackOfficeDataFilled(store_cd)) {
+                openningstockbackoffice = R.drawable.opening_stock_backroom_done;
+            } else {
+                openningstockbackoffice = R.drawable.opening_stock_backroom;
+            }
+            if (db.isMiddayDataFilled(store_cd)) {
+                middayImg = R.drawable.midday_stock_done;
+            } else {
+                middayImg = R.drawable.midday_stock;
+            }
+            if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                marketIntelligence = R.drawable.audit_done;
+            } else {
+                marketIntelligence = R.drawable.audit;
+            }
+       /* if (db.isClosingBackOfficeDataFilled(store_cd)) {
             closingBackoffice = R.drawable.closing_stock_backroom_done;
         } else {
             closingBackoffice = R.drawable.closing_stock_backroom;
-        }
-        if (db.isAssetDataFilled(store_cd)) {
-            assetImg = R.drawable.asset_done;
-        } else {
-            assetImg = R.drawable.asset;
-        }
-        if (db.isPromotionDataFilled(store_cd)) {
-            promotionImg = R.drawable.promotion_done;
-        } else {
-            promotionImg = R.drawable.promotion;
-        }
-        if (db.isShareOfShelfDataFilled(store_cd)) {
-            shareofshelf = R.drawable.share_of_shelf_done;
-        } else {
-            shareofshelf = R.drawable.share_of_shelf;
-        }
-        if (db.isClosingDataFilled(store_cd)) {
+        }*/
+            if (db.isAssetDataFilled(store_cd)) {
+                assetImg = R.drawable.asset_done;
+            } else {
+                assetImg = R.drawable.asset;
+            }
+            if (db.isPromotionDataFilled(store_cd)) {
+                promotionImg = R.drawable.promotion_done;
+            } else {
+                promotionImg = R.drawable.promotion;
+            }
+            if (db.isShareOfShelfDataFilled(store_cd)) {
+                shareofshelf = R.drawable.share_of_shelf_done;
+            } else {
+                shareofshelf = R.drawable.share_of_shelf;
+            }
+       /* if (db.isClosingDataFilled(store_cd)) {
             closingImg = R.drawable.closing_stock_done;
         } else {
             closingImg = R.drawable.closing_stock;
+        }*/
+
+        } else {
+            if (db.isMiddayDataFilled(store_cd)) {
+                middayImg = R.drawable.midday_stock_done;
+            } else {
+                middayImg = R.drawable.midday_stock;
+            }
+            if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                marketIntelligence = R.drawable.audit_done;
+            } else {
+                marketIntelligence = R.drawable.audit;
+            }
+       /* if (db.isClosingBackOfficeDataFilled(store_cd)) {
+            closingBackoffice = R.drawable.closing_stock_backroom_done;
+        } else {
+            closingBackoffice = R.drawable.closing_stock_backroom;
+        }*/
+            if (db.isAssetDataFilled(store_cd)) {
+                assetImg = R.drawable.asset_done;
+            } else {
+                assetImg = R.drawable.asset;
+            }
+            if (db.isPromotionDataFilled(store_cd)) {
+                promotionImg = R.drawable.promotion_done;
+            } else {
+                promotionImg = R.drawable.promotion;
+            }
+            if (db.isShareOfShelfDataFilled(store_cd)) {
+                shareofshelf = R.drawable.share_of_shelf_done;
+            } else {
+                shareofshelf = R.drawable.share_of_shelf;
+            }
+       /* if (db.isClosingDataFilled(store_cd)) {
+            closingImg = R.drawable.closing_stock_done;
+        } else {
+            closingImg = R.drawable.closing_stock;
+        }*/
         }
 
-        if (user_type.equals("Promoter")) {
-            int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
+
+        //  int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
+        int img[] = {openingImg, openningstockbackoffice, middayImg, shareofshelf, assetImg, marketIntelligence, promotionImg};
+
+        if (floor_status.equals("1") && backroom_status.equals("1")) {
             for (int i = 0; i < img.length; i++) {
+                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
+                recData.setIconImg(img[i]);
+                data.add(recData);
+            }
+        } else {
+            for (int i = 2; i < img.length; i++) {
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
                 recData.setIconImg(img[i]);
                 data.add(recData);
             }
         }
 
+
         return data;
     }
 
     public boolean setCheckOutData() {
         boolean flag = true;
-        //opning stock category
-        if (db.getStockAvailabilityData1(account_cd,city_cd,storetype_cd).size() > 0) {
-            if (db.isOpeningDataAllFilled(store_cd)) {
-                flag = true;
-            } else {
-                flag = false;
-            }
-        }
-        //stock backroom
-        if (flag) {
-            /*if (db.getStockAvailabilityData(store_cd).size() > 0) {*/
-            if (db.getStockAvailabilityData1(account_cd,city_cd,storetype_cd).size() > 0) {
-                if (db.isStockBackRoomDataAllFilled(store_cd)) {
+
+        if (floor_status.equals("1") && backroom_status.equals("1")) {
+            //opning stock category
+            if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                if (db.isOpeningDataAllFilled(store_cd)) {
                     flag = true;
                 } else {
                     flag = false;
                 }
             }
-        }
-        //promotion
-        if (flag) {
-            if (db.getPromotionBrandData(store_cd).size() > 0) {
-                if (db.isPromotionDataFilled(store_cd)) {
-                    flag = true;
-                } else {
-                    flag = false;
+            //stock backroom
+            if (flag) {
+                if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                    if (db.isStockBackRoomDataAllFilled(store_cd)) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
                 }
             }
-        }
-        //pais visibility
+            //promotion
+            if (flag) {
+                if (db.getPromotionBrandData(store_cd).size() > 0) {
+                    if (db.isPromotionDataFilled(store_cd)) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
+                }
+            }
+            //pais visibility
       /*  if (flag) {
             if (db.isStoreAssetDataFilled(store_cd)) {
                 if (db.getAssetCategoryData(store_cd).size() > 0) {
@@ -455,28 +409,61 @@ public class StoreEntry extends AppCompatActivity {
                 }
             }
         }*/
-        //marketintelligence
-        if (flag) {
-            if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-                flag = true;
-            } else {
-                flag = false;
+            //marketintelligence
+            if (flag) {
+                if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
             }
-        }
 
-        if (flag) {
-            if (db.getMiddayDataFromCheckoutDatabase(store_cd).size() > 0) {
-                flag = true;
-            } else {
-                flag = false;
+            if (flag) {
+                if (db.getMiddayStockInDatabase(store_cd).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
             }
-        }
 
-        if (flag) {
-            if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
-                flag = true;
-            } else {
-                flag = false;
+            if (flag) {
+                if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+        } else {
+            if (db.getPromotionBrandData(store_cd).size() > 0) {
+                if (db.isPromotionDataFilled(store_cd)) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+            //marketintelligence
+            if (flag) {
+                if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+
+            if (flag) {
+                if (db.getMiddayStockInDatabase(store_cd).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+
+            if (flag) {
+                if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
             }
         }
 

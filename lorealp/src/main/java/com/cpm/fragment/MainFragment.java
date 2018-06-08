@@ -41,9 +41,6 @@ public class MainFragment extends Fragment {
         noticeboard = preferences.getString(CommonString.KEY_notice_board, null);
         webView.setWebViewClient(new MyWebViewClient());
 
-       /* String url = CommonString.URL_Notice_Board;
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(url);*/
 
         webView.getSettings().setJavaScriptEnabled(true);
         if (noticeboard!=null){
@@ -56,14 +53,6 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-      /*  Activity activity = getActivity();
-        if(activity instanceof CompleteDownloadActivity){
-            CompleteDownloadActivity myactivity = (CompleteDownloadActivity) activity;
-            myactivity.getSupportActionBar().setTitle("Main Menu");
-        }
-        else{
-            ((MainMenuActivity) getActivity()).getSupportActionBar().setTitle("Main Menu");
-        }*/
 
     }
     private class MyWebViewClient extends WebViewClient {
@@ -75,8 +64,7 @@ public class MainFragment extends Fragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-           /* progress.setVisibility(View.GONE);
-            WebViewActivity.this.progress.setProgress(100);*/
+
             imageView.setVisibility(View.INVISIBLE);
             webView.setVisibility(View.VISIBLE);
             super.onPageFinished(view, url);
@@ -85,8 +73,7 @@ public class MainFragment extends Fragment {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-           /* progress.setVisibility(View.VISIBLE);
-            WebViewActivity.this.progress.setProgress(0);*/
+
             super.onPageStarted(view, url, favicon);
         }
 
