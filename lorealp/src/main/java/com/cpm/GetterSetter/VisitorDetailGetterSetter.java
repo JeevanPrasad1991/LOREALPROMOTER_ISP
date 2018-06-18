@@ -13,6 +13,15 @@ public class VisitorDetailGetterSetter {
     String In_time;
     String Out_time;
     String Upload_status;
+    String isexit;
+
+    public String getIsexit() {
+        return isexit;
+    }
+
+    public void setIsexit(String isexit) {
+        this.isexit = isexit;
+    }
 
     public String getUsername() {
         return username;
@@ -24,11 +33,11 @@ public class VisitorDetailGetterSetter {
 
     String username;
 
-    private String name;
+    private String name="";
 
     private Integer empId;
 
-    private String designation;
+    private String designation="";
 
     public String getIn_time_img() {
         return In_time_img;

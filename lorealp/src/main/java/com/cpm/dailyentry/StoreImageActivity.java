@@ -75,7 +75,7 @@ public class StoreImageActivity extends AppCompatActivity implements
     ImageView img_cam, img_clicked, img_cam2, img_clicked2;
     Button btn_save;
     String _pathforcheck, _pathforcheck2, _path, str;
-    String store_cd, visit_date, username, date,selfie_image;
+    String store_cd, visit_date, username, date, selfie_image;
     private SharedPreferences preferences;
     AlertDialog alert;
     String img_str, img_str2;
@@ -151,7 +151,7 @@ public class StoreImageActivity extends AppCompatActivity implements
 
                 }
 */
-                if (img_str2 != null&& !img_str2.equalsIgnoreCase("")) {
+                if (img_str2 != null && !img_str2.equalsIgnoreCase("")) {
                     File image2 = new File(str + img_str2);
                     if (image2.exists()) {
                         image2.delete();
@@ -198,7 +198,7 @@ public class StoreImageActivity extends AppCompatActivity implements
 
                 break;
             case R.id.btn_save_selfie:
-              //  if (img_str != null && img_str2 != null) {
+                //  if (img_str != null && img_str2 != null) {
                 if (img_str2 != null) {
                     if (checkNetIsAvailable()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(StoreImageActivity.this);
@@ -528,30 +528,29 @@ public class StoreImageActivity extends AppCompatActivity implements
     }
 
 
-    public static Bitmap convertBitmap(String path)   {
-        Bitmap bitmap=null;
-        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
         ourOptions.inPreferredConfig = Bitmap.Config.RGB_565;
-        ourOptions.inDither=false;
-        ourOptions.inPurgeable=true;
-        ourOptions.inInputShareable=true;
-        ourOptions.inTempStorage=new byte[32 * 1024];
-        File file=new File(path);
-        FileInputStream fs=null;
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            if(fs!=null)
-            {
-                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {

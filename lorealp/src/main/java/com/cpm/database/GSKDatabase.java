@@ -70,8 +70,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE11";
-    public static final int DATABASE_VERSION = 11;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE12";
+    public static final int DATABASE_VERSION = 12;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -6726,10 +6726,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 while (!dbcursor.isAfterLast()) {
                     FocusPerformanceGetterSetter pgs = new FocusPerformanceGetterSetter();
 
-                  /*  pgs.setFOCUS_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET"))));
-                    pgs.setSALES(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SALES"))));
-                    pgs.setALL_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ALL_TARGET"))));
-                    pgs.setSHOW_TARGET(Float.valueOf(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SHOW_TARGET"))));*/
                     pgs.setFOCUS_TARGET(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FOCUS_TARGET")));
                     pgs.setSALES(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SALES")));
                     pgs.setALL_TARGET(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ALL_TARGET")));
@@ -6905,26 +6901,37 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 values.put(CommonString.KEY_IN_TIME, visitorLoginGetterSetter.get(i).getIn_time());
                 values.put(CommonString.KEY_OUT_TIME, visitorLoginGetterSetter.get(i).getOut_time());
                 values.put(CommonString.KEY_UPLOADSTATUS, visitorLoginGetterSetter.get(i).getUpload_status());
+                values.put(CommonString.KEY_EXIT, visitorLoginGetterSetter.get(i).getIsexit());
                 db.insert(CommonString.TABLE_VISITOR_LOGIN, null, values);
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace();
 
         }
     }
 
 
-    public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username) {
+    public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username, String check,String name) {
 
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_OUT_TIME_IMAGE, out_time_image);
             values.put(CommonString.KEY_OUT_TIME, out_time);
 
-            db.update(CommonString.TABLE_VISITOR_LOGIN, values,
-                    CommonString.KEY_EMP_CODE + "='" + emp_code + "' and " + CommonString.KEY_USERNAME + " = '" + username + "'", null);
+            if (check.equalsIgnoreCase("CPM")){
+
+                db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                        CommonString.KEY_EMP_CODE + "='" + emp_code + "' and " + CommonString.KEY_USERNAME + " = '" + username + "'", null);
+            }else {
+
+                db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                        CommonString.KEY_NAME + "='" + name + "' and " + CommonString.KEY_EXIT + " = '" + check + "'", null);
+            }
+
 
         } catch (Exception e) {
+            e.printStackTrace();
 
         }
     }
@@ -6987,8 +6994,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                             .getColumnIndexOrThrow(CommonString.KEY_IN_TIME_IMAGE)));
                     sb.setOut_time_img(dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow(CommonString.KEY_OUT_TIME_IMAGE)));
-                    sb.setEmp_code(dbcursor.getString(dbcursor
-                            .getColumnIndexOrThrow(CommonString.KEY_EMP_CODE)));
                     sb.setVisit_date(dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow(CommonString.KEY_VISIT_DATE)));
                     sb.setIn_time(dbcursor.getString(dbcursor
@@ -6997,8 +7002,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
                             .getColumnIndexOrThrow(CommonString.KEY_OUT_TIME)));
                     sb.setUpload_status(dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow(CommonString.KEY_UPLOADSTATUS)));
+                    sb.setIsexit(dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow(CommonString.KEY_EXIT)));
 
+                    String emp_code =dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE));
 
+                    if ( emp_code == null ) {
+                        sb.setEmp_code("0");
+                    } else {
+                          sb.setEmp_code(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE)));
+                    }
                     list.add(sb);
                     dbcursor.moveToNext();
                 }
@@ -7007,22 +7020,30 @@ public class GSKDatabase extends SQLiteOpenHelper {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
 
         }
         return list;
 
     }
 
-    public void updateVisitorUploadData(String empid) {
+    public void updateVisitorUploadData(String empid,String name,String check) {
 
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_UPLOADSTATUS, "U");
 
-            db.update(CommonString.TABLE_VISITOR_LOGIN, values,
-                    CommonString.KEY_EMP_CODE + "='" + empid + "'", null);
-        } catch (Exception e) {
+            if (check.equals("CPM")){
+                db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                        CommonString.KEY_EMP_CODE + "='" + empid + "'", null);
+            }else {
 
+                db.update(CommonString.TABLE_VISITOR_LOGIN, values,
+                        CommonString.KEY_NAME + "='" + name + "' and " + CommonString.KEY_EXIT + " = '" + check + "'", null);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
 
         }
     }
@@ -7081,19 +7102,5 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-
-
-   /* //yestardy use code
-    SELECT DISTINCT SD.BRAND_CD, SD.BRAND, SD.HIMALAYA_PHOTO, SD.CATEGORY_PHOTO FROM MAPPING_CHANNEL_SKU CD
-    INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
-    WHERE CD.CHANNEL_CD ='2'
-    ORDER BY SD.BRAND_SEQUENCE
-
-
-    SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD FROM
-    MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
-    INNER JOIN BRAND_MASTER BM ON BM.BRAND_CD = SD.BRAND_CD
-    WHERE CD.CHANNEL_CD ='2' AND BM.BRAND_CD = 2
-    ORDER BY SD.SKU_SEQUENCE*/
 
 }

@@ -955,6 +955,8 @@ public class CommonString {
     public static final String KEY_UPLOADSTATUS = "UPLOADSTATUS";
     public static final String KEY_IN_TIME_IMAGE = "IN_TIME_IMAGE";
     public static final String KEY_OUT_TIME_IMAGE = "OUT_TIME_IMAGE";
+    public static final String KEY_EXIT = "EXIT";
+
     public static final String CREATE_TABLE_VISITOR_LOGIN = "CREATE TABLE "
             + TABLE_VISITOR_LOGIN + " (" + KEY_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
@@ -967,6 +969,7 @@ public class CommonString {
             + KEY_IN_TIME + " VARCHAR,"
             + KEY_OUT_TIME + " VARCHAR,"
             + KEY_IN_TIME_IMAGE + " VARCHAR,"
+            + KEY_EXIT + " VARCHAR,"
             + KEY_OUT_TIME_IMAGE + " VARCHAR)";
 
 

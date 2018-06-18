@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_visitor_login">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/progress_empid"
@@ -48,6 +48,37 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:weightSum="7">
+
+                        <RadioGroup
+                            android:id="@+id/radiogroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/cpm"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="CPM" />
+
+                            <RadioButton
+                                android:id="@+id/loreal"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="LOREAL" />
+
+
+                        </RadioGroup>
+
 
                         <TextView
                             android:id="@+id/tv_user_id"
@@ -90,6 +121,20 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
+                            <Button
+                                android:id="@+id/btncleardata"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2.5"
+                                android:background="@drawable/roundedbutton"
+                                android:text="CLEAR"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+
                         </LinearLayout>
 
                         <View
@@ -102,6 +147,7 @@
                             android:background="@color/colorPrimary" />
 
                         <LinearLayout
+                            android:id="@+id/lr_cpm"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginLeft="10dp"
@@ -165,6 +211,100 @@
                             </LinearLayout>
                         </LinearLayout>
 
+
+                        <LinearLayout
+                            android:id="@+id/lr_loreal"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            android:weightSum="2">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="6">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginTop="4dip"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:layout_gravity="center"
+                                    android:text="Visitor Name"
+                                    android:textSize="16sp" />
+
+                                <EditText
+                                    android:id="@+id/ed_name"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"
+                                    android:textColor="@color/green"
+                                    android:textSize="@dimen/text_size_small" />
+
+                                <Button
+                                    android:id="@+id/loreal_clear"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/roundedbutton"
+                                    android:text="CLEAR"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="6">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginTop="4dip"
+                                    android:layout_weight="2"
+                                    android:text="Designation"
+                                    android:layout_gravity="center"
+                                    android:textSize="16sp" />
+
+                                <EditText
+                                    android:id="@+id/ed_designation"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"
+                                    android:textColor="@color/green"
+                                    android:textSize="@dimen/text_size_small" />
+
+                                <Button
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:visibility="invisible"
+
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
@@ -195,10 +335,20 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1">
 
+                                    <TextView
+                                        android:id="@+id/intime"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="In Time Image"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+
                                     <ImageView
                                         android:id="@+id/imgcam_intime"
                                         android:layout_width="70dp"
                                         android:layout_height="70dp"
+                                        android:layout_below="@+id/intime"
                                         android:layout_centerInParent="true"
                                         android:background="@drawable/camera_orange" />
 
@@ -206,6 +356,13 @@
 
                                 <ImageView
                                     android:id="@+id/img_intime"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:visibility="gone" />
+
+                                <ImageView
+                                    android:id="@+id/img_intime_loreal"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
@@ -219,12 +376,23 @@
                                     android:id="@+id/rel_outtime"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
+
                                     android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/outtime"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="Out Time Image"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
 
                                     <ImageView
                                         android:id="@+id/imgcam_outtime"
                                         android:layout_width="70dp"
                                         android:layout_height="70dp"
+                                        android:layout_below="@+id/outtime"
                                         android:layout_centerInParent="true"
                                         android:background="@drawable/camera_orange" />
                                 </RelativeLayout>
@@ -249,6 +417,13 @@
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/tvintime_loreal"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_centerInParent="true"
+                                        android:textSize="16sp" />
 
                                     <TextView
                                         android:id="@+id/tvintime"
@@ -285,7 +460,6 @@
                     android:layout_weight=".7"
                     android:background="@color/colorPrimary"
                     android:orientation="horizontal"
-
                     android:weightSum="7.5">
 
                     <TextView
@@ -345,9 +519,10 @@
                     android:id="@+id/rv_visitor"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="3.8" />
+                    android:layout_weight="4" />
             </LinearLayout>
         </LinearLayout>
 

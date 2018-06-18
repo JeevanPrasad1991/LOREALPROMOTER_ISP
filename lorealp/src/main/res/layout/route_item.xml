@@ -30,21 +30,6 @@
             android:textColor="@color/green"
             android:textSize="@dimen/text_size_small" />
 
-       <!-- <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/green" />
-
-        <TextView
-            android:id="@+id/tvmerchandise"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingTop="3dp"
-            android:text="Merch%"
-            android:textColor="@color/green"
-            android:textSize="@dimen/text_size_small" />-->
 
         <View
             android:layout_width="2dp"

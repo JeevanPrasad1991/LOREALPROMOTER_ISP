@@ -34,6 +34,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,6 +107,17 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
     String result1;
     TextView tv_user_id;
 
+    RadioButton cpm, loreal;
+    RadioGroup radiogroup;
+    LinearLayout lr_cpm, lr_loreal, linear_empl;
+    String check = "CPM";
+    EditText ed_name, ed_designation;
+    Button btncleardata,loreal_clear;
+
+    TextView tvintime_loreal;
+    ImageView img_intime_loreal;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,31 +125,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         declaration();
-        //prepareList();
-       /* visitorSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if (position != 0) {
-                    tvname.setText(list.get(position).getName());
-                    tvdesignation.setText(list.get(position).getDesignation());
-                    empid = list.get(position).getEmp_code();
-                    name = list.get(position).getName();
-                    designation = list.get(position).getDesignation();
 
-                } else {
-                    tvname.setText("");
-                    tvdesignation.setText("");
-                    empid = null;
-                    name = null;
-                    designation = null;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
 
     }
 
@@ -178,6 +167,22 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         progressBar = (ProgressBar) findViewById(R.id.progress_empid);
         heading = (LinearLayout) findViewById(R.id.lay_heading);
         recyclerView = (RecyclerView) findViewById(R.id.rv_visitor);
+
+        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+        cpm = (RadioButton) findViewById(R.id.cpm);
+        loreal = (RadioButton) findViewById(R.id.loreal);
+        lr_cpm = (LinearLayout) findViewById(R.id.lr_cpm);
+        lr_loreal = (LinearLayout) findViewById(R.id.lr_loreal);
+        linear_empl = (LinearLayout) findViewById(R.id.linear_empl);
+        ed_name = (EditText) findViewById(R.id.ed_name);
+        ed_designation = (EditText) findViewById(R.id.ed_designation);
+        btncleardata = (Button) findViewById(R.id.btncleardata);
+        loreal_clear = (Button) findViewById(R.id.loreal_clear);
+
+
+        tvintime_loreal = (TextView) findViewById(R.id.tvintime_loreal);
+        img_intime_loreal = (ImageView) findViewById(R.id.img_intime_loreal);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         database = new GSKDatabase(this);
         database.open();
@@ -193,7 +198,29 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         rel_outtime.setOnClickListener(this);
         btnclear.setOnClickListener(this);
         btngo.setOnClickListener(this);
+        btncleardata.setOnClickListener(this);
+        loreal_clear.setOnClickListener(this);
         Path = CommonString.FILE_PATH;
+
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.cpm) {
+                    lr_cpm.setVisibility(View.VISIBLE);
+                    lr_loreal.setVisibility(View.GONE);
+                    linear_empl.setVisibility(View.VISIBLE);
+                    check = "CPM";
+
+
+                } else if (checkedId == R.id.loreal) {
+                    lr_loreal.setVisibility(View.VISIBLE);
+                    lr_cpm.setVisibility(View.GONE);
+                    linear_empl.setVisibility(View.GONE);
+                    check = "LOREAL";
+
+                }
+            }
+        });
+
 
     }
 
@@ -223,7 +250,8 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                                                 String out_time = tv_out_time.getText().toString();
                                                 visitorLoginGetterSetter.setOut_time(out_time);
 
-                                                database.updateOutTimeVisitorLoginData(visitorLoginGetterSetter.getOut_time_img(), out_time, String.valueOf(visitorLoginGetterSetter.getEmp_code()), username);
+                                                database.open();
+                                                database.updateOutTimeVisitorLoginData(visitorLoginGetterSetter.getOut_time_img(), out_time, String.valueOf(visitorLoginGetterSetter.getEmp_code()), username, check, visitorLoginGetterSetter.getName());
 
                                                 if (CheckNetAvailability()) {
                                                     new UploadVisitorData().execute();
@@ -241,6 +269,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                                                 visitorLoginGetterSetter.setDesignation(designation);
                                                 visitorLoginGetterSetter.setVisit_date(visit_date);
                                                 visitorLoginGetterSetter.setIn_time_img(intime_img);
+                                                visitorLoginGetterSetter.setIsexit(check);
                                                 visitorLoginGetterSetter.setIn_time(tv_in_time.getText().toString());
                                                 String out_time = tv_out_time.getText().toString();
                                                 if (out_time.equalsIgnoreCase("Out Time")) {
@@ -289,37 +318,74 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 break;
             case R.id.rel_intime:
-                if (et_emp_name.getText().toString() != null && !et_emp_name.getText().toString().equalsIgnoreCase("")) {
+
+                if (check.equalsIgnoreCase("CPM")) {
+                    if (et_emp_name.getText().toString() != null && !et_emp_name.getText().toString().equalsIgnoreCase("")) {
+                        camin_clicked = true;
+                        _pathforcheck = username + getCurrentTime() + "visitor_intime" + ".jpg";
+                        _path = str + _pathforcheck;
+                        CommonFunctions.startCameraActivity((Activity) context, _path);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please fill employee code first", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+
+                    if ((ed_name.getText().toString() != null && !ed_name.getText().toString().equalsIgnoreCase("")) || (ed_designation.getText().toString() != null && !ed_designation.getText().toString().equalsIgnoreCase(""))) {
+                        camin_clicked = true;
+                        _pathforcheck = username + getCurrentTime() + "visitor_intime" + ".jpg";
+                        _path = str + _pathforcheck;
+                        CommonFunctions.startCameraActivity((Activity) context, _path);
+                    } else {
+
+                        Toast.makeText(getApplicationContext(), "Please fill Visiter Name and Designation", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                /*if (et_emp_name.getText().toString() != null && !et_emp_name.getText().toString().equalsIgnoreCase("")) {
                     camin_clicked = true;
                     _pathforcheck = username + getCurrentTime() + "visitor_intime" + ".jpg";
-                    //imageV = _pathforcheck;
                     _path = str + _pathforcheck;
                     CommonFunctions.startCameraActivity((Activity) context, _path);
-                    //startCameraActivity();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please fill employee code first", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+
                 break;
 
             case R.id.rel_outtime:
-                //if(!isUpdate && (intime_img == null)){
+
+               /* if (check.equalsIgnoreCase("CPM")) {
+                    if (!isUpdate) {
+                         error_msg = "Please click Out Time image at out time";
+                       // error_msg = "Please enter Employee Code ";
+                        Toast.makeText(getApplicationContext(), error_msg, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        camout_clicked = true;
+                        _pathforcheck = username + getCurrentTime() + "visitor_outtime" + ".jpg";
+                        _path = str + _pathforcheck;
+                        CommonFunctions.startCameraActivity((Activity) context, _path);
+                    }
+                }else {
+
+                }*/
+
                 if (!isUpdate) {
                     error_msg = "Please click Out Time image at out time";
+                   // error_msg = "Please enter Employee Code ";
                     Toast.makeText(getApplicationContext(), error_msg, Toast.LENGTH_SHORT).show();
 
                 } else {
                     camout_clicked = true;
                     _pathforcheck = username + getCurrentTime() + "visitor_outtime" + ".jpg";
-                    //imageV = _pathforcheck;
                     _path = str + _pathforcheck;
                     CommonFunctions.startCameraActivity((Activity) context, _path);
-                    //startCameraActivity();
                 }
 
                 break;
             case R.id.btngo:
 
-                emp_name = et_emp_name.getText().toString().trim().replaceAll("[&^<>{}'$]", "");
+                emp_name = et_emp_name.getText().toString().toUpperCase().trim().replaceAll("[&^<>{}'$]", "");
                 if (emp_name.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter Employee Name", Toast.LENGTH_SHORT).show();
                 } else if (CheckNetAvailability()) {
@@ -336,6 +402,20 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 clearVisitorData();
 
                 break;
+            case R.id.btncleardata:
+
+                clearVisitorData();
+
+                break;
+            case R.id.loreal_clear:
+
+                clearVisitorData();
+
+                break;
+
+
+
+
         }
 
     }
@@ -456,7 +536,10 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     empid = String.valueOf(visitordata.getEMP_CD().get(0));
                     name = visitordata.getEMPLOYEE().get(0);
                     designation = visitordata.getDESIGNATION().get(0);
-                    btnclear.setVisibility(View.VISIBLE);
+                   // et_emp_name.setText("");
+
+                    btngo.setVisibility(View.GONE);
+                    btncleardata.setVisibility(View.VISIBLE);
                 } else {
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Please enter valid Employee Code", Toast.LENGTH_LONG).show();
@@ -542,6 +625,11 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
     public void clearVisitorData() {
 
+
+        ed_name.setText("");
+        ed_designation.setText("");
+
+
         et_emp_name.setText("");
         tvname.setText("");
         tvdesignation.setText("");
@@ -562,7 +650,16 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         fab_save.setVisibility(View.VISIBLE);
         rel_intime.setClickable(true);
         rel_outtime.setClickable(true);
-        btnclear.setVisibility(View.INVISIBLE);
+
+        btngo.setVisibility(View.VISIBLE);
+        btncleardata.setVisibility(View.GONE);
+        ed_name.setEnabled(true);
+        ed_designation.setEnabled(true);
+
+        //image
+        rel_intime.setVisibility(View.VISIBLE);
+        rel_intime.setClickable(true);
+        img_intime.setVisibility(View.GONE);
 
         isUpdate = false;
 
@@ -599,6 +696,12 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
+
+                      /*  if (check.equalsIgnoreCase("CPM")) {
+
+                        }else {
+
+                        }*/
 
                         if (camin_clicked) {
                             intime_img = _pathforcheck;
@@ -732,32 +835,61 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
     public boolean check_condition() {
 
-        if (isUpdate) {
-            if (visitorLoginGetterSetter.getOut_time_img().equals("")) {
 
-                error_msg = "Please click out time image";
-                return false;
+        if (check.equalsIgnoreCase("CPM")) {
+            if (isUpdate) {
+                if (visitorLoginGetterSetter.getOut_time_img().equals("")) {
+                    error_msg = "Please click out time image";
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
-                return true;
+                if (empid == null || name == null || designation == null) {
+                    error_msg = "Please Select Employee";
+                    return false;
+                } else if (intime_img == null) {
+                    error_msg = "Please click in time image";
+                    return false;
+                } else if (database.isVistorDataExists(empid, visit_date)) {
+                    error_msg = "Employee already entered";
+                    return false;
+                } else {
+                    return true;
+                }
             }
+
         } else {
-            if (empid == null || name == null || designation == null) {
-                error_msg = "Please Select Employee";
-                return false;
-            } else if (intime_img == null) {
-                error_msg = "Please click in time image";
-                return false;
-            } else if (database.isVistorDataExists(empid, visit_date)) {
-                error_msg = "Employee already entered";
-                return false;
+            if (isUpdate) {
+                if (visitorLoginGetterSetter.getOut_time_img().equals("")) {
+                    error_msg = "Please click out time image";
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
-                return true;
+                name = ed_name.getText().toString().trim().replaceAll("[&^<>{}'$]", "");
+                designation = ed_designation.getText().toString().trim().replaceAll("[&^<>{}'$]", "");
+                if (name.equalsIgnoreCase("") || designation.equalsIgnoreCase("")) {
+                    error_msg = "Please fill Visiter Name and Designation";
+                    return false;
+                } else if (intime_img == null) {
+                    error_msg = "Please click in time image";
+                    return false;
+                } else if (database.isVistorDataExists(empid, visit_date)) {
+                    error_msg = "Employee already entered";
+                    return false;
+                } else {
+                    return true;
+                }
             }
+
         }
+
     }
 
     public void setLoginData() {
-
+        database.open();
         visitorLoginData = database.getVisitorLoginData(visit_date, username);
 
         if (visitorLoginData.size() > 0) {
@@ -809,20 +941,28 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                         Toast.makeText(getApplicationContext(), "Data already uploaded", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        btnclear.setVisibility(View.VISIBLE);
-                        tvname.setText(visitorLoginGetterSetter.getName());
-                        tvdesignation.setText(visitorLoginGetterSetter.getDesignation());
+                        if (!visitorLoginGetterSetter.getIsexit().equalsIgnoreCase("") && visitorLoginGetterSetter.getIsexit().equalsIgnoreCase("CPM")) {
+                            cpm.setChecked(true);
+                            tvname.setText(visitorLoginGetterSetter.getName());
+                            tvdesignation.setText(visitorLoginGetterSetter.getDesignation());
+                          //  et_emp_name.setText(visitorLoginGetterSetter.getName());
+                            btncleardata.setVisibility(View.VISIBLE);
+                            btngo.setVisibility(View.GONE);
 
-                      /*  for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).getName().equalsIgnoreCase(visitorLoginGetterSetter.getName())) {
-                                visitorSpn.setSelection(i);
-                            }
-                        }*/
 
-                        et_emp_name.setText(visitorLoginGetterSetter.getName());
+                        }
+                        if (!visitorLoginGetterSetter.getIsexit().equalsIgnoreCase("") && visitorLoginGetterSetter.getIsexit().equalsIgnoreCase("LOREAL")) {
+                            loreal.setChecked(true);
+                            ed_name.setText(visitorLoginGetterSetter.getName());
+                            ed_designation.setText(visitorLoginGetterSetter.getDesignation());
+                            ed_name.setEnabled(false);
+                            ed_designation.setEnabled(false);
+                            btncleardata.setVisibility(View.VISIBLE);
+                            btngo.setVisibility(View.GONE);
+
+                        }
 
                         tv_in_time.setText(visitorLoginGetterSetter.getIn_time());
-                        //et_emp_name.setFocusable(false);
                         String intime_img = visitorLoginGetterSetter.getIn_time_img();
                         if (intime_img != null && !intime_img.equals("")) {
 
@@ -920,9 +1060,19 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                         + visitorLoginGetterSetter.getOut_time_img()
                         + "[/OUT_TIME_IMAGE][IN_TIME]"
                         + visitorLoginGetterSetter.getIn_time()
-                        + "[/IN_TIME][OUT_TIME]"
+                        + "[/IN_TIME]"
+                        + "[OUT_TIME]"
                         + visitorLoginGetterSetter.getOut_time()
                         + "[/OUT_TIME]"
+                        + "[EXIT]"
+                        + check
+                        + "[/EXIT]"
+                        + "[VISITER_NAME]"
+                        + visitorLoginGetterSetter.getName()
+                        + "[/VISITER_NAME]"
+                        + "[DESIGNATION]"
+                        + visitorLoginGetterSetter.getDesignation()
+                        + "[/DESIGNATION]"
                         + "[/USER_DATA]";
 
 
@@ -933,7 +1083,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 SoapObject request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                 request.addProperty("XMLDATA", visitdata);
-                request.addProperty("KEYS", "VISITOR_LOGIN");
+                request.addProperty("KEYS", "VISITOR_LOGIN_NEW");
                 request.addProperty("USERNAME", username);
                 request.addProperty("MID", 0);
 
@@ -980,7 +1130,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                         .equals("")) {
 
                     if (new File(CommonString.FILE_PATH + visitorLoginGetterSetter.getOut_time_img()).exists()) {
-                        //result = UploadImage(addNewStoreList.get(j).getImg_Camera(), "StoreImages");
+
                         result = uploadRetro.UploadImage2(visitorLoginGetterSetter.getOut_time_img(), "Visitor", CommonString.FILE_PATH);
                         if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                             if (result.toString().equalsIgnoreCase(CommonString.KEY_FALSE)) {
@@ -1031,7 +1181,8 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 Toast.makeText(getApplicationContext(), "Visit Data Uploaded", Toast.LENGTH_LONG).show();
                 //update upload_status to U
-                database.updateVisitorUploadData(visitorLoginGetterSetter.getEmp_code());
+                //  database.updateVisitorUploadData(visitorLoginGetterSetter.getEmp_code());
+                database.updateVisitorUploadData(visitorLoginGetterSetter.getEmp_code(), visitorLoginGetterSetter.getName(), check);
                 clearVisitorData();
 
                 setLoginData();
