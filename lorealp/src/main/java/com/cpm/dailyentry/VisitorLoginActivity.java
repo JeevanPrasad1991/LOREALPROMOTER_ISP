@@ -372,7 +372,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 if (!isUpdate) {
                     error_msg = "Please click Out Time image at out time";
-                   // error_msg = "Please enter Employee Code ";
                     Toast.makeText(getApplicationContext(), error_msg, Toast.LENGTH_SHORT).show();
 
                 } else {
