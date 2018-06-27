@@ -450,6 +450,9 @@ public class UploadDataActivity extends Activity {
                                             + "[PID]" + promotionData.get(j).getPromotion_id() + "[/PID]"
                                             + "[BRAND_CD]" + promotionData.get(j).getBrand_cd() + "[/BRAND_CD]"
                                             + "[PRESENT_SPIN]" + promotionData.get(j).getPresentSpi() + "[/PRESENT_SPIN]"
+
+                                            + "[PROMO_STOCK]" + promotionData.get(j).getPromoStock() + "[/PROMO_STOCK]"
+                                            + "[RUNNING_POS]" + promotionData.get(j).getRunningPOS() + "[/RUNNING_POS]"
                                             + "[CAMERA]" + promotionData.get(j).getCamera() + "[/CAMERA]"
                                             + "[PROMOTION_REMARK_CD]" + promotionData.get(j).getReason_cd() + "[/PROMOTION_REMARK_CD]"
                                             + "[/LOREAL_PROMOTION_DATA]";

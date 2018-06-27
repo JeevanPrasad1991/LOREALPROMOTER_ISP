@@ -68,7 +68,8 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
     String img_str;
     //today image
     int size = 5;
-    Bitmap bmp,dest;
+    Bitmap bmp,dest,bitmapsimplesize;
+    TextView storename_remembermetext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +78,12 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
         img_clicked = (ImageView) findViewById(R.id.img_cam_selfie_checkout);
         img_cam = (ImageView) findViewById(R.id.img_selfie_check);
         btn_save =(Button) findViewById(R.id.btn_save_selfie_checkout);
+        storename_remembermetext =(TextView) findViewById(R.id.storename_remembermetext);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         username = preferences.getString(CommonString.KEY_USERNAME, "");
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
+        storename_remembermetext.setText("Checkout -"+visit_date);
         str = CommonString.FILE_PATH;
         db = new GSKDatabase(this);
         db.open();
@@ -328,7 +331,6 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
             case -1:
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
-                      //  Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
                         bmp = convertBitmap(str + _pathforcheck);
                         dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -352,7 +354,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
 
                         try {
                             bmp = convertBitmap(str + _pathforcheck);
-                            Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bmp,bmp.getWidth() / size, bmp.getHeight() / size, true);
+                            bitmapsimplesize = Bitmap.createScaledBitmap(bmp,bmp.getWidth() / size, bmp.getHeight() / size, true);
                             bmp.recycle();
                             img_cam.setImageBitmap(bitmapsimplesize);
                             img_clicked.setVisibility(View.GONE);
@@ -360,6 +362,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
                             img_str = _pathforcheck;
                             _pathforcheck = "";
                         } catch (Exception e) {
+                            Crashlytics.logException(e);
                             e.printStackTrace();
                         }
 

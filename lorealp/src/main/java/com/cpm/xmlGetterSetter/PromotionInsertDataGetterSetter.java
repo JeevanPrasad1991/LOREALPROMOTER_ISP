@@ -4,7 +4,16 @@ public class PromotionInsertDataGetterSetter {
 
     String brand, brand_cd, sku_cd, sku, promotion_txt,
             category_type, present, remark, promotion_id, img,
-            presentSpi, promoTalker, runningPOS, camera;
+            presentSpi, promoTalker, runningPOS, camera="";
+    String promoStock="";
+
+    public String getPromoStock() {
+        return promoStock;
+    }
+
+    public void setPromoStock(String promoStock) {
+        this.promoStock = promoStock;
+    }
 
     public String getBrand() {
         return brand;

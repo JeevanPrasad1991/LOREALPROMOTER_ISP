@@ -42,7 +42,6 @@
                     android:text="Brand Name"
                     android:textColor="@color/black"
                     android:textSize="15dip" />
-                <!--android:textAppearance="?android:attr/textAppearanceListItem"-->
 
                 <LinearLayout
                     android:id="@+id/lin_camera"
@@ -181,13 +180,153 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Stock"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Promo talker"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Running POS"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ToggleButton
+                        android:id="@+id/toggle_promostock"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textOff="NO"
+                        android:textOn="YES" />
+
+                    <ToggleButton
+                        android:id="@+id/toggle_promotalk"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textOff="NO"
+                        android:textOn="YES" />
+
+
+                    <ToggleButton
+                        android:id="@+id/toggle_running_pos"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textOff="NO"
+                        android:textOn="YES" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/rlP_camera"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/toggle_runningPOS"
+                                android:layout_width="45dip"
+                                android:layout_height="45dip"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:src="@drawable/camera_orange" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/rlp_remark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <Spinner
+                                android:id="@+id/toggle_promoTalker"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="2dp"
+                                android:layout_weight="0.7"
+                                android:gravity="center_vertical|center_horizontal" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                //
                 <!--promo stock-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:weightSum="1">
 
                     <TextView
@@ -198,81 +337,87 @@
                         android:text="Present :"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
-
+                    <!--
+                                        <ToggleButton
+                                            android:id="@+id/toggle_promoStock"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="0.4"
+                                            android:checked="true"
+                                            android:textOn="YES"
+                                            android:textOff="NO"
+                                            android:gravity="center_vertical|center_horizontal" />-->
                     <ToggleButton
-                        android:id="@+id/toggle_promoStock"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="5dp"
                         android:layout_weight="0.4"
                         android:checked="true"
-                        android:textOn="YES"
+                        android:gravity="center_vertical|center_horizontal"
                         android:textOff="NO"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:textOn="YES" />
                 </LinearLayout>
 
                 <!--promo talker-->
-                <LinearLayout
-                    android:id="@+id/rlp_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.3"
-                        android:padding="10dp"
-                        android:text="Remark :"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                <!--
+                                <LinearLayout
+                                    android:id="@+id/rlp_remark"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
 
-                    <Spinner
-                        android:id="@+id/toggle_promoTalker"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="0.7"
-                        android:gravity="center_vertical|center_horizontal" />
-                </LinearLayout>
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.3"
+                                        android:padding="10dp"
+                                        android:text="Remark :"
+                                        android:textColor="@color/black"
+                                        android:textSize="15sp" />
+
+                                    <Spinner
+                                        android:id="@+id/toggle_promoTalker"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight="0.7"
+                                        android:gravity="center_vertical|center_horizontal" />
+                                </LinearLayout>
+                -->
 
                 <!--Running on POS-->
-                <LinearLayout
-                    android:id="@+id/rlP_camera"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                <!--
+                                <LinearLayout
+                                    android:id="@+id/rlP_camera"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.6"
-                        android:padding="10dp"
-                        android:text="Photo :"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.6"
+                                        android:padding="10dp"
+                                        android:text="Photo :"
+                                        android:textColor="@color/black"
+                                        android:textSize="15sp" />
 
-                    <ImageView
-                        android:id="@+id/toggle_runningPOS"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="0.2"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:src="@drawable/camera_orange" />
+                                    <ImageView
+                                        android:id="@+id/toggle_runningPOS"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight="0.2"
+                                        android:gravity="center_vertical|center_horizontal"
+                                        android:src="@drawable/camera_orange" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="0.2"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:src="@drawable/camera"
-                        android:visibility="invisible" />
-                </LinearLayout>
+                                </LinearLayout>
+                -->
             </LinearLayout>
 
         </LinearLayout>

@@ -31,6 +31,7 @@ import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
+import com.cpm.xmlGetterSetter.MappingUserCategoryGetterSetter;
 import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
@@ -1109,6 +1110,32 @@ public class XMLHandlers {
                     }
                     if (xpp.getName().equals("BRAND_CD")) {
                         mappingsos.setBrand_cd(xpp.nextText());
+                    }
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingsos;
+    }
+
+    public static MappingUserCategoryGetterSetter mappingUSERCategoryXML(XmlPullParser xpp, int eventType) {
+        MappingUserCategoryGetterSetter mappingsos = new MappingUserCategoryGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingsos.setMapping_user_category_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("CATEGORY_CD")) {
+                        mappingsos.setCategory_cd(xpp.nextText());
                     }
                 }
                 xpp.next();

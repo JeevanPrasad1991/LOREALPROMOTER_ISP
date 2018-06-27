@@ -696,12 +696,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
 
-                      /*  if (check.equalsIgnoreCase("CPM")) {
-
-                        }else {
-
-                        }*/
-
                         if (camin_clicked) {
                             intime_img = _pathforcheck;
 
@@ -870,7 +864,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 name = ed_name.getText().toString().trim().replaceAll("[&^<>{}'$]", "");
                 designation = ed_designation.getText().toString().trim().replaceAll("[&^<>{}'$]", "");
                 if (name.equalsIgnoreCase("") || designation.equalsIgnoreCase("")) {
-                    error_msg = "Please fill Visiter Name and Designation";
+                    error_msg = "Please fill Visitor Name and Designation";
                     return false;
                 } else if (intime_img == null) {
                     error_msg = "Please click in time image";

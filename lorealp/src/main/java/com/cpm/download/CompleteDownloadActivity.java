@@ -34,6 +34,7 @@ import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
+import com.cpm.xmlGetterSetter.MappingUserCategoryGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
@@ -72,7 +73,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     CompanyGetterSetter companyGetterSetter;
     BrandGetterSetter brandGetterSetter;
     SubCategoryGetterSetter subCategoryGetterSetter;
-    PerformanceGetterSetter  performanceGetterSetter;
+    PerformanceGetterSetter performanceGetterSetter;
     FocusPerformanceGetterSetter focusperformanceGetterSetter;
     NonWorkingReasonGetterSetter nonworkinggettersetter;
     CategoryMasterGetterSetter categorygettersetter;
@@ -85,6 +86,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     MappingSosGetterSetter mappingSosGetterSetter;
     TodayQuestionGetterSetter todayQuestionGetterSetter;
     MappingChannalSkuGetterSetter mappingChannalSkuGetterSetter;
+    MappingUserCategoryGetterSetter mappingUserCategoryGetterSetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -329,7 +331,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
-
                 //Category master data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -360,8 +361,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Category Master Downloading";
                 }
                 publishProgress(data);
-
-
 
 
                 //Category master data
@@ -396,8 +395,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
-
-                        //STORE_FOCUS_SKU_PERFORMANCE master data
+                //STORE_FOCUS_SKU_PERFORMANCE master data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
                 request.addProperty("Type", "STORE_FOCUS_SKU_PERFORMANCE");
@@ -426,7 +424,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "Focus Performance Data Downloading";
                 }
                 publishProgress(data);
-
 
 
                 // Mapping Availability data
@@ -487,6 +484,38 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 publishProgress(data);
 
 
+                //MAPPING_USER_CATEGORY
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_USER_CATEGORY");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                Object resultmappingctg = (Object) envelope.getResponse();
+                if (resultmappingctg.toString() != null) {
+
+                    xpp.setInput(new StringReader(resultmappingctg.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    mappingUserCategoryGetterSetter = XMLHandlers.mappingUSERCategoryXML(xpp, eventType);
+                    if (mappingUserCategoryGetterSetter.getMapping_user_category_table() != null) {
+                        String mappingtable = mappingUserCategoryGetterSetter.getMapping_user_category_table();
+                        TableBean.setMappingUserCategorytable(mappingtable);
+                    }
+                    if (mappingUserCategoryGetterSetter.getCategory_cd().size() > 0) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                        data.value = 52;
+                        data.name = "MAPPING_USER_CATEGORY data Downloading";
+                    } else {
+                        return "MAPPING_USER_CATEGORY";
+                    }
+                }
+                publishProgress(data);
+
+
                 // MAPPING_CHANNEL_SKU
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -499,7 +528,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 androidHttpTransport = new HttpTransportSE(CommonString.URL);
                 androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
 
-                Object   result2 = (Object) envelope.getResponse();
+                Object result2 = (Object) envelope.getResponse();
 
                 if (result2.toString() != null) {
                     xpp.setInput(new StringReader(result2.toString()));
@@ -517,7 +546,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.value = 97;
                     data.name = "MAPPING_CHANNEL_SKU Downloading";
                 }
-
 
 
                 // Mapping Promotion data
@@ -583,7 +611,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         data.name = "Mapping Asset Data Downloading";
                     } else {
                         //return "MAPPING_ASSET_NEW";
-                       // asset_flag = false;
+                        // asset_flag = false;
                     }
                 }
                 publishProgress(data);
@@ -685,7 +713,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }
 
 
-
                 //PERFORMANCE_OQAD Slip Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -728,7 +755,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 androidHttpTransport = new HttpTransportSE(CommonString.URL);
                 androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
 
-                 result2 = (Object) envelope.getResponse();
+                result2 = (Object) envelope.getResponse();
 
                 if (result2.toString() != null) {
                     xpp.setInput(new StringReader(result2.toString()));
@@ -883,8 +910,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertpromoTypeData(promoTypeGetterSetter);
                 db.insertIncentiveTypeData(incentiveGetterSetter);
                 db.insertMappingSosData(mappingSosGetterSetter);
+                db.insertMappingUserCategoryData(mappingUserCategoryGetterSetter);
                 db.insertQuestionAnsData(todayQuestionGetterSetter);
-
                 db.insertMappingChannelData(mappingChannalSkuGetterSetter);
 
 
@@ -919,7 +946,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 Crashlytics.logException(e);
                 success_flag = false;
                 final AlertMessage message = new AlertMessage(
-                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION , "download", e);
+                        CompleteDownloadActivity.this, AlertMessage.MESSAGE_EXCEPTION, "download", e);
                 e.getMessage();
                 e.printStackTrace();
                 e.getCause();
@@ -945,9 +972,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             dialog.dismiss();
-
+            AlertMessage message;
             if (success_flag) {
-                if (result.equals(CommonString.KEY_SUCCESS)) {
+                /*if (result.equals(CommonString.KEY_SUCCESS)) {
                     AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
                     message.showMessage();
                 }else if (result.equalsIgnoreCase("JOURNEY_PLAN")){
@@ -956,6 +983,19 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 } else {
                     AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
                     message.showMessage();
+                }*/
+                if (result.equals(CommonString.KEY_SUCCESS)) {
+                    message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
+                    message.showMessage();
+                } else if (result.equalsIgnoreCase("JOURNEY_PLAN")) {
+                    message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP, "success", null);
+                    message.showMessage();
+                } else if (result.equalsIgnoreCase("MAPPING_USER_CATEGORY")) {
+                        message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_MAPPING_USER_CATEGORY + result, "success", null);
+                        message.showMessage();
+                }else {
+                     message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
+                     message.showMessage();
                 }
             }
 

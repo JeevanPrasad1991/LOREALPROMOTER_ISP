@@ -46,6 +46,7 @@ import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
+import com.cpm.xmlGetterSetter.MappingUserCategoryGetterSetter;
 import com.cpm.xmlGetterSetter.MarketIntelligenceGetterSetter;
 import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
@@ -70,8 +71,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE12";
-    public static final int DATABASE_VERSION = 12;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE13";
+    public static final int DATABASE_VERSION = 13;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -113,9 +114,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getMappingsos_table());
         db.execSQL(TableBean.getFocusperformancetable());
         db.execSQL(TableBean.getTodayquestion_ans_table());
-
         db.execSQL(TableBean.getMappingChanneltable());
-
+        db.execSQL(TableBean.getMappingUserCategorytable());
 
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
@@ -818,7 +818,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
         try {
 
-            dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER ORDER BY CATEGORY_CD ", null);
+          //  dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER ORDER BY CATEGORY_CD ", null);
+            dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER WHERE CATEGORY_CD IN(SELECT CATEGORY_CD FROM MAPPING_USER_CATEGORY) ORDER BY CATEGORY_CD ", null);
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -1323,8 +1324,15 @@ public class GSKDatabase extends SQLiteOpenHelper {
         try {
 
 
+/*
             dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO   FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
                     " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD  WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+*/
+            dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO, SK.CATEGORY_CD" +
+                    " FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
+                    " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD" +
+                    " INNER JOIN MAPPING_USER_CATEGORY MC ON SK.CATEGORY_CD = MC.CATEGORY_CD" +
+                    " WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
 
 
             if (dbcursor != null) {
@@ -1442,15 +1450,29 @@ public class GSKDatabase extends SQLiteOpenHelper {
         try {
 
 
+/*
             dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO   FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
                     " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD  WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+*/
 
+            dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO, SK.CATEGORY_CD" +
+                     " FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
+                     " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD" +
+                     " INNER JOIN MAPPING_USER_CATEGORY MC ON SK.CATEGORY_CD = MC.CATEGORY_CD" +
+                     " WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+
+            //yestardy use qury
+           /* SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO,SK. CATEGORY_CD
+            FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD
+            INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD
+            INNER JOIN MAPPING_USER_CATEGORY MC ON SK.CATEGORY_CD = MC.CATEGORY_CD
+            WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = 2)
+*/
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
                     StockNewGetterSetter sb = new StockNewGetterSetter();
-
 
                     sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND_CD")));
                     sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("BRAND")));
@@ -1480,7 +1502,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         try {
 
-            dbcursor = db.rawQuery("SELECT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND FROM BRAND_MASTER BR " +
+        /*    dbcursor = db.rawQuery("SELECT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND FROM BRAND_MASTER BR " +
+                    "INNER JOIN SUB_CATEGORY_MASTER SB " +
+                    "ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD " +
+                    "WHERE BR.COMPANY_CD ='1'", null);*/
+
+            dbcursor = db.rawQuery("SELECT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND,SB.CATEGORY_CD FROM BRAND_MASTER BR " +
+                    "INNER JOIN MAPPING_USER_CATEGORY MC ON SB.CATEGORY_CD = MC.CATEGORY_CD " +
                     "INNER JOIN SUB_CATEGORY_MASTER SB " +
                     "ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD " +
                     "WHERE BR.COMPANY_CD ='1'", null);
@@ -1530,7 +1558,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setImg_cat_two(dbcursor.getString(dbcursor.getColumnIndexOrThrow("IMAGE_CAT_TWO")));
                     sb.setHimalaya_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("HIMALAYA_PHOTO")));
                     sb.setCatstock(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAT_STOCK")));
-
                     sb.setCategory_camera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_PHOTO")));
 
                     list.add(sb);
@@ -1803,13 +1830,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     " ORDER BY SD.SKU_SEQUENCE ", null);
 
 
-            //use karna h
-          /*  SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD FROM
-            MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
+//yestardy use qury
+         /*   SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD, SD.CATEGORY_CD
+            FROM MAPPING_CHANNEL_SKU CD INNER JOIN SKU_MASTER SD ON CD.SKU_CD = SD.SKU_CD
             INNER JOIN BRAND_MASTER BM ON BM.BRAND_CD = SD.BRAND_CD
-            WHERE CD.CHANNEL_CD ='2' AND BM.BRAND_CD = 2
-            ORDER BY SD.SKU_SEQUENCE*/
-
+            INNER JOIN MAPPING_USER_CATEGORY MC ON SD.CATEGORY_CD = MC.CATEGORY_CD
+            WHERE CD.CHANNEL_CD ='2' AND  BM.BRAND_CD ='1'  ORDER BY SD.SKU_SEQUENCE
+*/
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -2086,12 +2113,24 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
+/*
             dbcursor = db.rawQuery("SELECT DISTINCT SD.BRAND_CD, SD.BRAND " +
                     "FROM MAPPING_PROMOTION CD " +
                     "INNER JOIN BRAND_MASTER SD " +
                     "ON CD.BRAND_CD = SD.BRAND_CD " +
                     "WHERE CD.KEYACCOUNT_CD ='" + account_cd + "' AND CITY_CD  ='" + city_cd + "' AND STORETYPE_CD  ='" + storetype_cd + "'" +
                     "ORDER BY SD.BRAND_SEQUENCE", null);
+*/
+
+            dbcursor = db.rawQuery("SELECT DISTINCT SD.BRAND_CD, SD.BRAND, CA.CATEGORY_CD " +
+                    "FROM MAPPING_PROMOTION CD " +
+                    "INNER JOIN BRAND_MASTER SD ON CD.BRAND_CD = SD.BRAND_CD " +
+                    "INNER JOIN SUB_CATEGORY_MASTER SB ON SD.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD " +
+                    "INNER JOIN CATEGORY_MASTER CA ON SB.CATEGORY_CD = CA.CATEGORY_CD " +
+                    "INNER JOIN MAPPING_USER_CATEGORY MC ON CA.CATEGORY_CD = MC.CATEGORY_CD " +
+                    "WHERE CD.KEYACCOUNT_CD ='" + account_cd + "' AND CITY_CD  ='" + city_cd + "' AND STORETYPE_CD  ='" + storetype_cd + "'" +
+                    "ORDER BY SD.BRAND_SEQUENCE", null);
+
 
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -2121,10 +2160,22 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY " +
+           /* dbcursor = db.rawQuery("SELECT DISTINCT CATEGORY_CD, CATEGORY " +
                     "FROM CATEGORY_MASTER BD " +
                     "WHERE CATEGORY_CD IN( SELECT DISTINCT CATEGORY_CD FROM MAPPING_ASSET " +
                     "WHERE STORE_CD ='" + store_cd + "' ) ", null);
+*/
+            dbcursor = db.rawQuery("SELECT * FROM(" +
+                    " SELECT DISTINCT CATEGORY_CD, CATEGORY" +
+                    " FROM CATEGORY_MASTER BD WHERE CATEGORY_CD IN( SELECT DISTINCT CATEGORY_CD FROM MAPPING_ASSET WHERE STORE_CD ='" + store_cd + "' )" +
+                    " )AS T1" +
+                    " INNER JOIN MAPPING_USER_CATEGORY MC ON T1.CATEGORY_CD = MC.CATEGORY_CD", null);
+
+          /*  SELECT * FROM(
+                    SELECT DISTINCT CATEGORY_CD, CATEGORY--,MC.CATEGORY
+                    FROM CATEGORY_MASTER BD WHERE CATEGORY_CD IN( SELECT DISTINCT CATEGORY_CD FROM MAPPING_ASSET WHERE STORE_CD ='5' )
+            )AS T1
+            INNER JOIN MAPPING_USER_CATEGORY MC ON T1.CATEGORY_CD = MC.CATEGORY_CD*/
 
 
             if (dbcursor != null) {
@@ -2170,7 +2221,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setPromotion_txt(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMOTION")));
                     sb.setPromotion_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PID")));
                     sb.setCamera("");
+                    sb.setPromoStock("0");
                     sb.setPresentSpi("0");
+                    sb.setRunningPOS("0");
                     sb.setReason_cd("0");
                     sb.setReason("");
                     list.add(sb);
@@ -2752,6 +2805,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values1.put("REMARK_CD", data.get(save_listDataHeader.get(i)).get(j).getReason_cd());
                     values1.put("CAMERA", data.get(save_listDataHeader.get(i)).get(j).getCamera());
                     values1.put("PRESENT_SPIN", data.get(save_listDataHeader.get(i)).get(j).getPresentSpi());
+
+                    values1.put("PROMO_STOCK", data.get(save_listDataHeader.get(i)).get(j).getPromoStock());
+                    values1.put("RUNNING_POS", data.get(save_listDataHeader.get(i)).get(j).getRunningPOS());
+
                     db.insert(CommonString.TABLE_PROMOTION_DATA, null, values1);
                 }
             }
@@ -2985,7 +3042,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT SD.PID, SD.CAMERA, SD.PROMOTION,SD.PRESENT_SPIN,SD.REMARK,SD.REMARK_CD," +
+            dbcursor = db.rawQuery("SELECT SD.PID, SD.CAMERA, SD.PROMOTION,SD.PRESENT_SPIN,SD.PROMO_STOCK, SD.RUNNING_POS,SD.REMARK,SD.REMARK_CD," +
                     " CD.BRAND_CD,CD.BRAND FROM openingHeader_Promotion_data CD INNER JOIN PROMOTION_DATA SD ON CD.KEY_ID=SD.Common_Id WHERE CD.STORE_CD= '" + storeId + "' AND CD.BRAND_CD = '" + brand_cd + "'", null);
 
             if (dbcursor != null) {
@@ -3004,6 +3061,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     String value = dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT_SPIN"));
                     sb.setPresentSpi(value);
 
+                    String promoStock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMO_STOCK"));
+                    sb.setPromoStock(promoStock);
+
+                    String runningPos = dbcursor.getString(dbcursor.getColumnIndexOrThrow("RUNNING_POS"));
+                    sb.setRunningPOS(runningPos);
 
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -3355,15 +3417,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     "ON CD.KEY_ID=SD.Common_Id " +
                     "INNER JOIN SKU_MASTER SM ON SD.SKU_CD=SM.SKU_CD " +
                     "WHERE CD.STORE_CD= '" + store_cd + "' AND CD.CATEGORY_CD = '" + categord_cd + "'", null);
-
-          /*  dbcursor = db.rawQuery("SELECT DISTINCT SD.SKU_CD, SD.SKU,SD.BRAND_CD,SD.BRAND ,BM.COMPANY_CD " +
-                    "FROM MAPPING_CHANNEL_SKU CD " +
-                    "INNER JOIN SKU_MASTER SD " +
-                    "ON CD.SKU_CD = SD.SKU_CD " +
-                    "INNER JOIN BRAND_MASTER BM " +
-                    "ON BM.BRAND_CD = SD.BRAND_CD " +
-                    "WHERE CD.CHANNEL_CD ='" + channel_cd + "' AND  BM.BRAND_CD ='" + categord_cd + "' " +
-                    " ORDER BY SD.SKU_SEQUENCE ", null);*/
 
 
             if (dbcursor != null) {
@@ -4956,6 +5009,24 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
+    public void insertMappingUserCategoryData(MappingUserCategoryGetterSetter data) {
+        db.delete("MAPPING_USER_CATEGORY", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getCategory_cd().size(); i++) {
+                values.put("CATEGORY_CD", Integer.parseInt(data.getCategory_cd().get(i)));
+                db.insert("MAPPING_USER_CATEGORY", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database Exception while Insert MAPPING_USER_CATEGORY Data ",
+                    ex.toString());
+        }
+
+    }
+
 
     public void insertQuestionAnsData(TodayQuestionGetterSetter data) {
         db.delete("PERFORMANCE_OQAD", null, null);
@@ -5309,7 +5380,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         ArrayList<PromotionInsertDataGetterSetter> list = new ArrayList<PromotionInsertDataGetterSetter>();
         Cursor dbcursor = null;
         try {
-            dbcursor = db.rawQuery("SELECT SD.PID, SD.PRESENT_SPIN,SD.REMARK_CD,SD.CAMERA, SD.PROMOTION,SD.REMARK, CD.BRAND_CD,CD.BRAND FROM openingHeader_Promotion_data CD INNER JOIN PROMOTION_DATA SD " +
+            dbcursor = db.rawQuery("SELECT SD.PID, SD.PRESENT_SPIN,SD.REMARK_CD,SD.CAMERA, SD.PROMOTION,SD.PROMO_STOCK, SD.RUNNING_POS,SD.REMARK, CD.BRAND_CD,CD.BRAND FROM openingHeader_Promotion_data CD INNER JOIN PROMOTION_DATA SD " +
                     "ON CD.KEY_ID=SD.Common_Id WHERE CD.STORE_CD= '" + storeId + "'", null);
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -5324,6 +5395,13 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setCamera(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CAMERA")));
                     String value = dbcursor.getString(dbcursor.getColumnIndexOrThrow("PRESENT_SPIN"));
                     sb.setPresentSpi(value);
+
+                    String promoStock = dbcursor.getString(dbcursor.getColumnIndexOrThrow("PROMO_STOCK"));
+                    sb.setPromoStock(promoStock);
+
+                    String runningPos = dbcursor.getString(dbcursor.getColumnIndexOrThrow("RUNNING_POS"));
+                    sb.setRunningPOS(runningPos);
+
                     list.add(sb);
                     dbcursor.moveToNext();
                 }
@@ -6071,12 +6149,31 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         try {
 
+/*
             dbcursor = db.rawQuery("SELECT SB.SUB_CATEGORY_CD AS SUB_CATEGORY_CD, CA.CATEGORY||'-'||SB.SUB_CATEGORY AS SUB_CATEGORY, IFNULL(D.IMAGE_CAT_FACING,'') AS IMAGE_CAT_FACING, IFNULL(D.CAT_FACING,'')" +
                     "  AS CAT_FACING FROM CATEGORY_MASTER CA " +
                     " INNER JOIN (SELECT * FROM SUB_CATEGORY_MASTER WHERE SUB_CATEGORY_CD IN( SELECT DISTINCT SUB_CATEGORY_CD FROM BRAND_MASTER WHERE BRAND_CD IN(" +
                     " SELECT BRAND_CD FROM MAPPING_SOS))) AS  SB ON CA.CATEGORY_CD = SB.CATEGORY_CD " +
                     " LEFT JOIN " +
                     "(SELECT * FROM DR_CATEGORY_SHARE_OF_SHELF_IMAGE WHERE STORE_CD='" + store_cd + "')" + " AS D ON SB.SUB_CATEGORY_CD = D.SUB_CATEGORY_CD", null);
+*/
+
+            dbcursor = db.rawQuery("SELECT SB.SUB_CATEGORY_CD AS SUB_CATEGORY_CD, CA.CATEGORY||'-'||SB.SUB_CATEGORY AS SUB_CATEGORY, IFNULL(D.IMAGE_CAT_FACING,'') AS IMAGE_CAT_FACING, IFNULL(D.CAT_FACING,'')" +
+                    "  AS CAT_FACING,SB.CATEGORY_CD AS CATEGORY_CD FROM CATEGORY_MASTER CA " +
+                    " INNER JOIN (SELECT * FROM SUB_CATEGORY_MASTER WHERE SUB_CATEGORY_CD IN( SELECT DISTINCT SUB_CATEGORY_CD FROM BRAND_MASTER WHERE BRAND_CD IN(" +
+                    " SELECT BRAND_CD FROM MAPPING_SOS))) AS  SB ON CA.CATEGORY_CD = SB.CATEGORY_CD " +
+                    " LEFT JOIN " +
+                    "(SELECT * FROM DR_CATEGORY_SHARE_OF_SHELF_IMAGE WHERE STORE_CD='" + store_cd + "')" + " AS D ON SB.SUB_CATEGORY_CD = D.SUB_CATEGORY_CD" +
+                    " INNER JOIN MAPPING_USER_CATEGORY MC ON SB.CATEGORY_CD = MC.CATEGORY_CD ", null);
+
+            /*SELECT SB.SUB_CATEGORY_CD AS SUB_CATEGORY_CD, CA.CATEGORY||'-'||SB.SUB_CATEGORY AS SUB_CATEGORY, IFNULL(D.IMAGE_CAT_FACING,'') AS IMAGE_CAT_FACING, IFNULL(D.CAT_FACING,'')  AS CAT_FACING,
+            SB.CATEGORY_CD AS CATEGORY_CD
+            FROM CATEGORY_MASTER CA
+            INNER JOIN (SELECT * FROM SUB_CATEGORY_MASTER WHERE SUB_CATEGORY_CD IN( SELECT DISTINCT SUB_CATEGORY_CD
+            FROM BRAND_MASTER WHERE BRAND_CD IN( SELECT BRAND_CD FROM MAPPING_SOS))) AS  SB ON CA.CATEGORY_CD = SB.CATEGORY_CD
+            LEFT JOIN (SELECT * FROM DR_CATEGORY_SHARE_OF_SHELF_IMAGE WHERE STORE_CD='5') AS D ON SB.SUB_CATEGORY_CD = D.SUB_CATEGORY_CD
+            INNER JOIN MAPPING_USER_CATEGORY MC ON SB.CATEGORY_CD = MC.CATEGORY_CD*/
+
 
 
             if (dbcursor != null) {
@@ -6912,18 +7009,18 @@ public class GSKDatabase extends SQLiteOpenHelper {
     }
 
 
-    public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username, String check,String name) {
+    public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username, String check, String name) {
 
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_OUT_TIME_IMAGE, out_time_image);
             values.put(CommonString.KEY_OUT_TIME, out_time);
 
-            if (check.equalsIgnoreCase("CPM")){
+            if (check.equalsIgnoreCase("CPM")) {
 
                 db.update(CommonString.TABLE_VISITOR_LOGIN, values,
                         CommonString.KEY_EMP_CODE + "='" + emp_code + "' and " + CommonString.KEY_USERNAME + " = '" + username + "'", null);
-            }else {
+            } else {
 
                 db.update(CommonString.TABLE_VISITOR_LOGIN, values,
                         CommonString.KEY_NAME + "='" + name + "' and " + CommonString.KEY_EXIT + " = '" + check + "'", null);
@@ -7005,12 +7102,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setIsexit(dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow(CommonString.KEY_EXIT)));
 
-                    String emp_code =dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE));
+                    String emp_code = dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE));
 
-                    if ( emp_code == null ) {
+                    if (emp_code == null) {
                         sb.setEmp_code("0");
                     } else {
-                          sb.setEmp_code(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE)));
+                        sb.setEmp_code(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_EMP_CODE)));
                     }
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -7027,16 +7124,16 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
-    public void updateVisitorUploadData(String empid,String name,String check) {
+    public void updateVisitorUploadData(String empid, String name, String check) {
 
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_UPLOADSTATUS, "U");
 
-            if (check.equals("CPM")){
+            if (check.equals("CPM")) {
                 db.update(CommonString.TABLE_VISITOR_LOGIN, values,
                         CommonString.KEY_EMP_CODE + "='" + empid + "'", null);
-            }else {
+            } else {
 
                 db.update(CommonString.TABLE_VISITOR_LOGIN, values,
                         CommonString.KEY_NAME + "='" + name + "' and " + CommonString.KEY_EXIT + " = '" + check + "'", null);

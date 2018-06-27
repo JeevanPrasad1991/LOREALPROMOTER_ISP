@@ -141,7 +141,6 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
     private void prepareListData() {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
-       /* brandData = db.getPromotionBrandData(store_cd);*/
         brandData = db.getPromotionBrandData1(account_cd, city_cd, storetype_cd);
 
         if (brandData.size() > 0) {
@@ -201,7 +200,9 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 holder = new ViewHolder();
                 holder.cardView = (CardView) convertView.findViewById(R.id.card_view);
                 holder.txt_brandSkuName = (TextView) convertView.findViewById(R.id.txt_brandSkuName);
-                holder.present_toggleV = (ToggleButton) convertView.findViewById(R.id.toggle_promoStock);
+                holder.present_toggleV = (ToggleButton) convertView.findViewById(R.id.toggle_promotalk);
+                holder.toggle_running_pos = (ToggleButton) convertView.findViewById(R.id.toggle_running_pos);
+                holder.toggle_promostock = (ToggleButton) convertView.findViewById(R.id.toggle_promostock);
                 holder.remark_spinV = (Spinner) convertView.findViewById(R.id.toggle_promoTalker);
                 holder.promotion_img_ = (ImageView) convertView.findViewById(R.id.toggle_runningPOS);
 
@@ -269,25 +270,60 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             final ViewHolder finalHolder = holder;
 
             final ViewHolder finalHolder1 = holder;
+
+            //promo stock
+            holder.toggle_promostock.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    expListView.clearFocus();
+                    expListView.invalidateViews();
+                    if (finalHolder1.toggle_promostock.isChecked()) {
+                        childText.setPromoStock("1");
+                    } else {
+                        childText.setPromoStock("0");
+
+                    }
+                }
+            });
+
+            //promo talker
             holder.present_toggleV.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     expListView.clearFocus();
                     expListView.invalidateViews();
                     if (finalHolder1.present_toggleV.isChecked()) {
-                        finalHolder.rlp_remark.setVisibility(View.GONE);
                         finalHolder.rlP_camera.setVisibility(View.VISIBLE);
                         childText.setPresentSpi("1");
-                        childText.setReason("");
-                        childText.setReason_cd("");
+
                     } else {
-                        finalHolder.rlP_camera.setVisibility(View.GONE);
-                        finalHolder.rlp_remark.setVisibility(View.VISIBLE);
+                        finalHolder.rlP_camera.setVisibility(View.INVISIBLE);
                         childText.setPresentSpi("0");
                         childText.setCamera("");
+
                     }
                 }
             });
+            //promo pos
+            holder.toggle_running_pos.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    expListView.clearFocus();
+                    expListView.invalidateViews();
+                    if (finalHolder1.toggle_running_pos.isChecked()) {
+
+                        finalHolder.rlp_remark.setVisibility(View.INVISIBLE);
+                        childText.setRunningPOS("1");
+                        childText.setReason("");
+                        childText.setReason_cd("");
+                    } else {
+                        finalHolder.rlp_remark.setVisibility(View.VISIBLE);
+                        childText.setRunningPOS("0");
+
+                    }
+                }
+            });
+
 
 /*
             holder.present_toggleV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -312,19 +348,39 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             });
 */
 
+            //  toggle_running_talk
             if (childText.getPresentSpi().equals("0")) {
                 holder.present_toggleV.setChecked(false);
-                finalHolder.rlP_camera.setVisibility(View.GONE);
-                finalHolder.rlp_remark.setVisibility(View.VISIBLE);
+                finalHolder.rlP_camera.setVisibility(View.INVISIBLE);
             } else {
-                finalHolder.rlp_remark.setVisibility(View.GONE);
                 finalHolder.rlP_camera.setVisibility(View.VISIBLE);
                 holder.present_toggleV.setChecked(true);
             }
 
+            //  toggle_running_pos
+            if (childText.getRunningPOS().equals("0")) {
+                holder.toggle_running_pos.setChecked(false);
+                finalHolder.rlp_remark.setVisibility(View.VISIBLE);
+            } else {
+                finalHolder.rlp_remark.setVisibility(View.INVISIBLE);
+                holder.toggle_running_pos.setChecked(true);
+            }
+
+
+            //setPromoStock
+            //  toggle_running_pos
+            if (childText.getPromoStock().equals("0")) {
+                holder.toggle_promostock.setChecked(false);
+            } else {
+                holder.toggle_promostock.setChecked(true);
+            }
+
+
+            //promo talker
             if (!checkflag) {
                 boolean tempflag = false;
-                if (childText.getPresentSpi().equals("1")) {
+                boolean posflag = false;
+               /* if (childText.getPresentSpi().equals("1")) {
                     if (childText.getCamera().equals("")) {
                         tempflag = true;
                     } else {
@@ -336,9 +392,26 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     } else {
                         tempflag = false;
                     }
+                }*/
+                if (childText.getPresentSpi().equals("1")) {
+                    if (childText.getCamera().equals("")) {
+                        tempflag = true;
+                    } else {
+                        tempflag = false;
+                    }
                 }
 
-                if (tempflag) {
+                if (childText.getRunningPOS().equals("0")) {
+                    if (childText.getReason_cd().equals("0")) {
+                        posflag = true;
+                    } else {
+                        posflag = false;
+                    }
+                }
+
+
+
+                if (tempflag ||posflag) {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
                 } else {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
@@ -410,7 +483,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
         LinearLayout rlP_camera, rlp_remark;
         ImageView promotion_img_;
         Spinner remark_spinV;
-        ToggleButton present_toggleV;
+        // ToggleButton present_toggleV,toggle_promostock,toggle_promo_talk,toggle_running_pos;
+        ToggleButton toggle_promostock, present_toggleV, toggle_running_pos;
     }
 
     @Override
@@ -455,6 +529,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
         }
     }
 
+/*
     boolean validateData(HashMap<StockNewGetterSetter, List<PromotionInsertDataGetterSetter>> listDataChild2,
                          List<StockNewGetterSetter> listDataHeader2) {
         boolean flag = true;
@@ -482,6 +557,49 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                         errorMessage = "Please Select Reason";
                         flag = false;
                         break;
+                    }
+                }
+            }
+        }
+
+        if (!flag) {
+            checkflag = false;
+        } else {
+            checkflag = true;
+        }
+        return checkflag;
+    }
+*/
+
+    boolean validateData(HashMap<StockNewGetterSetter, List<PromotionInsertDataGetterSetter>> listDataChild2,
+                         List<StockNewGetterSetter> listDataHeader2) {
+        boolean flag = true;
+        checkHeaderArray.clear();
+        loop1:
+        for (int i = 0; i < listDataHeader2.size(); i++) {
+            for (int j = 0; j < listDataChild2.get(listDataHeader2.get(i)).size(); j++) {
+                String camera = listDataChild2.get(listDataHeader2.get(i)).get(j).getCamera();
+                String presentspinValue = listDataChild2.get(listDataHeader2.get(i)).get(j).getPresentSpi();
+                String reasonCdP = listDataChild2.get(listDataHeader2.get(i)).get(j).getReason_cd();
+                String runningPos = listDataChild2.get(listDataHeader2.get(i)).get(j).getRunningPOS();
+
+                if (presentspinValue.equals("1")) {
+                    if (camera.equals("")) {
+                        if (!checkHeaderArray.contains(i)) {
+                            checkHeaderArray.add(i);
+                        }
+                        errorMessage = "Please Click The Camera Image ";
+                        flag = false;
+                        break loop1;
+                    }
+                }else if (runningPos.equals("0")) {
+                    if (reasonCdP.equals("0")) {
+                        if (!checkHeaderArray.contains(i)) {
+                            checkHeaderArray.add(i);
+                        }
+                        errorMessage = "Please Select Reason";
+                        flag = false;
+                        break loop1;
                     }
                 }
             }

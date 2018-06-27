@@ -644,6 +644,10 @@ public class CommonString {
             + "REMARK_CD"
             + " INTEGER,"
 
+            + "PROMO_STOCK"
+            + " INTEGER,"
+            + "RUNNING_POS"
+            + " INTEGER,"
             + "BRAND_CD"
             + " VARCHAR,"
             + "BRAND"

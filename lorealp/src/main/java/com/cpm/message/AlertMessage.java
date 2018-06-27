@@ -20,6 +20,7 @@ public class AlertMessage {
 	public static final String MESSAGE_FAILURE = "Server Eroor.Please Access After Some Time";
 	public static final String MESSAGE_JCP_FALSE = "Data is not found in ";
 	public static final String MESSAGE_JCP_FALSE_NOJCP = "No Journey plan for today Please Contact your Supervisor For";
+	public static final String MESSAGE_MAPPING_USER_CATEGORY = "User Category Mapping not exist. ";
 	public static final String MESSAGE_INVALID_DATA = "Enter Data";
 	public static final String MESSAGE_DUPLICATE_DATA = "Data Already Exist";
 	public static final String MESSAGE_DOWNLOAD = "Data Downloaded Successfully";
