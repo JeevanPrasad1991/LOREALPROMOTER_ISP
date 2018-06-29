@@ -444,18 +444,18 @@ public class UploadDataActivity extends Activity {
                             promotionData = database.getPromotionUploadData(coverageBeanlist.get(i).getStoreId());
                             if (promotionData.size() > 0) {
                                 for (int j = 0; j < promotionData.size(); j++) {
-                                    onXML = "[LOREAL_PROMOTION_DATA]"
+
+                                    onXML = "[LOREAL_PROMOTION_DATA_NEW]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[PID]" + promotionData.get(j).getPromotion_id() + "[/PID]"
                                             + "[BRAND_CD]" + promotionData.get(j).getBrand_cd() + "[/BRAND_CD]"
-                                            + "[PRESENT_SPIN]" + promotionData.get(j).getPresentSpi() + "[/PRESENT_SPIN]"
-
-                                            + "[PROMO_STOCK]" + promotionData.get(j).getPromoStock() + "[/PROMO_STOCK]"
+                                            + "[PROMO_TALKER]" + promotionData.get(j).getPresentSpi() + "[/PROMO_TALKER]"
+                                            + "[STOCK]" + promotionData.get(j).getPromoStock() + "[/STOCK]"
                                             + "[RUNNING_POS]" + promotionData.get(j).getRunningPOS() + "[/RUNNING_POS]"
                                             + "[CAMERA]" + promotionData.get(j).getCamera() + "[/CAMERA]"
                                             + "[PROMOTION_REMARK_CD]" + promotionData.get(j).getReason_cd() + "[/PROMOTION_REMARK_CD]"
-                                            + "[/LOREAL_PROMOTION_DATA]";
+                                            + "[/LOREAL_PROMOTION_DATA_NEW]";
 
                                     final_xml = final_xml + onXML;
                                 }
@@ -464,7 +464,7 @@ public class UploadDataActivity extends Activity {
 
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_PROMOTION_DATA");
+                                request.addProperty("KEYS", "LOREAL_PROMOTION_DATA_NEW");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
 

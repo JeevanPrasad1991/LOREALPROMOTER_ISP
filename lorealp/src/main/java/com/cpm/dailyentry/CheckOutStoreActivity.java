@@ -30,17 +30,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cpm.Constants.CommonFunctions;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
 import com.cpm.lorealpromoter.R;
 import com.cpm.delegates.CoverageBean;
 import com.cpm.message.AlertMessage;
 import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -68,7 +71,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
     String img_str;
     //today image
     int size = 5;
-    Bitmap bmp,dest,bitmapsimplesize;
+    Bitmap bmp, dest, bitmapsimplesize;
     TextView storename_remembermetext;
 
     @Override
@@ -77,13 +80,13 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.storename);
         img_clicked = (ImageView) findViewById(R.id.img_cam_selfie_checkout);
         img_cam = (ImageView) findViewById(R.id.img_selfie_check);
-        btn_save =(Button) findViewById(R.id.btn_save_selfie_checkout);
-        storename_remembermetext =(TextView) findViewById(R.id.storename_remembermetext);
+        btn_save = (Button) findViewById(R.id.btn_save_selfie_checkout);
+        storename_remembermetext = (TextView) findViewById(R.id.storename_remembermetext);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         username = preferences.getString(CommonString.KEY_USERNAME, "");
         username = preferences.getString(CommonString.KEY_USERNAME, null);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
-        storename_remembermetext.setText("Checkout -"+visit_date);
+        storename_remembermetext.setText("Checkout -" + visit_date);
         str = CommonString.FILE_PATH;
         db = new GSKDatabase(this);
         db.open();
@@ -220,7 +223,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
                 if (result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS_chkout)) {
 
                     db.open();
-                    db.updateCoverageStoreOutTime(store_id, specificCdata.get(0).getVisitDate(),img_str, getCurrentTime(), CommonString.KEY_C);
+                    db.updateCoverageStoreOutTime(store_id, specificCdata.get(0).getVisitDate(), img_str, getCurrentTime(), CommonString.KEY_C);
                     db.updateStoreStatusOnCheckout(store_id, specificCdata.get(0).getVisitDate(), CommonString.KEY_C);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(CommonString.KEY_STOREVISITED, "");
@@ -331,7 +334,7 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
             case -1:
                 if (_pathforcheck != null && !_pathforcheck.equals("")) {
                     if (new File(str + _pathforcheck).exists()) {
-                        bmp = convertBitmap(str + _pathforcheck);
+                      /*  bmp = convertBitmap(str + _pathforcheck);
                         dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
@@ -364,7 +367,19 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
                         } catch (Exception e) {
                             Crashlytics.logException(e);
                             e.printStackTrace();
+                        }*/
+
+                        try {
+                            bmp = convertBitmap(str + _pathforcheck);
+                            img_cam.setImageBitmap(bmp);
+                        } catch (OutOfMemoryError ex) {
+                            CommonFunctions.setScaledImage(img_cam, str + _pathforcheck);
                         }
+                        img_clicked.setVisibility(View.GONE);
+                        img_cam.setVisibility(View.VISIBLE);
+
+                        img_str = _pathforcheck;
+                        _pathforcheck = "";
 
                     }
                 }
@@ -379,29 +394,29 @@ public class CheckOutStoreActivity extends Activity implements View.OnClickListe
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
-    public static Bitmap convertBitmap(String path)   {
-        Bitmap bitmap=null;
-        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
-        ourOptions.inDither=false;
-        ourOptions.inPurgeable=true;
-        ourOptions.inInputShareable=true;
-        ourOptions.inTempStorage=new byte[32 * 1024];
-        File file=new File(path);
-        FileInputStream fs=null;
+
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            if(fs!=null)
-            {
-                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {

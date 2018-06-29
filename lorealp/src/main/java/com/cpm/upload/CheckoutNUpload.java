@@ -448,7 +448,6 @@ public class CheckoutNUpload extends Activity {
                                             + "[PID]" + promotionData.get(j).getPromotion_id() + "[/PID]"
                                             + "[BRAND_CD]" + promotionData.get(j).getBrand_cd() + "[/BRAND_CD]"
                                             + "[PROMO_TALKER]" + promotionData.get(j).getPresentSpi() + "[/PROMO_TALKER]"
-
                                             + "[STOCK]" + promotionData.get(j).getPromoStock() + "[/STOCK]"
                                             + "[RUNNING_POS]" + promotionData.get(j).getRunningPOS() + "[/RUNNING_POS]"
                                             + "[CAMERA]" + promotionData.get(j).getCamera() + "[/CAMERA]"
