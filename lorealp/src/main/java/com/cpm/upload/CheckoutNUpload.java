@@ -752,17 +752,17 @@ public class CheckoutNUpload extends Activity {
 
             } catch (MalformedURLException e) {
                 up_success_flag = false;
-                exceptionMessage = e.toString();
+                exceptionMessage = CommonString.MESSAGE_EXCEPTION;
 
             } catch (IOException e) {
                 up_success_flag = false;
-                exceptionMessage = e.toString();
+                exceptionMessage = CommonString.MESSAGE_SOCKETEXCEPTION;
 
             } catch (Exception e) {
                 Crashlytics.logException(e);
 
                 up_success_flag = false;
-                exceptionMessage = e.toString();
+                exceptionMessage = CommonString.MESSAGE_EXCEPTION;
 
             }
 

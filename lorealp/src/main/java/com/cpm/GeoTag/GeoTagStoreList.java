@@ -38,7 +38,7 @@ import java.util.Locale;
 
 
 /**
- * Created by ashishc on 27-12-2016.
+ * Created by upendraon 27-2-2018.
  */
 
 public class GeoTagStoreList extends AppCompatActivity {
