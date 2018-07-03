@@ -366,8 +366,6 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 holder.toggle_running_pos.setChecked(true);
             }
 
-
-            //setPromoStock
             //  toggle_running_pos
             if (childText.getPromoStock().equals("0")) {
                 holder.toggle_promostock.setChecked(false);
@@ -410,8 +408,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 }
 
 
-
-                if (tempflag ||posflag) {
+                if (tempflag || posflag) {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.red));
                 } else {
                     holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
@@ -592,7 +589,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                         flag = false;
                         break loop1;
                     }
-                }else if (runningPos.equals("0")) {
+                }
+                if (runningPos.equals("0")) {
                     if (reasonCdP.equals("0")) {
                         if (!checkHeaderArray.contains(i)) {
                             checkHeaderArray.add(i);
