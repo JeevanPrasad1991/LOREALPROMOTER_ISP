@@ -71,8 +71,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE13";
-    public static final int DATABASE_VERSION = 13;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE14";
+    public static final int DATABASE_VERSION = 14;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {

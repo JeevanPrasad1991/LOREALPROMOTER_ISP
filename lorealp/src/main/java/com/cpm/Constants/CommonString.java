@@ -43,7 +43,8 @@ public class CommonString {
     public static final String KEY_STORE_IN_TIME = "Store_in_time";
     public static final String SOAP_ACTION = "http://tempuri.org/";
     public static final String KEY_MERCHANDISER_ID = "MERCHANDISER_ID";
-    public static final String ERROR = " PROBLEM OCCURED IN ";
+  //  public static final String ERROR = " PROBLEM OCCURED IN ";
+    public static final String ERROR = " ";
     public static final String KEY_SUCCESS_chkout = "Success";
     public static final String KEY_notice_board = "notice_board";
 
