@@ -45,5 +45,6 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="light_teal">#3f5db3</color>
+    <color name="secand_border_color">#b7b7b7</color>
 
 </resources>

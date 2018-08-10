@@ -123,5 +123,10 @@
     <string name="data_uploaded_successfully">Database Uploaded Successfully</string>
     <string name="database_not_uploaded">Database Not Uploaded</string>
     <string name="errordatabase_not_uploaded">Error in Database Uploading</string>
+    <string name="title_activity_loreal_feedback">LorealFeedback</string>
 
+    <string name="title_activity_select_dropdown">Select</string>
+    <string name="pls_answer_all_qns">"Please select all feedback"</string>
+    <string name="title_activity_loreal_feedback_actiivty">LorealFeedbackActiivty</string>
+    <string name="data_will_be_lost">Want to proceed unsaved data will be deleted</string>
 </resources>

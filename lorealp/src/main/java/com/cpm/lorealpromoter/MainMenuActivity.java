@@ -29,6 +29,8 @@ import com.cpm.Constants.CommonString;
 import com.cpm.GeoTag.GeoTagStoreList;
 import com.cpm.dailyentry.DailyEntryScreen;
 import com.cpm.dailyentry.IncentiveActivity;
+import com.cpm.dailyentry.LorealFeedback;
+import com.cpm.dailyentry.LorealFeedbackActiivty;
 import com.cpm.dailyentry.MyPerformance;
 import com.cpm.dailyentry.PaySlip;
 import com.cpm.dailyentry.VisitorLoginActivity;
@@ -335,6 +337,16 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         }
+        else if (id==R.id.feedback){
+            jcplist = database.getJCPData(date);
+            if (jcplist.size()>0){
+                Intent in=new Intent(this, LorealFeedbackActiivty.class);
+                startActivity(in);
+            }else {
+                Snackbar.make(frameLayout, "Please Download Data First", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            }
+        }
+
 
 
         else if (id == R.id.nav_export_database) {

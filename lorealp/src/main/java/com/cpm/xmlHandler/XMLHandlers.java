@@ -18,6 +18,9 @@ import com.cpm.xmlGetterSetter.ComplianceByMappingGetterSetter;
 import com.cpm.xmlGetterSetter.ComplianceGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.FailureGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
 import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JCPGetterSetter;
@@ -1851,6 +1854,109 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
             e.printStackTrace();
         }
         return qnsGetterSetter;
+    }
+
+
+    public static FeedbackQuestionGettersetter feedbackQuestionXML(XmlPullParser xpp,
+                                                            int eventType) {
+        FeedbackQuestionGettersetter feedback_qes = new FeedbackQuestionGettersetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        feedback_qes.setFeedback_question_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FQUESTION_ID")) {
+                        feedback_qes.setFQUESTION_ID(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FQUESTION")) {
+                        feedback_qes.setFQUESTION(xpp.nextText());
+                    }
+
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return feedback_qes;
+    }
+
+    public static FeedbackRetingGettersetter feedbackRatingXML(XmlPullParser xpp,
+                                                               int eventType) {
+        FeedbackRetingGettersetter feedback_rat = new FeedbackRetingGettersetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        feedback_rat.setFeedback_rating_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("RATING")) {
+                        feedback_rat.setRATING(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return feedback_rat;
+    }
+    public static FeedbackQuestionRatingGettersetter feedbackQuestionRatingXML(XmlPullParser xpp,
+                                                                               int eventType) {
+        FeedbackQuestionRatingGettersetter feedback_rat = new FeedbackQuestionRatingGettersetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        feedback_rat.setFeedback_question_rating_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FCATEGORY_CD")) {
+                        feedback_rat.setFCATEGORY_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FCATEGORY")) {
+                        feedback_rat.setFCATEGORY(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FQUESTION_CD")) {
+                        feedback_rat.setFQUESTION_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FQUESTION")) {
+                        feedback_rat.setFQUESTION(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FANSWER_CD")) {
+                        feedback_rat.setFANSWER_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FANSWER")) {
+                        feedback_rat.setFANSWER(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return feedback_rat;
     }
 
 

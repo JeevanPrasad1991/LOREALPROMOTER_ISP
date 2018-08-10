@@ -72,7 +72,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
     ArrayList<BrandGetterSetter> brandmasterData = new ArrayList<>();
     ArrayList<SubCategoryGetterSetter> subcategoryData = new ArrayList<>();
     ArrayList<CategoryMasterGetterSetter> categorytypeData = new ArrayList<>();
-    /* ArrayList<CategoryMasterGetterSetter> categorymasterData = new ArrayList<>();*/
+
     ArrayList<AssetMasterGetterSetter> categorymasterData = new ArrayList<>();
 
     ArrayList<MarketIntelligenceGetterSetter> inserteslistData = new ArrayList<>();

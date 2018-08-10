@@ -26,6 +26,9 @@ import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
 import com.cpm.xmlGetterSetter.CompanyGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
 import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
@@ -87,6 +90,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     TodayQuestionGetterSetter todayQuestionGetterSetter;
     MappingChannalSkuGetterSetter mappingChannalSkuGetterSetter;
     MappingUserCategoryGetterSetter mappingUserCategoryGetterSetter;
+    FeedbackQuestionGettersetter feedbackQuestionGettersetter;
+    FeedbackRetingGettersetter feedbackRetingGettersetter;
+    FeedbackQuestionRatingGettersetter feedbackQuestionRatingGettersetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -773,6 +779,100 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     data.name = "EMP_INCENTIVE Downloading";
                 }
 
+                /// today
+
+                //FEEDBACK_QUESTION
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "FEEDBACK_QUESTION");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                result1 = (Object) envelope.getResponse();
+
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    feedbackQuestionGettersetter = XMLHandlers.feedbackQuestionXML(xpp, eventType);
+                    if (feedbackQuestionGettersetter.getFeedback_question_table() != null) {
+                        String feedback_ques = feedbackQuestionGettersetter.getFeedback_question_table();
+                        TableBean.setFeedback_question_table(feedback_ques);
+                    } else {
+                        return "FEEDBACK_QUESTION";
+                    }
+                    data.value = 95;
+                    data.name = "FEEDBACK_QUESTION Downloading";
+                }
+
+                //FEEDBACK_RATING
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "FEEDBACK_RATING");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                result1 = (Object) envelope.getResponse();
+
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    feedbackRetingGettersetter = XMLHandlers.feedbackRatingXML(xpp, eventType);
+                    if (feedbackRetingGettersetter.getFeedback_rating_table() != null) {
+                        String feedback_rating = feedbackRetingGettersetter.getFeedback_rating_table();
+                        TableBean.setFeedback_rating_table(feedback_rating);
+                    } else {
+                        return "FEEDBACK_RATING";
+                    }
+                    data.value = 95;
+                    data.name = "FEEDBACK_RATING Downloading";
+                }
+
+                //FEEDBACK_QUESTIONNAIRE
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "FEEDBACK_QUESTIONNAIRE");
+
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+
+                result1 = (Object) envelope.getResponse();
+
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+
+                    feedbackQuestionRatingGettersetter = XMLHandlers.feedbackQuestionRatingXML(xpp, eventType);
+                    if (feedbackQuestionRatingGettersetter.getFeedback_question_rating_table() != null) {
+                        String feedback_question_rating = feedbackQuestionRatingGettersetter.getFeedback_question_rating_table();
+                        TableBean.setFeedback_question_rating_table(feedback_question_rating);
+                    } else {
+                        return "FEEDBACK_QUESTIONNAIRE";
+                    }
+                    data.value = 95;
+                    data.name = "FEEDBACK_QUESTIONNAIRE Downloading";
+                }
+
+
+
                 //AUDIT_QUESTION_CATEGORYWISE
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -913,6 +1013,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertMappingUserCategoryData(mappingUserCategoryGetterSetter);
                 db.insertQuestionAnsData(todayQuestionGetterSetter);
                 db.insertMappingChannelData(mappingChannalSkuGetterSetter);
+                db.insertFeedbackData(feedbackQuestionGettersetter);
+                db.insertFeedbackRatingData(feedbackRetingGettersetter);
+                db.insertFeedbackQuestionRatingData(feedbackQuestionRatingGettersetter);
 
 
                 data.value = 100;

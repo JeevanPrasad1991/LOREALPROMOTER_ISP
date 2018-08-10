@@ -88,6 +88,10 @@
                 android:id="@+id/visiter_login"
                 android:icon="@mipmap/settings_grey"
                 android:title="Visiter Login" />
+            <item
+                android:id="@+id/feedback"
+                android:icon="@mipmap/settings_grey"
+                android:title="Loreal feedback" />
 
             <item
                 android:id="@+id/nav_help"

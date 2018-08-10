@@ -33,12 +33,17 @@ import com.cpm.xmlGetterSetter.CompetitionPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerTypeGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
+import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
 import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.FoodStoreInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.HeaderGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JCPGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
+import com.cpm.xmlGetterSetter.MSL_AvailabilityStockFacingGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
@@ -51,6 +56,7 @@ import com.cpm.xmlGetterSetter.MarketIntelligenceGetterSetter;
 import com.cpm.xmlGetterSetter.NonComplianceChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.NonPromotionReasonGetterSetter;
 import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
+import com.cpm.xmlGetterSetter.POGGetterSetter;
 import com.cpm.xmlGetterSetter.POIGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
 import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
@@ -71,8 +77,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE14";
-    public static final int DATABASE_VERSION = 14;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE18";
+    public static final int DATABASE_VERSION = 18;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -116,6 +122,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getTodayquestion_ans_table());
         db.execSQL(TableBean.getMappingChanneltable());
         db.execSQL(TableBean.getMappingUserCategorytable());
+        db.execSQL(TableBean.getFeedback_question_table());
+        db.execSQL(TableBean.getFeedback_rating_table());
+        db.execSQL(TableBean.getFeedback_question_rating_table());
 
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
@@ -155,6 +164,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
         //visiter login
         db.execSQL(CommonString.CREATE_TABLE_VISITOR_LOGIN);
+        db.execSQL(CommonString.CREATE_TABLE_FEEDBACK);
+        db.execSQL(CommonString.CREATE_TABLE_FEEDBACK_DATA_SAVE);
+        db.execSQL(CommonString.CREATE_feedback_save);
 
 
     }
@@ -233,6 +245,11 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     db.delete(CommonString.TABLE_STORE_GEOTAGGING, null, null);
                     db.delete(CommonString.TABLE_SHARE_OF_SHELF_DATA, null, null);
                     db.delete(CommonString.TABLE_SHARE_OF_SHELF_POPUP_DATA, null, null);
+
+                    //
+                    db.delete(CommonString.TABLE_VISITOR_LOGIN, null, null);
+                    db.delete(CommonString.TABLE_INSERT_FEEDBACK, null, null);
+                    db.delete(CommonString.TABLE_feedback_save, null, null);
 
 
                 }
@@ -818,7 +835,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
         try {
 
-          //  dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER ORDER BY CATEGORY_CD ", null);
+            //  dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER ORDER BY CATEGORY_CD ", null);
             dbcursor = db.rawQuery("SELECT * FROM CATEGORY_MASTER WHERE CATEGORY_CD IN(SELECT CATEGORY_CD FROM MAPPING_USER_CATEGORY) ORDER BY CATEGORY_CD ", null);
 
             if (dbcursor != null) {
@@ -1456,10 +1473,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
 */
 
             dbcursor = db.rawQuery("SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO, SK.CATEGORY_CD" +
-                     " FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
-                     " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD" +
-                     " INNER JOIN MAPPING_USER_CATEGORY MC ON SK.CATEGORY_CD = MC.CATEGORY_CD" +
-                     " WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
+                    " FROM SKU_MASTER SK INNER JOIN  BRAND_MASTER BR ON  SK.BRAND_CD = BR.BRAND_CD" +
+                    " INNER JOIN SUB_CATEGORY_MASTER SB ON BR.SUB_CATEGORY_CD = SB.SUB_CATEGORY_CD" +
+                    " INNER JOIN MAPPING_USER_CATEGORY MC ON SK.CATEGORY_CD = MC.CATEGORY_CD" +
+                    " WHERE  SK.SKU_CD IN(SELECT SKU_CD FROM MAPPING_CHANNEL_SKU WHERE CHANNEL_CD = " + channel_cd + ")", null);
 
             //yestardy use qury
            /* SELECT  DISTINCT BR.BRAND_CD, SB.SUB_CATEGORY||'-'||BR.BRAND as BRAND, SK.HIMALAYA_PHOTO, SK.CATEGORY_PHOTO,SK. CATEGORY_CD
@@ -6175,7 +6192,6 @@ public class GSKDatabase extends SQLiteOpenHelper {
             INNER JOIN MAPPING_USER_CATEGORY MC ON SB.CATEGORY_CD = MC.CATEGORY_CD*/
 
 
-
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
@@ -6979,38 +6995,36 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_SHARE_OF_SHELF_POPUP_DATA, CommonString.KEY_STORE_ID + "='" + storeid + "'", null);
     }
 
+    public void InsertVisitorLogindata(VisitorDetailGetterSetter visitorLoginGetterSetter) {
 
-    public void InsertVisitorLogindata(ArrayList<VisitorDetailGetterSetter> visitorLoginGetterSetter) {
-
-        db.delete(CommonString.TABLE_VISITOR_LOGIN, null, null);
         ContentValues values = new ContentValues();
 
         try {
-            for (int i = 0; i < visitorLoginGetterSetter.size(); i++) {
 
-                values.put(CommonString.KEY_USERNAME, visitorLoginGetterSetter.get(i).getUsername());
-                values.put(CommonString.KEY_NAME, visitorLoginGetterSetter.get(i).getName());
-                values.put(CommonString.KEY_DESIGNATION, visitorLoginGetterSetter.get(i).getDesignation());
-                values.put(CommonString.KEY_IN_TIME_IMAGE, visitorLoginGetterSetter.get(i).getIn_time_img());
-                values.put(CommonString.KEY_OUT_TIME_IMAGE, visitorLoginGetterSetter.get(i).getOut_time_img());
-                values.put(CommonString.KEY_EMP_CODE, visitorLoginGetterSetter.get(i).getEmp_code());
-                values.put(CommonString.KEY_VISIT_DATE, visitorLoginGetterSetter.get(i).getVisit_date());
-                values.put(CommonString.KEY_IN_TIME, visitorLoginGetterSetter.get(i).getIn_time());
-                values.put(CommonString.KEY_OUT_TIME, visitorLoginGetterSetter.get(i).getOut_time());
-                values.put(CommonString.KEY_UPLOADSTATUS, visitorLoginGetterSetter.get(i).getUpload_status());
-                values.put(CommonString.KEY_EXIT, visitorLoginGetterSetter.get(i).getIsexit());
-                db.insert(CommonString.TABLE_VISITOR_LOGIN, null, values);
-            }
+            values.put(CommonString.KEY_USERNAME, visitorLoginGetterSetter.getUsername());
+            values.put(CommonString.KEY_NAME, visitorLoginGetterSetter.getName());
+            values.put(CommonString.KEY_DESIGNATION, visitorLoginGetterSetter.getDesignation());
+            values.put(CommonString.KEY_IN_TIME_IMAGE, visitorLoginGetterSetter.getIn_time_img());
+            values.put(CommonString.KEY_OUT_TIME_IMAGE, visitorLoginGetterSetter.getOut_time_img());
+            values.put(CommonString.KEY_EMP_CODE, visitorLoginGetterSetter.getEmp_code());
+            values.put(CommonString.KEY_VISIT_DATE, visitorLoginGetterSetter.getVisit_date());
+            values.put(CommonString.KEY_IN_TIME, visitorLoginGetterSetter.getIn_time());
+            values.put(CommonString.KEY_OUT_TIME, visitorLoginGetterSetter.getOut_time());
+            values.put(CommonString.KEY_UPLOADSTATUS, visitorLoginGetterSetter.getUpload_status());
+            values.put(CommonString.KEY_EXIT, visitorLoginGetterSetter.getIsexit());
+
+            long key = db.insert(CommonString.TABLE_VISITOR_LOGIN, null, values);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
 
         }
+
     }
 
 
     public void updateOutTimeVisitorLoginData(String out_time_image, String out_time, String emp_code, String username, String check, String name) {
-
         try {
             ContentValues values = new ContentValues();
             values.put(CommonString.KEY_OUT_TIME_IMAGE, out_time_image);
@@ -7081,6 +7095,9 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 dbcursor.moveToFirst();
                 while (!dbcursor.isAfterLast()) {
                     VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+
+                    sb.setKey_id((dbcursor.getString(dbcursor
+                            .getColumnIndexOrThrow("_id"))));
                     sb.setUsername((dbcursor.getString(dbcursor
                             .getColumnIndexOrThrow(CommonString.KEY_USERNAME))));
                     sb.setName(dbcursor.getString(dbcursor
@@ -7199,5 +7216,537 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
+    public void insertFeedbackData(FeedbackQuestionGettersetter data) {
+        db.delete("FEEDBACK_QUESTION", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getFQUESTION_ID().size(); i++) {
+                values.put("FQUESTION_ID", Integer.parseInt(data.getFQUESTION_ID().get(i)));
+                values.put("FQUESTION", data.getFQUESTION().get(i));
+                db.insert("FEEDBACK_QUESTION", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database FEEDBACK_QUESTION ", ex.toString());
+        }
+
+    }
+
+    public void insertFeedbackRatingData(FeedbackRetingGettersetter data) {
+        db.delete("FEEDBACK_RATING", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getRATING().size(); i++) {
+                values.put("RATING", Integer.parseInt(data.getRATING().get(i)));
+                db.insert("FEEDBACK_RATING", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database FEEDBACK_RATING ", ex.toString());
+        }
+
+    }
+
+    public void insertFeedbackQuestionRatingData(FeedbackQuestionRatingGettersetter data) {
+        db.delete("FEEDBACK_QUESTIONNAIRE", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getFCATEGORY_CD().size(); i++) {
+                values.put("FCATEGORY_CD", Integer.parseInt(data.getFCATEGORY_CD().get(i)));
+                values.put("FCATEGORY", data.getFCATEGORY().get(i));
+                values.put("FQUESTION_CD", Integer.parseInt(data.getFQUESTION_CD().get(i)));
+                values.put("FQUESTION", data.getFQUESTION().get(i));
+                values.put("FANSWER_CD", Integer.parseInt(data.getFANSWER_CD().get(i)));
+                values.put("FANSWER", data.getFANSWER().get(i));
+                db.insert("FEEDBACK_QUESTIONNAIRE", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database FEEDBACK_QUESTIONNAIRE ", ex.toString());
+        }
+
+    }
+
+
+    public ArrayList<VisitorDetailGetterSetter> getFeedaback_question() {
+
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<VisitorDetailGetterSetter>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT * from FEEDBACK_QUESTION", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter pgs = new VisitorDetailGetterSetter();
+
+                    pgs.setFeedback_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FQUESTION_ID")));
+                    pgs.setFeedback(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FQUESTION")));
+                    list.add(pgs);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            return list;
+        }
+
+        return list;
+
+    }
+
+    public ArrayList<VisitorDetailGetterSetter> getRatingData() {
+        Log.d("FetchingAssetdata--------------->Start<------------",
+                "------------------");
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM FEEDBACK_RATING", null);
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+                    sb.setRating(dbcursor.getString(dbcursor.getColumnIndexOrThrow("RATING")));
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            return list;
+        }
+        return list;
+    }
+
+
+    public long InsertFeedbackData(ArrayList<VisitorDetailGetterSetter> data, String exit, String date, String remark, String name, String designation, String key_id) {
+
+        db.delete(CommonString.TABLE_INSERT_FEEDBACK, CommonString.KEY_NAME + "='" + name + "' and " + CommonString.KEY_COMMON_ID + " = '" + key_id + "'", null);
+
+        ContentValues values = new ContentValues();
+        long id = 0;
+        try {
+            for (int i = 0; i < data.size(); i++) {
+                values.put(CommonString.KEY_COMMON_ID, key_id);
+                values.put(CommonString.KEY_FEEDBACK_CD, data.get(i).getFeedback_cd());
+                values.put(CommonString.KEY_FEEDBACK, data.get(i).getFeedback());
+                values.put(CommonString.KEY_EXIT, exit);
+                values.put(CommonString.KEY_VISIT_DATE, date);
+                values.put(CommonString.KEY_FEEDBACK_RATING, data.get(i).getRating());
+                values.put(CommonString.KEY_REMARK, remark);
+                values.put(CommonString.KEY_NAME, name);
+                values.put(CommonString.KEY_DESIGNATION, designation);
+
+                id = db.insert(CommonString.TABLE_INSERT_FEEDBACK, null, values);
+            }
+
+            return id;
+        } catch (Exception ex) {
+            Log.d("Database Exception ", ex.toString());
+            return -1;
+        }
+
+    }
+
+
+    public ArrayList<VisitorDetailGetterSetter> getInsertFeedbackData(String key_id) {
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_INSERT_FEEDBACK + " WHERE " + CommonString.KEY_COMMON_ID + " = " + key_id, null);
+            // dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_INSERT_FEEDBACK, null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+
+                    sb.setRating(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK_RATING)));
+                    sb.setFeedback(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK)));
+                    sb.setFeedback_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK_CD)));
+                    sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_REMARK)));
+                    sb.setKey_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_COMMON_ID)));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+
+            return list;
+        }
+
+        Log.d("Fetching non working data---------------------->Stop<-----------",
+                "-------------------");
+        return list;
+    }
+
+    public ArrayList<VisitorDetailGetterSetter> getInsertFeedbackUploadData(String key_id) {
+        ArrayList<VisitorDetailGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+
+            //   dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_INSERT_FEEDBACK, null);
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_INSERT_FEEDBACK + " WHERE " + CommonString.KEY_COMMON_ID + " = " + key_id, null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    VisitorDetailGetterSetter sb = new VisitorDetailGetterSetter();
+
+                    sb.setRating(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK_RATING)));
+                    sb.setFeedback(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK)));
+                    sb.setFeedback_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_FEEDBACK_CD)));
+                    sb.setRemark(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_REMARK)));
+                    sb.setName(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_NAME)));
+                    sb.setDesignation(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_DESIGNATION)));
+                    sb.setKey_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_COMMON_ID)));
+
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+
+            return list;
+        }
+
+        return list;
+    }
+
+    public void deleteFeedback() {
+        db.delete(CommonString.TABLE_INSERT_FEEDBACK, null, null);
+        db.delete(CommonString.TABLE_VISITOR_LOGIN, null, null);
+    }
+
+    public void savePOGQuestionAnswerData(HashMap<MSL_AvailabilityStockFacingGetterSetter, List<POGGetterSetter>> hashMapListChildData,
+                                          List<MSL_AvailabilityStockFacingGetterSetter> headerDataList,
+                                          String store_cd, long return_id, String name, String designation, String user_id) {
+        // db.delete(CommonString.TABLE_FEEDBACK_DATA_SAVE, "STORE_CD" + "='" + store_cd + "' AND CATEGORY_ID ='" + category_cd + "'", null);
+
+        ContentValues values = new ContentValues();
+        try {
+
+            for (int l = 0; l < headerDataList.size(); l++) {
+                List<POGGetterSetter> childList = hashMapListChildData.get(headerDataList.get(l));
+                for (int i = 0; i < childList.size(); i++) {
+                    POGGetterSetter data = childList.get(i);
+
+                    values.put("STORE_CD", store_cd);
+                    values.put("COMMONA_ID", return_id);
+                    values.put("QUESTION_ID", data.getQUESTION_ID());
+                    values.put("QUESTION", data.getQUESTION());
+                    values.put("ANSWER_ID", data.getANSWER_ID());
+                    values.put("CATEGORY_ID", headerDataList.get(l).getF_category_cd());
+                    values.put("SUB_CATEGORY_ID", "");
+                    values.put("VISITOR_NAME", name);
+                    values.put("VISITOR_DESIGNATION", designation);
+                    values.put("USER_ID", user_id);
+
+
+                    db.insert(CommonString.TABLE_FEEDBACK_DATA_SAVE, null, values);
+                }
+            }
+
+        } catch (Exception ex) {
+            Log.d("Database ", "Exception while Insert Audit Data " + ex.toString());
+        }
+    }
+
+    //get POG Data
+    public ArrayList<MSL_AvailabilityStockFacingGetterSetter> getSubCategoryMasterForPOG() {
+
+        ArrayList<MSL_AvailabilityStockFacingGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+
+            dbcursor = db.rawQuery("SELECT DISTINCT FCATEGORY_CD,FCATEGORY FROM FEEDBACK_QUESTIONNAIRE ", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    MSL_AvailabilityStockFacingGetterSetter cd = new MSL_AvailabilityStockFacingGetterSetter();
+
+                    cd.setF_category_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FCATEGORY_CD")));
+                    cd.setF_category(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FCATEGORY")));
+
+                    list.add(cd);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception ", "get MSL_AvailabilityHeader!" + e.toString());
+            return list;
+        }
+        return list;
+    }
+
+    //get inserted POG data
+    public ArrayList<POGGetterSetter> getAfterSavePOGQuestionAnswerData(String store_cd, String f_category_cd) {
+        ArrayList<POGGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("Select * " + "From " + CommonString.TABLE_FEEDBACK_DATA_SAVE
+                    + " where STORE_CD='" + store_cd + "' AND CATEGORY_ID ='" + f_category_cd + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    POGGetterSetter sb = new POGGetterSetter();
+
+                    sb.setQUESTION_ID(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION_ID")));
+                    sb.setQUESTION(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION")));
+                    sb.setANSWER_ID(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ANSWER_ID")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+
+        return list;
+    }
+
+    //Sub Category wise POG
+    public ArrayList<POGGetterSetter> getPOGSubCategoryWise(String f_category_cd) {
+        Cursor cursordata = null;
+        ArrayList<POGGetterSetter> pogData = new ArrayList<>();
+
+        try {
+
+            // cursordata = db.rawQuery("Select DISTINCT QUESTION ,QUESTION_ID from POG_QUESTION  " + "where SUB_CATEGORY_ID ='" + sub_category_id + "'", null);
+            cursordata = db.rawQuery("SELECT DISTINCT FQUESTION_CD, FQUESTION  FROM FEEDBACK_QUESTIONNAIRE " + "where FCATEGORY_CD ='" + f_category_cd + "'", null);
+
+            if (cursordata != null) {
+                cursordata.moveToFirst();
+                while (!cursordata.isAfterLast()) {
+                    POGGetterSetter sb = new POGGetterSetter();
+
+                    sb.setQUESTION(cursordata.getString(cursordata.getColumnIndexOrThrow("FQUESTION")));
+                    sb.setQUESTION_ID(cursordata.getString(cursordata.getColumnIndexOrThrow("FQUESTION_CD")));
+
+                    pogData.add(sb);
+                    cursordata.moveToNext();
+                }
+                cursordata.close();
+            }
+
+        } catch (Exception ex) {
+            Log.d("Exception ", " in ADDITIONAL_QUESTION " + ex.toString());
+        }
+        return pogData;
+
+    }
+
+    //get POG Answer data
+    public ArrayList<POGGetterSetter> getPOGAnswerData(String question_id, String f_category_id, String select) {
+        Log.d("Fetching", "Ansdata--------------->Start<------------");
+
+        ArrayList<POGGetterSetter> list = new ArrayList<>();
+        POGGetterSetter sb1 = new POGGetterSetter();
+        sb1.setANSWER_ID("0");
+        sb1.setANSWER(select);
+        list.add(0, sb1);
+
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT DISTINCT FANSWER_CD,FANSWER  FROM FEEDBACK_QUESTIONNAIRE " + "where FQUESTION_CD='" + question_id + "' AND FCATEGORY_CD ='" + f_category_id + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    POGGetterSetter sb = new POGGetterSetter();
+
+                    sb.setANSWER_ID(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FANSWER_CD")));
+                    sb.setANSWER(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FANSWER")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " answer " + e.toString());
+            return list;
+        }
+        Log.d("Fetching", " audit answer-->Stop<-");
+        return list;
+    }
+
+    public long InsertfeedbackData(FeedbackGetterSetter data) {
+        // db.delete(CommonString.TABLE_feedback_save, CommonString.COMMON_ID + "='" +key_id  + "'", null);
+        ContentValues values = new ContentValues();
+        long id = 0;
+
+        try {
+
+            values.put(CommonString.KEY_VISITOR_NAME, data.getVisitor_name());
+            values.put(CommonString.KEY_VISIT_DATE, data.getVisit_date());
+            values.put(CommonString.KEY_VISITOR_DESIGNATION, data.getVisitor_designation());
+            values.put(CommonString.KEY_STATUS, data.getStatus());
+            values.put(CommonString.KEY_USER_ID, data.getUser_id());
+
+            id = db.insert(CommonString.TABLE_feedback_save, null, values);
+            return id;
+        } catch (Exception ex) {
+            Log.d("Database Exception ", ex.toString());
+            return -1;
+        }
+    }
+
+
+    //get POG Data for Upload
+    public ArrayList<POGGetterSetter> getAfterSavePOGForUploadData(String store_cd) {
+        ArrayList<POGGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("Select * " + "From " + CommonString.TABLE_FEEDBACK_DATA_SAVE + " where STORE_CD='" + store_cd + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    POGGetterSetter sb = new POGGetterSetter();
+
+                    sb.setQUESTION_ID(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION_ID")));
+                    sb.setQUESTION(dbcursor.getString(dbcursor.getColumnIndexOrThrow("QUESTION")));
+                    sb.setANSWER_ID(dbcursor.getString(dbcursor.getColumnIndexOrThrow("ANSWER_ID")));
+                    sb.setCATEGORY_CD(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_ID")));
+                    sb.setVISITOR_NAME(dbcursor.getString(dbcursor.getColumnIndexOrThrow("VISITOR_NAME")));
+                    sb.setVISITOR_DESIGNATION(dbcursor.getString(dbcursor.getColumnIndexOrThrow("VISITOR_DESIGNATION")));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+
+        return list;
+    }
+
+    public void updateFeedbackData(String name, String designation) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(CommonString.KEY_STATUS, "U");
+
+            db.update(CommonString.TABLE_feedback_save, values, CommonString.KEY_VISITOR_NAME + "='" + name + "' and " + CommonString.KEY_VISITOR_DESIGNATION + " = '" + designation + "'", null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    public FeedbackGetterSetter getfeedbackData(String user_id) {
+        Log.d("FetchinggetCityMasterData--------------->Start<------------",
+                "------------------");
+        FeedbackGetterSetter sb = new FeedbackGetterSetter();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("Select * " + "From " + CommonString.TABLE_feedback_save + " where USER_ID='" + user_id + "'", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+
+
+                    sb.setVisit_date(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISIT_DATE)));
+                    sb.setUser_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_USER_ID)));
+                    sb.setVisitor_name(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISITOR_NAME)));
+                    sb.setVisitor_designation(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISITOR_DESIGNATION )));
+                    sb.setStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_STATUS)));
+
+
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return sb;
+            }
+
+        } catch (Exception e) {
+            Log.d("Exception when fetching CITY MASTER!!!!!!!!!!!",
+                    e.toString());
+            return sb;
+        }
+
+        Log.d("Fetching non working data---------------------->Stop<-----------",
+                "-------------------");
+        return sb;
+    }
+
+
+    public ArrayList<FeedbackGetterSetter> getVisitorLoginFeedbackData(String visitdate, String username) {
+
+        ArrayList<FeedbackGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+            dbcursor = db.rawQuery("SELECT  * from FEEDBACK_save where VISIT_DATE = '" + visitdate + "' and " + CommonString.KEY_USER_ID + " = '" + username + "'"
+                    , null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    FeedbackGetterSetter sb = new FeedbackGetterSetter();
+
+                    sb.setVisitor_name((dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISITOR_NAME))));
+                    sb.setVisitor_designation(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISITOR_DESIGNATION )));
+                    sb.setVisit_date(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_VISIT_DATE )));
+                    sb.setStatus(dbcursor.getString(dbcursor.getColumnIndexOrThrow(CommonString.KEY_STATUS)));
+
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return list;
+
+    }
+    public void deletetfeedbackTables() {
+
+        //db.delete(CommonString.TABLE_FEEDBACK_DATA_SAVE, null, null);
+        db.delete("FEEDBACK_Data_Save", null, null);
+    }
 
 }

@@ -71,6 +71,33 @@ public class TableBean {
     public static String mappingsos_table;
     public static String todayquestion_ans_table;
     public static String noticboard_table;
+    public static String feedback_question_table;
+    public static String feedback_rating_table;
+    public static String feedback_question_rating_table;
+
+    public static String getFeedback_question_rating_table() {
+        return feedback_question_rating_table;
+    }
+
+    public static void setFeedback_question_rating_table(String feedback_question_rating_table) {
+        TableBean.feedback_question_rating_table = feedback_question_rating_table;
+    }
+
+    public static String getFeedback_question_table() {
+        return feedback_question_table;
+    }
+
+    public static void setFeedback_question_table(String feedback_question_table) {
+        TableBean.feedback_question_table = feedback_question_table;
+    }
+
+    public static String getFeedback_rating_table() {
+        return feedback_rating_table;
+    }
+
+    public static void setFeedback_rating_table(String feedback_rating_table) {
+        TableBean.feedback_rating_table = feedback_rating_table;
+    }
 
     public static String getNoticboard_table() {
         return noticboard_table;

@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +49,12 @@ import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.VisitorDetailGetterSetter;
 import com.cpm.GetterSetter.VisitorSearchGetterSetter;
 import com.cpm.database.GSKDatabase;
+import com.cpm.lorealpromoter.LoginActivity;
 import com.cpm.lorealpromoter.R;
 import com.cpm.retrofit.UploadImageWithRetrofit;
+import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
+import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlHandler.XMLHandlers;
 
 
@@ -69,7 +77,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class VisitorLoginActivity extends AppCompatActivity implements View.OnClickListener {
-
+    String global_key_id = "0";
+    Dialog dialog1;
+    private LinearLayout lay_feedback;
+    private Button feedback, save;
+    private EditText ed_feedback;
+    private RecyclerView lv_feedback;
     private GSKDatabase database;
     LinearLayout heading;
     FloatingActionButton fab_save;
@@ -87,7 +100,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
     boolean ResultFlag = true;
     boolean camin_clicked = false, camout_clicked = false;
     Activity activity;
-    ProgressBar progressBar;
     String visit_date, username;
     RelativeLayout rel_intime, rel_outtime;
     ImageView img_intime, img_outtime;
@@ -95,7 +107,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
     String Path;
     ImageView imgcam_in, imgcam_out;
     Context context;
-    VisitorDetailGetterSetter vistorObject;
     Button btnclear, btngo;
     int eventType;
     VisitorSearchGetterSetter visitordata;
@@ -104,18 +115,16 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
     ArrayList<VisitorDetailGetterSetter> visitorListData;
     Dialog dialog_list;
     ArrayList<VisitorDetailGetterSetter> list;
-    String result1;
     TextView tv_user_id;
-
     RadioButton cpm, loreal;
     RadioGroup radiogroup;
     LinearLayout lr_cpm, lr_loreal, linear_empl;
     String check = "CPM";
     EditText ed_name, ed_designation;
-    Button btncleardata,loreal_clear;
-
-    TextView tvintime_loreal;
+    Button btncleardata, loreal_clear;
     ImageView img_intime_loreal;
+    ArrayList<VisitorDetailGetterSetter> feedback_ques = new ArrayList<>();
+    RouteAdapter feedback_question;
 
 
     @Override
@@ -164,7 +173,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         fab_save = (FloatingActionButton) findViewById(R.id.fab);
         img_intime = (ImageView) findViewById(R.id.img_intime);
         img_outtime = (ImageView) findViewById(R.id.img_outtime);
-        progressBar = (ProgressBar) findViewById(R.id.progress_empid);
         heading = (LinearLayout) findViewById(R.id.lay_heading);
         recyclerView = (RecyclerView) findViewById(R.id.rv_visitor);
 
@@ -178,9 +186,9 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         ed_designation = (EditText) findViewById(R.id.ed_designation);
         btncleardata = (Button) findViewById(R.id.btncleardata);
         loreal_clear = (Button) findViewById(R.id.loreal_clear);
+        lay_feedback = (LinearLayout) findViewById(R.id.lay_feedback);
+        feedback = (Button) findViewById(R.id.feedback);
 
-
-        tvintime_loreal = (TextView) findViewById(R.id.tvintime_loreal);
         img_intime_loreal = (ImageView) findViewById(R.id.img_intime_loreal);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -193,6 +201,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
         str = CommonString.FILE_PATH;
 
+
         fab_save.setOnClickListener(this);
         rel_intime.setOnClickListener(this);
         rel_outtime.setOnClickListener(this);
@@ -200,6 +209,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         btngo.setOnClickListener(this);
         btncleardata.setOnClickListener(this);
         loreal_clear.setOnClickListener(this);
+        feedback.setOnClickListener(this);
         Path = CommonString.FILE_PATH;
 
         radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -209,6 +219,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     lr_loreal.setVisibility(View.GONE);
                     linear_empl.setVisibility(View.VISIBLE);
                     check = "CPM";
+                    lay_feedback.setVisibility(View.GONE);
 
 
                 } else if (checkedId == R.id.loreal) {
@@ -216,6 +227,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     lr_cpm.setVisibility(View.GONE);
                     linear_empl.setVisibility(View.GONE);
                     check = "LOREAL";
+
 
                 }
             }
@@ -235,15 +247,13 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 name = tvname.getText().toString();
                 designation = tvdesignation.getText().toString();
                 if (check_condition()) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(
                             VisitorLoginActivity.this);
                     builder.setMessage("Do you want to save the data ")
                             .setCancelable(false)
                             .setPositiveButton("OK",
                                     new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog,
-                                                            int id) {
+                                        public void onClick(DialogInterface dialog, int id) {
 
                                             if (isUpdate) {
 
@@ -288,7 +298,8 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                                                 visitorLoginData.add(visitorLoginGetterSetter);
                                                 database.open();
-                                                database.InsertVisitorLogindata(visitorLoginData);
+
+                                                database.InsertVisitorLogindata(visitorLoginGetterSetter);
 
                                                 clearVisitorData();
 
@@ -341,34 +352,9 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     }
                 }
 
-                /*if (et_emp_name.getText().toString() != null && !et_emp_name.getText().toString().equalsIgnoreCase("")) {
-                    camin_clicked = true;
-                    _pathforcheck = username + getCurrentTime() + "visitor_intime" + ".jpg";
-                    _path = str + _pathforcheck;
-                    CommonFunctions.startCameraActivity((Activity) context, _path);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please fill employee code first", Toast.LENGTH_SHORT).show();
-                }*/
-
                 break;
 
             case R.id.rel_outtime:
-
-               /* if (check.equalsIgnoreCase("CPM")) {
-                    if (!isUpdate) {
-                         error_msg = "Please click Out Time image at out time";
-                       // error_msg = "Please enter Employee Code ";
-                        Toast.makeText(getApplicationContext(), error_msg, Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        camout_clicked = true;
-                        _pathforcheck = username + getCurrentTime() + "visitor_outtime" + ".jpg";
-                        _path = str + _pathforcheck;
-                        CommonFunctions.startCameraActivity((Activity) context, _path);
-                    }
-                }else {
-
-                }*/
 
                 if (!isUpdate) {
                     error_msg = "Please click Out Time image at out time";
@@ -411,8 +397,11 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 clearVisitorData();
 
                 break;
+            case R.id.feedback:
 
+                popup(global_key_id);
 
+                break;
 
 
         }
@@ -438,11 +427,11 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                 .getState() == NetworkInfo.State.CONNECTED
                 || connectivityManager.getNetworkInfo(
                 ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            // we are connected to a network
             connected = true;
         }
         return connected;
     }
+
 
     class GetCredentials extends AsyncTask<Void, Void, String> {
 
@@ -535,7 +524,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     empid = String.valueOf(visitordata.getEMP_CD().get(0));
                     name = visitordata.getEMPLOYEE().get(0);
                     designation = visitordata.getDESIGNATION().get(0);
-                   // et_emp_name.setText("");
 
                     btngo.setVisibility(View.GONE);
                     btncleardata.setVisibility(View.VISIBLE);
@@ -624,16 +612,16 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
     public void clearVisitorData() {
 
+        lay_feedback.setVisibility(View.GONE);
 
         ed_name.setText("");
         ed_designation.setText("");
-
-
         et_emp_name.setText("");
         tvname.setText("");
         tvdesignation.setText("");
         tv_in_time.setText("");
         tv_out_time.setText("");
+
         img_intime.setVisibility(View.GONE);
         img_outtime.setVisibility(View.GONE);
 
@@ -896,6 +884,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
             recyclerView.setVisibility(View.INVISIBLE);
         }
 
+
     }
 
     class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
@@ -938,7 +927,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                             cpm.setChecked(true);
                             tvname.setText(visitorLoginGetterSetter.getName());
                             tvdesignation.setText(visitorLoginGetterSetter.getDesignation());
-                          //  et_emp_name.setText(visitorLoginGetterSetter.getName());
                             btncleardata.setVisibility(View.VISIBLE);
                             btngo.setVisibility(View.GONE);
 
@@ -951,7 +939,9 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                             ed_name.setEnabled(false);
                             ed_designation.setEnabled(false);
                             btncleardata.setVisibility(View.VISIBLE);
+                            global_key_id = visitorLoginGetterSetter.getKey_id();
                             btngo.setVisibility(View.GONE);
+                            lay_feedback.setVisibility(View.VISIBLE);
 
                         }
 
@@ -1041,6 +1031,32 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
             try {
                 UploadImageWithRetrofit uploadRetro = new UploadImageWithRetrofit(context);
 
+                feedback_ques = database.getInsertFeedbackUploadData(global_key_id);
+                String feedbackxml = "";
+                String onXML = "";
+                if (feedback_ques.size() > 0) {
+                    for (int k = 0; k < feedback_ques.size(); k++) {
+                        onXML = "[LOREAL_FEEDBACK]"
+                                + "[COMMAN_ID]"
+                                + feedback_ques.get(k).getKey_id()
+                                + "[/COMMAN_ID]"
+                                + "[FEEDBACK]"
+                                + feedback_ques.get(k).getFeedback()
+                                + "[/FEEDBACK]"
+                                + "[FEEDBACK_CD]"
+                                + feedback_ques.get(k).getFeedback_cd()
+                                + "[/FEEDBACK_CD]"
+                                + "[RATING]"
+                                + feedback_ques.get(k).getRating()
+                                + "[/RATING]"
+                                + "[REMARK]"
+                                + feedback_ques.get(k).getRemark()
+                                + "[/REMARK]"
+                                + "[/LOREAL_FEEDBACK]";
+                        feedbackxml = feedbackxml + onXML;
+                    }
+                }
+
                 String visitdata = "[USER_DATA][CREATED_BY]"
                         + username
                         + "[/CREATED_BY][EMP_ID]"
@@ -1066,8 +1082,11 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                         + "[DESIGNATION]"
                         + visitorLoginGetterSetter.getDesignation()
                         + "[/DESIGNATION]"
+                       /* + "[COMMAN_ID]"
+                        + visitorLoginGetterSetter.getKey_id()
+                        + "[/COMMAN_ID]"
+                        + feedbackxml*/
                         + "[/USER_DATA]";
-
 
                 XmlPullParserFactory factory = XmlPullParserFactory
                         .newInstance();
@@ -1093,7 +1112,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     return "Failure";
 
                 }
-
 
                 if (visitorLoginGetterSetter.getIn_time_img() != null && !visitorLoginGetterSetter.getIn_time_img().equals("")) {
 
@@ -1174,11 +1192,11 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 Toast.makeText(getApplicationContext(), "Visit Data Uploaded", Toast.LENGTH_LONG).show();
                 //update upload_status to U
-                //  database.updateVisitorUploadData(visitorLoginGetterSetter.getEmp_code());
+                database.open();
                 database.updateVisitorUploadData(visitorLoginGetterSetter.getEmp_code(), visitorLoginGetterSetter.getName(), check);
                 clearVisitorData();
-
                 setLoginData();
+                global_key_id = "0";
             } else {
                 Toast.makeText(getApplicationContext(), "Data not uploaded!", Toast.LENGTH_LONG).show();
             }
@@ -1217,5 +1235,198 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
     }
 
+
+    private void popup(final String key_id) {
+
+        dialog1 = new Dialog(VisitorLoginActivity.this);
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.dialog_loreal);
+        ed_feedback = (EditText) dialog1.findViewById(R.id.feedback);
+        save = (Button) dialog1.findViewById(R.id.save);
+        lv_feedback = (RecyclerView) dialog1.findViewById(R.id.lv_routewise);
+        dialog1.setCancelable(false);
+        dialog1.setCanceledOnTouchOutside(true);
+        database.open();
+        feedback_ques = database.getInsertFeedbackData(key_id);
+        for (int i = 0; i < feedback_ques.size(); i++) {
+            ed_feedback.setText(feedback_ques.get(i).getRemark());
+
+        }
+
+        if (feedback_ques.size() > 0) {
+            feedback_question = new RouteAdapter(getApplicationContext(), feedback_ques);
+            lv_feedback.setAdapter(feedback_question);
+            lv_feedback.setLayoutManager(new LinearLayoutManager(VisitorLoginActivity.this));
+        } else {
+            feedback_ques = database.getFeedaback_question();
+            if (feedback_ques.size() > 0) {
+                feedback_question = new RouteAdapter(getApplicationContext(), feedback_ques);
+                lv_feedback.setAdapter(feedback_question);
+                lv_feedback.setLayoutManager(new LinearLayoutManager(this));
+
+            }
+        }
+
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        VisitorLoginActivity.this);
+                builder.setMessage("Do you want to save the data ")
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+
+                                        String remark1 = ed_feedback.getText().toString().replaceAll("[(!@#$%^&*?)\"]", " ").trim();
+                                        visitorLoginGetterSetter.setRemark(remark1);
+
+                                        long id1 = database.InsertFeedbackData(feedback_ques, check, visit_date, remark1, visitorLoginGetterSetter.getName(), visitorLoginGetterSetter.getDesignation(), key_id);
+                                        if (id1 > 0) {
+                                            Snackbar.make(fab_save, "Data saved successfully", Snackbar.LENGTH_SHORT).show();
+                                            dialog.cancel();
+                                            dialog1.dismiss();
+                                         //   global_key_id = "";
+                                            //setLoginData();
+
+                                        } else {
+                                            Snackbar.make(fab_save, "Data not saved", Snackbar.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        dialog1.dismiss();
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+        });
+
+        dialog1.show();
+    }
+
+    public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MyViewHolder> {
+        private LayoutInflater inflator;
+        List<VisitorDetailGetterSetter> data = Collections.emptyList();
+
+        public RouteAdapter(Context context, List<VisitorDetailGetterSetter> data) {
+            inflator = LayoutInflater.from(context);
+            this.data = data;
+        }
+
+        @Override
+        public RouteAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+            View view = inflator.inflate(R.layout.dialog_list_, parent, false);
+            RouteAdapter.MyViewHolder holder = new RouteAdapter.MyViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final RouteAdapter.MyViewHolder viewHolder, final int position) {
+
+            final VisitorDetailGetterSetter current = data.get(position);
+
+            viewHolder.question.setText(current.getFeedback());
+
+            //for reason spinner
+            final ArrayList<VisitorDetailGetterSetter> reason_list = database.getRatingData();
+            VisitorDetailGetterSetter non = new VisitorDetailGetterSetter();
+            non.setAreason("-Select Reason-");
+            //  non.setRating("0");
+            reason_list.add(0, non);
+
+            viewHolder.rating_sp.setAdapter(new ReasonSpinnerAdapter(VisitorLoginActivity.this, R.layout.spinner_text_view, reason_list));
+            for (int i = 0; i < reason_list.size(); i++) {
+                if (reason_list.get(i).getRating().equals(current.getRating())) {
+                    viewHolder.rating_sp.setSelection(i);
+                    break;
+                }
+            }
+
+            viewHolder.rating_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    if (pos != 0) {
+                        String ans = reason_list.get(pos).getRating().toString();
+                        current.setRating(ans);
+
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView question;
+            Spinner rating_sp;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                question = (TextView) itemView.findViewById(R.id.question);
+                rating_sp = (Spinner) itemView.findViewById(R.id.rating_sp);
+            }
+        }
+    }
+
+    public class ReasonSpinnerAdapter extends ArrayAdapter<VisitorDetailGetterSetter> {
+        List<VisitorDetailGetterSetter> list;
+        Context context;
+        int resourceId;
+
+        public ReasonSpinnerAdapter(Context context, int resourceId, ArrayList<VisitorDetailGetterSetter> list) {
+            super(context, resourceId, list);
+            this.context = context;
+            this.list = list;
+            this.resourceId = resourceId;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            LayoutInflater inflater = getLayoutInflater();
+            view = inflater.inflate(resourceId, parent, false);
+
+            VisitorDetailGetterSetter cm = list.get(position);
+
+            TextView txt_spinner = (TextView) view.findViewById(R.id.txt_sp_text);
+            txt_spinner.setText(list.get(position).getRating());
+
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            LayoutInflater inflater = getLayoutInflater();
+            view = inflater.inflate(resourceId, parent, false);
+
+            VisitorDetailGetterSetter cm = list.get(position);
+
+            TextView txt_spinner = (TextView) view.findViewById(R.id.txt_sp_text);
+            txt_spinner.setText(cm.getRating());
+
+            return view;
+        }
+
+    }
 
 }

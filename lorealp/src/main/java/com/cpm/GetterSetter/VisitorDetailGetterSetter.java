@@ -1,7 +1,7 @@
 package com.cpm.GetterSetter;
 
 /**
- * Created by yadavendras on 05-10-2017.
+ * Created by upendra on 05-03-2018.
  */
 
 public class VisitorDetailGetterSetter {
@@ -14,6 +14,60 @@ public class VisitorDetailGetterSetter {
     String Out_time;
     String Upload_status;
     String isexit;
+    String feedback="";
+    String feedback_cd="";
+    String remark="";
+    String rating="";
+    String Areason;
+    String key_id="";
+
+    public String getKey_id() {
+        return key_id;
+    }
+
+    public void setKey_id(String key_id) {
+        this.key_id = key_id;
+    }
+
+    public String getAreason() {
+        return Areason;
+    }
+
+    public void setAreason(String areason) {
+        Areason = areason;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getFeedback_cd() {
+        return feedback_cd;
+    }
+
+    public void setFeedback_cd(String feedback_cd) {
+        this.feedback_cd = feedback_cd;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getIsexit() {
         return isexit;

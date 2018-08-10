@@ -38,7 +38,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_weight="6"
+                    android:layout_weight="7"
                     card_view:cardBackgroundColor="@color/white"
                     card_view:cardCornerRadius="5dp">
 
@@ -59,6 +59,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:gravity="center"
+                            android:visibility="gone"
                             android:orientation="horizontal">
 
                             <RadioButton
@@ -447,6 +448,27 @@
                                 </RelativeLayout>
                             </LinearLayout>
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/lay_feedback"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="70dp"
+                            android:layout_marginRight="70dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <Button
+                                android:id="@+id/feedback"
+                                android:layout_width="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/roundedbutton"
+                                android:text="FEEDBACK"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -522,7 +544,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="4" />
+                    android:layout_weight="3" />
             </LinearLayout>
         </LinearLayout>
 

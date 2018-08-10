@@ -961,6 +961,15 @@ public class CommonString {
     public static final String KEY_IN_TIME_IMAGE = "IN_TIME_IMAGE";
     public static final String KEY_OUT_TIME_IMAGE = "OUT_TIME_IMAGE";
     public static final String KEY_EXIT = "EXIT";
+    public static final String KEY_FEEDBACK = "FEEDBACK";
+    public static final String KEY_FEEDBACK_CD = "FEEDBACK_CD";
+    public static final String KEY_REMARK = "REMARK";
+    public static final String KEY_COMMON_ID = "COMMON_ID";
+    public static final String KEY_FQUESTION_ID = "FQUESTION_ID";
+    public static final String KEY_FQUESTION = "FQUESTION";
+    public static final String KEY_FEEDBACK_RATING = "FEEDBACK_RATING";
+    public static final String KEY_VISITOR_NAME = "VISITOR_NAME";
+    public static final String KEY_VISITOR_DESIGNATION = "VISITOR_DESIGNATION";
 
     public static final String CREATE_TABLE_VISITOR_LOGIN = "CREATE TABLE "
             + TABLE_VISITOR_LOGIN + " (" + KEY_ID
@@ -977,5 +986,72 @@ public class CommonString {
             + KEY_EXIT + " VARCHAR,"
             + KEY_OUT_TIME_IMAGE + " VARCHAR)";
 
+    public static final String TABLE_INSERT_FEEDBACK = "FEEDBACK";
+    public static final String CREATE_TABLE_FEEDBACK = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_INSERT_FEEDBACK
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_COMMON_ID + " INTEGER,"
+            + KEY_FEEDBACK_CD + " INTEGER,"
+            + KEY_FEEDBACK + " VARCHAR,"
+            + KEY_EXIT + " VARCHAR,"
+            + KEY_REMARK + " VARCHAR,"
+            + KEY_VISIT_DATE + " VARCHAR,"
+            + KEY_NAME + " VARCHAR,"
+            + KEY_DESIGNATION + " VARCHAR,"
+            + KEY_FEEDBACK_RATING + " INTEGER"
+            + ")";
+
+    ///feedback
+    public static final String TABLE_FEEDBACK_DATA_SAVE = "FEEDBACK_Data_Save";
+    public static final String TABLE_feedback_save = "FEEDBACK_save";
+    public static final String CREATE_feedback_save = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_feedback_save
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_VISIT_DATE + " VARCHAR,"
+            + KEY_VISITOR_NAME+ " VARCHAR,"
+            + KEY_VISITOR_DESIGNATION + " VARCHAR,"
+            + KEY_STATUS+ " VARCHAR,"
+            + KEY_USER_ID + " VARCHAR"
+            + ")";
+
+    public static final String CREATE_TABLE_FEEDBACK_DATA_SAVE = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_FEEDBACK_DATA_SAVE
+            + " ("
+            + "KEY_ID"
+            + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+
+            + "STORE_CD"
+            + " INTEGER,"
+
+            + "COMMONA_ID"
+            + " INTEGER,"
+
+            + "QUESTION_ID"
+            + " INTEGER,"
+
+            + "QUESTION"
+            + " VARCHAR,"
+
+            + "ANSWER_ID"
+            + " INTEGER,"
+
+            + "SUB_CATEGORY_ID"
+            + " INTEGER,"
+
+            + "VISITOR_NAME"
+            + " VARCHAR,"
+
+            + "VISITOR_DESIGNATION"
+            + " VARCHAR,"
+
+            + "USER_ID"
+            + " VARCHAR,"
+
+            + "CATEGORY_ID"
+            + " INTEGER"
+
+            + ")";
 
 }
