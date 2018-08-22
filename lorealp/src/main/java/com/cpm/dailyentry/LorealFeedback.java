@@ -60,9 +60,8 @@ import java.util.List;
 
 public class LorealFeedback extends AppCompatActivity {
     ExpandableListView expandableListView;
-    String categoryName, categoryId;
     String visit_date, username;
-    String name, designation;
+    String name, designation,feedback_image;
     private SharedPreferences preferences;
     private GSKDatabase db;
     List<MSL_AvailabilityStockFacingGetterSetter> headerDataList;
@@ -74,6 +73,7 @@ public class LorealFeedback extends AppCompatActivity {
     ArrayList<JourneyPlanGetterSetter> jcplist;
     private String store_cd;
     FeedbackGetterSetter feedbackGetterSetter;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class LorealFeedback extends AppCompatActivity {
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         db = new GSKDatabase(this);
         db.open();
+        context = this;
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
@@ -92,6 +93,8 @@ public class LorealFeedback extends AppCompatActivity {
 
         name = preferences.getString(CommonString.KEY_NAME, null);
         designation = preferences.getString(CommonString.KEY_DESIGNATION, null);
+        feedback_image = preferences.getString(CommonString.KEY_FEEDBACK_IMAGE, null);
+
         setTitle("Loreal Feedback- " + visit_date);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -115,8 +118,8 @@ public class LorealFeedback extends AppCompatActivity {
                                         db.open();
                                         long return_id = db.InsertfeedbackData(feedbackGetterSetter);
                                         if (return_id > 0) {
-                                            db.savePOGQuestionAnswerData(hashMapListChildData, headerDataList, store_cd, return_id, name, designation, username);
-                                           // Snackbar.make(expandableListView, "Loreal feedback data saveed", Snackbar.LENGTH_SHORT).show();
+                                            db.savePOGQuestionAnswerData(hashMapListChildData, headerDataList, store_cd, return_id, name, designation, username,feedback_image);
+
                                         }
                                         new UploadVisitorData().execute();
                                     } else {
@@ -483,6 +486,7 @@ public class LorealFeedback extends AppCompatActivity {
             // TODO Auto-generated method stub
 
             try {
+                UploadImageWithRetrofit uploadRetro = new UploadImageWithRetrofit(context);
 
                 db.open();
                 ArrayList<POGGetterSetter> feedback = db.getAfterSavePOGForUploadData(store_cd);
@@ -494,6 +498,7 @@ public class LorealFeedback extends AppCompatActivity {
                                 + "[USER_ID]" + username + "[/USER_ID]"
                                 + "[STORE_CD]" + store_cd + "[/STORE_CD]"
                                 + "[VISIT_DATE]" + visit_date + "[/VISIT_DATE]"
+                                + "[FEEDBACK_IMAGE]" + feedback_image + "[/FEEDBACK_IMAGE]"
                                 + "[CATEGORY_ID]" + feedback.get(n).getCATEGORY_CD() + "[/CATEGORY_ID]"
                                 + "[QUESTION_ID]" + feedback.get(n).getQUESTION_ID() + "[/QUESTION_ID]"
                                 + "[ANSWER_ID]" + feedback.get(n).getANSWER_ID() + "[/ANSWER_ID]"
@@ -529,6 +534,8 @@ public class LorealFeedback extends AppCompatActivity {
                         return "Failure";
 
                     }
+
+
                 }
                 return CommonString.KEY_SUCCESS;
 

@@ -77,8 +77,8 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE18";
-    public static final int DATABASE_VERSION = 18;
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE19";
+    public static final int DATABASE_VERSION = 19;
     private SQLiteDatabase db;
 
     public GSKDatabase(Context completeDownloadActivity) {
@@ -7440,7 +7440,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     public void savePOGQuestionAnswerData(HashMap<MSL_AvailabilityStockFacingGetterSetter, List<POGGetterSetter>> hashMapListChildData,
                                           List<MSL_AvailabilityStockFacingGetterSetter> headerDataList,
-                                          String store_cd, long return_id, String name, String designation, String user_id) {
+                                          String store_cd, long return_id, String name, String designation, String user_id,String feedback_image) {
         // db.delete(CommonString.TABLE_FEEDBACK_DATA_SAVE, "STORE_CD" + "='" + store_cd + "' AND CATEGORY_ID ='" + category_cd + "'", null);
 
         ContentValues values = new ContentValues();
@@ -7461,6 +7461,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     values.put("VISITOR_NAME", name);
                     values.put("VISITOR_DESIGNATION", designation);
                     values.put("USER_ID", user_id);
+                    values.put("FEEDBACK_IMAGE", feedback_image);
 
 
                     db.insert(CommonString.TABLE_FEEDBACK_DATA_SAVE, null, values);

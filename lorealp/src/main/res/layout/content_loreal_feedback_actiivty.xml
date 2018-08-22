@@ -56,8 +56,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
-                        android:padding="7dp"
                         android:background="@drawable/rouded_corner"
+                        android:padding="7dp"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -83,20 +83,29 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
-                        android:padding="7dp"
                         android:background="@drawable/rouded_corner"
+                        android:padding="7dp"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_photoMar"
+                    android:layout_width="45dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/camera_orange" />
+
 
                 <Button
                     android:id="@+id/save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginTop="3dp"
                     android:layout_marginRight="50dp"
+                    android:layout_marginTop="3dp"
                     android:background="@drawable/roundedbutton"
                     android:text="GO" />
 
@@ -111,10 +120,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:padding="5dp"
             android:layout_marginTop="5dp"
             android:background="@color/colorPrimary"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -161,8 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            />
+            android:layout_marginRight="5dp" />
 
     </LinearLayout>
 

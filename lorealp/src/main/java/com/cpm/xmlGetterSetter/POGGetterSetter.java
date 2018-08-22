@@ -10,6 +10,15 @@ public class POGGetterSetter {
     String ANSWER;
     String VISITOR_NAME;
     String VISITOR_DESIGNATION;
+    String FEEDBACK_IMAGE="";
+
+    public String getFEEDBACK_IMAGE() {
+        return FEEDBACK_IMAGE;
+    }
+
+    public void setFEEDBACK_IMAGE(String FEEDBACK_IMAGE) {
+        this.FEEDBACK_IMAGE = FEEDBACK_IMAGE;
+    }
 
     public String getVISITOR_NAME() {
         return VISITOR_NAME;

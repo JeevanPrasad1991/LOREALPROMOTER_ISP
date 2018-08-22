@@ -47,6 +47,7 @@ public class CommonString {
     public static final String ERROR = " ";
     public static final String KEY_SUCCESS_chkout = "Success";
     public static final String KEY_notice_board = "notice_board";
+    public static final String KEY_quiz_url = "quiz_url";
 
 
 
@@ -957,6 +958,7 @@ public class CommonString {
     public static final String KEY_EMP_CODE = "EMP_CODE";
     public static final String KEY_NAME = "NAME";
     public static final String KEY_DESIGNATION = "DESIGNATION";
+    public static final String KEY_FEEDBACK_IMAGE = "FEEDBACK_IMAGE";
     public static final String KEY_UPLOADSTATUS = "UPLOADSTATUS";
     public static final String KEY_IN_TIME_IMAGE = "IN_TIME_IMAGE";
     public static final String KEY_OUT_TIME_IMAGE = "OUT_TIME_IMAGE";
@@ -1047,6 +1049,9 @@ public class CommonString {
             + " VARCHAR,"
 
             + "USER_ID"
+            + " VARCHAR,"
+
+            + "FEEDBACK_IMAGE"
             + " VARCHAR,"
 
             + "CATEGORY_ID"

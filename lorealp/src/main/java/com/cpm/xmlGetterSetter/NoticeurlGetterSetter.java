@@ -3,11 +3,20 @@ package com.cpm.xmlGetterSetter;
 import java.util.ArrayList;
 
 /**
- * Created by rishikaa on 10-05-2016.
+ * Created by upendra on 10-05-2018.
  */
 public class NoticeurlGetterSetter {
     String noticeurl_table;
     ArrayList<String> NOTICE_URL = new ArrayList<String>();
+    ArrayList<String> QUIZ_URL = new ArrayList<String>();
+
+    public ArrayList<String> getQUIZ_URL() {
+        return QUIZ_URL;
+    }
+
+    public void setQUIZ_URL(String QUIZ_URL) {
+        this.QUIZ_URL.add(QUIZ_URL);
+    }
 
     public String getNoticeurl_table() {
         return noticeurl_table;

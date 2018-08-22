@@ -1088,8 +1088,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                         + feedbackxml*/
                         + "[/USER_DATA]";
 
-                XmlPullParserFactory factory = XmlPullParserFactory
-                        .newInstance();
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
 
@@ -1136,9 +1135,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
                     }
                 }
 
-                if (visitorLoginGetterSetter.getOut_time_img() != null
-                        && !visitorLoginGetterSetter.getOut_time_img()
-                        .equals("")) {
+                if (visitorLoginGetterSetter.getOut_time_img() != null && !visitorLoginGetterSetter.getOut_time_img().equals("")) {
 
                     if (new File(CommonString.FILE_PATH + visitorLoginGetterSetter.getOut_time_img()).exists()) {
 

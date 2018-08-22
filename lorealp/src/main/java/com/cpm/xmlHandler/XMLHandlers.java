@@ -1827,9 +1827,6 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
     }
 
 
-
-
-    //usk
     public static NoticeurlGetterSetter NoticeUrlXMLHandler(XmlPullParser xpp, int eventType) {
         NoticeurlGetterSetter qnsGetterSetter = new NoticeurlGetterSetter();
 
@@ -1842,6 +1839,8 @@ public static FocusPerformanceGetterSetter focusperformanceXML(XmlPullParser xpp
 
                     if (xpp.getName().equals("NOTICE_URL")) {
                         qnsGetterSetter.setNOTICE_URL(xpp.nextText());
+                    }  if (xpp.getName().equals("QUIZ_URL")) {
+                        qnsGetterSetter.setQUIZ_URL(xpp.nextText());
                     }
                 }
                 xpp.next();

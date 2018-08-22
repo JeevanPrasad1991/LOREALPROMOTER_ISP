@@ -774,7 +774,20 @@ public class UploadDataActivity extends Activity {
                             data.value = 97;
                             data.name = "Geotag Images";
                             publishProgress(data);
+                        } else if (list.get(i1).contains("_FEEDBACK_")) {
+                            File originalFile = new File(Path + list.get(i1));
+
+                            result = UploadImage(originalFile.getName(), "Visitor");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 98;
+                            data.name = "Visitor Images";
+                            publishProgress(data);
                         }
+
+
+
 
                     }
                     String response = updateStatus();

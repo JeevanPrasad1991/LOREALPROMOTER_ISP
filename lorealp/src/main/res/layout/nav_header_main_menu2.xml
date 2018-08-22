@@ -12,18 +12,18 @@
     android:paddingTop="5dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-   <!-- <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@drawable/rtretail"
-        android:visibility="gone"/>-->
+    <!-- <ImageView
+         android:layout_width="match_parent"
+         android:layout_height="35dp"
+         android:background="@drawable/rtretail"
+         android:visibility="gone"/>-->
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-android:layout_marginTop="5dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/loreal1" />
 
     <TextView
