@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
 
+import com.cpm.dailyentry.MidDayStock;
 import com.cpm.dailyentry.PaidVisibilityActivity;
 import com.cpm.dailyentry.ClosingStock;
 import com.cpm.dailyentry.StockInActivity;
@@ -130,7 +131,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
                 else if(childText.equals("Midday Stock")){
 
-                    Intent in = new Intent(mContext, StockInActivity.class);
+                   // Intent in = new Intent(mContext, StockInActivity.class);
+                    Intent in = new Intent(mContext, MidDayStock.class);
                     mContext.startActivity(in);
 
                 }else if(childText.equals("Closing Stock")){

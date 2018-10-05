@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
                     android:gravity="center|center_horizontal"
-                    android:text="OS-FLR"
+                    android:text="OPENING-STOCK"
                     android:textColor="@color/darkgrey"
 
                     android:textSize="15dp" />
@@ -60,6 +60,7 @@
                     android:layout_weight=".3"
                     android:gravity="center|center_horizontal"
                     android:text="OS-BR"
+                    android:visibility="gone"
                     android:textColor="@color/darkgrey"
                     android:textSize="15dp" />
 
@@ -69,7 +70,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
                     android:gravity="center|center_horizontal"
-                    android:text="STK-IN"
+                    android:text="MIDDAY-STOCK"
                     android:textColor="@color/darkgrey"
                     android:textSize="15dp" />
                 <TextView
@@ -79,6 +80,7 @@
                     android:layout_weight=".3"
                     android:gravity="center|center_horizontal"
                     android:text="CS-BR"
+                    android:visibility="gone"
                     android:textColor="@color/darkgrey"
                     android:textSize="15dp" />
 

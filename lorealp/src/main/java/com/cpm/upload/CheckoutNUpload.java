@@ -229,13 +229,14 @@ public class CheckoutNUpload extends Activity {
                             stockData = database.getOpeningStockUpload(coverageBeanlist.get(i).getStoreId());
                             if (stockData.size() > 0) {
                                 for (int j = 0; j < stockData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_FLOOR_DATA]"
+                                    onXML = "[LOREAL_STOCK_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
                                             + "[SKU_CD]" + stockData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK]" + stockData.get(j).getStock1() + "[/STOCK]"
-                                            //+ "[CLOSING_STOCK]" + stockData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_FLOOR_DATA]";
+                                            + "[OPENING_STOCK]" + stockData.get(j).getStock1() + "[/OPENING_STOCK]"
+                                            + "[MIDDAY_STOCK]" + stockData.get(j).getEd_midFacing() + "[/MIDDAY_STOCK]"
+                                            + "[CLOSING_STOCK]" + stockData.get(j).getEd_closingFacing() + "[/CLOSING_STOCK]"
+                                            + "[/LOREAL_STOCK_DATA]";
 
                                     final_xml = final_xml + onXML;
                                 }
@@ -243,7 +244,7 @@ public class CheckoutNUpload extends Activity {
                                 final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_FLOOR_DATA");
+                                request.addProperty("KEYS", "LOREAL_STOCK_DATA");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -297,7 +298,7 @@ public class CheckoutNUpload extends Activity {
                                 publishProgress(data);
                             }
 
-                            //LOREAL_STOCK_BACKROOM_DATA
+                           /* //LOREAL_STOCK_BACKROOM_DATA
                             final_xml = "";
                             onXML = "";
                             stockbackroomData = database.getOpeningBackRoomStockUpload(coverageBeanlist.get(i).getStoreId());
@@ -382,7 +383,7 @@ public class CheckoutNUpload extends Activity {
                                 data.name = "LOREAL_STOCK_IN_EXIT_DATA Data";
                                 publishProgress(data);
                             }
-
+*/
                             //shareOfShelImgData
                             final_xml = "";
                             onXML = "";
@@ -712,7 +713,6 @@ public class CheckoutNUpload extends Activity {
                             publishProgress(data);
                         }else if (list.get(i1).contains("_SHARE_OF_SHELF_IMAGE_")) {
                             File originalFile = new File(Path + list.get(i1));
-
                             result = UploadImage( originalFile.getName(), "ShareOfShelf");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
@@ -723,7 +723,6 @@ public class CheckoutNUpload extends Activity {
                         }
                         else if (list.get(i1).contains("_GeoTag_")) {
                             File originalFile = new File(Path + list.get(i1));
-
                             result = UploadImage( originalFile.getName(), "GeotagImages");
                             if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
                                 return result.toString();
@@ -731,6 +730,16 @@ public class CheckoutNUpload extends Activity {
                             data.value = 97;
                             data.name = "Geotag Images";
                             publishProgress(data);
+                        }else {
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage(originalFile.getName(), "BulkImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 99;
+                            data.name = "BulkImages";
+                            publishProgress(data);
+
                         }
 
                     }

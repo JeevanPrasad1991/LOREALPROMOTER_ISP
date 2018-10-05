@@ -308,7 +308,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         } else if (((checkoutstatus.equals(CommonString.KEY_C)))) {
             Snackbar.make(lv, "Store already checked out", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
-        } else if (isStoreCoverageLeave(store_cd)) {
+        } /*else if (isStoreCoverageLeave(store_cd)) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Parinaam");
             builder1.setMessage("Want to enter store, it is already closed. \nData will be deleted.")
@@ -340,7 +340,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             });
             AlertDialog alert = builder1.create();
             alert.show();
-        } else {
+        }*/ else {
             if (!setcheckedmenthod(store_cd)) {
                 boolean enteryflag = true;
                 if (coverage.size() > 0) {

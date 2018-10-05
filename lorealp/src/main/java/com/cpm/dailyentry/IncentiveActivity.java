@@ -78,9 +78,9 @@ public class IncentiveActivity extends AppCompatActivity {
 
             final IncentiveGetterSetter current = data.get(position);
 
-            viewHolder.tvroute.setText(String.valueOf(current.getMonth()));
-            viewHolder.tvpss.setText(String.valueOf(current.getIncentive()));
-            viewHolder.tvmerchandise.setText(String.valueOf(current.getYear()));
+            viewHolder.tvroute.setText(String.valueOf(current.getMonth().get(0)));
+            viewHolder.tvpss.setText(String.valueOf(current.getIncentive().get(0)));
+            viewHolder.tvmerchandise.setText(String.valueOf(current.getYear().get(0)));
         }
 
         @Override

@@ -69,6 +69,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     GSKDatabase db;
     String visit_date, username, intime;
     String store_cd, account_cd, city_cd, storetype_cd;
+    String channel_cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +94,8 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
         account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
         city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
-
-        setTitle("Closing STK Floor- " + visit_date);
+        channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
+        setTitle("Closing Stock- " + visit_date);
 
         // preparing list data
         prepareListData();
@@ -190,7 +191,8 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
         db.open();
-        brandData = db.getmappingStockData(account_cd, city_cd, storetype_cd);
+      //  brandData = db.getmappingStockData(account_cd, city_cd, storetype_cd);
+        brandData = db.getmappingStockDataNew(account_cd, city_cd, storetype_cd);
         if (brandData.size() > 0) {
             // Adding child data
             for (int i = 0; i < brandData.size(); i++) {
@@ -203,9 +205,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                         btnSave.setText("Update");
                     }
                 }
-
-
-
                 List<StockNewGetterSetter> skulist = new ArrayList<StockNewGetterSetter>();
                 for (int j = 0; j < skuData.size(); j++) {
                     skulist.add(skuData.get(j));
@@ -218,7 +217,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
         if (id == R.id.save_btn) {
             expListView.clearFocus();
             expListView.invalidateViews();
@@ -298,14 +296,15 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
             holder = (ViewHolder) convertView.getTag();
             holder.txt_skuHeader.setText(childText.getBrand() + " - " + childText.getSku());
 
-            holder.txt_midValue.setText("STK-IN :" + childText.getEd_midFacing());
-            holder.txt_openingfloreStock.setText("OS-BR :" + childText.getOpening_stock_backroom());
-            holder.txt_openingStock.setText("OS-FLR : " + childText.getSumofSTOCK());
-            holder.txt_closingStock_br.setText("CS-BR : " + childText.getClosing_stk_backroom());
+            holder.txt_midValue.setText("MIDDAY-STOCK :" + childText.getEd_midFacing());
+          //  holder.txt_openingfloreStock.setText("OS-BR :" + childText.getOpening_stock_backroom());
+            holder.txt_openingStock.setText("OPENING-STOCK : " + childText.getSumofSTOCK());
+         //   holder.txt_closingStock_br.setText("CS-BR : " + childText.getClosing_stk_backroom());
 
             final ViewHolder finalHolder = holder;
 
 
+/*
             holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -348,7 +347,48 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                 }
                 //  }
             });
+*/
 
+            holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    int consolidateValue = Integer.parseInt(childText.getSumofSTOCK()) + Integer.parseInt(childText.getEd_midFacing());
+
+                    final EditText Caption = (EditText) v;
+                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
+                    if (value1.equals("")) {
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing("");
+                    } else {
+                        int closingS = Integer.parseInt(value1);
+                        if (closingS <= consolidateValue) {
+                            ischangedflag = true;
+                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing(value1);
+                        } else {
+                            checkpopup=true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ClosingStock.this);
+                            builder.setMessage("Closing stock cannot be greater than sum of Opening Stock and Mid Day Stock.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            checkpopup=false;
+                                            expListView.invalidateViews();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    }
+
+                }
+                //  }
+            });
 
 
 

@@ -120,7 +120,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
 
-        setTitle("Stock Entry - Floor -" + visit_date);
+        setTitle("Opening Stock -" + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
@@ -204,18 +204,18 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
         brandData = db.getHeaderStockImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
-            brandData = db.getmappingStockDataNew(channel_cd);
+          //  brandData = db.getmappingStockDataNew(channel_cd);
+            brandData = db.getmappingStockDataNew(account_cd,city_cd,storetype_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data
-
             for (int i = 0; i < brandData.size(); i++) {
 
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
-
-                    skuData = db.getStockSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
+                  //  skuData = db.getStockSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
+                    skuData = db.getStockSkuDataNew(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
                 }

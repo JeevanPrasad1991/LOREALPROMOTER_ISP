@@ -191,7 +191,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
         listDataChild = new HashMap<ShareOfShelfGetterSetter, List<ShareOfShelfGetterSetter>>();
         brandData = db.getHeaderShareOfSelfImageData(store_cd);
         if (!(brandData.size() > 0)) {
-           // brandData = db.getmappingShareOfShelfData();
+            brandData = db.getmappingShareOfShelfData();
         }
         if (brandData.size() > 0) {
             // Adding child data

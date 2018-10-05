@@ -72,17 +72,15 @@
                 android:icon="@mipmap/export"
                 android:title="Performance" />
 
-          <!--  <item
+            <!--<item
                 android:id="@+id/nav_payslip"
                 android:icon="@mipmap/export"
-
                 android:title="Pay Slip" />
 
             <item
                 android:id="@+id/nav_incentive"
                 android:icon="@mipmap/export"
-                android:title="Incentive" />
--->
+                android:title="Incentive" />-->
 
             <item
                 android:id="@+id/visiter_login"
@@ -92,6 +90,9 @@
                 android:id="@+id/feedback"
                 android:icon="@mipmap/settings_grey"
                 android:title="Loreal feedback" />
+
+
+
 
             <item
                 android:id="@+id/nav_help"
