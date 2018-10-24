@@ -515,8 +515,7 @@ public class StockInActivity extends AppCompatActivity implements OnClickListene
                     final EditText Caption = (EditText) v;
                     String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
                     if (value1.equals("")) {
-                        _listDataChild.get(listDataHeader.get(groupPosition))
-                                .get(childPosition).setEd_midFacing("");
+                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_midFacing("");
                     } else {
                         ischangedflag = true;
                         _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_midFacing(value1);

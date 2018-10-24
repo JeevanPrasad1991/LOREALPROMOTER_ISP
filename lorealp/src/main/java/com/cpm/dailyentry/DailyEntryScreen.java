@@ -583,22 +583,18 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
     public boolean setcheckedmenthod(String store_cd) {
         for (int i = 0; i < coverage.size(); i++) {
-
             if (store_cd.equals(coverage.get(i).getStoreId())) {
-
                 if (coverage.get(i).getOutTime() != null) {
                     result_flag = true;
-
                     break;
                 }
-
             } else {
                 result_flag = false;
             }
-
         }
         return result_flag;
     }
+
 
     public boolean isStoreCoverageLeave(String store_cd) {
         boolean result = false;

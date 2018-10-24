@@ -25,26 +25,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<LinearLayout
-        android:id="@+id/belowme"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/red"
-        android:orientation="horizontal"
-        android:weightSum="100" >
-
-        <TextView
-            android:id="@+id/txt_idealFor"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="100"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:text="Stock Availability/Midday Stock"
-            android:textSize="20sp"
-            android:textStyle="italic" />
-    </LinearLayout>
--->
     <include
         android:id="@+id/entry_data"
         android:layout_width="match_parent"
