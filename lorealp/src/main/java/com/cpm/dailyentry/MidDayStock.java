@@ -125,9 +125,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_SHORT).show();
+
                 return false;
             }
         });
@@ -179,8 +177,6 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
     private void prepareListData() {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
-      //  brandData = db.getStockAvailabilityData(account_cd, city_cd, storetype_cd);
-       // brandData = db.getmappingStockDataNew(channel_cd);
         brandData = db.getmappingStockDataNew(account_cd, city_cd, storetype_cd);
         if (brandData.size() > 0) {
             // Adding child data
@@ -188,7 +184,6 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getMiddayStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0) || (skuData.get(0).getEd_midFacing() == null) || (skuData.get(0).getEd_midFacing().equals(""))) {
-                  //  skuData = db.getStockSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
                     skuData = db.getStockSkuDataNew(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
@@ -216,7 +211,6 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 db.open();
-                                //getMid();
                                 dataExists = db.checkStock(store_cd);
                                 db.UpdateMiddayStocklistData(store_cd, listDataChild, listDataHeader);
                                 Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_SHORT).show();
@@ -518,14 +512,10 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
     public String getCurrentTime() {
 
         Calendar m_cal = Calendar.getInstance();
-
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         String cdate = formatter.format(m_cal.getTime());
-
-
         return cdate;
 
     }
-
 
 }

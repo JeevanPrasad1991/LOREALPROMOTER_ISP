@@ -298,92 +298,6 @@ public class CheckoutNUpload extends Activity {
                                 publishProgress(data);
                             }
 
-                           /* //LOREAL_STOCK_BACKROOM_DATA
-                            final_xml = "";
-                            onXML = "";
-                            stockbackroomData = database.getOpeningBackRoomStockUpload(coverageBeanlist.get(i).getStoreId());
-                            if (stockbackroomData.size() > 0) {
-                                for (int j = 0; j < stockbackroomData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_BACKROOM_DATA]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
-                                           // + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_BACKROOM_DATA]";
-                                    final_xml = final_xml + onXML;
-                                }
-
-                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_BACKROOM_DATA");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 20;
-                                data.name = "LOREAL_STOCK_BACKROOM_DATA Data";
-                                publishProgress(data);
-                            }
-
-
-                            //LOREALPRO_STOCK_IN_DATA
-                            final_xml = "";
-                            onXML = "";
-                            storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
-                            storepopup = database.getStockInPopupuPLOADData(coverageBeanlist.get(i).getStoreId());
-                            stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
-                            if (stockInData.size() > 0) {
-                                String stock_in_exit = "", stock_in_brandListXml = "";
-
-                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
-                                        + "[MID]" + mid + "[/MID]"
-                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
-                                        + "[BILL_DATE]" + storepopup.getCurrent_date() + "[/BILL_DATE]"
-                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
-                                stock_in_exit = stock_in_exit + onXML;
-
-                                for (int j = 0; j < stockInData.size(); j++) {
-                                    stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[SKU_CD]" + stockInData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK_IN_DATA]" + stockInData.get(j).getEd_midFacing() + "[/STOCK_IN_DATA]"
-                                            + "[/LOREAL_STOCK_IN_DATA]";
-                                    final_xml = final_xml + stock_in_brandListXml;
-
-                                }
-
-
-                                final String sos_xml = "[DATA]" +final_xml+stock_in_exit + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 21;
-                                data.name = "LOREAL_STOCK_IN_EXIT_DATA Data";
-                                publishProgress(data);
-                            }
-*/
                             //shareOfShelImgData
                             final_xml = "";
                             onXML = "";
@@ -794,7 +708,7 @@ public class CheckoutNUpload extends Activity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             dialog.dismiss();
-            // database.deleteAllTables();
+            // database.deleteAllTablesData();
             if (isError) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutNUpload.this);
                 builder.setTitle("Parinaam");

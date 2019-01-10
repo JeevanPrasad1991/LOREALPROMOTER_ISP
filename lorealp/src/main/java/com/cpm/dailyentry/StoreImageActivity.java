@@ -275,52 +275,6 @@ public class StoreImageActivity extends AppCompatActivity implements
                 break;
 
             case -1:
-/*
-                if (_pathforcheck != null && !_pathforcheck.equals("")) {
-                    if (new File(str + _pathforcheck).exists()) {
-
-                        bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                        dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                        String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
-
-                        Canvas cs = new Canvas(dest);
-                        Paint tPaint = new Paint();
-                        tPaint.setTextSize(100);
-                        tPaint.setColor(Color.RED);
-                        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                        cs.drawBitmap(bmp, 0f, 0f, null);
-                        float height = tPaint.measureText("yY");
-                        cs.drawText(dateTime, 20f, height + 15f, tPaint);
-                        try {
-                            dest.compress(Bitmap.CompressFormat.JPEG, 90,
-                                    new FileOutputStream(new File(str + _pathforcheck)));
-                        } catch (FileNotFoundException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-
-                        try {
-                          //  bmp = BitmapFactory.decodeFile(str + _pathforcheck);
-                            bmp=convertBitmap(str + _pathforcheck);
-                           // bmp=decodeBitmapPath(str + _pathforcheck,800,500);
-
-                            Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bmp, bmp.getWidth() / size, bmp.getHeight() / size, true);
-                            bmp.recycle();
-                            img_cam.setImageBitmap(bitmapsimplesize);
-                            img_clicked.setVisibility(View.GONE);
-                            img_cam.setVisibility(View.VISIBLE);
-                            //Set Clicked image to Imageview
-                            img_str = _pathforcheck;
-                            _pathforcheck = "";
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                }
-*/
                 if (_pathforcheck2 != null && !_pathforcheck2.equals("")) {
                     if (new File(str + _pathforcheck2).exists()) {
                         bmp = convertBitmap(str + _pathforcheck2);

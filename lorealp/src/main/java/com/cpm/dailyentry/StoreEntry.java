@@ -203,7 +203,6 @@ public class StoreEntry extends AppCompatActivity {
                             }*/
                         } else {
 
-                           // Snackbar.make(recyclerView, "First  fill Opening Stock floor in Data", Snackbar.LENGTH_SHORT).show();
                             Snackbar.make(recyclerView, "First  fill Opening Stock Category,Mid Day Stock in Data", Snackbar.LENGTH_SHORT).show();
                         }
 
@@ -479,6 +478,7 @@ public class StoreEntry extends AppCompatActivity {
        //opning stock category
        if (db.getStockAvailabilityData1(account_cd,city_cd,storetype_cd).size() > 0) {
            if (db.isOpeningDataAllFilled(store_cd)) {
+          // if (db.getClosingDtaFiel(store_cd).size()>0) {
                flag = true;
            } else {
                flag = false;

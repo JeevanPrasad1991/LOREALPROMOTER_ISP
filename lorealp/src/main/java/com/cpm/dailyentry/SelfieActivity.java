@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import com.cpm.Constants.AlertandMessages;
 import com.cpm.Constants.CommonString;
 import com.cpm.database.GSKDatabase;
@@ -38,7 +39,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class SelfieActivity extends AppCompatActivity implements View.OnClickListener{
+public class SelfieActivity extends AppCompatActivity implements View.OnClickListener {
     ImageView img_cam, img_clicked;
     Button btn_save;
     String _pathforcheck, _path, str;
@@ -105,7 +106,7 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.btn_save_selfie:
-                if (img_str != null ) {
+                if (img_str != null) {
                     if (checkNetIsAvailable()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(SelfieActivity.this);
                         builder.setMessage("Do you want to save the image ")
@@ -114,13 +115,13 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
                                     public void onClick(DialogInterface dialog, int id) {
                                         alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-                                    editor = preferences.edit();
-                                    editor.putString(CommonString.KEY_SELFIE_IMAGE, img_str);
-                                    editor.commit();
-                                    Intent in = new Intent(SelfieActivity.this, StoreImageActivity.class);
-                                    startActivity(in);
-                                    overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                                    finish();
+                                        editor = preferences.edit();
+                                        editor.putString(CommonString.KEY_SELFIE_IMAGE, img_str);
+                                        editor.commit();
+                                        Intent in = new Intent(SelfieActivity.this, StoreImageActivity.class);
+                                        startActivity(in);
+                                        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                                        finish();
 
                                     }
                                 })
@@ -203,7 +204,7 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
                         try {
-                            bmp=convertBitmap(str + _pathforcheck);
+                            bmp = convertBitmap(str + _pathforcheck);
                             Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bmp, bmp.getWidth() / size, bmp.getHeight() / size, true);
                             bmp.recycle();
                             img_cam.setImageBitmap(bitmapsimplesize);
@@ -223,30 +224,29 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public static Bitmap convertBitmap(String path)   {
-        Bitmap bitmap=null;
-        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
         ourOptions.inPreferredConfig = Bitmap.Config.RGB_565;
-        ourOptions.inDither=false;
-        ourOptions.inPurgeable=true;
-        ourOptions.inInputShareable=true;
-        ourOptions.inTempStorage=new byte[32 * 1024];
-        File file=new File(path);
-        FileInputStream fs=null;
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            if(fs!=null)
-            {
-                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {
@@ -270,6 +270,7 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
         AlertandMessages.backpressedAlertForStoreImage(SelfieActivity.this, run);
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // automatically handle clicks on the Home/Up button, so long
@@ -280,7 +281,6 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

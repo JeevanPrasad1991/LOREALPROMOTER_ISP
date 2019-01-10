@@ -207,9 +207,6 @@ public class MyPerformance extends AppCompatActivity {
         }
     }
 
-
-    ///
-
     public class todayAdapter extends RecyclerView.Adapter<MyPerformance.todayAdapter.MyViewHolderfocus>{
         private LayoutInflater inflator;
         List<TodayQuestionGetterSetter> data = Collections.emptyList();
@@ -251,6 +248,5 @@ public class MyPerformance extends AppCompatActivity {
             }
         }
     }
-
 
 }

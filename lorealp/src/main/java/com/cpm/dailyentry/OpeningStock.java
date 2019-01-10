@@ -204,7 +204,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
         brandData = db.getHeaderStockImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
-          //  brandData = db.getmappingStockDataNew(channel_cd);
             brandData = db.getmappingStockDataNew(account_cd,city_cd,storetype_cd);
         }
         if (brandData.size() > 0) {
@@ -214,7 +213,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
-                  //  skuData = db.getStockSkuDataNew(channel_cd, brandData.get(i).getCategory_cd());
                     skuData = db.getStockSkuDataNew(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
@@ -650,16 +648,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                         break;
                     }
                 }
-
-
-
-/*                if ((openingstock.equalsIgnoreCase("")) || (openingfacing.equalsIgnoreCase(""))) {
-                    checkflag = false;
-                    flag = false;
-                    Error_Message = "Please fill all the data";
-                    break;
-
-                }*/
 
                 if ((openingstock.equalsIgnoreCase(""))) {
                     checkflag = false;

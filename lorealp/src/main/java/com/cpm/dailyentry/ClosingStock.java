@@ -51,7 +51,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
     boolean flagcoldroom = false;
     boolean flagmccain = false;
     boolean flagstoredf = false;
-    int valHeadCount;
     List<Integer> checkHeaderArray = new ArrayList<Integer>();
     List<Integer> checkValidHeaderArray = new ArrayList<Integer>();
     List<Integer> checkValidChildArray = new ArrayList<Integer>();
@@ -134,9 +133,7 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_LONG).show();
+
                 return false;
             }
         });
@@ -297,58 +294,9 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
             holder.txt_skuHeader.setText(childText.getBrand() + " - " + childText.getSku());
 
             holder.txt_midValue.setText("MIDDAY-STOCK :" + childText.getEd_midFacing());
-          //  holder.txt_openingfloreStock.setText("OS-BR :" + childText.getOpening_stock_backroom());
             holder.txt_openingStock.setText("OPENING-STOCK : " + childText.getSumofSTOCK());
-         //   holder.txt_closingStock_br.setText("CS-BR : " + childText.getClosing_stk_backroom());
 
             final ViewHolder finalHolder = holder;
-
-
-/*
-            holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    int consolidateValue = Integer.parseInt(childText.getSumofSTOCK()) +
-                            Integer.parseInt(childText.getOpening_stock_backroom()) + Integer.parseInt(childText.getEd_midFacing()) -
-                            Integer.parseInt(childText.getClosing_stk_backroom());
-
-                    final EditText Caption = (EditText) v;
-                    String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
-                    if (value1.equals("")) {
-                        _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing("");
-                    } else {
-                        int closingS = Integer.parseInt(value1);
-                        if (closingS <= consolidateValue) {
-                            ischangedflag = true;
-                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing(value1);
-                        } else {
-                            checkpopup=true;
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ClosingStock.this);
-                            builder.setMessage("Closing stock cannot be greater than sum of Opening Stock and Stock-in")
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialog, int id) {
-                                            checkpopup=false;
-                                            expListView.invalidateViews();
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                        }
-                    }
-
-                }
-                //  }
-            });
-*/
-
             holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -389,26 +337,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                 }
                 //  }
             });
-
-
-
-/*
-            holder.ed_closingStock.setOnFocusChangeListener(new OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        final EditText Caption = (EditText) v;
-                        String value1 = Caption.getText().toString().replaceFirst("^0+(?!$)", "");
-                        if (value1.equals("")) {
-                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing("");
-                        } else {
-                            _listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).setEd_closingFacing(value1);
-
-                        }
-                    }
-                }
-            });
-*/
 
             holder.ed_closingStock.setText(childText.getEd_closingFacing());
             if (!checkflag) {

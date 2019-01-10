@@ -9,7 +9,8 @@ public class CommonString {
     public static final String MESSAGE_EXCEPTION = "Problem Occured : Report The Problem To Parinaam ";
     public static final String MESSAGE_INVALID_XML = "Problem Occured while parsing XML : invalid data";
 
-    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
+  //  public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
+    public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Image/";
     public static final String BACKUP_PATH = Environment.getExternalStorageDirectory() + "/Lorealpromoter_backup/";
 
     public static final String PLS_FILL_DATA = "Please fill the data";

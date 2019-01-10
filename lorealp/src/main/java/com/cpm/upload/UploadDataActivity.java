@@ -265,127 +265,6 @@ public class UploadDataActivity extends Activity {
                                 publishProgress(data);
                             }
 
-                           /* //LOREAL_STOCK_BACKROOM_DATA
-                            final_xml = "";
-                            onXML = "";
-                            stockbackroomData = database.getOpeningBackRoomStockUpload(coverageBeanlist.get(i).getStoreId());
-                            if (stockbackroomData.size() > 0) {
-                                for (int j = 0; j < stockbackroomData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_BACKROOM_DATA_NEW]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK]" + stockbackroomData.get(j).getStock1() + "[/STOCK]"
-                                          //  + "[CLOSING_STOCK]" + stockbackroomData.get(j).getClosing_stk_backroom() + "[/CLOSING_STOCK]"
-                                            + "[/LOREAL_STOCK_BACKROOM_DATA_NEW]";
-                                    final_xml = final_xml + onXML;
-                                }
-
-                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_BACKROOM_DATA_NEW");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 20;
-                                data.name = "LOREAL_STOCK_BACKROOM_DATA_NEW Data";
-                                publishProgress(data);
-                            }*/
-
-
-
-                          /*  //LOREAL_Bill_date_DATA
-                            final_xml = "";
-                            onXML = "";
-                            storepopup = database.getStockInPopupuPLOADData(coverageBeanlist.get(i).getStoreId());
-                            if (!storepopup.getCurrent_date().isEmpty()) {
-                                for (int j = 0; j < stockbackroomData.size(); j++) {
-                                    onXML = "[LOREAL_STOCK_IN_POPUP_DATA]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[BILL_DATE]" + storepopup.getCurrent_date() + "[/BILL_DATE]"
-                                            + "[/LOREAL_STOCK_IN_POPUP_DATA]";
-                                    final_xml = final_xml + onXML;
-                                }
-
-                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_IN_POPUP_DATA");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 20;
-                                data.name = "LOREAL_STOCK_IN_POPUP_DATA Data";
-                                publishProgress(data);
-                            }*/
-
-                           /* //LOREALPRO_STOCK_IN_DATA
-                            final_xml = "";
-                            onXML = "";
-                            storeSpinner = database.getStockInSpinneruPLOADData(coverageBeanlist.get(i).getStoreId());
-                            storepopup = database.getStockInPopupuPLOADData(coverageBeanlist.get(i).getStoreId());
-                            stockInData = database.getStockInUploadFromDatabase(coverageBeanlist.get(i).getStoreId());
-                            if (stockInData.size() > 0) {
-                                String stock_in_exit = "", stock_in_brandListXml = "";
-
-                                onXML = "[LOREAL_STOCK_IN_EXIT_DATA]"
-                                        + "[MID]" + mid + "[/MID]"
-                                        + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                        + "[SELECT_BRAND]" + storeSpinner.getSelect_brand() + "[/SELECT_BRAND]"
-                                        + "[BILL_DATE]" + storepopup.getCurrent_date() + "[/BILL_DATE]"
-                                        + "[/LOREAL_STOCK_IN_EXIT_DATA]";
-                                stock_in_exit = stock_in_exit + onXML;
-
-                                for (int j = 0; j < stockInData.size(); j++) {
-                                    stock_in_brandListXml = "[LOREAL_STOCK_IN_DATA]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[SKU_CD]" + stockInData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[STOCK_IN_DATA]" + stockInData.get(j).getEd_midFacing() + "[/STOCK_IN_DATA]"
-                                            + "[/LOREAL_STOCK_IN_DATA]";
-                                    final_xml = final_xml + stock_in_brandListXml;
-
-                                }
-
-
-                                final String sos_xml = "[DATA]" + final_xml + stock_in_exit + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_STOCK_IN_DATA");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 21;
-                                data.name = "LOREAL_STOCK_IN_EXIT_DATA Data";
-                                publishProgress(data);
-                            }
-*/
                             //shareOfShelImgData
                             final_xml = "";
                             onXML = "";
@@ -624,46 +503,6 @@ public class UploadDataActivity extends Activity {
 
                             }
 
-                          /*  final_xml = "";
-                            onXML = "";
-                            paid_visibility = "";
-                            sampledData = database.getinsertedsampledData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
-                            if (sampledData.size() > 0) {
-                                for (int j = 0; j < sampledData.size(); j++) {
-
-                                    onXML = "[LOREAL_SAMPLED_DATA]"
-                                            + "[MID]" + mid + "[/MID]"
-                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                            + "[SKU_CD]" + sampledData.get(j).getSku_cd() + "[/SKU_CD]"
-                                            + "[CATEGORY_CD]" + sampledData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
-                                            + "[SAMPLED]" + sampledData.get(j).getSampled() + "[/SAMPLED]"
-                                            + "[PHOTO]" + sampledData.get(j).getSampled_img() + "[/PHOTO]"
-                                            + "[FEEDBACK]" + sampledData.get(j).getFeedback() + "[/FEEDBACK]"
-                                            + "[/LOREAL_SAMPLED_DATA]";
-
-                                    paid_visibility = paid_visibility + onXML;
-                                }
-                                final String sos_xml = "[DATA]" + paid_visibility + "[/DATA]";
-                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
-                                request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_SAMPLED_DATA");
-                                request.addProperty("USERNAME", username);
-                                request.addProperty("MID", mid);
-                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                                envelope.dotNet = true;
-                                envelope.setOutputSoapObject(request);
-                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
-                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
-                                result = (Object) envelope.getResponse();
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    isError = true;
-                                }
-                                data.value = 49;
-                                data.name = "Market Intelligence Data";
-                                publishProgress(data);
-
-                            }*/
-
                             // SET COVERAGE STATUS
                             String final_xml1 = "";
                             String onXML1 = "";
@@ -793,8 +632,6 @@ public class UploadDataActivity extends Activity {
 
                         }
 
-
-
                     }
                     String response = updateStatus();
                     if (!response.equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
@@ -901,7 +738,7 @@ public class UploadDataActivity extends Activity {
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(Path + path, o);
         // The new size we want to scale to
-        final int REQUIRED_SIZE = 1024;
+        final int REQUIRED_SIZE = 1639;
 
         // Find the correct scale value. It should be the power of 2.
         int width_tmp = o.outWidth, height_tmp = o.outHeight;
@@ -920,7 +757,7 @@ public class UploadDataActivity extends Activity {
         Bitmap bitmap = BitmapFactory.decodeFile(Path + path, o2);
 
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bao);
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeBytes(ba);
         SoapObject request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_IMAGE);
@@ -1017,7 +854,6 @@ public class UploadDataActivity extends Activity {
 
                     data.value = 100;
                     data.name = "Covrage Status";
-                    //publishProgress(data);
                     resultFinal = result1.toString();
                 }
             }

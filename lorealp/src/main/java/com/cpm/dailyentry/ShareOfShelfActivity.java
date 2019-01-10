@@ -876,7 +876,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                            bmp = convertBitmap(str + _pathforcheck);
+                           /* bmp = convertBitmap(str + _pathforcheck);
                             dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
@@ -895,7 +895,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                             } catch (FileNotFoundException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
-                            }
+                            }*/
 
                             img1 = _pathforcheck;
                             expListView.invalidateViews();
@@ -913,7 +913,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
 
-                            bmp = convertBitmap(str + _pathforcheck);
+                           /* bmp = convertBitmap(str + _pathforcheck);
                             dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
@@ -932,7 +932,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                             } catch (FileNotFoundException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
-                            }
+                            }*/
 
                             if (_pathforcheck.contains("ImgTwo")) {
                                 img3 = _pathforcheck;

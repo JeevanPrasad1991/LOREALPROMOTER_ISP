@@ -67,7 +67,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     boolean result_flag = false;
     MyAdapter myAdapter;
     FloatingActionButton fab_button;
-    boolean flag_deviation = false;
 
     ArrayList<GeotaggingBeans> geotaglist = new ArrayList<GeotaggingBeans>();
 
@@ -246,7 +245,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.checkout.setVisibility(View.INVISIBLE);
 
             } else if ((jcplist.get(position).getUploadStatus().get(0).equals(CommonString.KEY_D))) {
-                // holder.img.setVisibility(View.INVISIBLE);
                 holder.checkinclose.setBackgroundResource(R.drawable.tick_d);
                 holder.checkinclose.setVisibility(View.VISIBLE);
                 holder.checkout.setVisibility(View.INVISIBLE);
@@ -276,7 +274,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             }
 
             holder.storename.setText(jcplist.get(position).getStore_name().get(0));
-            holder.city.setText(jcplist.get(position).getCity().get(0)+"\n"+jcplist.get(position).getChannel().get(0));
+            holder.city.setText(jcplist.get(position).getCity().get(0) + "\n" + jcplist.get(position).getChannel().get(0));
             holder.keyaccount.setText(jcplist.get(position).getKey_account().get(0));
             return convertView;
         }
@@ -302,9 +300,10 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         final String checkoutstatus = jcplist.get(position).getCheckOutStatus().get(0);
         final String geotag = jcplist.get(position).getGeotagStatus().get(0);
 
-       if (upload_status.equals(CommonString.KEY_U)) {
+        if (upload_status.equals(CommonString.KEY_U)) {
             Snackbar.make(lv, "All Data Uploaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-
+        } else if ((upload_status.equals(CommonString.KEY_D))) {
+            Snackbar.make(lv, "All Data Uploaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
         } else if (((checkoutstatus.equals(CommonString.KEY_C)))) {
             Snackbar.make(lv, "Store already checked out", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
@@ -402,13 +401,13 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
     }
 
     void showMyDialog(final String storeCd, final String storeName, final String status, final String visitDate, final String checkout_status,
-                      final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag,final String channel_cd,
-                      final  String floor_status,final  String backroom_status) {
+                      final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag, final String channel_cd,
+                      final String floor_status, final String backroom_status) {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialogbox);
 
-       final RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radiogrpvisit);
+        final RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radiogrpvisit);
         radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -456,9 +455,9 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                         } else {
 
-                        Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
-                        startActivity(in);
-                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
+                            startActivity(in);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
                         }
 

@@ -247,7 +247,9 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.imgcam) {
-            _pathforcheck = store_id + "_NONWORKING_IMG_" + _UserId + ".jpg";
+
+            _pathforcheck = store_id + "_NONWORKING_IMG_" + visit_date.replace("/", "") + "_" + getCurrentTime().replace(":", "") + ".jpg";
+
             _path = CommonString.FILE_PATH + _pathforcheck;
             startCameraActivity();
         }
@@ -367,4 +369,5 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
