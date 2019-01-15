@@ -1,5 +1,6 @@
 package com.cpm.dailyentry;
 
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,7 +35,10 @@ import com.cpm.Constants.CommonString;
 import com.cpm.lorealpromoter.R;
 import com.cpm.database.GSKDatabase;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SampledGetterSetter;
+import com.cpm.xmlGetterSetter.SamplingMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 
 import java.io.File;
@@ -43,7 +47,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
-public class SampleActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class SamplingActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
+    EditText sample_mobile,sample_name;
+
     GSKDatabase db;
     String store_cd, visit_date, username, _pathforcheck, _path, str, image1 = "";
     String sku_cdSpinValue = "", skuSpinValue = "", category_cdSpinValue = "", categorySpinValue = "", toggle_Value = "NO";
@@ -58,15 +64,16 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
     ToggleButton toogle_sampleV;
     MyAdapter adapter;
     private ArrayAdapter<CharSequence> categoryAdapter, skuAdapter;
-    ArrayList<CategoryMasterGetterSetter> categorymasterData = new ArrayList<>();
-    ArrayList<SkuMasterGetterSetter> skuData = new ArrayList<>();
+    ArrayList<SamplingMasterGetterSetter> sampleData = new ArrayList<>();
+    ArrayList<FeedbackMasterGetterSetter> skuData = new ArrayList<>();
     ArrayList<SampledGetterSetter> insertedDataList = new ArrayList<>();
     boolean sampleaddflag = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample);
+        setContentView(R.layout.activity_sampling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -88,6 +95,8 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         img_sampled = (ImageView) findViewById(R.id.img_sampled);
         sample_list = (RecyclerView) findViewById(R.id.sample_list);
         toogle_sampleV = (ToggleButton) findViewById(R.id.toogle_sampleV);
+        sample_mobile = (EditText) findViewById(R.id.sample_mobile);
+        sample_name = (EditText) findViewById(R.id.sample_name);
         setTitle("Sampling - " + visit_date);
         str = CommonString.FILE_PATH;
         btn_add.setOnClickListener(this);
@@ -96,7 +105,9 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         toogle_sampleV.setOnClickListener(this);
         GETALLDATA();
         setDataToListView();
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -122,7 +133,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_add:
                 if (validation()) {
                     if (validationDuplicateSku()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SamplingActivity.this);
                         builder.setMessage("Are you sure you want to add")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
@@ -132,27 +143,29 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                                 SampledGetterSetter sampledG = new SampledGetterSetter();
                                                 sampledG.setCategory(categorySpinValue);
                                                 sampledG.setCategory_cd(category_cdSpinValue);
-                                                sampledG.setSku_cd(sku_cdSpinValue);
+                                               // sampledG.setSku_cd(sku_cdSpinValue);
                                                 sampledG.setSku(skuSpinValue);
-                                                sampledG.setSampled(toggle_Value);
+                                              //  sampledG.setSampled(toggle_Value);
                                                 sampledG.setFeedback(sample_feedback_txt.getText().toString().replaceAll("[(!@#$%^&*?)]", ""));
-
-
+                                                sampledG.setMobile(sample_mobile.getText().toString().replaceAll("[(!@#$%^&*?)]", ""));
+                                                sampledG.setName(sample_name.getText().toString().replaceAll("[(!@#$%^&*?)]", ""));
                                                 sampledG.setSampled_img(image1);
                                                 insertedDataList.add(sampledG);
-                                                adapter = new MyAdapter(SampleActivity.this, insertedDataList);
+                                                adapter = new MyAdapter(SamplingActivity.this, insertedDataList);
                                                 sample_list.setAdapter(adapter);
-                                                sample_list.setLayoutManager(new LinearLayoutManager(SampleActivity.this));
+                                                sample_list.setLayoutManager(new LinearLayoutManager(SamplingActivity.this));
                                                 adapter.notifyDataSetChanged();
                                                 img_sampled.setImageResource(R.drawable.camera_black);
                                                 sample_feedback_txt.setText("");
+                                                sample_mobile.setText("");
+                                                sample_name.setText("");
                                                 sample_feedback_txt.setHint("Feedback");
                                                 categorysample_spin.setSelection(0);
                                                 skusample_spin.setSelection(0);
                                                 toogle_sampleV.setChecked(false);
                                                 rl_img.setVisibility(View.GONE);
                                                 rl_feedback.setVisibility(View.VISIBLE);
-                                                toggle_Value = "NO";
+                                              //  toggle_Value = "NO";
                                                 image1 = "";
                                                 sampleaddflag = true;
                                                 Snackbar.make(btn_add, "Data has been added", Snackbar.LENGTH_SHORT).show();
@@ -168,14 +181,14 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        Snackbar.make(btn_add, "Already added this sku.", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(btn_add, "Already added this feedback.", Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 break;
             case R.id.save_fab:
                 if (insertedDataList.size() > 0) {
                     if (sampleaddflag) {
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(SampleActivity.this);
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(SamplingActivity.this);
                         builder1.setMessage("Are you sure you want to save data")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
@@ -183,7 +196,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             public void onClick(DialogInterface dialog, int id) {
                                                 db.open();
                                                 db.insertSampledData(store_cd, username, visit_date, insertedDataList);
-                                                SampleActivity.this.finish();
+                                                finish();
                                                 sampleaddflag = false;
                                                 Snackbar.make(btn_add, "Data has been saved", Snackbar.LENGTH_SHORT).show();
                                             }
@@ -218,15 +231,29 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
     public void GETALLDATA() {
         db.open();
         //for category
-        categorymasterData = db.getcategorymasterData();
+        sampleData = db.getSamplingData();
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        categoryAdapter.add("-Select Category-");
-        for (int i = 0; i < categorymasterData.size(); i++) {
-            categoryAdapter.add(categorymasterData.get(i).getCategory().get(0));
+        categoryAdapter.add("-Select Sampling name-");
+        for (int i = 0; i < sampleData.size(); i++) {
+            categoryAdapter.add(sampleData.get(i).getSAMPLE().get(0));
         }
         categorysample_spin.setAdapter(categoryAdapter);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorysample_spin.setOnItemSelectedListener(this);
+
+
+
+        //for sku
+        skuData = db.getFeedbackMasterData();
+        skuAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        skuAdapter.add("-Select Feedback-");
+        for (int i = 0; i < skuData.size(); i++) {
+            skuAdapter.add(skuData.get(i).getFEEDBACK().get(0));
+        }
+        skusample_spin.setAdapter(skuAdapter);
+        skuAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        skusample_spin.setOnItemSelectedListener(this);
+
     }
 
     @Override
@@ -234,29 +261,20 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         switch (parent.getId()) {
             case R.id.categorysample_spin:
                 if (position != 0) {
-                    category_cdSpinValue = categorymasterData.get(position - 1).getCategory_cd().get(0);
-                    categorySpinValue = categorymasterData.get(position - 1).getCategory().get(0);
-                    //for sku
-                    skuData = db.getSkuMasterData(category_cdSpinValue);
-                    skuAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-                    skuAdapter.add("-Select Sku-");
-                    for (int i = 0; i < skuData.size(); i++) {
-                        skuAdapter.add(skuData.get(i).getSku().get(0));
-                    }
-                    skusample_spin.setAdapter(skuAdapter);
-                    skuAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    skusample_spin.setOnItemSelectedListener(this);
+                    category_cdSpinValue = sampleData.get(position - 1).getSAMPLE_CD().get(0);
+                    categorySpinValue = sampleData.get(position - 1).getSAMPLE().get(0);
+
                 }
                 break;
             case R.id.skusample_spin:
                 if (!category_cdSpinValue.equals("")) {
                     if (position != 0) {
-                        sku_cdSpinValue = skuData.get(position - 1).getSku_cd().get(0);
-                        skuSpinValue = skuData.get(position - 1).getSku().get(0);
+                      //  sku_cdSpinValue = skuData.get(position - 1).getSku_cd().get(0);
+                        skuSpinValue = skuData.get(position - 1).getFEEDBACK().get(0);
                     }
-                } else {
+                }/* else {
                     Snackbar.make(btn_add, "Please First select category", Snackbar.LENGTH_SHORT).show();
-                }
+                }*/
                 break;
         }
 
@@ -296,7 +314,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     if (insertedlist_Data.get(position).getKey_id() == null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SamplingActivity.this);
                         builder.setMessage("Are you sure you want to Delete")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
@@ -305,7 +323,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                                                 int id) {
                                                 insertedlist_Data.remove(position);
                                                 if (insertedlist_Data.size() > 0) {
-                                                    MyAdapter adapter = new MyAdapter(SampleActivity.this, insertedlist_Data);
+                                                    MyAdapter adapter = new MyAdapter(SamplingActivity.this, insertedlist_Data);
                                                     sample_list.setAdapter(adapter);
                                                     adapter.notifyDataSetChanged();
                                                 }
@@ -322,7 +340,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SamplingActivity.this);
                         builder.setMessage("Are you sure you want to Delete")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
@@ -333,7 +351,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                                 db.removesampledata(listid);
                                                 insertedlist_Data.remove(position);
                                                 if (insertedlist_Data.size() > 0) {
-                                                    MyAdapter adapter = new MyAdapter(SampleActivity.this, insertedlist_Data);
+                                                    MyAdapter adapter = new MyAdapter(SamplingActivity.this, insertedlist_Data);
                                                     sample_list.setAdapter(adapter);
                                                     adapter.notifyDataSetChanged();
                                                 }
@@ -380,16 +398,25 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
     public boolean validation() {
         boolean value = true;
-        if (categorysample_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Category-")) {
+        if (categorysample_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Sampling name-")) {
             value = false;
-            showMessage("Please Select Category Dropdown");
-        } else if (skusample_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Sku-")) {
+            showMessage("Please Select Sampling Name Dropdown");
+        }
+        else if (sample_mobile.getText().toString().length() < 10) {
             value = false;
-            showMessage("Please Select Sku Dropdown");
-        } else if (!toogle_sampleV.isChecked() && sample_feedback_txt.getText().toString().isEmpty()) {
+            showMessage(CommonString.stpcontactnolenght);
+        }
+        else if (sample_name.getText().toString().isEmpty()) {
             value = false;
-            showMessage("Please Enter Remark");
-        } /*else if (toogle_sampleV.isChecked() && image1.equals("")) {
+            showMessage("Please fill Name");
+        }else if (skusample_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Feedback-")) {
+            value = false;
+            showMessage("Please Select Feedback Dropdown");
+        }
+
+
+
+        /*else if (toogle_sampleV.isChecked() && image1.equals("")) {
             value = false;
             showMessage("Please Capture Photo");
         }*/
@@ -397,7 +424,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         return value;
     }
 
-    public boolean validationDuplicateSku() {
+   /* public boolean validationDuplicateSku() {
         boolean value = true;
         if (insertedDataList.size() > 0) {
             for (int i = 0; i < insertedDataList.size(); i++) {
@@ -409,7 +436,20 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         return value;
+    }*/
+    public boolean validationDuplicateSku() {
+        boolean value = true;
+        if (insertedDataList.size() > 0) {
+            for (int i = 0; i < insertedDataList.size(); i++) {
+                if (insertedDataList.get(i).getCategory_cd().equals(category_cdSpinValue)) {
+                    value = false;
+                }
+            }
+        }
+
+        return value;
     }
+
 
 
     @Override
@@ -510,7 +550,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 Collections.reverse(insertedDataList);
                 adapter = new MyAdapter(this, insertedDataList);
                 sample_list.setAdapter(adapter);
-                sample_list.setLayoutManager(new LinearLayoutManager(SampleActivity.this));
+                sample_list.setLayoutManager(new LinearLayoutManager(SamplingActivity.this));
                 adapter.notifyDataSetChanged();
             }
 

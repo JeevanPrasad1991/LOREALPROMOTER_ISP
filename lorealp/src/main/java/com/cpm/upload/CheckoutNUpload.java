@@ -490,6 +490,50 @@ public class CheckoutNUpload extends Activity {
                             final_xml = "";
                             onXML = "";
                             paid_visibility = "";
+                            sampledData = database.getinsertedsampledData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
+                            if (sampledData.size() > 0) {
+                                for (int j = 0; j < sampledData.size(); j++) {
+
+                                    onXML = "[LOREAL_SAMPLED_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            // + "[SKU_CD]" + sampledData.get(j).getSku_cd() + "[/SKU_CD]"
+                                            + "[FEEDBACK]" + sampledData.get(j).getSku() + "[/FEEDBACK]"
+                                            //  + "[CATEGORY_CD]" + sampledData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                            + "[SAMPLING_NAME_CD]" + sampledData.get(j).getCategory_cd() + "[/SAMPLING_NAME_CD]"
+                                            // + "[SAMPLED]" + sampledData.get(j).getSampled() + "[/SAMPLED]"
+                                            //+ "[PHOTO]" + sampledData.get(j).getSampled_img() + "[/PHOTO]"
+                                            + "[REMARK]" + sampledData.get(j).getFeedback() + "[/REMARK]"
+                                            + "[MOBILE]" + sampledData.get(j).getMobile() + "[/MOBILE]"
+                                            + "[NAME]" + sampledData.get(j).getName() + "[/NAME]"
+                                            + "[/LOREAL_SAMPLED_DATA]";
+
+                                    paid_visibility = paid_visibility + onXML;
+                                }
+                                final String sos_xml = "[DATA]" + paid_visibility + "[/DATA]";
+                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                request.addProperty("XMLDATA", sos_xml);
+                                request.addProperty("KEYS", "LOREAL_SAMPLED_DATA");
+                                request.addProperty("USERNAME", username);
+                                request.addProperty("MID", mid);
+                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                envelope.dotNet = true;
+                                envelope.setOutputSoapObject(request);
+                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                result = (Object) envelope.getResponse();
+                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                    isError = true;
+                                }
+                                data.value = 49;
+                                data.name = "SAMPLED Data";
+                                publishProgress(data);
+
+                            }
+
+                            final_xml = "";
+                            onXML = "";
+                            paid_visibility = "";
                             String valueex="";
                             additionalVisibilityData = database.getinsertedMarketIntelligenceData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (additionalVisibilityData.size() > 0) {

@@ -186,6 +186,16 @@ public class StoreEntry extends AppCompatActivity {
 
                     }
 
+                    //sample
+                    if (current.getIconImg() == R.drawable.sample || current.getIconImg() == R.drawable.sample_done) {
+
+                        Intent in5 = new Intent(getApplicationContext(), SamplingActivity.class);
+                        startActivity(in5);
+                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                    }
+
+
 
                     if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
                         if (db.isOpeningDataFilled(store_cd)) {
@@ -531,6 +541,13 @@ public class StoreEntry extends AppCompatActivity {
                flag = false;
            }
        }
+       if (flag) {
+           if (db.getSamplingCheckoutData(store_cd).size()>0) {
+               flag = true;
+           } else {
+               flag = false;
+           }
+       }
 
        return flag;
    }
@@ -538,7 +555,8 @@ public class StoreEntry extends AppCompatActivity {
     public List<NavMenuItemGetterSetter> getdata() {
         List<NavMenuItemGetterSetter> data = new ArrayList<>();
 
-        int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg;
+      //  int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg;
+        int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg,samplingImg;
 
         if (db.isOpeningDataFilled(store_cd)) {
             openingImg = R.drawable.opening_stock_done;
@@ -586,6 +604,16 @@ public class StoreEntry extends AppCompatActivity {
             closingImg = R.drawable.closing_stock;
         }
 
+        //
+        if (db.issampledDataFilled(store_cd)) {
+            samplingImg = R.drawable.sample_done;
+        } else {
+            samplingImg = R.drawable.sample;
+        }
+
+
+
+
      /*   if (user_type.equals("Promoter")) {
             int img[] = {openingImg, openningstockbackoffice, middayImg, closingImg, closingBackoffice, promotionImg, assetImg, marketIntelligence};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
@@ -596,7 +624,7 @@ public class StoreEntry extends AppCompatActivity {
         }*/
         if (user_type.equals("Promoter")) {
           //  int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
-            int img[] = {openingImg, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg};//, additionalImg, competitionImg};
+            int img[] = {openingImg, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,samplingImg};//, additionalImg, competitionImg};
             for (int i = 0; i < img.length; i++) {
                 NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
                 recData.setIconImg(img[i]);

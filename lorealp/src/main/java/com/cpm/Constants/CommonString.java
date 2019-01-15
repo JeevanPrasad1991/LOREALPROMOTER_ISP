@@ -772,6 +772,11 @@ public class CommonString {
             + "USER_ID"
             + " VARCHAR,"
 
+            + "MOBILE"
+            + " VARCHAR,"
+            + "NAME"
+            + " VARCHAR,"
+
             + "STORE_CD"
             + " INTEGER)";
 
@@ -1060,4 +1065,5 @@ public class CommonString {
 
             + ")";
 
+  public static final String stpcontactnolenght = "Please fill atleast 10 digit contact number";
 }

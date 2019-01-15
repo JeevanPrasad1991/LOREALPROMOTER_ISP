@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:orientation="vertical"
     android:weightSum="100" >
 
@@ -19,21 +18,21 @@
             android:id="@+id/txt_cat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@color/colorPrimary"
             android:textColor="#ffffff"
             android:gravity="center"
             android:layout_marginLeft="3sp"
             android:paddingLeft="2dp"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:text="txttxttxttxttxttxt" />
 
         <TextView
             android:id="@+id/txt_sku"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textSize="9sp"
+            android:layout_weight="4"
+            android:textSize="12sp"
             android:background="@color/colorPrimary"
             android:textColor="#ffffff"
             android:gravity="center"
@@ -50,6 +49,7 @@
             android:background="@color/colorPrimary"
             android:textColor="#ffffff"
             android:gravity="center"
+            android:visibility="gone"
             android:layout_marginLeft="3sp"
             android:maxLines="@android:integer/config_mediumAnimTime"
             android:text="" />
@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10sp"
-            android:layout_weight="1.5"
+            android:layout_weight="2"
             android:src="@drawable/close"
             android:layout_gravity="center"
             android:gravity="center"

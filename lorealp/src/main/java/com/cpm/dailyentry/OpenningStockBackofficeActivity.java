@@ -96,7 +96,6 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-       // expListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         btnSave.setOnClickListener(this);
         expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -174,7 +173,9 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         brandData = db.getHeaderStockBackOfficeImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
 
+            //all data show
             brandData = db.getStockAvailabilityDataNew(channel_cd);
+          //  brandData = db.getmappingStockDataNew(account_cd,city_cd,storetype_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data

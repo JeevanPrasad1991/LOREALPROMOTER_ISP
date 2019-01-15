@@ -26,12 +26,14 @@ import com.cpm.xmlGetterSetter.Audit_QuestionGetterSetter;
 import com.cpm.xmlGetterSetter.BrandGetterSetter;
 import com.cpm.xmlGetterSetter.CategoryMasterGetterSetter;
 import com.cpm.xmlGetterSetter.CompanyGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackMasterGetterSetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
 import com.cpm.xmlGetterSetter.FocusPerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
+import com.cpm.xmlGetterSetter.MapingSamplingGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
@@ -43,6 +45,7 @@ import com.cpm.xmlGetterSetter.NonWorkingReasonGetterSetter;
 import com.cpm.xmlGetterSetter.PayslipGetterSetter;
 import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
+import com.cpm.xmlGetterSetter.SamplingMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
 import com.cpm.xmlGetterSetter.TodayQuestionGetterSetter;
@@ -93,6 +96,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     FeedbackQuestionGettersetter feedbackQuestionGettersetter;
     FeedbackRetingGettersetter feedbackRetingGettersetter;
     FeedbackQuestionRatingGettersetter feedbackQuestionRatingGettersetter;
+    FeedbackMasterGetterSetter feedbackMasterGetterSetter;
+    SamplingMasterGetterSetter samplingMasterGetterSetter;
+    MapingSamplingGetterSetter mapingSamplingGetterSetter;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -949,6 +955,113 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }
 
 
+              //
+                //FEEDBACK_MASTER Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "FEEDBACK_MASTER");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                result1 = (Object) envelope.getResponse();
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    feedbackMasterGetterSetter = XMLHandlers.feedbackMasterXML(xpp, eventType);
+                    String payslipTable = feedbackMasterGetterSetter.getFeedback_table();
+                    TableBean.setFeedbacktable(payslipTable);
+                    if (feedbackMasterGetterSetter.getFEEDBACK() != null) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                        return "FEEDBACK_MASTER";
+                    }
+                    data.value = 98;
+                    data.name = "FEEDBACK_MASTER Downloading";
+                }
+
+                //SAMPLING_MASTER Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "SAMPLING_MASTER");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                result1 = (Object) envelope.getResponse();
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    samplingMasterGetterSetter = XMLHandlers.samplingMasterXML(xpp, eventType);
+                    String payslipTable = samplingMasterGetterSetter.getSampling_master_table();
+                    TableBean.setSamplingtable(payslipTable);
+                    if (samplingMasterGetterSetter.getSAMPLE_CD() != null) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                        return "SAMPLING_MASTER";
+                    }
+                    data.value = 98;
+                    data.name = "SAMPLING_MASTER Downloading";
+                }
+                //MAPPING_SAMPLING Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_SAMPLING");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                result1 = (Object) envelope.getResponse();
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    mapingSamplingGetterSetter = XMLHandlers.mappingsamplingXML(xpp, eventType);
+                    String payslipTable = mapingSamplingGetterSetter.getMaping_sampling_table();
+                    TableBean.setMappingsamplingtable(payslipTable);
+                    if (mapingSamplingGetterSetter.getSTORE_CD() != null) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                        return "MAPPING_SAMPLING";
+                    }
+                    data.value = 98;
+                    data.name = "MAPPING_SAMPLING Downloading";
+                }
+
+
+              /*  //MAPPING_MENU_OPTION Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_MENU_OPTION");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                result1 = (Object) envelope.getResponse();
+                if (result1.toString() != null) {
+                  *//*  xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    mapingSamplingGetterSetter = XMLHandlers.mappingsamplingXML(xpp, eventType);
+                    String payslipTable = mapingSamplingGetterSetter.getMaping_sampling_table();
+                    TableBean.setMappingsamplingtable(payslipTable);
+                    if (mapingSamplingGetterSetter.getSTORE_CD() != null) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    } else {
+                        return "MAPPING_MENU_OPTION";
+                    }
+                    data.value = 98;
+                    data.name = "MAPPING_MENU_OPTION Downloading";*//*
+                }*/
+
+
+
                 //PROMO_TYPE_MASTER FOR ASSET Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -1016,7 +1129,9 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertFeedbackData(feedbackQuestionGettersetter);
                 db.insertFeedbackRatingData(feedbackRetingGettersetter);
                 db.insertFeedbackQuestionRatingData(feedbackQuestionRatingGettersetter);
-
+                db.insertFeedbackgData(feedbackMasterGetterSetter);
+                db.samplingMasterData(samplingMasterGetterSetter);
+                db.mapingsamplingData(mapingSamplingGetterSetter);
 
                 data.value = 100;
                 data.name = "Finishing";

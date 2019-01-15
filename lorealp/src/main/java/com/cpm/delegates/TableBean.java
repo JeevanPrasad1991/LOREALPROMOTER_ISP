@@ -24,6 +24,34 @@ public class TableBean {
     public static String mappingChanneltable;
     public static String mappingUserCategorytable;
 
+    public static String feedbacktable;
+    public static String samplingtable;
+    public static String mappingsamplingtable;
+
+    public static String getFeedbacktable() {
+        return feedbacktable;
+    }
+
+    public static void setFeedbacktable(String feedbacktable) {
+        TableBean.feedbacktable = feedbacktable;
+    }
+
+    public static String getSamplingtable() {
+        return samplingtable;
+    }
+
+    public static void setSamplingtable(String samplingtable) {
+        TableBean.samplingtable = samplingtable;
+    }
+
+    public static String getMappingsamplingtable() {
+        return mappingsamplingtable;
+    }
+
+    public static void setMappingsamplingtable(String mappingsamplingtable) {
+        TableBean.mappingsamplingtable = mappingsamplingtable;
+    }
+
     public static String getMappingUserCategorytable() {
         return mappingUserCategorytable;
     }

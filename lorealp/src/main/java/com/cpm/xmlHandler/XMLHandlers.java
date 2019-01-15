@@ -18,6 +18,7 @@ import com.cpm.xmlGetterSetter.ComplianceByMappingGetterSetter;
 import com.cpm.xmlGetterSetter.ComplianceGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.FailureGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackMasterGetterSetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
@@ -27,6 +28,7 @@ import com.cpm.xmlGetterSetter.JCPGetterSetter;
 import com.cpm.xmlGetterSetter.JcpTypeGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.LoginGetterSetter;
+import com.cpm.xmlGetterSetter.MapingSamplingGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
@@ -46,6 +48,7 @@ import com.cpm.xmlGetterSetter.PosmGetterSetter;
 import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
 import com.cpm.xmlGetterSetter.PromotionalMasterGettersetter;
 import com.cpm.xmlGetterSetter.QuestionGetterSetter;
+import com.cpm.xmlGetterSetter.SamplingMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMappingGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SubCategoryGetterSetter;
@@ -795,6 +798,98 @@ public class XMLHandlers {
                     }
                     if (xpp.getName().equals("PREASON")) {
                         mappingavail.setPreason(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingavail;
+    }
+
+
+    public static MapingSamplingGetterSetter mappingsamplingXML(XmlPullParser xpp,
+                                                                   int eventType) {
+        MapingSamplingGetterSetter mappingavail = new MapingSamplingGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingavail.setMaping_sampling_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("STORE_CD")) {
+                        mappingavail.setSTORE_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("SAMPLE_CD")) {
+                        mappingavail.setSAMPLE_CD(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingavail;
+    }
+
+    public static SamplingMasterGetterSetter samplingMasterXML(XmlPullParser xpp,
+                                                                   int eventType) {
+        SamplingMasterGetterSetter mappingavail = new SamplingMasterGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingavail.setSampling_master_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("SAMPLE_CD")) {
+                        mappingavail.setSAMPLE_CD(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("SAMPLE")) {
+                        mappingavail.setSAMPLE(xpp.nextText());
+                    }
+
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingavail;
+    }
+
+
+    public static FeedbackMasterGetterSetter feedbackMasterXML(XmlPullParser xpp,
+                                                         int eventType) {
+        FeedbackMasterGetterSetter mappingavail = new FeedbackMasterGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingavail.setFeedback_table(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("FEEDBACK")) {
+                        mappingavail.setFEEDBACK(xpp.nextText());
                     }
 
                 }

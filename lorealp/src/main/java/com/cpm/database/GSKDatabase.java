@@ -34,6 +34,7 @@ import com.cpm.xmlGetterSetter.DeepFreezerGetterSetter;
 import com.cpm.xmlGetterSetter.DeepFreezerTypeGetterSetter;
 import com.cpm.xmlGetterSetter.FacingCompetitorGetterSetter;
 import com.cpm.xmlGetterSetter.FeedbackGetterSetter;
+import com.cpm.xmlGetterSetter.FeedbackMasterGetterSetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackQuestionRatingGettersetter;
 import com.cpm.xmlGetterSetter.FeedbackRetingGettersetter;
@@ -44,6 +45,7 @@ import com.cpm.xmlGetterSetter.IncentiveGetterSetter;
 import com.cpm.xmlGetterSetter.JCPGetterSetter;
 import com.cpm.xmlGetterSetter.JourneyPlanGetterSetter;
 import com.cpm.xmlGetterSetter.MSL_AvailabilityStockFacingGetterSetter;
+import com.cpm.xmlGetterSetter.MapingSamplingGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
@@ -63,6 +65,7 @@ import com.cpm.xmlGetterSetter.PerformanceGetterSetter;
 import com.cpm.xmlGetterSetter.PromoTypeGetterSetter;
 import com.cpm.xmlGetterSetter.PromotionInsertDataGetterSetter;
 import com.cpm.xmlGetterSetter.SampledGetterSetter;
+import com.cpm.xmlGetterSetter.SamplingMasterGetterSetter;
 import com.cpm.xmlGetterSetter.SkuGetterSetter;
 import com.cpm.xmlGetterSetter.SkuMasterGetterSetter;
 import com.cpm.xmlGetterSetter.StockGetterSetter;
@@ -77,7 +80,7 @@ import java.util.List;
 @SuppressLint("LongLogTag")
 public class GSKDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE22";
+    public static final String DATABASE_NAME = "LOREAL_PRO_DATABASE";
     public static final int DATABASE_VERSION = 21;
     private SQLiteDatabase db;
 
@@ -125,6 +128,10 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.execSQL(TableBean.getFeedback_question_table());
         db.execSQL(TableBean.getFeedback_rating_table());
         db.execSQL(TableBean.getFeedback_question_rating_table());
+
+        db.execSQL(TableBean.getFeedbacktable());
+        db.execSQL(TableBean.getSamplingtable());
+        db.execSQL(TableBean.getMappingsamplingtable());
 
         db.execSQL(CommonString.CREATE_TABLE_DEEPFREEZER_DATA);
         db.execSQL(CommonString.CREATE_TABLE_OPENING_STOCK_DATA);
@@ -359,6 +366,42 @@ public class GSKDatabase extends SQLiteOpenHelper {
         return list;
 
     }
+
+    public ArrayList<FeedbackMasterGetterSetter> getFeedbackMasterData() {
+
+        Log.d("FetchingCategoryType--------------->Start<------------",
+                "------------------");
+        ArrayList<FeedbackMasterGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+
+        try {
+
+            dbcursor = db.rawQuery("select * from FEEDBACK_MASTER ", null);
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    FeedbackMasterGetterSetter df = new FeedbackMasterGetterSetter();
+                    df.setFEEDBACK(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FEEDBACK")));
+
+                    list.add(df);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            Log.d("Exception when fetching Category!!!!!!!!!!!!!!!!!!!!!",
+                    e.toString());
+            return list;
+        }
+
+        Log.d("FetchingCategory data---------------------->Stop<-----------",
+                "-------------------");
+        return list;
+
+    }
+
 
     //JCP data
     public void insertJCPData(JourneyPlanGetterSetter data) {
@@ -860,6 +903,40 @@ public class GSKDatabase extends SQLiteOpenHelper {
                 "-------------------");
         return list;
     }
+
+    public ArrayList<SamplingMasterGetterSetter> getSamplingData() {
+        Log.d("FetchingAssetdata--------------->Start<------------",
+                "------------------");
+        ArrayList<SamplingMasterGetterSetter> list = new ArrayList<>();
+        Cursor dbcursor = null;
+        try {
+
+            dbcursor = db.rawQuery("SELECT * FROM SAMPLING_MASTER WHERE SAMPLE_CD IN(SELECT SAMPLE_CD FROM MAPPING_SAMPLING) ORDER BY SAMPLE_CD ", null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    SamplingMasterGetterSetter sb = new SamplingMasterGetterSetter();
+                    sb.setSAMPLE_CD(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SAMPLE_CD")));
+                    sb.setSAMPLE(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SAMPLE")));
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+
+        } catch (Exception e) {
+            Log.d("Exception when fetching Non working!!!!!!!!!!!",
+                    e.toString());
+            return list;
+        }
+
+        Log.d("Fetching non working data---------------------->Stop<-----------",
+                "-------------------");
+        return list;
+    }
+
 
 
     //Category Master data
@@ -5523,9 +5600,12 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
                 values.put("SKU_CD", list.get(i).getSku_cd());
                 values.put("SKU", list.get(i).getSku());
+
                 values.put("SAMPLED", list.get(i).getSampled());
                 values.put("PHOTO", list.get(i).getSampled_img());
                 values.put("FEEDBACK", list.get(i).getFeedback());
+                values.put("MOBILE", list.get(i).getMobile());
+                values.put("NAME", list.get(i).getName());
 
                 l = db.insert(CommonString.TABLE_INSERT_SAMPLED_DATA, null, values);
             }
@@ -5554,6 +5634,8 @@ public class GSKDatabase extends SQLiteOpenHelper {
                     sb.setSampled(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SAMPLED")));
                     sb.setSampled_img(dbcursor.getString(dbcursor.getColumnIndexOrThrow("PHOTO")));
                     sb.setFeedback(dbcursor.getString(dbcursor.getColumnIndexOrThrow("FEEDBACK")));
+                    sb.setMobile(dbcursor.getString(dbcursor.getColumnIndexOrThrow("MOBILE")));
+                    sb.setName(dbcursor.getString(dbcursor.getColumnIndexOrThrow("NAME")));
                     sb.setKey_id(dbcursor.getString(dbcursor.getColumnIndexOrThrow("KEY_ID")));
                     list.add(sb);
                     dbcursor.moveToNext();
@@ -6706,8 +6788,7 @@ public class GSKDatabase extends SQLiteOpenHelper {
         Cursor dbcursor = null;
 
         try {
-            dbcursor = db.rawQuery("SELECT  * from TABLE_VISITOR_LOGIN where EMP_CODE = '" + emp_id + "' and VISIT_DATE = '" + visitdate + "'"
-                    , null);
+            dbcursor = db.rawQuery("SELECT  * from TABLE_VISITOR_LOGIN where EMP_CODE = '" + emp_id + "' and VISIT_DATE = '" + visitdate + "'", null);
             int count = 0;
             if (dbcursor != null) {
                 dbcursor.moveToFirst();
@@ -6927,6 +7008,61 @@ public class GSKDatabase extends SQLiteOpenHelper {
 
     }
 
+
+    public void insertFeedbackgData(FeedbackMasterGetterSetter data) {
+        db.delete("FEEDBACK_MASTER", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getFEEDBACK().size(); i++) {
+
+                values.put("FEEDBACK", data.getFEEDBACK().get(i));
+                db.insert("FEEDBACK_MASTER", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database FEEDBACK_MASTER ", ex.toString());
+        }
+
+    }
+
+
+    public void samplingMasterData(SamplingMasterGetterSetter data) {
+        db.delete("SAMPLING_MASTER", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getSAMPLE_CD().size(); i++) {
+                values.put("SAMPLE_CD", Integer.parseInt(data.getSAMPLE_CD().get(i)));
+                values.put("SAMPLE", data.getSAMPLE().get(i));
+                db.insert("SAMPLING_MASTER", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database FEEDBACK_MASTER ", ex.toString());
+        }
+
+    }
+
+    public void mapingsamplingData(MapingSamplingGetterSetter data) {
+        db.delete("MAPPING_SAMPLING", null, null);
+        ContentValues values = new ContentValues();
+
+        try {
+
+            for (int i = 0; i < data.getSAMPLE_CD().size(); i++) {
+                values.put("STORE_CD", Integer.parseInt(data.getSTORE_CD().get(i)));
+                values.put("SAMPLE_CD", Integer.parseInt(data.getSAMPLE_CD().get(i)));
+                db.insert("MAPPING_SAMPLING", null, values);
+
+            }
+        } catch (Exception ex) {
+            Log.d("Database MAPPING_SAMPLING ", ex.toString());
+        }
+
+    }
 
     public ArrayList<VisitorDetailGetterSetter> getFeedaback_question() {
 
@@ -7500,6 +7636,35 @@ public class GSKDatabase extends SQLiteOpenHelper {
         db.delete(CommonString.TABLE_VISITOR_LOGIN, null, null);
         db.delete(CommonString.TABLE_INSERT_FEEDBACK, null, null);
         db.delete(CommonString.TABLE_feedback_save, null, null);
+    }
+
+
+    public ArrayList<SampledGetterSetter> getSamplingCheckoutData(String store_cd) {
+        Log.d("Fetching", "Storedata--------------->Start<------------");
+        ArrayList<SampledGetterSetter> list = new ArrayList<SampledGetterSetter>();
+        Cursor dbcursor = null;
+        try {
+            dbcursor = db.rawQuery("SELECT * FROM " + CommonString.TABLE_INSERT_SAMPLED_DATA + " WHERE " + CommonString.KEY_STORE_CD + " = " + store_cd, null);
+
+            if (dbcursor != null) {
+                dbcursor.moveToFirst();
+                while (!dbcursor.isAfterLast()) {
+                    SampledGetterSetter sb = new SampledGetterSetter();
+                    sb.setCategory_cd(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY_CD")));
+                    sb.setCategory(dbcursor.getString(dbcursor.getColumnIndexOrThrow("CATEGORY")));
+                    sb.setSku(dbcursor.getString(dbcursor.getColumnIndexOrThrow("SKU")));
+                    list.add(sb);
+                    dbcursor.moveToNext();
+                }
+                dbcursor.close();
+                return list;
+            }
+        } catch (Exception e) {
+            Log.d("Exception", " when fetching opening stock!!!!!!!!!!!" + e.toString());
+            return list;
+        }
+        Log.d("Fetching ", "opening stock---------------------->Stop<-----------");
+        return list;
     }
 
 
