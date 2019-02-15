@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
 import com.cpm.lorealpromoter.R;
 
 public class MidDayStock extends AppCompatActivity implements OnClickListener {
@@ -62,8 +64,10 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
     String visit_date, username, intime;
     boolean dataExists = false;
     boolean ischangedflag = false;
+    String menu_name = "";
 
-    String  account_cd, storetype_cd,city_cd,channel_cd;
+    String account_cd, storetype_cd, city_cd, channel_cd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +94,9 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
         city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
         channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
+        menu_name = getIntent().getStringExtra(CommonString.KEY_NAME);
 
-        setTitle("Mid Day Stock - " + visit_date);
+        setTitle(menu_name + " - " + visit_date);
         // preparing list data
         prepareListData();
 
@@ -184,7 +189,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getMiddayStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0) || (skuData.get(0).getEd_midFacing() == null) || (skuData.get(0).getEd_midFacing().equals(""))) {
-                    skuData = db.getStockSkuDataNew(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
+                    skuData = db.getStockSkuDataNew(account_cd, city_cd, storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
                 }
@@ -205,8 +210,8 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
             expListView.clearFocus();
             if (validateData(listDataChild, listDataHeader)) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to save")
+                AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                builder.setMessage("Are you sure you want to save data ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -232,8 +237,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2,
-                         List<StockNewGetterSetter> listDataHeader2) {
+    boolean validateData(HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild2, List<StockNewGetterSetter> listDataHeader2) {
         boolean flag = true;
 
         checkHeaderArray.clear();
@@ -317,6 +321,9 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
             holder.txt_midOpeningStock.setText("OS : " + childText.getSumofSTOCK());
 
+            holder.etmidstock.setHint(menu_name);
+            holder.etmidstock.setTextColor(Color.BLACK);
+
             holder.etmidstock.setOnFocusChangeListener(new OnFocusChangeListener() {
 
                 @Override
@@ -350,8 +357,7 @@ public class MidDayStock extends AppCompatActivity implements OnClickListener {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                    .size();
+            return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
         }
 
         @Override

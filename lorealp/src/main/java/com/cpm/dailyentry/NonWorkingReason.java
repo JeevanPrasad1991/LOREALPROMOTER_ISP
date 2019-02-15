@@ -257,8 +257,8 @@ public class NonWorkingReason extends AppCompatActivity implements OnItemSelecte
             if (validatedata()) {
                 if (imageAllowed()) {
                     if (textAllowed()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(NonWorkingReason.this);
-                        builder.setMessage("Do you want to save the data ")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(NonWorkingReason.this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to save data ?")
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(

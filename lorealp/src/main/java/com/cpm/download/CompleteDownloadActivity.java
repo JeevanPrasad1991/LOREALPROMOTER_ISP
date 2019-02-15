@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
-import com.cpm.dailyentry.IncentiveActivity;
 import com.cpm.lorealpromoter.R;
 import com.cpm.database.GSKDatabase;
 import com.cpm.delegates.TableBean;
@@ -37,6 +37,7 @@ import com.cpm.xmlGetterSetter.MapingSamplingGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
+import com.cpm.xmlGetterSetter.MappingMenuOptionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.MappingUserCategoryGetterSetter;
@@ -59,9 +60,18 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class CompleteDownloadActivity extends AppCompatActivity {
     private Dialog dialog;
@@ -99,6 +109,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
     FeedbackMasterGetterSetter feedbackMasterGetterSetter;
     SamplingMasterGetterSetter samplingMasterGetterSetter;
     MapingSamplingGetterSetter mapingSamplingGetterSetter;
+    MappingMenuOptionGetterSetter menuimageGetterObject;
     GSKDatabase db;
     TableBean tb;
     String _UserId, visit_date;
@@ -521,9 +532,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         resultHttp = CommonString.KEY_SUCCESS;
                         data.value = 52;
                         data.name = "MAPPING_USER_CATEGORY data Downloading";
-                    } else {
-                        return "MAPPING_USER_CATEGORY";
                     }
+
                 }
                 publishProgress(data);
 
@@ -552,11 +562,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                         String incentiveTable = mappingChannalSkuGetterSetter.getMapping_channel_sku_table();
                         TableBean.setMappingChanneltable(incentiveTable);
 
-                    } else {
-                        return "MAPPING_CHANNEL_SKU";
                     }
+
                     data.value = 97;
                     data.name = "MAPPING_CHANNEL_SKU Downloading";
+                    publishProgress(data);
                 }
 
 
@@ -722,6 +732,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 95;
                     data.name = "EMP_SALARY Downloading";
+                    publishProgress(data);
                 }
 
 
@@ -753,6 +764,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 95;
                     data.name = "PERFORMANCE_OQAD Downloading";
+                    publishProgress(data);
                 }
 
                 //Incentive Data
@@ -783,6 +795,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 96;
                     data.name = "EMP_INCENTIVE Downloading";
+                    publishProgress(data);
                 }
 
                 /// today
@@ -815,6 +828,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 95;
                     data.name = "FEEDBACK_QUESTION Downloading";
+                    publishProgress(data);
                 }
 
                 //FEEDBACK_RATING
@@ -845,6 +859,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 95;
                     data.name = "FEEDBACK_RATING Downloading";
+                    publishProgress(data);
                 }
 
                 //FEEDBACK_QUESTIONNAIRE
@@ -875,8 +890,8 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 95;
                     data.name = "FEEDBACK_QUESTIONNAIRE Downloading";
+                    publishProgress(data);
                 }
-
 
 
                 //AUDIT_QUESTION_CATEGORYWISE
@@ -898,6 +913,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     TableBean.setAudit_question_table(auditQuestionTable);
                     data.value = 100;
                     data.name = "AUDIT_QUESTION_CATEGORYWISE Downloading";
+                    publishProgress(data);
                 }
 
                 //NON_ASSET_REASON FOR ASSET Data
@@ -925,6 +941,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
 
                     data.value = 96;
                     data.name = "NON_ASSET_REASON Downloading";
+                    publishProgress(data);
                 }
 
 
@@ -952,10 +969,11 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 98;
                     data.name = "NON_PROMOTION_REASON Downloading";
+                    publishProgress(data);
                 }
 
 
-              //
+                //
                 //FEEDBACK_MASTER Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -980,6 +998,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 98;
                     data.name = "FEEDBACK_MASTER Downloading";
+                    publishProgress(data);
                 }
 
                 //SAMPLING_MASTER Data
@@ -1006,6 +1025,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 98;
                     data.name = "SAMPLING_MASTER Downloading";
+                    publishProgress(data);
                 }
                 //MAPPING_SAMPLING Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
@@ -1031,6 +1051,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 98;
                     data.name = "MAPPING_SAMPLING Downloading";
+                    publishProgress(data);
                 }
 
 
@@ -1061,7 +1082,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 }*/
 
 
-
                 //PROMO_TYPE_MASTER FOR ASSET Data
                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
                 request.addProperty("UserName", _UserId);
@@ -1086,8 +1106,66 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     }
                     data.value = 99;
                     data.name = "PROMO_TYPE_MASTER Downloading";
+                    publishProgress(data);
                 }
 
+                //PROMO_TYPE_MASTER FOR ASSET Data
+                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_NAME_UNIVERSAL_DOWNLOAD);
+                request.addProperty("UserName", _UserId);
+                request.addProperty("Type", "MAPPING_MENU_OPTION");
+                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                androidHttpTransport.call(CommonString.SOAP_ACTION_UNIVERSAL, envelope);
+                result1 = (Object) envelope.getResponse();
+                if (result1.toString() != null) {
+                    xpp.setInput(new StringReader(result1.toString()));
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    menuimageGetterObject = XMLHandlers.mappingMenuXML(xpp, eventType);
+                    TableBean.setMapping_menuTable(menuimageGetterObject.getTable());
+                    if (menuimageGetterObject.getRegion_Id() != null) {
+                        resultHttp = CommonString.KEY_SUCCESS;
+                    }
+
+                    data.value = 99;
+                    data.name = "MAPPING_MENU_OPTION Downloading";
+                    publishProgress(data);
+                }
+
+
+                if (menuimageGetterObject!=null){
+                    for (int i = 0; i < menuimageGetterObject.getRegion_Id().size(); i++) {
+                        String dir = Environment.getExternalStorageDirectory().toString();
+                        File folder = new File(dir, ".Loreal_promo_icons");
+                        folder.mkdir();
+                        if (!menuimageGetterObject.getImage_path().get(0).equals("")) {
+                            File pdfFile = new File(folder, menuimageGetterObject.getImage_path().get(i));
+                            try {
+                                pdfFile.createNewFile();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (new File(CommonString.FILE_PATH_MENU_ICONS + menuimageGetterObject.getMenu_icon().get(i)).exists()) {
+                            } else {
+                                downloadFile(menuimageGetterObject.getImage_path().get(i), menuimageGetterObject.getMenu_icon().get(i), folder);
+                            }
+
+                            if (new File(CommonString.FILE_PATH_MENU_ICONS + menuimageGetterObject.getMenu_icon_done().get(i)).exists()) {
+                            } else {
+                                downloadFile(menuimageGetterObject.getImage_path().get(i), menuimageGetterObject.getMenu_icon_done().get(i), folder);
+                            }
+
+                            if (new File(CommonString.FILE_PATH_MENU_ICONS + menuimageGetterObject.getMenu_icon_gray().get(i)).exists()) {
+                            } else {
+                                downloadFile(menuimageGetterObject.getImage_path().get(i), menuimageGetterObject.getMenu_icon_gray().get(i), folder);
+                            }
+                        }
+
+                    }
+
+                }
                 //Database insert method calling
 
                 db.open();
@@ -1132,6 +1210,7 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                 db.insertFeedbackgData(feedbackMasterGetterSetter);
                 db.samplingMasterData(samplingMasterGetterSetter);
                 db.mapingsamplingData(mapingSamplingGetterSetter);
+                db.mappingmenuenentry(menuimageGetterObject);
 
                 data.value = 100;
                 data.name = "Finishing";
@@ -1192,16 +1271,6 @@ public class CompleteDownloadActivity extends AppCompatActivity {
             dialog.dismiss();
             AlertMessage message;
             if (success_flag) {
-                /*if (result.equals(CommonString.KEY_SUCCESS)) {
-                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
-                    message.showMessage();
-                }else if (result.equalsIgnoreCase("JOURNEY_PLAN")){
-                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP, "success", null);
-                    message.showMessage();
-                } else {
-                    AlertMessage message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
-                    message.showMessage();
-                }*/
                 if (result.equals(CommonString.KEY_SUCCESS)) {
                     message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_DOWNLOAD, "success", null);
                     message.showMessage();
@@ -1209,15 +1278,60 @@ public class CompleteDownloadActivity extends AppCompatActivity {
                     message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP, "success", null);
                     message.showMessage();
                 } else if (result.equalsIgnoreCase("MAPPING_USER_CATEGORY")) {
-                        message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_MAPPING_USER_CATEGORY + result, "success", null);
-                        message.showMessage();
-                }else {
-                     message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
-                     message.showMessage();
+                    message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_MAPPING_USER_CATEGORY + result, "success", null);
+                    message.showMessage();
+                } else {
+                    message = new AlertMessage(CompleteDownloadActivity.this, AlertMessage.MESSAGE_JCP_FALSE_NOJCP + result, "success", null);
+                    message.showMessage();
                 }
             }
 
         }
 
     }
+
+
+    public void downloadFile(String fileUrl, String directory, File folder_path) {
+        try {
+            URL url = new URL(fileUrl + directory);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.getResponseCode();
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == 200) {
+                int length = urlConnection.getContentLength();
+                String size = new DecimalFormat("##.##").format((double) ((double) length / 1024)) + " KB";
+                if (!new File(folder_path.getPath() + directory).exists() && !size.equalsIgnoreCase("0 KB")) {
+                    File outputFile = new File(folder_path, directory);
+                    FileOutputStream fos = new FileOutputStream(outputFile);
+                    InputStream is1 = (InputStream) urlConnection.getInputStream();
+                    int bytes = 0;
+                    byte[] buffer = new byte[1024];
+                    int len1 = 0;
+
+                    while ((len1 = is1.read(buffer)) != -1) {
+                        bytes = (bytes + len1);
+
+                        fos.write(buffer, 0, len1);
+
+                    }
+
+                    fos.close();
+                    is1.close();
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
+    }
+
 }

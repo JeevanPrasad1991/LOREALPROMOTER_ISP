@@ -172,10 +172,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         listDataChild = new HashMap<StockNewGetterSetter, List<StockNewGetterSetter>>();
         brandData = db.getHeaderStockBackOfficeImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
-
-            //all data show
             brandData = db.getStockAvailabilityDataNew(channel_cd);
-          //  brandData = db.getmappingStockDataNew(account_cd,city_cd,storetype_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data
@@ -206,8 +203,8 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
             if (snackbar == null || !snackbar.isShown()) {
                 if (validateData1(listDataChild, listDataHeader)) {
                     if (condition()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage("Are you sure you want to save")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to save data ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -235,8 +232,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        Snackbar.make(expListView, "Invalid Faceup, Faceup Should Be Less Than The Stock at line "
-                                + row_pos, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(expListView, "Invalid Faceup, Faceup Should Be Less Than The Stock at line " + row_pos, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
                     Snackbar.make(expListView, Error_Message, Snackbar.LENGTH_LONG).show();
@@ -260,8 +256,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
 
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
-            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                    .get(childPosititon);
+            return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
         }
 
         @Override
@@ -286,7 +281,6 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
                 holder.edt_stock1 = (EditText) convertView.findViewById(R.id.edt_stock1);
                 holder.edt_stock2 = (EditText) convertView.findViewById(R.id.edt_stock2);
                 holder.edt_stock3 = (EditText) convertView.findViewById(R.id.edt_stock3);
-
 
                 convertView.setTag(holder);
             } else {
@@ -453,10 +447,10 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
         public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             final StockNewGetterSetter headerTitle = (StockNewGetterSetter) getGroup(groupPosition);
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) this
-                        ._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.list_group_opening_backroom, null);
             }
+
             CardView card_view = (CardView) convertView.findViewById(R.id.card_view);
             card_view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -468,6 +462,7 @@ public class OpenningStockBackofficeActivity extends AppCompatActivity implement
                     }
                 }
             });
+
             TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
 
             lblListHeader.setTypeface(null, Typeface.BOLD);

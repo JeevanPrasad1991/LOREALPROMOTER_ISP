@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="false"
+    tools:showIn="@layout/activity_additonalvisibility"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
@@ -38,7 +39,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="7"
+                        android:layout_weight="8.5"
                         android:gravity="left"
                         android:text="Exists"
                         android:textColor="@color/black"
@@ -49,7 +50,7 @@
                         android:id="@+id/market_checkbox"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="1.5"
                         android:checked="true" />
                 </LinearLayout>
 

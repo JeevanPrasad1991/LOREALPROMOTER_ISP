@@ -116,6 +116,15 @@ public class JourneyPlanGetterSetter {
 		this.geotagStatus.add(geotagStatus);
 	}
 
+	public ArrayList<String> getRegion_Id() {
+		return region_Id;
+	}
+
+	public void setRegion_Id(String region_Id) {
+		this.region_Id.add(region_Id);
+	}
+
+	ArrayList<String>region_Id=new ArrayList<>();
 
 	
 	

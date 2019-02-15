@@ -123,7 +123,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 if (validation()) {
                     if (validationDuplicateSku()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
-                        builder.setMessage("Are you sure you want to add")
+                        builder.setMessage("Are you sure you want to add ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -136,7 +136,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                                 sampledG.setSku(skuSpinValue);
                                                 sampledG.setSampled(toggle_Value);
                                                 sampledG.setFeedback(sample_feedback_txt.getText().toString().replaceAll("[(!@#$%^&*?)]", ""));
-
 
                                                 sampledG.setSampled_img(image1);
                                                 insertedDataList.add(sampledG);
@@ -176,7 +175,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 if (insertedDataList.size() > 0) {
                     if (sampleaddflag) {
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(SampleActivity.this);
-                        builder1.setMessage("Are you sure you want to save data")
+                        builder1.setMessage("Are you sure you want to save data ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -297,7 +296,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 public void onClick(View v) {
                     if (insertedlist_Data.get(position).getKey_id() == null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
-                        builder.setMessage("Are you sure you want to Delete")
+                        builder.setMessage("Are you sure you want to Delete ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -323,7 +322,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         alert.show();
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
-                        builder.setMessage("Are you sure you want to Delete")
+                        builder.setMessage("Are you sure you want to Delete ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -401,9 +400,9 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         boolean value = true;
         if (insertedDataList.size() > 0) {
             for (int i = 0; i < insertedDataList.size(); i++) {
-                if (insertedDataList.get(i).getCategory_cd().equals(category_cdSpinValue)
-                        && insertedDataList.get(i).getSku_cd().equals(sku_cdSpinValue)) {
+                if (insertedDataList.get(i).getCategory_cd().equals(category_cdSpinValue) && insertedDataList.get(i).getSku_cd().equals(sku_cdSpinValue)) {
                     value = false;
+                    break;
                 }
             }
         }

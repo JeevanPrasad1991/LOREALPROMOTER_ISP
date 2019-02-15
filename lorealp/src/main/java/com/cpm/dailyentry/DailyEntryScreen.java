@@ -96,7 +96,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             public void onClick(View view) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(DailyEntryScreen.this);
                 builder1.setTitle("Parinaam");
-                builder1.setMessage("Do you want to download data")
+                builder1.setMessage("Do you want to download data ?")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -213,8 +213,8 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 @Override
                 public void onClick(View v) {
                     if (CheckNetAvailability()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(DailyEntryScreen.this);
-                        builder.setMessage("Are you sure you want to Checkout")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DailyEntryScreen.this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to Checkout ?")
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(
@@ -273,7 +273,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                 holder.checkinclose.setVisibility(View.INVISIBLE);
             }
 
-            holder.storename.setText(jcplist.get(position).getStore_name().get(0));
+            holder.storename.setText(jcplist.get(position).getStore_name().get(0) + " ( Id : " + jcplist.get(position).getStore_cd().get(0) + " )");
             holder.city.setText(jcplist.get(position).getCity().get(0) + "\n" + jcplist.get(position).getChannel().get(0));
             holder.keyaccount.setText(jcplist.get(position).getKey_account().get(0));
             return convertView;
@@ -307,39 +307,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
         } else if (((checkoutstatus.equals(CommonString.KEY_C)))) {
             Snackbar.make(lv, "Store already checked out", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
-        } /*else if (isStoreCoverageLeave(store_cd)) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            builder1.setTitle("Parinaam");
-            builder1.setMessage("Want to enter store, it is already closed. \nData will be deleted.")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            ArrayList<CoverageBean> coveragespecific = database.getCoverageSpecificData(store_cd);
-                            String reason_cd = coveragespecific.get(0).getReasonid();
-                            String entry_allow = database.getNonEntryAllowReasonData(reason_cd);
-
-                            if (entry_allow.equals("0")) {
-                                database.deleteAllCoverage();
-                                setListdata();
-                            } else {
-                                database.deleteSpecificCoverage(store_cd);
-                                setListdata();
-                            }
-
-                        }
-                    })
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                    dialog.cancel();
-
-                                }
-                            });
-            AlertDialog alert = builder1.create();
-            alert.show();
-        }*/ else {
+        } else {
             if (!setcheckedmenthod(store_cd)) {
                 boolean enteryflag = true;
                 if (coverage.size() > 0) {
@@ -367,7 +335,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             jcplist.get(position).getGeotagStatus().get(0),
                             jcplist.get(position).getChannel_cd().get(0),
                             jcplist.get(position).getFloor_status().get(0),
-                            jcplist.get(position).getBackroom_status().get(0));
+                            jcplist.get(position).getBackroom_status().get(0), jcplist.get(position).getRegion_Id().get(0));
                 }
             } else {
                 Snackbar.make(lv, "Data already filled ", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -402,7 +370,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
 
     void showMyDialog(final String storeCd, final String storeName, final String status, final String visitDate, final String checkout_status,
                       final String keyaccount_cd, final String city_cd, final String store_ype_cd, final String geotag, final String channel_cd,
-                      final String floor_status, final String backroom_status) {
+                      final String floor_status, final String backroom_status, final String region_Id) {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialogbox);
@@ -412,7 +380,6 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.yes) {
-
                     database.open();
                     geotaglist = database.getinsertGeotaggingData(storeCd);
                     if (geotag.equals("Y") || geotaglist.size() > 0) {
@@ -427,12 +394,11 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
                         editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
                         editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
-
+                        editor.putString(CommonString.KEY_REGION_Id, region_Id);
                         if (status.equals("Yes")) {
                             editor.putString(CommonString.KEY_STOREVISITED_STATUS, "Yes");
                         }
                         editor.commit();
-
                         if (store_intime.equalsIgnoreCase("")) {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString(CommonString.KEY_STORE_IN_TIME, getCurrentTime());
@@ -454,27 +420,23 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                             startActivity(in);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                         } else {
-
                             Intent in = new Intent(DailyEntryScreen.this, StoreEntry.class);
                             startActivity(in);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
                         }
-
                     } else {
                         Snackbar.make(radioGroup, "Please do the Geotag first", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     }
                 } else if (checkedId == R.id.no) {
                     dialog.cancel();
-                    if (checkout_status.equals(CommonString.KEY_INVALID) || checkout_status.equals(CommonString.KEY_VALID)) {
+                    ArrayList<CoverageBean> specific_storelist = database.getCoverageSpecificData(storeCd);
+                    if (specific_storelist.size()>0 && specific_storelist.get(0).getStatus().equals(CommonString.KEY_INVALID) || specific_storelist.size()>0 && specific_storelist.get(0).getStatus().equals(CommonString.KEY_VALID)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(DailyEntryScreen.this);
                         builder.setMessage(CommonString.DATA_DELETE_ALERT_MESSAGE)
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
                                         UpdateData(storeCd);
-
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putString(CommonString.KEY_STORE_CD, storeCd);
                                         editor.putString(CommonString.KEY_STORE_IN_TIME, "");
@@ -486,7 +448,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                                         editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
                                         editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
                                         editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
-
+                                        editor.putString(CommonString.KEY_REGION_Id, region_Id);
                                         editor.commit();
                                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);
                                         startActivity(in);
@@ -514,6 +476,7 @@ public class DailyEntryScreen extends AppCompatActivity implements OnItemClickLi
                         editor.putString(CommonString.KEY_CHANNEL_CD, channel_cd);
                         editor.putString(CommonString.KEY_FLOOR_STATUS, floor_status);
                         editor.putString(CommonString.KEY_BACKROOK_STATUS, backroom_status);
+                        editor.putString(CommonString.KEY_REGION_Id, region_Id);
                         editor.commit();
                         Intent in = new Intent(DailyEntryScreen.this, NonWorkingReason.class);
                         startActivity(in);

@@ -220,8 +220,8 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                 if (validateData(listDataChild, listDataHeader)) {
                    // if (condition()) {
                         if (condition2()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                            builder.setMessage("Are you sure you want to save")
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                            builder.setMessage("Are you sure you want to save data ?")
                                     .setCancelable(false)
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
@@ -244,12 +244,7 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
                         } else {
 
                         }
-                    } /*else {
-
-                        Snackbar.make(expListView, "Invalid Faceup, Faceup Should Be Less Than The Stock at line "
-                                + row_pos, Snackbar.LENGTH_LONG).show();
-                    }*/
-               // }
+                    }
                 else {
                     Snackbar.make(expListView, Error_Message, Snackbar.LENGTH_LONG).show();
                 }
@@ -577,9 +572,9 @@ public class ShareOfShelfActivity extends AppCompatActivity implements View.OnCl
             }
 
             if (headerTitle.getImg_cat_facing() != null && !headerTitle.getImg_cat_facing().equals("")) {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_green);
+                imgcamcat1.setImageResource(R.mipmap.camera_green);
             } else {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
+                imgcamcat1.setImageResource(R.mipmap.camera_orange);
             }
             catfacing.setText(headerTitle.getCat_facing());
 

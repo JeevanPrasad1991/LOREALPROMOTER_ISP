@@ -388,7 +388,6 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
 
                 break;
             case R.id.btncleardata:
-
                 clearVisitorData();
 
                 break;
@@ -611,9 +610,7 @@ public class VisitorLoginActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void clearVisitorData() {
-
         lay_feedback.setVisibility(View.GONE);
-
         ed_name.setText("");
         ed_designation.setText("");
         et_emp_name.setText("");

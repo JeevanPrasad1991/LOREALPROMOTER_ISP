@@ -108,13 +108,12 @@ public class SelfieActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_save_selfie:
                 if (img_str != null) {
                     if (checkNetIsAvailable()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SelfieActivity.this);
-                        builder.setMessage("Do you want to save the image ")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SelfieActivity.this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to save data ?")
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
                                         editor = preferences.edit();
                                         editor.putString(CommonString.KEY_SELFIE_IMAGE, img_str);
                                         editor.commit();

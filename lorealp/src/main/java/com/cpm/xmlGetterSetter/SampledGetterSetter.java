@@ -11,6 +11,16 @@ public class SampledGetterSetter {
     String mobile="";
     String name="";
 
+    public boolean isExists() {
+        return isExists;
+    }
+
+    public void setExists(boolean exists) {
+        isExists = exists;
+    }
+
+    boolean isExists;
+
     public String getMobile() {
         return mobile;
     }

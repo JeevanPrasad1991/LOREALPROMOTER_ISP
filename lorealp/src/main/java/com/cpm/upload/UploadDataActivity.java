@@ -235,7 +235,6 @@ public class UploadDataActivity extends Activity {
                             stockImages = database.getStockImageUploadData(coverageBeanlist.get(i).getStoreId());
                             if (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals("") || (stockImages.size() > 0 && !stockImages.get(0).getImg_cat_one().equals(""))) {
                                 for (int j = 0; j < stockImages.size(); j++) {
-
                                     onXML = "[LOREAL_STOCK_FLOOR_IMAGE_DATA_NEW]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
@@ -264,6 +263,45 @@ public class UploadDataActivity extends Activity {
                                 data.name = "Stock Image Data";
                                 publishProgress(data);
                             }
+
+
+                            //LOREALPRO_BACK ROOM STOCK_DATA
+                            final_xml = "";
+                            onXML = "";
+                            stockbackroomData = database.getOpeningBackRoomStockUpload(coverageBeanlist.get(i).getStoreId());
+                            if (stockbackroomData.size() > 0) {
+                                for (int j = 0; j < stockbackroomData.size(); j++) {
+                                    onXML = "[LOREAL_BACKROOM_STOCK_DATA]"
+                                            + "[MID]" + mid + "[/MID]"
+                                            + "[CREATED_BY]" + username + "[/CREATED_BY]"
+                                            + "[CATEGORY_CD]" + stockbackroomData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
+                                            + "[SKU_CD]" + stockbackroomData.get(j).getSku_cd() + "[/SKU_CD]"
+                                            + "[OPENING_STOCK_BACKROOM]" + stockbackroomData.get(j).getStock1() + "[/OPENING_STOCK_BACKROOM]"
+                                            + "[/LOREAL_BACKROOM_STOCK_DATA]";
+
+                                    final_xml = final_xml + onXML;
+                                }
+
+                                final String sos_xml = "[DATA]" + final_xml + "[/DATA]";
+                                request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
+                                request.addProperty("XMLDATA", sos_xml);
+                                request.addProperty("KEYS", "LOREAL_BACKROOM_STOCK_DATA");
+                                request.addProperty("USERNAME", username);
+                                request.addProperty("MID", mid);
+                                envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                envelope.dotNet = true;
+                                envelope.setOutputSoapObject(request);
+                                androidHttpTransport = new HttpTransportSE(CommonString.URL);
+                                androidHttpTransport.call(CommonString.SOAP_ACTION + CommonString.METHOD_UPLOAD_XML, envelope);
+                                result = (Object) envelope.getResponse();
+                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                    isError = true;
+                                }
+                                data.value = 26;
+                                data.name = "LOREAL_BACKROOM_STOCK Data";
+                                publishProgress(data);
+                            }
+
 
                             //shareOfShelImgData
                             final_xml = "";
@@ -462,27 +500,30 @@ public class UploadDataActivity extends Activity {
                             sampledData = database.getinsertedsampledData(coverageBeanlist.get(i).getStoreId(), coverageBeanlist.get(i).getVisitDate());
                             if (sampledData.size() > 0) {
                                 for (int j = 0; j < sampledData.size(); j++) {
+                                    String checkbox = "1";
+                                    if (sampledData.get(j).isExists()) {
+                                        checkbox = "1";
+                                    } else {
+                                        checkbox = "0";
+                                    }
 
-                                    onXML = "[LOREAL_SAMPLED_DATA]"
+                                    onXML = "[LOREAL_SAMPLED_WITH_CHECKBOX_DATA]"
                                             + "[MID]" + mid + "[/MID]"
                                             + "[CREATED_BY]" + username + "[/CREATED_BY]"
-                                           // + "[SKU_CD]" + sampledData.get(j).getSku_cd() + "[/SKU_CD]"
+                                            + "[CHECK_BOX]" + checkbox + "[/CHECK_BOX]"
                                             + "[FEEDBACK]" + sampledData.get(j).getSku() + "[/FEEDBACK]"
-                                          //  + "[CATEGORY_CD]" + sampledData.get(j).getCategory_cd() + "[/CATEGORY_CD]"
                                             + "[SAMPLING_NAME_CD]" + sampledData.get(j).getCategory_cd() + "[/SAMPLING_NAME_CD]"
-                                           // + "[SAMPLED]" + sampledData.get(j).getSampled() + "[/SAMPLED]"
-                                            //+ "[PHOTO]" + sampledData.get(j).getSampled_img() + "[/PHOTO]"
                                             + "[REMARK]" + sampledData.get(j).getFeedback() + "[/REMARK]"
                                             + "[MOBILE]" + sampledData.get(j).getMobile() + "[/MOBILE]"
                                             + "[NAME]" + sampledData.get(j).getName() + "[/NAME]"
-                                            + "[/LOREAL_SAMPLED_DATA]";
+                                            + "[/LOREAL_SAMPLED_WITH_CHECKBOX_DATA]";
 
                                     paid_visibility = paid_visibility + onXML;
                                 }
                                 final String sos_xml = "[DATA]" + paid_visibility + "[/DATA]";
                                 request = new SoapObject(CommonString.NAMESPACE, CommonString.METHOD_UPLOAD_XML);
                                 request.addProperty("XMLDATA", sos_xml);
-                                request.addProperty("KEYS", "LOREAL_SAMPLED_DATA");
+                                request.addProperty("KEYS", "LOREAL_SAMPLED_WITH_CHECKBOX_DATA");
                                 request.addProperty("USERNAME", username);
                                 request.addProperty("MID", mid);
                                 envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -665,14 +706,14 @@ public class UploadDataActivity extends Activity {
                             data.name = "Visitor Images";
                             publishProgress(data);
                         } else {
-                                File originalFile = new File(Path + list.get(i1));
-                                result = UploadImage(originalFile.getName(), "BulkImages");
-                                if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
-                                    return result.toString();
-                                }
-                                data.value = 99;
-                                data.name = "BulkImages";
-                                publishProgress(data);
+                            File originalFile = new File(Path + list.get(i1));
+                            result = UploadImage(originalFile.getName(), "BulkImages");
+                            if (!result.toString().equalsIgnoreCase(CommonString.KEY_SUCCESS)) {
+                                return result.toString();
+                            }
+                            data.value = 99;
+                            data.name = "BulkImages";
+                            publishProgress(data);
 
                         }
 

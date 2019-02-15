@@ -162,7 +162,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.nav_download) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Parinaam");
-            builder1.setMessage("Do you want to download data")
+            builder1.setMessage("Do you want to download data ?")
                     .setCancelable(false)
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -215,7 +215,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Parinaam");
-            builder1.setMessage("Do you want to upload data")
+            builder1.setMessage("Do you want to upload data ?")
                     .setCancelable(false)
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -266,7 +266,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Parinaam");
-            builder1.setMessage("Do you want to exit app")
+            builder1.setMessage("Do you want to exit app ?")
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -349,8 +349,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
 
         else if (id == R.id.nav_export_database) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainMenuActivity.this);
-            builder1.setMessage("Are you sure you want to take the backup of your data")
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainMenuActivity.this).setTitle("Parinaam");
+            builder1.setMessage("Are you sure you want to take the backup of your data ?")
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @SuppressWarnings("resource")
@@ -391,7 +391,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                                         }
                                     }
                                 }
-                                Snackbar.make(frameLayout, "Database Exported And Uploaded Successfully", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(frameLayout, "Database Exported And Uploaded Successfully.", Snackbar.LENGTH_SHORT).show();
 
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());

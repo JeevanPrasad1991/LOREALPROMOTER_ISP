@@ -5,12 +5,14 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:textAlignment="inherit"
-    android:textColor="@color/white"
+    android:textColor="@color/black"
     android:text="jdhfjkdvfhdj"
     android:paddingLeft="10dp"
-    android:textSize="20sp"
+    android:textSize="15sp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:background="@color/primarycolor"
+    android:gravity="center"
+    android:textStyle="normal"
+    android:background="@color/white"
     />
 

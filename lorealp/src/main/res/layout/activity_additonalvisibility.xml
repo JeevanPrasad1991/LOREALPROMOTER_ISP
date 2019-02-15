@@ -9,10 +9,12 @@
     <include layout="@layout/content_market_inteligence_additionalvisibility" />
 
     <LinearLayout
-        android:layout_gravity="bottom"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="4dp"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/save_fab"
             android:layout_width="match_parent"

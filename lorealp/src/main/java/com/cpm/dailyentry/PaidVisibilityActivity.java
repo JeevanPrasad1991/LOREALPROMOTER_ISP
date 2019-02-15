@@ -180,8 +180,8 @@ public class PaidVisibilityActivity extends AppCompatActivity implements OnClick
             expListView.clearFocus();
 
             if (validateData(listDataChild, listDataHeader)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to save")
+                AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                builder.setMessage("Are you sure you want to save data ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

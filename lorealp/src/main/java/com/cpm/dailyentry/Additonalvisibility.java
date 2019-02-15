@@ -72,14 +72,11 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
     ArrayList<BrandGetterSetter> brandmasterData = new ArrayList<>();
     ArrayList<SubCategoryGetterSetter> subcategoryData = new ArrayList<>();
     ArrayList<CategoryMasterGetterSetter> categorytypeData = new ArrayList<>();
-
     ArrayList<AssetMasterGetterSetter> categorymasterData = new ArrayList<>();
-
     ArrayList<MarketIntelligenceGetterSetter> inserteslistData = new ArrayList<>();
     String brand_cdSpinValue = "", brandSpinValue = "", category_cdSpinValue = "", categorySpinValue = "",
             categorytype_cdSpinValue = "", categorytype_SpinValue = "", subcat_cdspinValue = "", subcat_spinValue = "";
     boolean sampleaddflag = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +109,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
         str = CommonString.FILE_PATH;
         GETALLDATA();
         setDataToListView();
+
         if (inserteslistData.size() > 0 && !inserteslistData.get(0).isExists()) {
             market_checkbox.setChecked(false);
             marketinteligence_list.setVisibility(View.GONE);
@@ -138,7 +136,6 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                         inserteslistData.clear();
                         db.removeallmarketIData(store_cd);
                         save_fab.setText("Save");
-//                        adapter.notifyDataSetChanged();
                     }
                     marketinteligence_list.setVisibility(View.VISIBLE);
                     rl_content.setVisibility(View.VISIBLE);
@@ -157,6 +154,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                                 inserteslistData.clear();
                                 db.removeallmarketIData(store_cd);
                             }
+
                             MarketIntelligenceGetterSetter marketIntelligenceG = new MarketIntelligenceGetterSetter();
                             marketIntelligenceG.setCategory("");
                             marketIntelligenceG.setCategory_cd("");
@@ -179,18 +177,20 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            market_checkbox.setChecked(true);
                         }
                     });
                     builder.show();
 
                 }
+                break;
 
             case R.id.btn_add:
                 if (market_checkbox.isChecked()) {
                     if (validation()) {
                         if (validationDuplication()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this);
-                            builder.setMessage("Are you sure you want to add")
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this).setTitle("Parinaam");
+                            builder.setMessage("Are you sure you want to add ?")
                                     .setCancelable(false)
                                     .setPositiveButton("Yes",
                                             new DialogInterface.OnClickListener() {
@@ -228,8 +228,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                                             })
                                     .setNegativeButton("No",
                                             new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog,
-                                                                    int id) {
+                                                public void onClick(DialogInterface dialog, int id) {
                                                     dialog.cancel();
                                                 }
                                             });
@@ -245,8 +244,8 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
             case R.id.save_fab:
                 if (inserteslistData.size() > 0) {
                     if (sampleaddflag) {
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(Additonalvisibility.this);
-                        builder1.setMessage("Are you sure you want to save data")
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(Additonalvisibility.this).setTitle("Parinaam");
+                        builder1.setMessage("Are you sure you want to save data ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -279,6 +278,8 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                 _path = CommonString.FILE_PATH + _pathforcheck;
                 intime = getCurrentTime();
                 startCameraActivity();
+
+                break;
         }
     }
 
@@ -311,42 +312,42 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
 
         categorymasterData = db.getassetData();
         categorytypeData = db.getcategorymasterData();
-        display_adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        display_adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_custom_item);
         display_adapter.add("-Select Display Type-");
         for (int i = 0; i < categorymasterData.size(); i++) {
             display_adapter.add(categorymasterData.get(i).getAsset().get(0));
         }
         display_spin.setAdapter(display_adapter);
-        display_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        display_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
 //brand
-        brand_adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        brand_adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_custom_item);
         brand_adapter.add("-Select Brand-");
         for (int i = 0; i < brandmasterData.size(); i++) {
             brand_adapter.add(brandmasterData.get(i).getBrand().get(0));
         }
 
         bran_spin.setAdapter(brand_adapter);
-        brand_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        brand_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
 
         //promotype
-        category_type_adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        category_type_adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_custom_item);
         category_type_adapter.add("-Select Category-");
 
         for (int i = 0; i < categorytypeData.size(); i++) {
             category_type_adapter.add(categorytypeData.get(i).getCategory().get(0));
         }
         categorytype_spin.setAdapter(category_type_adapter);
-        category_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category_type_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
 
         //subcategory type
-        subcetegory_type_adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        subcetegory_type_adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_custom_item);
         subcetegory_type_adapter.add("-Select Sub Category-");
 
         for (int i = 0; i < subcategoryData.size(); i++) {
             subcetegory_type_adapter.add(subcategoryData.get(i).getSUB_CATEGORY().get(0));
         }
         subcat_spin.setAdapter(subcetegory_type_adapter);
-        subcetegory_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subcetegory_type_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
 
         categorytype_spin.setOnItemSelectedListener(this);
         subcat_spin.setOnItemSelectedListener(this);
@@ -391,7 +392,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                         subcetegory_type_adapter.add(subcategoryData.get(i).getSUB_CATEGORY().get(0));
                     }
                     subcat_spin.setAdapter(subcetegory_type_adapter);
-                    subcetegory_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    subcetegory_type_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
                 } else {
                     categorytype_cdSpinValue = "";
                     categorytype_SpinValue = "0";
@@ -413,7 +414,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                         brand_adapter.add(brandmasterData.get(i).getBrand().get(0));
                     }
                     bran_spin.setAdapter(brand_adapter);
-                    brand_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    brand_adapter.setDropDownViewResource(R.layout.spinner_custom_item);
                 } else {
                     subcat_cdspinValue = "";
                     subcat_spinValue = "0";
@@ -421,7 +422,7 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
 
                 break;
         }
-        ((Spinner)parent).invalidate();
+        ((Spinner) parent).invalidate();
 
     }
 
@@ -507,14 +508,14 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
             } else if (subcat_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Sub Category-")) {
                 value = false;
                 showMessage("Please Select Sub Category Dropdown");
-            }else if (bran_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Brand-")) {
+            } else if (bran_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Brand-")) {
                 value = false;
                 showMessage("Please  Brand Dropdown");
 
             } else if (display_spin.getSelectedItem().toString().equalsIgnoreCase("-Select Category-")) {
                 value = false;
                 showMessage("Please Select Display Type Dropdown");
-            }  else if (desc_edit_txt.getText().toString().replaceAll("[(!@#$%^&*?)\"]", " ").trim().isEmpty()) {
+            } else if (desc_edit_txt.getText().toString().replaceAll("[(!@#$%^&*?)\"]", " ").trim().isEmpty()) {
                 value = false;
                 showMessage("Please Enter Remark");
             } else if (image1.equals("")) {
@@ -611,8 +612,8 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onClick(View v) {
                     if (insertedlist_Data.get(position).getKey_id() == null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this);
-                        builder.setMessage("Are you sure you want to Delete")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to Delete ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -637,8 +638,8 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this);
-                        builder.setMessage("Are you sure you want to Delete")
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Additonalvisibility.this).setTitle("Parinaam");
+                        builder.setMessage("Are you sure you want to Delete ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
@@ -698,7 +699,6 @@ public class Additonalvisibility extends AppCompatActivity implements View.OnCli
         try {
             inserteslistData = db.getinsertedMarketIntelligenceData(store_cd, visit_date);
             if (inserteslistData.size() > 0) {
-                save_fab.setText("Update");
                 Collections.reverse(inserteslistData);
                 adapter = new MyAdapter(this, inserteslistData);
                 marketinteligence_list.setAdapter(adapter);

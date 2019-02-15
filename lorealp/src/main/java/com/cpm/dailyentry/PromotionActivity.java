@@ -297,7 +297,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                         childText.setPresentSpi("1");
 
                     } else {
-                        finalHolder.rlP_camera.setVisibility(View.INVISIBLE);
+                        finalHolder.rlP_camera.setVisibility(View.GONE);
                         childText.setPresentSpi("0");
                         childText.setCamera("");
 
@@ -312,7 +312,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                     expListView.invalidateViews();
                     if (finalHolder1.toggle_running_pos.isChecked()) {
 
-                        finalHolder.rlp_remark.setVisibility(View.INVISIBLE);
+                        finalHolder.rlp_remark.setVisibility(View.GONE);
                         childText.setRunningPOS("1");
                         childText.setReason("");
                         childText.setReason_cd("");
@@ -351,7 +351,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
             //  toggle_running_talk
             if (childText.getPresentSpi().equals("0")) {
                 holder.present_toggleV.setChecked(false);
-                finalHolder.rlP_camera.setVisibility(View.INVISIBLE);
+                finalHolder.rlP_camera.setVisibility(View.GONE);
             } else {
                 finalHolder.rlP_camera.setVisibility(View.VISIBLE);
                 holder.present_toggleV.setChecked(true);
@@ -362,7 +362,7 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
                 holder.toggle_running_pos.setChecked(false);
                 finalHolder.rlp_remark.setVisibility(View.VISIBLE);
             } else {
-                finalHolder.rlp_remark.setVisibility(View.INVISIBLE);
+                finalHolder.rlp_remark.setVisibility(View.GONE);
                 holder.toggle_running_pos.setChecked(true);
             }
 
@@ -489,8 +489,8 @@ public class PromotionActivity extends AppCompatActivity implements OnClickListe
         int id = v.getId();
         if (id == R.id.btn_save_promotion) {
             if (validateData(listDataChild, listDataHeader)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to save")
+                AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                builder.setMessage("Are you sure you want to save data ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

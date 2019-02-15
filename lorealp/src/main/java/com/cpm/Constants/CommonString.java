@@ -8,8 +8,9 @@ public class CommonString {
     public static final String MESSAGE_INTERNET_NOT_AVALABLE = "No Internet Connection.Please Check Your Network Connection";
     public static final String MESSAGE_EXCEPTION = "Problem Occured : Report The Problem To Parinaam ";
     public static final String MESSAGE_INVALID_XML = "Problem Occured while parsing XML : invalid data";
+    public static final String FILE_PATH_MENU_ICONS = Environment.getExternalStorageDirectory() + "/.Loreal_promo_icons/";
 
-  //  public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
+    //  public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Images/";
     public static final String FILE_PATH = Environment.getExternalStorageDirectory() + "/.LorealPromoter_Image/";
     public static final String BACKUP_PATH = Environment.getExternalStorageDirectory() + "/Lorealpromoter_backup/";
 
@@ -33,6 +34,7 @@ public class CommonString {
     public static final String KEY_ID = "_id";
     public static final String KEY_USER_TYPE = "RIGHTNAME";
     public static final String KEY_DATE = "date";
+    public static final String KEY_REGION_Id = "Region_Id";
     public static final String KEY_P = "P";
     public static final String KEY_D = "D";
     public static final String KEY_U = "U";
@@ -44,12 +46,11 @@ public class CommonString {
     public static final String KEY_STORE_IN_TIME = "Store_in_time";
     public static final String SOAP_ACTION = "http://tempuri.org/";
     public static final String KEY_MERCHANDISER_ID = "MERCHANDISER_ID";
-  //  public static final String ERROR = " PROBLEM OCCURED IN ";
+    //  public static final String ERROR = " PROBLEM OCCURED IN ";
     public static final String ERROR = " ";
     public static final String KEY_SUCCESS_chkout = "Success";
     public static final String KEY_notice_board = "notice_board";
     public static final String KEY_quiz_url = "quiz_url";
-
 
 
     // webservice constants
@@ -239,19 +240,19 @@ public class CommonString {
 
     public static final String NAMESPACE = "http://tempuri.org/";
 
-   // public static final String URL = "http://di.parinaam.in/Danonewebservice.asmx";
+    // public static final String URL = "http://di.parinaam.in/Danonewebservice.asmx";
     public static final String URL = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
 
     public static String URL2 = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
     //http://lipromo.parinaam.in/LoralMerchandising.asmx/Uploadimages
-   /* http://lipromo.parinaam.in/LoralMerchandising.asmx*/
+    /* http://lipromo.parinaam.in/LoralMerchandising.asmx*/
     public static final String URLFORRETROFIT = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
     public static final String URLBACKUPUPLOADRETROFIT = "http://lipromo.parinaam.in/LoralMerchandising.asmx";
 
     public static final String URL_Notice_Board = "http://lipromo.parinaam.in/notice/notice.html";
 
 
-  //  public static final String METHOD_LOGIN = "UserLoginDetail";
+    //  public static final String METHOD_LOGIN = "UserLoginDetail";
     public static final String METHOD_LOGIN = "UserLoginDetail_New";
     public static final String SOAP_ACTION_LOGIN = "http://tempuri.org/" + METHOD_LOGIN;
     // Upload Coverage
@@ -408,7 +409,6 @@ public class CommonString {
                     + "CATEGORY" +
                     " VARCHAR"
                     + ")";
-
 
 
     public static final String TABLE_STOCK_BACKOFFICE_DATA = "STOCK_BACKOFFICE_DATA";
@@ -776,7 +776,8 @@ public class CommonString {
             + " VARCHAR,"
             + "NAME"
             + " VARCHAR,"
-
+            + "CHECKBOX"
+            + " INTEGER,"
             + "STORE_CD"
             + " INTEGER)";
 
@@ -804,7 +805,6 @@ public class CommonString {
             + " VARCHAR,"
 
             + "FRONT_IMAGE" + " VARCHAR)";
-
 
 
     public static final String TABLE_SHARE_OF_SHELF_DATA = "STOCK_IN_SPINNER_DATA";
@@ -871,13 +871,13 @@ public class CommonString {
                     + "STORE_CD" +
                     " VARCHAR," +
 
-                     "VISIT_DATE" +
+                    "VISIT_DATE" +
                     " VARCHAR," +
 
                     "BRAND_CD" +
                     " INTEGER, " +
 
-                     "BRAND" +
+                    "BRAND" +
                     " VARCHAR"
                     + ")";
 
@@ -913,7 +913,6 @@ public class CommonString {
                     "COMPANY_CD" +
                     " INTEGER" +
                     ")";
-
 
 
     public static final String TABLE_INSERT_SHAREOF_SHELF_HEADER_DATA = "DR_shareofShelfHeader_data";
@@ -1018,9 +1017,9 @@ public class CommonString {
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + KEY_VISIT_DATE + " VARCHAR,"
-            + KEY_VISITOR_NAME+ " VARCHAR,"
+            + KEY_VISITOR_NAME + " VARCHAR,"
             + KEY_VISITOR_DESIGNATION + " VARCHAR,"
-            + KEY_STATUS+ " VARCHAR,"
+            + KEY_STATUS + " VARCHAR,"
             + KEY_USER_ID + " VARCHAR"
             + ")";
 
@@ -1065,5 +1064,5 @@ public class CommonString {
 
             + ")";
 
-  public static final String stpcontactnolenght = "Please fill atleast 10 digit contact number";
+    public static final String stpcontactnolenght = "Please fill atleast 10 digit contact number";
 }

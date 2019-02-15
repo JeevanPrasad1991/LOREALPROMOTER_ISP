@@ -34,6 +34,7 @@ import com.cpm.xmlGetterSetter.MappingAssetChecklistreasonGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAssetGetterSetter;
 import com.cpm.xmlGetterSetter.MappingAvailabilityGetterSetter;
 import com.cpm.xmlGetterSetter.MappingChannalSkuGetterSetter;
+import com.cpm.xmlGetterSetter.MappingMenuOptionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingPromotionGetterSetter;
 import com.cpm.xmlGetterSetter.MappingSosGetterSetter;
 import com.cpm.xmlGetterSetter.MappingUserCategoryGetterSetter;
@@ -193,6 +194,9 @@ public class XMLHandlers {
                     }
                     if (xpp.getName().equals("BACKROOK_STATUS")) {
                         jcpGetterSetter.setBackroom_status(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("REGION_CD")) {
+                        jcpGetterSetter.setRegion_Id(xpp.nextText());
                     }
 
 
@@ -936,6 +940,51 @@ public class XMLHandlers {
         return mappingavail;
     }
 
+    public static MappingMenuOptionGetterSetter mappingMenuXML(XmlPullParser xpp,
+                                                             int eventType) {
+        MappingMenuOptionGetterSetter mappingavail = new MappingMenuOptionGetterSetter();
+
+        try {
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() == XmlPullParser.START_TAG) {
+
+                    if (xpp.getName().equals("META_DATA")) {
+                        mappingavail.setTable(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("REGION_CD")) {
+                        mappingavail.setRegion_Id(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("MENU_NAME")) {
+                        mappingavail.setMenu_name(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("MENU_ICON")) {
+                        mappingavail.setMenu_icon(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("MENU_ICON_DONE")) {
+                        mappingavail.setMenu_icon_done(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("MENU_ICON_GREY")) {
+                        mappingavail.setMenu_icon_gray(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("IMAGE_PATH")) {
+                        mappingavail.setImage_path(xpp.nextText());
+                    }
+                    if (xpp.getName().equals("SEQUENCE")) {
+                        mappingavail.setSEQUENCE(xpp.nextText());
+                    }
+                }
+                xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mappingavail;
+    }
+
 
     public static AssetNonReasonGetterSetter assetnonreasonXML(XmlPullParser xpp,
                                                                int eventType) {
@@ -1108,7 +1157,6 @@ public class XMLHandlers {
                     if (xpp.getName().equals("SKU_CD")) {
                         mapping_channel.setChannel(xpp.nextText());
                     }
-
                 }
                 xpp.next();
             }

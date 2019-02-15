@@ -220,8 +220,8 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
             if(!checkpopup){
                 flagcoldroom = flagmccain = flagstoredf = false;
                 if (validateData(listDataChild, listDataHeader)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage("Are you sure you want to save")
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                    builder.setMessage("Are you sure you want to save data ?")
                             .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -426,7 +426,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
                     lblListHeader.setBackgroundColor(getResources().getColor(R.color.light_teal));
                 }
             }
-
             return convertView;
         }
 
@@ -586,7 +585,6 @@ public class ClosingStock extends AppCompatActivity implements OnClickListener {
             cdata.setLongitude("0.0");
             cdata.setStatus(CommonString.KEY_CHECK_IN);
             mid = db.InsertCoverageData(cdata);
-
         }
 
         return mid;

@@ -3,6 +3,8 @@ package com.cpm.dailyentry;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -16,14 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cpm.Constants.CommonString;
 import com.cpm.GetterSetter.NavMenuItemGetterSetter;
 import com.cpm.database.GSKDatabase;
 import com.cpm.lorealpromoter.R;
+import com.cpm.xmlGetterSetter.MappingMenuOptionGetterSetter;
+import com.cpm.xmlGetterSetter.SamplingMasterGetterSetter;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,9 +37,10 @@ public class StoreEntry extends AppCompatActivity {
     private SharedPreferences preferences;
     String store_cd, visit_date, account_cd, city_cd, storetype_cd, floor_status, backroom_status;
     boolean food_flag;
-    String user_type = "";
+    String user_type = "", region_Id, channel_cd;
     ValueAdapter adapter;
     RecyclerView recyclerView;
+    ArrayList<MappingMenuOptionGetterSetter> mappingmenu_List = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,27 +55,27 @@ public class StoreEntry extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         visit_date = preferences.getString(CommonString.KEY_DATE, null);
         store_cd = preferences.getString(CommonString.KEY_STORE_CD, null);
-
         account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
         city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
         storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
         floor_status = preferences.getString(CommonString.KEY_FLOOR_STATUS, null);
         backroom_status = preferences.getString(CommonString.KEY_BACKROOK_STATUS, null);
-
         food_flag = preferences.getBoolean(CommonString.KEY_FOOD_STORE, false);
         user_type = preferences.getString(CommonString.KEY_USER_TYPE, null);
+        region_Id = preferences.getString(CommonString.KEY_REGION_Id, "");
+        channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
         setTitle("Store Entry - " + visit_date);
-        user_type = "Promoter";
+        mappingmenu_List = db.getmappingMenuEntryByRegion(region_Id);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         recyclerView = (RecyclerView) findViewById(R.id.drawer_layout_recycle);
-        adapter = new ValueAdapter(getApplicationContext(), getdata());
+        adapter = new ValueAdapter(getApplicationContext(), getdata(mappingmenu_List));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-        if (setCheckOutData()) {
+        if (setCheckOutDatabyregion(mappingmenu_List)) {
             db.updateCoverageStatusNew(store_cd, CommonString.KEY_VALID);
             db.updateStoreStatusOnCheckout(store_cd, visit_date, CommonString.KEY_VALID);
         }
@@ -100,15 +106,14 @@ public class StoreEntry extends AppCompatActivity {
             overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.MyViewHolder> {
         private LayoutInflater inflator;
-        List<NavMenuItemGetterSetter> data = Collections.emptyList();
+        List<MappingMenuOptionGetterSetter> data;
 
-        public ValueAdapter(Context context, List<NavMenuItemGetterSetter> data) {
+        public ValueAdapter(Context context, List<MappingMenuOptionGetterSetter> data) {
             inflator = LayoutInflater.from(context);
             this.data = data;
         }
@@ -122,64 +127,89 @@ public class StoreEntry extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ValueAdapter.MyViewHolder viewHolder, final int position) {
-            final NavMenuItemGetterSetter current = data.get(position);
-            viewHolder.icon.setImageResource(current.getIconImg());
+            final MappingMenuOptionGetterSetter current = data.get(position);
+            viewHolder.icon_txtname.setText(current.getMenu_name().get(0));
+            File imgFile = new File(CommonString.FILE_PATH_MENU_ICONS + current.getJudge_imagename());
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                viewHolder.icon.setImageBitmap(myBitmap);
+            }
+
             viewHolder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Openning activty.
-                    if (current.getIconImg() == R.drawable.opening_stock || current.getIconImg() == R.drawable.opening_stock_done) {
+                    if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Opening Stock Category")
+                            && !current.getJudge_imagename().trim().equalsIgnoreCase("opening_stock_gray.png")) {
                         if (!db.isClosingDataFilled(store_cd)) {
-                            Intent in1 = new Intent(getApplicationContext(), OpeningStock.class);
+                            Intent in1 = new Intent(getApplicationContext(), OpeningStock.class).putExtra(CommonString.KEY_NAME, current.getMenu_name().get(0));
                             startActivity(in1);
                             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                         } else {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(recyclerView, "Data cannot be changed.", Snackbar.LENGTH_SHORT).show();
+                        }
+                    } else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Floor Opening Stock")
+                            && !current.getJudge_imagename().trim().equalsIgnoreCase("opening_stock_gray.png")) {
+                        if (!db.isMiddayDataFilled(store_cd)) {
+                            Intent in1 = new Intent(getApplicationContext(), OpeningStock.class).putExtra(CommonString.KEY_NAME, current.getMenu_name().get(0));
+                            startActivity(in1);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                        } else {
+                            Snackbar.make(recyclerView, "Data cannot be changed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
 
                     //  isClosingDataFilled
-                    if (current.getIconImg() == R.drawable.midday_stock || current.getIconImg() == R.drawable.midday_stock_done) {
+                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Stock In") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("midday_stock_gray.png")) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            if (db.isStockBackRoomDataAllFilled(store_cd)) {
+                                Intent in3 = new Intent(getApplicationContext(), MidDayStock.class).putExtra(CommonString.KEY_NAME, current.getMenu_name().get(0));
+                                startActivity(in3);
+                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            } else {
+                                Snackbar.make(recyclerView, "First fill Backroom Opening Stock Data.", Snackbar.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Snackbar.make(recyclerView, "First fill Opening Stock Category Data.", Snackbar.LENGTH_SHORT).show();
+                        }
+
+                    } else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Mid Day Stock") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("midday_stock_gray.png")) {
                         if (db.isOpeningDataFilled(store_cd)) {
                             if (!db.isClosingDataFilled(store_cd)) {
-                                // Intent in3 = new Intent(getApplicationContext(), StockInActivity.class);
-                                Intent in3 = new Intent(getApplicationContext(), MidDayStock.class);
+                                Intent in3 = new Intent(getApplicationContext(), MidDayStock.class).putExtra(CommonString.KEY_NAME, current.getMenu_name().get(0));
                                 startActivity(in3);
                                 overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             } else {
                                 Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
                             }
-                        }else {
-                            Snackbar.make(recyclerView, "First fill Opening Stock Category in Data", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(recyclerView, "First fill Opening Stock Category Data.", Snackbar.LENGTH_SHORT).show();
                         }
 
-                    }
-
-                    if (current.getIconImg() == R.drawable.share_of_shelf || current.getIconImg() == R.drawable.share_of_shelf_done) {
+                    } else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Share of Shelf") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("share_of_shelf_gray.png")) {
                         Intent in3 = new Intent(getApplicationContext(), ShareOfShelfActivity.class);
                         startActivity(in3);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                    }
-
-
-                    if (current.getIconImg() == R.drawable.audit || current.getIconImg() == R.drawable.audit_done) {
+                    } else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Additional Visibility") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("additionalvisibility_gray.png")) {
                         Intent in7 = new Intent(getApplicationContext(), Additonalvisibility.class);
                         startActivity(in7);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-
                     }
                     ///promotion
-                    if (current.getIconImg() == R.drawable.promotion || current.getIconImg() == R.drawable.promotion_done) {
-
+                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Promotion") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("promotion_gray.png")) {
                         Intent in4 = new Intent(getApplicationContext(), PromotionActivity.class);
                         startActivity(in4);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
                     }
-                    //asset
-                    if (current.getIconImg() == R.drawable.asset || current.getIconImg() == R.drawable.asset_done) {
 
+                    //asset
+                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Paid Visibility") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("paidvisibility_gray.png")) {
                         Intent in5 = new Intent(getApplicationContext(), PaidVisibilityActivity.class);
                         startActivity(in5);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -187,68 +217,61 @@ public class StoreEntry extends AppCompatActivity {
                     }
 
                     //sample
-                    if (current.getIconImg() == R.drawable.sample || current.getIconImg() == R.drawable.sample_done) {
-
+                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Sampling")
+                            && !current.getJudge_imagename().trim().equalsIgnoreCase("sampling_gray.png")) {
                         Intent in5 = new Intent(getApplicationContext(), SamplingActivity.class);
                         startActivity(in5);
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-
-                    }
-
-
-
-                    if (current.getIconImg() == R.drawable.closing_stock || current.getIconImg() == R.drawable.closing_stock_done) {
+                    } else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Closing Stock Category") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("closing_stock_gray.png")) {
                         if (db.isOpeningDataFilled(store_cd)) {
-                            //if (db.isOpeningBackOfficeDataFilled(store_cd)) {
-                                if (db.isMiddayDataFilled(store_cd)) {
-                                    Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
-                                    startActivity(in2);
-                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                } else {
-                                    Snackbar.make(recyclerView, "First fill Mid Day Stock Data", Snackbar.LENGTH_SHORT).show();
-                               // }
-                            } /*else {
-
-                                Snackbar.make(recyclerView, "First fill Opening Stock Backroom Data", Snackbar.LENGTH_SHORT).show();
-                            }*/
+                            if (db.isMiddayDataFilled(store_cd)) {
+                                Intent in2 = new Intent(getApplicationContext(), ClosingStock.class);
+                                startActivity(in2);
+                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            } else {
+                                Snackbar.make(recyclerView, "First fill Mid Day Stock Data.", Snackbar.LENGTH_SHORT).show();
+                            }
                         } else {
-
-                            Snackbar.make(recyclerView, "First  fill Opening Stock Category,Mid Day Stock in Data", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(recyclerView, "First fill Opening Stock Category Data.", Snackbar.LENGTH_SHORT).show();
                         }
-
                     }
-                    //opennig stock back room activity
-                    if (current.getIconImg() == R.drawable.opening_stock_backroom_done || current.getIconImg() == R.drawable.opening_stock_backroom) {
 
-                        if (!db.isClosingDataFilled(store_cd)) {
-                            Intent in8 = new Intent(getApplicationContext(), OpenningStockBackofficeActivity.class);
-                            startActivity(in8);
-                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    //opennig stock back room activity
+                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Backroom Opening Stock") &&
+                            !current.getJudge_imagename().trim().equalsIgnoreCase("openingstock_backroom_gray.png")) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            if (!db.isMiddayDataFilled(store_cd)){
+                                Intent in8 = new Intent(getApplicationContext(), OpenningStockBackofficeActivity.class);
+                                startActivity(in8);
+                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            }else {
+                                Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                            }
+
                         } else {
-                            Snackbar.make(recyclerView, "Data cannot be changed", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(recyclerView, "First fill Floor Opening Stock Data.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
 
                     //closing stock back room activity
-                    if (current.getIconImg() == R.drawable.closing_stock_backroom || current.getIconImg() == R.drawable.closing_stock_backroom_done) {
-                        if (db.isOpeningBackOfficeDataFilled(store_cd)) {
-                            if (db.isMiddayDataFilled(store_cd)) {
-                                if (db.isClosingDataFilled(store_cd)) {
-                                    Intent in8 = new Intent(getApplicationContext(), ClosingStockBackofficeActvity.class);
-                                    startActivity(in8);
-                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                } else {
-                                    Snackbar.make(recyclerView, "First fill Closing Stock Floor Data", Snackbar.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Snackbar.make(recyclerView, "First fill Stock In Data", Snackbar.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Snackbar.make(recyclerView, "First  fill Opening Stock floor,Opening Stock Backroom, Stock in Data", Snackbar.LENGTH_SHORT).show();
-
-                        }
-
-                    }
+//                    else if (current.getMenu_name().get(0).trim().equalsIgnoreCase("Closing Stock Backroom")) {
+//                        if (db.isOpeningBackOfficeDataFilled(store_cd)) {
+//                            if (db.isMiddayDataFilled(store_cd)) {
+//                                if (db.isClosingDataFilled(store_cd)) {
+//                                    Intent in8 = new Intent(getApplicationContext(), ClosingStockBackofficeActvity.class);
+//                                    startActivity(in8);
+//                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+//                                } else {
+//                                    Snackbar.make(recyclerView, "First fill Closing Stock Floor Data.", Snackbar.LENGTH_SHORT).show();
+//                                }
+//                            } else {
+//                                Snackbar.make(recyclerView, "First fill Stock In Data.", Snackbar.LENGTH_SHORT).show();
+//                            }
+//                        } else {
+//                            Snackbar.make(recyclerView, "First  fill Opening Stock floor,Opening Stock Backroom, Stock in Data.", Snackbar.LENGTH_SHORT).show();
+//                        }
+                    //                }
                 }
             });
         }
@@ -259,381 +282,246 @@ public class StoreEntry extends AppCompatActivity {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            //TextView txt;
+            TextView icon_txtname;
             ImageView icon;
 
             public MyViewHolder(View itemView) {
                 super(itemView);
                 icon = (ImageView) itemView.findViewById(R.id.list_icon);
+                icon_txtname = (TextView) itemView.findViewById(R.id.icon_txtname);
             }
         }
+
     }
 
-   /* public List<NavMenuItemGetterSetter> getdata() {
-        List<NavMenuItemGetterSetter> data = new ArrayList<>();
 
-        int openingImg = 0, openningstockbackoffice = 0, middayImg = 0, marketIntelligence = 0, closingBackoffice = 0, promotionImg = 0, assetImg = 0, shareofshelf = 0, closingImg = 0;
-        if (floor_status.equals("1") && backroom_status.equals("1")) {
-            if (db.isOpeningDataFilled(store_cd)) {
-                openingImg = R.drawable.opening_stock_done;
-            } else {
-                openingImg = R.drawable.opening_stock;
-            }
-            if (db.isOpeningBackOfficeDataFilled(store_cd)) {
-                openningstockbackoffice = R.drawable.opening_stock_backroom_done;
-            } else {
-                openningstockbackoffice = R.drawable.opening_stock_backroom;
-            }
-            if (db.isMiddayDataFilled(store_cd)) {
-                middayImg = R.drawable.midday_stock_done;
-            } else {
-                middayImg = R.drawable.midday_stock;
-            }
-            if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-                marketIntelligence = R.drawable.audit_done;
-            } else {
-                marketIntelligence = R.drawable.audit;
-            }
-       *//* if (db.isClosingBackOfficeDataFilled(store_cd)) {
-            closingBackoffice = R.drawable.closing_stock_backroom_done;
-        } else {
-            closingBackoffice = R.drawable.closing_stock_backroom;
-        }*//*
-            if (db.isAssetDataFilled(store_cd)) {
-                assetImg = R.drawable.asset_done;
-            } else {
-                assetImg = R.drawable.asset;
-            }
-            if (db.isPromotionDataFilled(store_cd)) {
-                promotionImg = R.drawable.promotion_done;
-            } else {
-                promotionImg = R.drawable.promotion;
-            }
-            if (db.isShareOfShelfDataFilled(store_cd)) {
-                shareofshelf = R.drawable.share_of_shelf_done;
-            } else {
-                shareofshelf = R.drawable.share_of_shelf;
-            }
-       *//* if (db.isClosingDataFilled(store_cd)) {
-            closingImg = R.drawable.closing_stock_done;
-        } else {
-            closingImg = R.drawable.closing_stock;
-        }*//*
+    public List<MappingMenuOptionGetterSetter> getdata(ArrayList<MappingMenuOptionGetterSetter> mapping_menuList) {
+        if (mapping_menuList.size() > 0) {
+            for (int k = 0; k < mapping_menuList.size(); k++) {
+                if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Opening Stock Category")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                }
+               else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Floor Opening Stock")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                }
 
-        } else {
-            if (db.isMiddayDataFilled(store_cd)) {
-                middayImg = R.drawable.midday_stock_done;
-            } else {
-                middayImg = R.drawable.midday_stock;
+                else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Stock In")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isMiddayDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Mid Day Stock")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isMiddayDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Share of Shelf")) {
+                    if (db.getHeaderShareOfSelfImageData(store_cd).size() > 0) {
+                        if (db.isShareOfShelfDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Paid Visibility")) {
+                    if (db.getAssetCategoryData(store_cd).size() > 0) {
+                        if (db.isAssetDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Additional Visibility")) {
+                    if (db.getcategorymasterData().size() > 0) {
+                        if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Promotion")) {
+                    if (db.getPromotionBrandData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isPromotionDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Closing Stock Category")) {
+                    if (db.getmappingStockDataNew(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isClosingDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Sampling")) {
+                    if (db.getSamplingData(store_cd).size() > 0) {
+                        if (db.issampledDataFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+                    }
+
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Backroom Opening Stock")) {
+                    if (db.getStockAvailabilityDataNew(channel_cd).size() > 0) {
+                        if (db.isStockBackRoomDataAllFilled(store_cd)) {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_done().get(0));
+                        } else {
+                            mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon().get(0));
+                        }
+                    } else {
+                        mapping_menuList.get(k).setJudge_imagename(mapping_menuList.get(k).getMenu_icon_gray().get(0));
+
+                    }
+                }
             }
-            if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-                marketIntelligence = R.drawable.audit_done;
-            } else {
-                marketIntelligence = R.drawable.audit;
-            }
-       *//* if (db.isClosingBackOfficeDataFilled(store_cd)) {
-            closingBackoffice = R.drawable.closing_stock_backroom_done;
-        } else {
-            closingBackoffice = R.drawable.closing_stock_backroom;
-        }*//*
-            if (db.isAssetDataFilled(store_cd)) {
-                assetImg = R.drawable.asset_done;
-            } else {
-                assetImg = R.drawable.asset;
-            }
-            if (db.isPromotionDataFilled(store_cd)) {
-                promotionImg = R.drawable.promotion_done;
-            } else {
-                promotionImg = R.drawable.promotion;
-            }
-            if (db.isShareOfShelfDataFilled(store_cd)) {
-                shareofshelf = R.drawable.share_of_shelf_done;
-            } else {
-                shareofshelf = R.drawable.share_of_shelf;
-            }
-       *//* if (db.isClosingDataFilled(store_cd)) {
-            closingImg = R.drawable.closing_stock_done;
-        } else {
-            closingImg = R.drawable.closing_stock;
-        }*//*
         }
 
-        //  int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
-        int img[] = {openingImg, openningstockbackoffice, middayImg, shareofshelf, assetImg, marketIntelligence, promotionImg};
-
-        if (floor_status.equals("1") && backroom_status.equals("1")) {
-            for (int i = 0; i < img.length; i++) {
-                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
-                recData.setIconImg(img[i]);
-                data.add(recData);
-            }
-        } else {
-            for (int i = 2; i < img.length; i++) {
-                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
-                recData.setIconImg(img[i]);
-                data.add(recData);
-            }
-        }
+        return mapping_menuList;
+    }
 
 
-        return data;
-    }*/
-
-   /* public boolean setCheckOutData() {
+    public boolean setCheckOutDatabyregion(ArrayList<MappingMenuOptionGetterSetter> mapping_menuList) {
         boolean flag = true;
-
-        if (floor_status.equals("1") && backroom_status.equals("1")) {
-            //opning stock category
-            if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
-                if (db.isOpeningDataAllFilled(store_cd)) {
-                    flag = true;
-                } else {
-                    flag = false;
+        if (mapping_menuList.size() > 0) {
+            for (int k = 0; k < mapping_menuList.size(); k++) {
+                if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Opening Stock Category")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
                 }
-            }
-            //stock backroom
-            if (flag) {
-                if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
-                    if (db.isStockBackRoomDataAllFilled(store_cd)) {
+               else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Floor Opening Stock")) {
+                    if (db.getStockAvailabilityData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (db.isOpeningDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                }
+
+                else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Stock In")) {
+                    if (flag && db.getmappingStockDataNew(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (flag && db.isMiddayDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Mid Day Stock")) {
+                    if (flag && db.getmappingStockDataNew(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (flag && db.isMiddayDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Share of Shelf")) {
+                    if (flag && db.isShareOfShelfDataFilled(store_cd)) {
                         flag = true;
                     } else {
                         flag = false;
                     }
-                }
-            }
-            //promotion
-            if (flag) {
-                if (db.getPromotionBrandData(store_cd).size() > 0) {
-                    if (db.isPromotionDataFilled(store_cd)) {
-                        flag = true;
-                    } else {
-                        flag = false;
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Paid Visibility")) {
+                    if (flag && db.getAssetCategoryData(store_cd).size() > 0) {
+                        if (flag && db.isAssetDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
                     }
-                }
-            }
-            //pais visibility
-      *//*  if (flag) {
-            if (db.isStoreAssetDataFilled(store_cd)) {
-                if (db.getAssetCategoryData(store_cd).size() > 0) {
-                    if (db.isAssetDataFilled(store_cd)) {
-                        flag = true;
-                    } else {
-                        flag = false;
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Additional Visibility")) {
+                    if (flag && db.getcategorymasterData().size() > 0) {
+                        if (flag && db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
                     }
-                }
-            }
-        }*//*
-            //marketintelligence
-            if (flag) {
-                if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (db.getMiddayStockInDatabase(store_cd).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-        } else {
-            if (db.getPromotionBrandData(store_cd).size() > 0) {
-                if (db.isPromotionDataFilled(store_cd)) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-            //marketintelligence
-            if (flag) {
-                if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (db.getMiddayStockInDatabase(store_cd).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
-                    flag = true;
-                } else {
-                    flag = false;
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Promotion")) {
+                    if (flag && db.getPromotionBrandData1(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (flag && db.isPromotionDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Closing Stock Category")) {
+                    if (flag && db.getmappingStockDataNew(account_cd, city_cd, storetype_cd).size() > 0) {
+                        if (flag && db.isClosingDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Sampling")) {
+                    if (flag && db.getSamplingData(store_cd).size() > 0) {
+                        if (flag && db.issampledDataFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
+                } else if (mapping_menuList.get(k).getMenu_name().get(0).trim().equalsIgnoreCase("Backroom Opening Stock")) {
+                    if (flag && db.getStockAvailabilityDataNew(channel_cd).size() > 0) {
+                        if (flag && db.isStockBackRoomDataAllFilled(store_cd)) {
+                            flag = true;
+                        } else {
+                            flag = false;
+                        }
+                    }
                 }
             }
         }
 
         return flag;
-    }*/
-   public boolean setCheckOutData() {
-       boolean flag = true;
-       //opning stock category
-       if (db.getStockAvailabilityData1(account_cd,city_cd,storetype_cd).size() > 0) {
-           if (db.isOpeningDataAllFilled(store_cd)) {
-          // if (db.getClosingDtaFiel(store_cd).size()>0) {
-               flag = true;
-           } else {
-               flag = false;
-           }
-       }
-       //stock backroom
-/*
-       if (flag) {
-           if (db.getStockAvailabilityData1(account_cd,city_cd,storetype_cd).size() > 0) {
-               if (db.isStockBackRoomDataAllFilled(store_cd)) {
-                   flag = true;
-               } else {
-                   flag = false;
-               }
-           }
-       }
-*/
-       //promotion
-       if (flag) {
-           if (db.getPromotionBrandData(store_cd).size() > 0) {
-               if (db.isPromotionDataFilled(store_cd)) {
-                   flag = true;
-               } else {
-                   flag = false;
-               }
-           }
-       }
-
-       //marketintelligence
-       if (flag) {
-           if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-               flag = true;
-           } else {
-               flag = false;
-           }
-       }
-
-     /*  if (flag) {
-           if (db.getMiddayStockInDatabase(store_cd).size() > 0) {
-               flag = true;
-           } else {
-               flag = false;
-           }
-       }*/
-
-       if (flag) {
-           if (db.getShareofSelfCheckoutData(store_cd).size() > 0) {
-               flag = true;
-           } else {
-               flag = false;
-           }
-       }
-       if (flag) {
-           if (db.getSamplingCheckoutData(store_cd).size()>0) {
-               flag = true;
-           } else {
-               flag = false;
-           }
-       }
-
-       return flag;
-   }
-
-    public List<NavMenuItemGetterSetter> getdata() {
-        List<NavMenuItemGetterSetter> data = new ArrayList<>();
-
-      //  int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg;
-        int openingImg, openningstockbackoffice, middayImg,marketIntelligence , closingBackoffice, promotionImg, assetImg,shareofshelf, closingImg,samplingImg;
-
-        if (db.isOpeningDataFilled(store_cd)) {
-            openingImg = R.drawable.opening_stock_done;
-        } else {
-            openingImg = R.drawable.opening_stock;
-        }
-        if (db.isOpeningBackOfficeDataFilled(store_cd)) {
-            openningstockbackoffice = R.drawable.opening_stock_backroom_done;
-        } else {
-            openningstockbackoffice = R.drawable.opening_stock_backroom;
-        }
-        if (db.isMiddayDataFilled(store_cd)) {
-            middayImg = R.drawable.midday_stock_done;
-        } else {
-            middayImg = R.drawable.midday_stock;
-        }
-        if (db.getinsertedMarketIntelligenceData(store_cd, visit_date).size() > 0) {
-            marketIntelligence = R.drawable.audit_done;
-        } else {
-            marketIntelligence = R.drawable.audit;
-        }
-        if (db.isClosingBackOfficeDataFilled(store_cd)) {
-            closingBackoffice = R.drawable.closing_stock_backroom_done;
-        } else {
-            closingBackoffice = R.drawable.closing_stock_backroom;
-        }
-        if (db.isAssetDataFilled(store_cd)) {
-            assetImg = R.drawable.asset_done;
-        } else {
-            assetImg = R.drawable.asset;
-        }
-        if (db.isPromotionDataFilled(store_cd)) {
-            promotionImg = R.drawable.promotion_done;
-        } else {
-            promotionImg = R.drawable.promotion;
-        }
-        if (db.isShareOfShelfDataFilled(store_cd)) {
-            shareofshelf = R.drawable.share_of_shelf_done;
-        } else {
-            shareofshelf = R.drawable.share_of_shelf;
-        }
-        if (db.isClosingDataFilled(store_cd)) {
-            closingImg = R.drawable.closing_stock_done;
-        } else {
-            closingImg = R.drawable.closing_stock;
-        }
-
-        //
-        if (db.issampledDataFilled(store_cd)) {
-            samplingImg = R.drawable.sample_done;
-        } else {
-            samplingImg = R.drawable.sample;
-        }
-
-
-
-
-     /*   if (user_type.equals("Promoter")) {
-            int img[] = {openingImg, openningstockbackoffice, middayImg, closingImg, closingBackoffice, promotionImg, assetImg, marketIntelligence};//, additionalImg, competitionImg};
-            for (int i = 0; i < img.length; i++) {
-                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
-                recData.setIconImg(img[i]);
-                data.add(recData);
-            }
-        }*/
-        if (user_type.equals("Promoter")) {
-          //  int img[] = {openingImg,openningstockbackoffice, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,closingBackoffice};//, additionalImg, competitionImg};
-            int img[] = {openingImg, middayImg ,shareofshelf, assetImg, marketIntelligence,promotionImg,closingImg,samplingImg};//, additionalImg, competitionImg};
-            for (int i = 0; i < img.length; i++) {
-                NavMenuItemGetterSetter recData = new NavMenuItemGetterSetter();
-                recData.setIconImg(img[i]);
-                data.add(recData);
-            }
-        }
-
-        return data;
     }
-
 
 }

@@ -348,6 +348,16 @@ public class TableBean {
 
     public static String promoTypeTable;
 
+    public static String getMapping_menuTable() {
+        return mapping_menuTable;
+    }
+
+    public static void setMapping_menuTable(String mapping_menuTable) {
+        TableBean.mapping_menuTable = mapping_menuTable;
+    }
+
+    public static String mapping_menuTable;
+
     public static String getNonpromotionnoreasonTable() {
         return nonpromotionnoreasonTable;
     }

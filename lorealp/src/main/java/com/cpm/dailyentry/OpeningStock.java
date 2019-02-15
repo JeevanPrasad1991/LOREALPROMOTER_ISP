@@ -74,7 +74,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     List<StockNewGetterSetter> listDataHeader;
     HashMap<StockNewGetterSetter, List<StockNewGetterSetter>> listDataChild;
     private SharedPreferences preferences;
-    String store_cd,account_cd,city_cd,storetype_cd,channel_cd;
+    String store_cd, account_cd, city_cd, storetype_cd, channel_cd, menu_name;
     ArrayList<StockNewGetterSetter> brandData;
     ArrayList<StockNewGetterSetter> skuData;
     GSKDatabase db;
@@ -88,7 +88,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     boolean ischangedflag = false;
     String _pathforcheck, _path, str, img1 = "", img2 = "", img3 = "";
     static int grp_position = -1;
-    Bitmap bmp,dest;
+    Bitmap bmp, dest;
 
 
     @Override
@@ -116,11 +116,11 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         intime = preferences.getString(CommonString.KEY_STORE_IN_TIME, "");
         channel_cd = preferences.getString(CommonString.KEY_CHANNEL_CD, null);
 
-        account_cd= preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
-        city_cd= preferences.getString(CommonString.KEY_CITY_CD, null);
-        storetype_cd= preferences.getString(CommonString.KEY_STORETYPE_CD, null);
-
-        setTitle("Opening Stock -" + visit_date);
+        account_cd = preferences.getString(CommonString.KEY_KEYACCOUNT_CD, null);
+        city_cd = preferences.getString(CommonString.KEY_CITY_CD, null);
+        storetype_cd = preferences.getString(CommonString.KEY_STORETYPE_CD, null);
+        menu_name = getIntent().getStringExtra(CommonString.KEY_NAME);
+        setTitle(menu_name + " - " + visit_date);
         // preparing list data
         prepareListData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
@@ -204,7 +204,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
 
         brandData = db.getHeaderStockImageData(store_cd, visit_date);
         if (!(brandData.size() > 0)) {
-            brandData = db.getmappingStockDataNew(account_cd,city_cd,storetype_cd);
+            brandData = db.getmappingStockDataNew(account_cd, city_cd, storetype_cd);
         }
         if (brandData.size() > 0) {
             // Adding child data
@@ -213,7 +213,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 listDataHeader.add(brandData.get(i));
                 skuData = db.getOpeningStockDataFromDatabase(store_cd, brandData.get(i).getCategory_cd());
                 if (!(skuData.size() > 0)) {
-                    skuData = db.getStockSkuDataNew(account_cd,city_cd,storetype_cd, brandData.get(i).getCategory_cd());
+                    skuData = db.getStockSkuDataNew(account_cd, city_cd, storetype_cd, brandData.get(i).getCategory_cd());
                 } else {
                     btnSave.setText("Update");
                 }
@@ -235,36 +235,35 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             expListView.invalidateViews();
             if (snackbar == null || !snackbar.isShown()) {
                 if (validateData(listDataChild, listDataHeader)) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                            builder.setMessage("Are you sure you want to save")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            db.open();
-                                            //If data already inserted
-                                            if (db.checkStock(store_cd)) {
-                                                //Update
-                                                db.UpdateHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
-                                                db.UpdateOpeningStocklistData(store_cd, listDataChild, listDataHeader);
-                                            } else {
-                                                //Insert
-                                                db.InsertHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
-                                                db.InsertOpeningStocklistData(store_cd, listDataChild, listDataHeader);
-                                            }
-                                            Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
-                                            finish();
-                                            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                                        }
-                                    })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                        }
-                        else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("Parinaam");
+                    builder.setMessage("Are you sure you want to save data ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    db.open();
+                                    //If data already inserted
+                                    if (db.checkStock(store_cd)) {
+                                        //Update
+                                        db.UpdateHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
+                                        db.UpdateOpeningStocklistData(store_cd, listDataChild, listDataHeader);
+                                    } else {
+                                        //Insert
+                                        db.InsertHeaderOpeningStocklistData(store_cd, visit_date, listDataHeader);
+                                        db.InsertOpeningStocklistData(store_cd, listDataChild, listDataHeader);
+                                    }
+                                    Snackbar.make(expListView, "Data has been saved", Snackbar.LENGTH_LONG).show();
+                                    finish();
+                                    overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
                     Snackbar.make(expListView, Error_Message, Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -379,7 +378,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 }
 
             });
-
 
 
             holder.etOpening_Stock_Facingg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -588,9 +586,9 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
             }
 
             if (headerTitle.getImg_cat_one() != null && !headerTitle.getImg_cat_one().equals("")) {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_green);
+                imgcamcat1.setImageResource(R.mipmap.camera_green);
             } else {
-                imgcamcat1.setBackgroundResource(R.mipmap.camera_orange);
+                imgcamcat1.setImageResource(R.mipmap.camera_orange);
             }
             catfacing.setText(headerTitle.getCatstock());
 
@@ -644,17 +642,17 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (category_camera.equals("1")) {
                     if (opningimage.equals("")) {
                         checkflag = false;
-                        Error_Message = "Please click image";
+                        Error_Message = "Please click image.";
                         break;
                     }
                 }
 
-                if ((openingstock.equalsIgnoreCase(""))) {
+                if ((openingstock.equals(""))) {
                     checkflag = false;
-                    Error_Message = "Please fill all the data";
+                    Error_Message = "Please fill all the data.";
                     break;
 
-                }else {
+                } else {
                     checkflag = true;
                 }
             }
@@ -876,7 +874,7 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
                 if (resultCode == -1) {
                     if (_pathforcheck != null && !_pathforcheck.equals("")) {
                         if (new File(str + _pathforcheck).exists()) {
-                           // Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
+                            // Bitmap bmp = BitmapFactory.decodeFile(str + _pathforcheck);
                             bmp = convertBitmap(str + _pathforcheck);
                             dest = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -955,30 +953,28 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
     }
 
 
-
-    public static Bitmap convertBitmap(String path)   {
-        Bitmap bitmap=null;
-        BitmapFactory.Options ourOptions=new BitmapFactory.Options();
-        ourOptions.inDither=false;
-        ourOptions.inPurgeable=true;
-        ourOptions.inInputShareable=true;
-        ourOptions.inTempStorage=new byte[32 * 1024];
-        File file=new File(path);
-        FileInputStream fs=null;
+    public static Bitmap convertBitmap(String path) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options ourOptions = new BitmapFactory.Options();
+        ourOptions.inDither = false;
+        ourOptions.inPurgeable = true;
+        ourOptions.inInputShareable = true;
+        ourOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            if(fs!=null)
-            {
-                bitmap=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
+            if (fs != null) {
+                bitmap = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, ourOptions);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {
@@ -988,7 +984,6 @@ public class OpeningStock extends AppCompatActivity implements OnClickListener {
         }
         return bitmap;
     }
-
 
 
 }
